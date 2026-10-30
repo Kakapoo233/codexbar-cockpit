@@ -140,7 +140,7 @@ struct CockpitPanelView: View {
                 self.usagePage(layout: CockpitPanelLayout(width: geometry.size.width))
             }
         case .statistics:
-            SpendDashboardPane(settings: self.settings, store: self.store)
+            SpendDashboardPane(settings: self.settings, store: self.store, showsTimeZoneControls: false)
         case .calendar:
             CockpitCalendarView(
                 controller: self.controller,

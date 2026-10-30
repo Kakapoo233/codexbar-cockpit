@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.4.1 — Statistics time-zone settings placement
+
+- Keep the statistics time-zone picker and current-Mac-zone action in Settings → Usage & Spend.
+  Remove these controls from the menu-bar Statistics page while preserving the saved setting
+  and shared calendar/ledger behavior.
+
 ## 0.4.0 — Editor help and local Cockpit insights
 
 - Explain menu-bar layout items, presets, display options, and conditional rules on hover in all

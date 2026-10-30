@@ -121,15 +121,17 @@ struct SpendDashboardPane: View {
     @Environment(\.cockpitPageActive) private var cockpitPageActive
     @Bindable var settings: SettingsStore
     @Bindable var store: UsageStore
+    let showsTimeZoneControls: Bool
     @State private var isVisible = false
     @State private var userSelectedBackground = false
     @State private var isDataControlsExpanded = true
     @State private var detailSelections: [String: SpendDashboardDetailSection] = [:]
     @State private var sessionNavigation = SessionUsageNavigation.shared
 
-    init(settings: SettingsStore, store: UsageStore) {
+    init(settings: SettingsStore, store: UsageStore, showsTimeZoneControls: Bool = true) {
         self.settings = settings
         self.store = store
+        self.showsTimeZoneControls = showsTimeZoneControls
     }
 
     var body: some View {
@@ -149,7 +151,9 @@ struct SpendDashboardPane: View {
                         .frame(height: 600)
                 } else {
                     self.header
-                    SpendTimeZoneControls(settings: self.settings)
+                    if self.showsTimeZoneControls {
+                        SpendTimeZoneControls(settings: self.settings)
+                    }
                     self.refreshStatus
                     self.codexCostCatchUpPanel
                     self.content
