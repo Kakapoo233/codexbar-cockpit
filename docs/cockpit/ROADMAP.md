@@ -10,25 +10,28 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Inspect both upstream repositories and licenses.
 - [x] Pin latest stable CodexBar v0.82.0 and Cockpit v0.3.4.
 - [x] Compile the unmodified CodexBar baseline on Apple Silicon.
-- [ ] Verify isolated application identity, settings, caches, and credential namespaces.
-- [ ] Validate explicit import of original display settings using synthetic fixtures.
+- [x] Verify isolated application identity, settings, caches, and credential namespaces.
+- [x] Validate explicit import of original display settings using synthetic fixtures.
 
 ## Integrated behavior
 
-- [ ] Menu-bar entry and persistent native Cockpit window.
-- [ ] Existing provider and Usage & Spend capabilities retained.
-- [ ] Monthly calendar driven by the same daily ledger.
-- [ ] Daily frozen recommendation, personal cap, and cross-reset observation accounting.
-- [ ] Subjective feedback records and Token experience chart.
-- [ ] Parent/subagent task grouping and deduplicated selected-task receipt.
-- [ ] PNG preview, save, and clipboard export, including Chinese and missing-cost cases.
+- [x] Implement menu-bar entry and persistent native Cockpit window.
+- [x] Retain existing provider and Usage & Spend capabilities.
+- [x] Implement monthly calendar driven by the same daily ledger.
+- [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
+- [x] Implement subjective feedback records and Token experience chart.
+- [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.
+- [x] Implement PNG preview, save, and clipboard export; render Chinese and missing-cost fixtures.
+- [ ] Manually verify window navigation, PNG save/clipboard, and migration with the user.
 
 ## Verification and release
 
-- [ ] Focused accounting, persistence, identity, and receipt tests pass.
-- [ ] `make check` passes, or upstream/tooling blockers are precisely documented.
-- [ ] Integrated app compiles and packages with independent identity.
-- [ ] Native UI visibly verified on this Mac; original app remains recoverable.
+- [x] Focused accounting, persistence, identity, and receipt tests pass (176 tests, 16 suites).
+- [x] `make check` passes, including strict formatting/lint, generated files, locales, and scripts.
+- [x] Integrated app compiles and packages with independent identity.
+- [x] Packaged startup and resources verified with network blocked and synthetic settings.
+- [x] Synthetic native overview, calendar, and receipt renders visually inspected on this Mac.
+- [ ] Real-account and menu-bar UI acceptance on this Mac; original app remains installed.
 - [ ] User acceptance and final settings migration.
-- [ ] Create and publish public GitHub repository (owner deferred sign-in).
+- [x] Create public GitHub repository and publish the project foundation on the development branch.
 - [ ] Release automation/signing/update feed configured for this fork.

@@ -17,7 +17,15 @@ provider support with local planning and task workflows inspired by
 - 勾选任务生成 PNG 小票；父子 Agent 合并时避免重复计算。
 - 开发版使用独立设置与缓存，用户主动导入原 CodexBar 的主要显示设置。
 
-当前实现与未完成验收见 [开发清单](docs/cockpit/ROADMAP.md)。
+当前实现与未完成验收见 [开发清单](docs/cockpit/ROADMAP.md)，已完成检查见 [验证记录](docs/cockpit/VALIDATION.md)。
+
+## Preview
+
+Native SwiftUI/AppKit rendering with synthetic data; these are not personal usage records.
+
+![Chinese planning and local experience panel](docs/cockpit/images/overview-zh.png)
+
+![Task receipt with partial costs and separate currencies](docs/cockpit/images/receipt-zh.png)
 
 ## Build
 

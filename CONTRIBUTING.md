@@ -10,3 +10,12 @@ separate from measured zero, and preserve account, provider, currency, and time-
 
 Pull requests should explain the visible change, tests, and any remaining limitations. Include a
 screenshot for UI changes. Maintain both upstream license notices and document new dependencies.
+
+## Git workflow
+
+`origin` is `Kakapoo233/codexbar-cockpit`; `upstream` is `steipete/CodexBar`.
+Keep `main` as the reviewed integration baseline. Create a focused branch for each feature or fix,
+commit working increments with a clear purpose, and open a pull request against this repository's
+`main`. Preserve the upstream history and pinned provenance; do not force-push shared branches.
+Record validation in the pull request and update the acceptance checklist when behavior changes.
+Application bundles, personal settings, local usage data, and signing material are not source commits.

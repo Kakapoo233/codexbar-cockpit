@@ -14,7 +14,8 @@ window hosts the Cockpit detail views. There is no floating widget or second Tau
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
-  descriptive and never converted into an official quota percentage.
+  descriptive and never converted into an official quota percentage. Local Token history belongs to
+  the explicit `local-machine` scope, independently of whichever quota account is currently selected.
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.
@@ -32,10 +33,13 @@ manual changes affect the personal cap only. Account changes must not reuse anot
 
 Receipts use stable session identifiers and union selected membership before summing. Parent and
 child selection must not double count; unknown cost remains unknown or explicitly partial.
+The selected period filters active tasks; totals cover their complete scanned sessions and can include
+usage outside that period. Both the selection UI and exported receipt disclose this distinction.
 
 ## Delivery
 
 Development bundles are isolated and ad-hoc signed. No upstream automatic update feed is accepted.
 Replacing an installed CodexBar happens after user acceptance; local integration testing does not
-replace or migrate an existing installation automatically. GitHub publication is deferred until the
-repository owner completes browser sign-in.
+replace or migrate an existing installation automatically. The public repository is
+Kakapoo233/codexbar-cockpit; integration/native-cockpit records the initial integration.
+Feature-sized commits and pull requests record each iteration.
