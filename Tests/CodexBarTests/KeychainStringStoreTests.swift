@@ -24,7 +24,7 @@ struct KeychainStringStoreTests {
         }
         #expect(value == "synthetic-value")
         #expect(backend.calls == ["preflight", "read"])
-        #expect(backend.context?.service == "com.steipete.CodexBar")
+        #expect(backend.context?.service == "io.github.kakapoo233.codexbar-cockpit.credentials")
         #expect(backend.context?.account == "synthetic-test-account")
         #expect(backend.query?[kSecAttrAccount as String] as? String == "synthetic-test-account")
         #expect(backend.query?[kSecMatchLimit as String] as? String == kSecMatchLimitOne as String)
@@ -65,7 +65,8 @@ struct KeychainStringStoreTests {
         #expect(backend.attributes?[kSecValueData as String] as? Data == Data("synthetic-value".utf8))
         #expect(backend.attributes?[kSecAttrAccessible as String] as? String ==
             kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
-        #expect(backend.query?[kSecAttrService as String] as? String == "com.steipete.CodexBar")
+        #expect(backend
+            .query?[kSecAttrService as String] as? String == "io.github.kakapoo233.codexbar-cockpit.credentials")
         #expect(backend.query?[kSecAttrAccount as String] as? String == "synthetic-test-account")
     }
 

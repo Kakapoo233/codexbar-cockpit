@@ -681,7 +681,7 @@ struct OpenCodeGoWebOverlayTests {
     }
 
     private func withEmptyCookieCache<T>(_ operation: () async throws -> T) async rethrows -> T {
-        let service = "com.steipete.codexbar.tests.opencodego-overlay-empty.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.opencodego-overlay-empty.\(UUID().uuidString)"
         return try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainCacheStore.withImplicitTestStoreForTesting {
                 CookieHeaderCache.resetDisplayCacheForTesting()
@@ -692,7 +692,7 @@ struct OpenCodeGoWebOverlayTests {
     }
 
     private func withCachedCookie<T>(_ operation: () async throws -> T) async rethrows -> T {
-        let service = "com.steipete.codexbar.tests.opencodego-overlay.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.opencodego-overlay.\(UUID().uuidString)"
         return try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainCacheStore.withImplicitTestStoreForTesting {
                 CookieHeaderCache.resetDisplayCacheForTesting()

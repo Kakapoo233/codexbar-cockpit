@@ -23,7 +23,7 @@ struct DashboardManagedCodexCollectionTests {
             "HOME": fixture.root.path,
             "CFFIXED_USER_HOME": fixture.root.path,
             "CODEX_HOME": fixture.root.appendingPathComponent(".codex").path,
-            "CODEXBAR_CONFIG": configURL.path,
+            "CODEXBAR_COCKPIT_CONFIG": configURL.path,
             "PATH": "/usr/bin:/bin",
             "CODEXBAR_TEST_SESSION_FILE_ISOLATION": "1",
             "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS": "1",

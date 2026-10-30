@@ -34,7 +34,7 @@ struct ClaudeOAuthCredentialsStoreNeverPromptCacheTests {
     }
 
     private func withTestState<T>(_ operation: (TestState) throws -> T) throws -> T {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         let pendingStore = ClaudeOAuthCredentialsStore.PendingCacheClearMemoryStore()
         let recorder = ClaudeOAuthCredentialsStore.OAuthCacheOperationRecorder()
         let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore()
@@ -470,7 +470,7 @@ struct ClaudeOAuthCredentialsStoreNeverPromptCacheTests {
         #expect(bundledCLIDomain == ClaudeOAuthKeychainPromptPreference.debugApplicationDefaultsDomain)
 
         let debugWidgetDomain = ClaudeOAuthKeychainPromptPreference.resolveApplicationDefaultsDomain(
-            bundleIdentifier: "com.steipete.codexbar.debug.widget",
+            bundleIdentifier: "io.github.kakapoo233.codexbar-cockpit.debug.widget",
             bundleURL: nil,
             executableURL: nil,
             invocationURL: nil)

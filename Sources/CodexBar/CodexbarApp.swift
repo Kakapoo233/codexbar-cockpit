@@ -52,7 +52,7 @@ struct CodexBarApp: App {
         let storedLevel = CodexBarLog.parseLevel(UserDefaults.standard.string(forKey: "debugLogLevel")) ?? .verbose
         let level = CodexBarLog.parseLevel(env["CODEXBAR_LOG_LEVEL"]) ?? storedLevel
         CodexBarLog.bootstrapIfNeeded(.init(
-            destination: .oslog(subsystem: "com.steipete.codexbar"),
+            destination: .oslog(subsystem: CockpitAppIdentity.bundleIdentifier),
             level: level,
             json: false))
 
@@ -126,7 +126,7 @@ struct CodexBarApp: App {
             }
             CommandGroup(replacing: .help) {
                 Button(L("CodexBar Help")) {
-                    guard let url = URL(string: "https://github.com/steipete/CodexBar/blob/main/README.md")
+                    guard let url = URL(string: "https://github.com/Kakapoo233/codexbar-cockpit")
                     else { return }
                     NSWorkspace.shared.open(url)
                 }
@@ -344,6 +344,13 @@ private func isDeveloperIDSigned(bundleURL: URL) -> Bool {
 
 @MainActor
 private func makeUpdaterController() -> UpdaterProviding {
+    // A fork must never install an upstream CodexBar build over its own features and data format.
+    guard let feed = Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String,
+          feed.hasPrefix("https://raw.githubusercontent.com/Kakapoo233/codexbar-cockpit/")
+    else {
+        return DisabledUpdaterController(
+            unavailableReason: "Automatic updates are not configured for CodexBar Cockpit.")
+    }
     let bundleURL = Bundle.main.bundleURL
     guard bundleURL.pathExtension == "app" else {
         return DisabledUpdaterController(unavailableReason: "Updates unavailable in this build.")

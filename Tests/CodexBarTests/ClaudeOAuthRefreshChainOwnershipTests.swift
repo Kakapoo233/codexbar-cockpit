@@ -70,7 +70,7 @@ struct ClaudeOAuthRefreshChainOwnershipTests {
         let profile = try self.makeProfile(accountUuid: "logged-in-profile")
         defer { try? FileManager.default.removeItem(at: profile.directory) }
 
-        let service = "com.steipete.codexbar.refresh-chain-ownership.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.refresh-chain-ownership.\(UUID().uuidString)"
         let pendingStore = ClaudeOAuthCredentialsStore.PendingCacheClearMemoryStore()
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)

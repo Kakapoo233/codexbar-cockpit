@@ -2,11 +2,11 @@
 # -p blocks inherited functions and startup hooks before validation; it does not elevate privileges.
 set -eu
 
-APP="/Applications/CodexBar.app"
+APP="/Applications/CodexBar Cockpit.app"
 HELPER="$APP/Contents/Helpers/CodexBarCLI"
 
 if [ ! -x "$HELPER" ]; then
-  /bin/echo "CodexBarCLI helper not found at $HELPER. Please reinstall CodexBar." >&2
+  /bin/echo "CodexBarCLI helper not found at $HELPER. Please reinstall CodexBar Cockpit." >&2
   exit 1
 fi
 
@@ -16,11 +16,11 @@ on run argv
   set helperPath to item 1 of argv
   set installCommand to "set -eu" & linefeed & ¬
     "/bin/mkdir -p /usr/local/bin /opt/homebrew/bin" & linefeed & ¬
-    "/bin/ln -sf " & quoted form of helperPath & " /usr/local/bin/codexbar" & linefeed & ¬
-    "/bin/ln -sf " & quoted form of helperPath & " /opt/homebrew/bin/codexbar"
+    "/bin/ln -sf " & quoted form of helperPath & " /usr/local/bin/codexbar-cockpit" & linefeed & ¬
+    "/bin/ln -sf " & quoted form of helperPath & " /opt/homebrew/bin/codexbar-cockpit"
 
   do shell script installCommand with administrator privileges
 end run
 APPLESCRIPT
 
-/bin/echo "CodexBar CLI installed. Try: codexbar usage"
+/bin/echo "CodexBar Cockpit CLI installed. Try: codexbar-cockpit usage"

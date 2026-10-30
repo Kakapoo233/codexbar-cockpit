@@ -1237,7 +1237,7 @@ extension GrokWebBillingFetcherTests {
 
     @Test
     func `web strategy is available from a cached browser session`() async {
-        let service = "com.steipete.codexbar.tests.grok-availability.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.grok-availability.\(UUID().uuidString)"
         CookieHeaderCache.resetDisplayCacheForTesting()
         defer { CookieHeaderCache.resetDisplayCacheForTesting() }
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
@@ -1271,7 +1271,7 @@ extension GrokWebBillingFetcherTests {
 
     @Test
     func `validated browser session stages a cache replacement for explicit refresh`() async throws {
-        let service = "com.steipete.codexbar.tests.grok-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.grok-refresh.\(UUID().uuidString)"
         CookieHeaderCache.resetDisplayCacheForTesting()
         defer { CookieHeaderCache.resetDisplayCacheForTesting() }
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {

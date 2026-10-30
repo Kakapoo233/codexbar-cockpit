@@ -67,7 +67,7 @@ struct ClaudeResilienceTests {
 
     @Test
     func `superseded credential change clears prior Claude state after cancellation`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -482,7 +482,7 @@ struct ClaudeResilienceTests {
 
     @Test
     func `credentials change clears prior Claude snapshot for non transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -567,7 +567,7 @@ struct ClaudeResilienceTests {
 
     @Test
     func `credentials change clears prior Claude snapshot for transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -652,7 +652,7 @@ struct ClaudeResilienceTests {
 
     @Test
     func `keychain change does not affect normal Claude refresh`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -769,7 +769,7 @@ struct ClaudeResilienceTests {
 
     @Test
     func `keychain removal does not affect normal Claude refresh`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -884,7 +884,7 @@ struct ClaudeResilienceTests {
 extension ClaudeResilienceTests {
     @Test
     func `keychain probe denial preserves prior Claude snapshot for transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -984,7 +984,7 @@ extension ClaudeResilienceTests {
 
     @Test
     func `keychain change does not affect reset backfill`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -1115,7 +1115,7 @@ extension ClaudeResilienceTests {
 
     @Test
     func `credentials change before fetch clears stale reset backfill`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
@@ -1298,7 +1298,7 @@ extension ClaudeResilienceTests {
 
     @Test
     func `credentials change during successful Claude fetch applies fresh snapshot without stale reset`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
+        try await KeychainCacheStore.withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
 

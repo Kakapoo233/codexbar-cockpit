@@ -29,7 +29,7 @@ private func appLanguageDefaults() -> UserDefaults {
         return .standard
     }
     // Fallback for running outside a .app bundle (swift run / debug builds)
-    return UserDefaults(suiteName: "CodexBar") ?? .standard
+    return UserDefaults(suiteName: CockpitAppIdentity.bundleIdentifier) ?? .standard
 }
 
 private let isRunningTestsProcessAtStartup = TestProcessSafety.isRunning
@@ -257,17 +257,24 @@ func codexBarLocalizedString(_ key: String, bundle: Bundle, resourceBundle: Bund
     let value = bundle.localizedString(forKey: key, value: nil, table: nil)
     let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
     if !trimmed.isEmpty, value != key {
-        return value
+        return cockpitConfigPathPresentationText(value)
     }
 
     guard bundle.bundleURL.lastPathComponent != "en.lproj",
           let englishBundle = lprojBundle(named: "en", in: resourceBundle)
     else {
-        return trimmed.isEmpty ? key : value
+        return cockpitConfigPathPresentationText(trimmed.isEmpty ? key : value)
     }
 
     let fallback = englishBundle.localizedString(forKey: key, value: nil, table: nil)
-    return fallback.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? key : fallback
+    return cockpitConfigPathPresentationText(
+        fallback.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? key : fallback)
+}
+
+/// Keep upstream translation keys while showing this fork's actual configuration destination.
+private func cockpitConfigPathPresentationText(_ value: String) -> String {
+    value.replacingOccurrences(of: "~/.codexbar/config.json", with: CockpitAppIdentity.configPathDisplay)
+        .replacingOccurrences(of: "~/.config/codexbar/config.json", with: CockpitAppIdentity.configPathDisplay)
 }
 
 func resetCodexBarLocalizationCache() {

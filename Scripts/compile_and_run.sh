@@ -4,8 +4,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-APP_BUNDLE="${ROOT_DIR}/CodexBar.app"
-APP_PROCESS_PATTERN="CodexBar.app/Contents/MacOS/CodexBar"
+APP_BUNDLE="${ROOT_DIR}/CodexBar Cockpit.app"
+APP_PROCESS_PATTERN="CodexBar Cockpit.app/Contents/MacOS/CodexBarCockpit"
 DEBUG_PROCESS_PATTERN="${ROOT_DIR}/.build/debug/CodexBar"
 RELEASE_PROCESS_PATTERN="${ROOT_DIR}/.build/release/CodexBar"
 LOCK_KEY="$(printf '%s' "${ROOT_DIR}" | shasum -a 256 | cut -c1-8)"
@@ -153,19 +153,13 @@ acquire_lock() {
 
 trap cleanup EXIT INT TERM
 
-kill_claude_probes() {
-  # CodexBar spawns `claude /usage` + `/status` in a PTY; if we kill the app mid-probe we can orphan them.
-  pkill -f "claude (/status|/usage) --allowed-tools" 2>/dev/null || true
-  sleep 0.2
-  pkill -9 -f "claude (/status|/usage) --allowed-tools" 2>/dev/null || true
-}
 
 kill_all_codexbar() {
   is_running() {
     pgrep -f "${APP_PROCESS_PATTERN}" >/dev/null 2>&1 \
       || pgrep -f "${DEBUG_PROCESS_PATTERN}" >/dev/null 2>&1 \
       || pgrep -f "${RELEASE_PROCESS_PATTERN}" >/dev/null 2>&1 \
-      || pgrep -x "CodexBar" >/dev/null 2>&1
+      || pgrep -x "CodexBarCockpit" >/dev/null 2>&1
   }
 
   # Phase 1: request termination (give the app time to exit cleanly).
@@ -173,7 +167,7 @@ kill_all_codexbar() {
     pkill -f "${APP_PROCESS_PATTERN}" 2>/dev/null || true
     pkill -f "${DEBUG_PROCESS_PATTERN}" 2>/dev/null || true
     pkill -f "${RELEASE_PROCESS_PATTERN}" 2>/dev/null || true
-    pkill -x "CodexBar" 2>/dev/null || true
+    pkill -x "CodexBarCockpit" 2>/dev/null || true
     if ! is_running; then
       return 0
     fi
@@ -184,7 +178,7 @@ kill_all_codexbar() {
   pkill -9 -f "${APP_PROCESS_PATTERN}" 2>/dev/null || true
   pkill -9 -f "${DEBUG_PROCESS_PATTERN}" 2>/dev/null || true
   pkill -9 -f "${RELEASE_PROCESS_PATTERN}" 2>/dev/null || true
-  pkill -9 -x "CodexBar" 2>/dev/null || true
+  pkill -9 -x "CodexBarCockpit" 2>/dev/null || true
 
   for _ in {1..25}; do
     if ! is_running; then
@@ -230,7 +224,6 @@ acquire_lock
 # 2) Kill all running CodexBar instances (debug, release, bundled).
 log "==> Killing existing CodexBar instances"
 kill_all_codexbar
-kill_claude_probes
 
 # 2.5) Optionally delete keychain entries to avoid permission prompts with adhoc signing
 # (adhoc signature changes on every build, making old keychain entries inaccessible)
@@ -238,8 +231,8 @@ if [[ "${SIGNING_MODE:-adhoc}" == "adhoc" && "${CLEAR_ADHOC_KEYCHAIN}" == "1" ]]
   log "==> Clearing CodexBar keychain entries (adhoc signing)"
   # Clear both the legacy keychain store and the current cache service when developers explicitly want a clean reset
   # of CodexBar-owned keychain state for ad-hoc builds.
-  delete_keychain_service_items "com.steipete.CodexBar"
-  delete_keychain_service_items "com.steipete.codexbar.cache"
+  delete_keychain_service_items "io.github.kakapoo233.codexbar-cockpit.credentials"
+  delete_keychain_service_items "io.github.kakapoo233.codexbar-cockpit.cache"
 elif [[ "${SIGNING_MODE:-adhoc}" == "adhoc" ]]; then
   log "==> Preserving CodexBar keychain entries (pass --clear-adhoc-keychain to reset adhoc keychain state)"
 fi
@@ -273,7 +266,7 @@ fi
 log "==> launch app"
 if ! open "${APP_BUNDLE}"; then
   log "WARN: launch app returned non-zero; falling back to direct binary launch."
-  "${APP_BUNDLE}/Contents/MacOS/CodexBar" >/dev/null 2>&1 &
+  "${APP_BUNDLE}/Contents/MacOS/CodexBarCockpit" >/dev/null 2>&1 &
   disown
 fi
 

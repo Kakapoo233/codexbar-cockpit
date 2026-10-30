@@ -60,7 +60,7 @@ for line in sys.stdin:
     stub.chmod(0o755)
     environment = {
         "HOME": str(root), "CFFIXED_USER_HOME": str(root), "CODEX_HOME": str(root / "empty"),
-        "CODEXBAR_CONFIG": str(config), "CODEX_CLI_PATH": str(stub), "PATH": "/usr/bin:/bin",
+        "CODEXBAR_COCKPIT_CONFIG": str(config), "CODEX_CLI_PATH": str(stub), "PATH": "/usr/bin:/bin",
         "SHELL": "/bin/sh", "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS": "1",
         "CODEXBAR_DISABLE_KEYCHAIN_ACCESS": "1", "CODEXBAR_TEST_SESSION_FILE_ISOLATION": "1",
         "CODEXBAR_TEST_CODEX_FILE_ISOLATION": "1",

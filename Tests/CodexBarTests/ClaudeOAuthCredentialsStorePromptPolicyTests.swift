@@ -60,7 +60,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `does not read claude keychain in background when prompt mode only on user action`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -115,7 +115,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `can read claude keychain on user action when prompt mode only on user action`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -164,7 +164,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `user initiated claude keychain reads respect pre alert acknowledgement cooldown`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -231,7 +231,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `shows pre alert when claude keychain likely requires interaction`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -292,7 +292,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `shows pre alert when claude keychain preflight fails`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -353,7 +353,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `experimental reader skips pre alert when security CLI read succeeds`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -415,7 +415,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `experimental reader shows pre alert when security CLI fails and fallback needs interaction`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -481,7 +481,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `experimental reader does not fallback in background when stored mode only on user action`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -559,7 +559,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `experimental reader does not fallback when stored mode never`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -636,7 +636,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
     func `experimental reader non interactive fallback blocked in background when stored mode only on user action`()
         throws
     {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -704,7 +704,7 @@ struct ClaudeOAuthCredentialsStorePromptPolicyTests {
 
     @Test
     func `experimental reader allows fallback in background when stored mode always`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)

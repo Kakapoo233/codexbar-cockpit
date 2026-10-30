@@ -39,7 +39,7 @@ struct ClaudeOAuthBackgroundCacheRecoveryTests {
         let pending = GenerationRaceStore()
         let revocationContext = ClaudeOAuthCredentialsStore
             .$taskDirectKeychainReadConsentRevocationMarkerStoreOverride
-        let service = "com.steipete.codexbar.cache.background-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.background-tests.\(UUID().uuidString)"
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -233,7 +233,7 @@ struct ClaudeOAuthBackgroundCacheRecoveryTests {
         let memory = ClaudeOAuthCredentialsStore.MemoryCacheStore()
         let pending = ClaudeOAuthCredentialsStore.PendingCacheClearMemoryStore()
         let memoryContext = ClaudeOAuthCredentialsStore.$taskMemoryCacheStoreOverride
-        let service = "com.steipete.codexbar.cache.refresh-recovery-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.refresh-recovery-tests.\(UUID().uuidString)"
         let profileIdentifier = "synthetic-refresh-recovery-profile"
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -349,7 +349,7 @@ struct ClaudeOAuthBackgroundCacheRecoveryTests {
         let memory = ClaudeOAuthCredentialsStore.MemoryCacheStore()
         let pending = InterposingPendingStore()
         let memoryContext = ClaudeOAuthCredentialsStore.$taskMemoryCacheStoreOverride
-        let service = "com.steipete.codexbar.cache.stale-recovery-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.stale-recovery-tests.\(UUID().uuidString)"
         let profileIdentifier = "synthetic-stale-recovery-profile"
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

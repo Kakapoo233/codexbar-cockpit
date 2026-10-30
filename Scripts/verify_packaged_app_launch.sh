@@ -29,7 +29,7 @@ if [[ "${CODEXBAR_SKIP_LAUNCH_SMOKE:-0}" == "1" ]]; then
   exit 0
 fi
 
-if [[ ! -x "$APP_BUNDLE/Contents/MacOS/CodexBar" ]]; then
+if [[ ! -x "$APP_BUNDLE/Contents/MacOS/CodexBarCockpit" ]]; then
   echo "ERROR: Launch smoke check: missing executable in ${APP_BUNDLE}" >&2
   exit 1
 fi
@@ -78,7 +78,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 cp -R "$APP_BUNDLE" "$SMOKE_DIR/CodexBar.app"
-SMOKE_BIN="$SMOKE_DIR/CodexBar.app/Contents/MacOS/CodexBar"
+SMOKE_BIN="$SMOKE_DIR/CodexBar.app/Contents/MacOS/CodexBarCockpit"
 CLI_BIN="$SMOKE_DIR/CodexBar.app/Contents/Helpers/CodexBarCLI"
 CLI_SYMLINK_DIR="$SMOKE_DIR/bin"
 CLI_SYMLINK="$CLI_SYMLINK_DIR/codexbar"
@@ -99,7 +99,7 @@ SMOKE_ENV=(/usr/bin/env -i
   "CFFIXED_USER_HOME=$SMOKE_HOME"
   "XDG_CONFIG_HOME=$SMOKE_HOME/.config"
   "TMPDIR=$SMOKE_DIR/tmp/"
-  "CODEXBAR_CONFIG=$SMOKE_HOME/config.json"
+  "CODEXBAR_COCKPIT_CONFIG=$SMOKE_HOME/config.json"
   "SWIFT_TESTING=1"
   "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS=1"
   "CODEXBAR_TEST_CODEX_FILE_ISOLATION=1"

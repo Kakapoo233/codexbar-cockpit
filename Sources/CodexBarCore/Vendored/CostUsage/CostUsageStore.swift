@@ -250,7 +250,7 @@ actor CostUsageStore {
 
     static func databaseURL(cacheRoot: URL?) -> URL {
         let root = cacheRoot ?? FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("CodexBar", isDirectory: true)
+            .appendingPathComponent(CockpitAppIdentity.storageDirectoryName, isDirectory: true)
         return root.appendingPathComponent("cost-usage", isDirectory: true)
             .appendingPathComponent(Self.databaseFilename, isDirectory: false)
     }

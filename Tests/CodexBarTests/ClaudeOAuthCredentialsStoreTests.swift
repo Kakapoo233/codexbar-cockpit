@@ -140,7 +140,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `loads from keychain cache before expired file`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try ProviderInteractionContext.$current.withValue(.background) {
             try KeychainCacheStore.withServiceOverrideForTesting(service) {
                 try KeychainAccessGate.withTaskOverrideForTesting(false) {
@@ -208,7 +208,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `load record non interactive repair can be disabled`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -268,7 +268,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `invalidates cache when credentials file changes`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -315,7 +315,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `returns expired file when no other sources`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(true) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -350,7 +350,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `load with auto refresh expired claude CLI owner throws delegated refresh`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -402,7 +402,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `load with auto refresh expired codexbar owner uses direct refresh path`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -459,7 +459,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `load record legacy cache entry without owner defaults to claude CLI owner`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -502,7 +502,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `has cached credentials returns false for expired unrefreshable codexbar cache entry`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -535,7 +535,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `has cached credentials returns true for expired refreshable cache entry`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -590,7 +590,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `syncs cache when claude keychain fingerprint changes and token differs`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -691,7 +691,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `does not sync in background when cache valid and prompt mode only on user action`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {
                 KeychainCacheStore.setTestStoreForTesting(true)
@@ -778,7 +778,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `does not sync when claude keychain fingerprint unchanged`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -840,7 +840,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `does not sync when keychain credentials expired but cache valid`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -905,7 +905,7 @@ struct ClaudeOAuthCredentialsStoreTests {
 
     @Test
     func `respects prompt cooldown gate when disabled prompting`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -1051,7 +1051,7 @@ extension ClaudeOAuthCredentialsStoreTests {
     }
 
     private func withIsolatedOAuthCache<T>(operation: () throws -> T) throws -> T {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         return try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }

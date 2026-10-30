@@ -25,7 +25,7 @@ public enum CodexBarConfigStoreError: LocalizedError {
 }
 
 public struct CodexBarConfigStore: @unchecked Sendable {
-    public static let pathEnvironmentKey = "CODEXBAR_CONFIG"
+    public static let pathEnvironmentKey = "CODEXBAR_COCKPIT_CONFIG"
     public static let xdgConfigHomeEnvironmentKey = "XDG_CONFIG_HOME"
 
     public let fileURL: URL
@@ -143,21 +143,21 @@ public struct CodexBarConfigStore: @unchecked Sendable {
             let expanded = (xdgConfigHome as NSString).expandingTildeInPath
             if (expanded as NSString).isAbsolutePath {
                 return URL(fileURLWithPath: expanded, isDirectory: true)
-                    .appendingPathComponent("codexbar", isDirectory: true)
+                    .appendingPathComponent(CockpitAppIdentity.configDirectoryName, isDirectory: true)
                     .appendingPathComponent("config.json")
             }
         }
 
         let xdgDefault = home
             .appendingPathComponent(".config", isDirectory: true)
-            .appendingPathComponent("codexbar", isDirectory: true)
+            .appendingPathComponent(CockpitAppIdentity.configDirectoryName, isDirectory: true)
             .appendingPathComponent("config.json")
         if fileManager.fileExists(atPath: xdgDefault.path) {
             return xdgDefault
         }
 
         let legacy = home
-            .appendingPathComponent(".codexbar", isDirectory: true)
+            .appendingPathComponent(CockpitAppIdentity.legacyConfigDirectoryName, isDirectory: true)
             .appendingPathComponent("config.json")
         if fileManager.fileExists(atPath: legacy.path) {
             return legacy

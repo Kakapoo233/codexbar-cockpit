@@ -556,7 +556,7 @@ struct ClaudeOAuthFetchStrategyAvailabilityTests {
     func `auto mode only on user action background startup without cache is unavailable`() async throws {
         let context = self.makeContext(sourceMode: .auto)
         let strategy = ClaudeOAuthFetchStrategy()
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
 
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
@@ -629,7 +629,7 @@ struct ClaudeOAuthFetchStrategyAvailabilityTests {
     func `auto mode default reader does not bypass background startup prompt policy`() async throws {
         let context = self.makeContext(sourceMode: .auto)
         let strategy = ClaudeOAuthFetchStrategy()
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
 
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)

@@ -79,7 +79,7 @@ struct LocalizationBundleTests {
         <plist version="1.0">
         <dict>
             <key>CFBundleExecutable</key><string>CodexBar</string>
-            <key>CFBundleIdentifier</key><string>com.steipete.codexbar.tests</string>
+            <key>CFBundleIdentifier</key><string>io.github.kakapoo233.codexbar-cockpit.tests</string>
             <key>CFBundleName</key><string>CodexBar</string>
             <key>CFBundlePackageType</key><string>APPL</string>
         </dict>

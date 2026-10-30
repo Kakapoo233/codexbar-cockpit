@@ -1188,7 +1188,7 @@ struct ClaudeOAuthUpgradeCompatibilityTests {
         credentialsURLOverride: URL?,
         operation: @escaping @Sendable () async throws -> T) async throws -> T
     {
-        let service = "com.steipete.codexbar.oauth-upgrade-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.oauth-upgrade-tests.\(UUID().uuidString)"
         return try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }

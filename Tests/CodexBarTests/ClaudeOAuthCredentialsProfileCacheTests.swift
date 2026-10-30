@@ -29,7 +29,7 @@ struct ClaudeOAuthCredentialsProfileCacheTests {
     }
 
     private func withIsolatedCache<T>(_ operation: () throws -> T) throws -> T {
-        let service = "com.steipete.codexbar.cache.profile-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.profile-tests.\(UUID().uuidString)"
         let pendingStore = ClaudeOAuthCredentialsStore.PendingCacheClearMemoryStore()
         return try KeychainCacheStore.withServiceOverrideForTesting(service) {
             try KeychainAccessGate.withTaskOverrideForTesting(false) {

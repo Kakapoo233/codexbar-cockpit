@@ -97,6 +97,7 @@ check_swift_test_sharding() {
 }
 
 check_ci_path_gate() {
+  python3 "${ROOT_DIR}/Scripts/test_cockpit_workflow.py"
   "${ROOT_DIR}/Scripts/test_ci_path_gate.sh"
 }
 

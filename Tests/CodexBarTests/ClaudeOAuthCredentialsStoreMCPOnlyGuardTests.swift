@@ -7,7 +7,7 @@ import Testing
 struct ClaudeOAuthCredentialsStoreMCPOnlyGuardTests {
     @Test
     func `standard reader skips MCP keychain probe in background but preserves user refresh`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         let mcpOAuthOnly = Data(#"{"mcpOAuth":{"plugin:test":{"accessToken":"synthetic"}}}"#.utf8)
         let tempDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)

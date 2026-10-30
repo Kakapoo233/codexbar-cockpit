@@ -23,7 +23,9 @@ enum ProviderSessionStoreFile {
         {
             testDirectory ?? self.testDirectory
         } else {
-            applicationSupportDirectory().appendingPathComponent("CodexBar", isDirectory: true)
+            applicationSupportDirectory().appendingPathComponent(
+                CockpitAppIdentity.storageDirectoryName,
+                isDirectory: true)
         }
         return directory.appendingPathComponent(filename)
     }

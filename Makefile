@@ -14,13 +14,13 @@ start-debug:
 
 start-release:
 	./Scripts/package_app.sh release
-	pkill -x CodexBar || pkill -f CodexBar.app || true
-	cd /Users/steipete/Projects/codexbar && open -n /Users/steipete/Projects/codexbar/CodexBar.app
+	pkill -x CodexBarCockpit || true
+	open -n "$(CURDIR)/CodexBar Cockpit.app"
 
 restart: start
 
 stop:
-	pkill -x CodexBar || pkill -f CodexBar.app || true
+	pkill -x CodexBarCockpit || true
 
 check lint:
 	./Scripts/lint.sh $(if $(filter Linux,$(shell uname -s)),lint-linux,lint)

@@ -177,7 +177,7 @@ struct CLIPluginConfigPreservationTests {
                     "CODEX_HOME": self.directory.appendingPathComponent(".codex").path,
                     "CODEX_CLI_PATH": self.directory.appendingPathComponent("codex").path,
                     "SHELL": "/bin/sh",
-                    "CODEXBAR_CONFIG": self.configURL.path,
+                    "CODEXBAR_COCKPIT_CONFIG": self.configURL.path,
                     "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS": "1",
                 ],
                 timeout: 30,

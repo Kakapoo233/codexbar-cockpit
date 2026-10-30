@@ -62,7 +62,7 @@ struct ClaudeOAuthDelegatedRefreshRecoveryTests {
         let delegatedCounter = AsyncCounter()
         let usageResponse = try Self.makeOAuthUsageResponse()
         let tokenCapture = TokenCapture()
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
 
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainAccessGate.withTaskOverrideForTesting(false) {
@@ -170,7 +170,7 @@ struct ClaudeOAuthDelegatedRefreshRecoveryTests {
         let delegatedCounter = AsyncCounter()
         let usageResponse = try Self.makeOAuthUsageResponse()
         let tokenCapture = TokenCapture()
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
 
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainAccessGate.withTaskOverrideForTesting(false) {
@@ -287,7 +287,7 @@ struct ClaudeOAuthDelegatedRefreshRecoveryTests {
         async throws
     {
         let delegatedCounter = AsyncCounter()
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
 
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainAccessGate.withTaskOverrideForTesting(false) {

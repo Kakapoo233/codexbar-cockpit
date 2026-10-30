@@ -38,7 +38,7 @@ def check_memory(binary, root):
         reservation.bind(("127.0.0.1", 0))
         port = reservation.getsockname()[1]
     environment = {"PATH": "/usr/bin:/bin", "HOME": str(home),
-                   "CODEX_HOME": str(home / ".codex"), "CODEXBAR_CONFIG": str(config),
+                   "CODEX_HOME": str(home / ".codex"), "CODEXBAR_COCKPIT_CONFIG": str(config),
                    "XDG_CACHE_HOME": str(home / ".cache")}
     with (root / "server.log").open("w") as log:
         process = subprocess.Popen([str(binary), "serve", "--port", str(port),

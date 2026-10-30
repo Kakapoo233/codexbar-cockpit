@@ -12,10 +12,14 @@ public struct PreferencesDocument: Codable, Sendable {
     }
 
     public static let pendingImportKey = "portablePreferencesPendingImport"
-    public static let importNotification = "com.steipete.codexbar.preferencesImport"
-    public static let defaultsDomain = "com.steipete.codexbar"
+    public static let importNotification = "\(CockpitAppIdentity.bundleIdentifier).preferencesImport"
+    public static let defaultsDomain = CockpitAppIdentity.bundleIdentifier
     private var version = 1
     private var preferences: [String: ProviderConfigExtensionValue] = [:]
+
+    public var settingCount: Int {
+        self.preferences.count
+    }
 
     private static let boolKeys = Set([
         "statusChecksEnabled", "sessionQuotaNotificationsEnabled", "quotaWarningNotificationsEnabled",
@@ -94,14 +98,21 @@ public struct PreferencesDocument: Codable, Sendable {
     }
 
     public init(defaults: UserDefaults) throws {
-        for key in Self.keys {
-            let defaultsKey = key == "costUsageEnabled" ? "tokenCostUsageEnabled" : key
-            guard let value = defaults.object(forKey: defaultsKey) else { continue }
-            let data = try JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed)
-            self.preferences[key] = try JSONDecoder().decode(ProviderConfigExtensionValue.self, from: data)
-        }
+        try self.init(persistentDomain: defaults.dictionaryRepresentation())
         if let pending = defaults.data(forKey: Self.pendingImportKey) {
             self = try self.merging(Self(data: pending))
+        }
+        try self.validate()
+    }
+
+    /// Imports only known presentation preferences from an explicitly selected domain. Reading a
+    /// dictionary avoids searching another application's defaults, registered values or credentials.
+    public init(persistentDomain: [String: Any]) throws {
+        for key in Self.keys {
+            let defaultsKey = key == "costUsageEnabled" ? "tokenCostUsageEnabled" : key
+            guard let value = persistentDomain[defaultsKey] else { continue }
+            let data = try JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed)
+            self.preferences[key] = try JSONDecoder().decode(ProviderConfigExtensionValue.self, from: data)
         }
         try self.validate()
     }

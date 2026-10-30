@@ -267,7 +267,7 @@ struct ProviderSettingsDescriptorTests {
         let context = fixture.settingsContext(provider: .opencode)
         let picker = try #require(OpenCodeProviderImplementation().settingsPickers(context: context).first)
         let action = try #require(picker.trailingActions.first)
-        let service = "com.steipete.codexbar.tests.settings-cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.settings-cookie-refresh.\(UUID().uuidString)"
         var observedInteraction: ProviderInteraction?
 
         #expect(action.title == "Refresh")
@@ -388,7 +388,7 @@ struct ProviderSettingsDescriptorTests {
         let context = fixture.settingsContext(provider: .opencodego)
         let picker = try #require(OpenCodeGoProviderImplementation().settingsPickers(context: context).first)
         let action = try #require(picker.trailingActions.first)
-        let service = "com.steipete.codexbar.tests.settings-cookie-validation.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.settings-cookie-validation.\(UUID().uuidString)"
 
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -423,7 +423,7 @@ struct ProviderSettingsDescriptorTests {
         let context = fixture.settingsContext(provider: .opencode)
         let picker = try #require(OpenCodeProviderImplementation().settingsPickers(context: context).first)
         let action = try #require(picker.trailingActions.first)
-        let service = "com.steipete.codexbar.tests.settings-cookie-missing-snapshot.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.settings-cookie-missing-snapshot.\(UUID().uuidString)"
         fixture.store.snapshots[.opencode] = UsageSnapshot(
             primary: nil,
             secondary: nil,
@@ -459,7 +459,7 @@ struct ProviderSettingsDescriptorTests {
         let context = fixture.settingsContext(provider: .opencode)
         let picker = try #require(OpenCodeProviderImplementation().settingsPickers(context: context).first)
         let action = try #require(picker.trailingActions.first)
-        let service = "com.steipete.codexbar.tests.settings-cookie-cooldown.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.settings-cookie-cooldown.\(UUID().uuidString)"
         var explicitRetryAllowed = false
 
         BrowserCookieAccessGate.resetForTesting()
