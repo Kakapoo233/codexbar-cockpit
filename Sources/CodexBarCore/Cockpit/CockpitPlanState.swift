@@ -83,6 +83,19 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         self.comfortRecords = Array(self.comfortRecords.suffix(3000))
     }
 
+    public mutating func clearComfort(
+        providerID: String,
+        accountID: String = "default",
+        on date: Date = Date(),
+        calendar: Calendar = .current)
+    {
+        let day = CockpitCalendar.dateKey(for: date, calendar: calendar)
+        self.comfortRecords.removeAll {
+            $0.providerID == providerID && $0.accountID == accountID
+                && $0.localDateKey == day && $0.timeZoneIdentifier == calendar.timeZone.identifier
+        }
+    }
+
     public func status(
         providerID: String,
         accountID: String = "default",

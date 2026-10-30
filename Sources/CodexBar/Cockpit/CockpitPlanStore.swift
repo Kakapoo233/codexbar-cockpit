@@ -92,15 +92,53 @@ final class CockpitPlanStore {
     func recordLocalComfort(
         _ feeling: CockpitFeeling,
         for provider: UsageProvider,
+        on date: Date = Date(),
         totalTokens: Int?,
-        coverage: CockpitCoverage = .partial)
+        coverage: CockpitCoverage = .partial,
+        calendar: Calendar = .current)
     {
         self.state.recordComfort(
             feeling,
             providerID: provider.rawValue,
             accountID: "local-machine",
+            on: date,
             totalTokens: totalTokens,
-            coverage: totalTokens == nil ? .partial : coverage)
+            coverage: totalTokens == nil ? .partial : coverage,
+            calendar: calendar)
+        self.save()
+    }
+
+    /// Editing a calendar rating preserves any measurement captured with the original record.
+    func setLocalComfortFeeling(
+        _ feeling: CockpitFeeling,
+        for provider: UsageProvider,
+        on date: Date,
+        calendar: Calendar = .current)
+    {
+        let day = CockpitCalendar.dateKey(for: date, calendar: calendar)
+        let previous = self.state.comfortRecords.last {
+            $0.providerID == provider.rawValue && $0.accountID == "local-machine"
+                && $0.localDateKey == day && $0.timeZoneIdentifier == calendar.timeZone.identifier
+        }
+        self.recordLocalComfort(
+            feeling,
+            for: provider,
+            on: previous?.recordedAt ?? date,
+            totalTokens: previous?.totalTokens,
+            coverage: previous?.coverage ?? .partial,
+            calendar: calendar)
+    }
+
+    func clearLocalComfort(
+        for provider: UsageProvider,
+        on date: Date,
+        calendar: Calendar = .current)
+    {
+        self.state.clearComfort(
+            providerID: provider.rawValue,
+            accountID: "local-machine",
+            on: date,
+            calendar: calendar)
         self.save()
     }
 

@@ -125,9 +125,15 @@ struct CockpitScreenshotUITests {
                 selectedDay: Self.now,
                 days: days,
                 select: { _ in })
+            CockpitCalendarStatusEditor(
+                selected: .comfortable,
+                canRecord: true,
+                errorMessage: nil,
+                onSelect: { _ in },
+                onClear: {})
         }
         .padding(28)
-        let monthPNG = try #require(Self.pngData(month, size: CGSize(width: 960, height: 700)))
+        let monthPNG = try #require(Self.pngData(month, size: CGSize(width: 960, height: 940)))
         try monthPNG.write(to: directory.appendingPathComponent("cockpit-calendar-zh.png"))
     }
 

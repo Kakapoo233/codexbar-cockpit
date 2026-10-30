@@ -17,6 +17,23 @@ enum CockpitCalendarProjection {
         let trailing = (7 - cells.count % 7) % 7
         return cells + [Date?](repeating: nil, count: trailing)
     }
+
+    static func canRecord(on date: Date, now: Date = Date(), calendar: Calendar) -> Bool {
+        calendar.startOfDay(for: date) <= calendar.startOfDay(for: now)
+    }
+
+    static func feeling(
+        on date: Date,
+        providerID: String,
+        records: [CockpitComfortRecord],
+        calendar: Calendar) -> CockpitFeeling?
+    {
+        let key = CockpitCalendar.dateKey(for: date, calendar: calendar)
+        return records.filter {
+            $0.providerID == providerID && $0.accountID == "local-machine"
+                && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == key
+        }.max { $0.recordedAt < $1.recordedAt }?.feeling
+    }
 }
 
 @MainActor
@@ -104,11 +121,11 @@ struct CockpitCalendarView: View {
     }
 
     private func feeling(on day: Date) -> CockpitFeeling? {
-        self.planStore.state.status(
-            providerID: self.feelingProvider.rawValue,
-            accountID: "local-machine",
+        CockpitCalendarProjection.feeling(
             on: day,
-            calendar: self.calendar).feeling
+            providerID: self.feelingProvider.rawValue,
+            records: self.planStore.state.comfortRecords,
+            calendar: self.calendar)
     }
 
     private var dayDetails: some View {
@@ -116,9 +133,10 @@ struct CockpitCalendarView: View {
             Text(spendDashboardLedgerDateText(self.selectedDay, timeZone: self.calendar.timeZone, accessibility: true))
                 .font(.headline)
             if let feeling = self.feeling(on: self.selectedDay) {
-                Label(L("cockpit_ui_feeling_value", feeling.cockpitTitle), systemImage: feeling.cockpitSymbol)
+                Label(L("cockpit_ui_feeling_value", feeling.calendarTitle), systemImage: feeling.cockpitSymbol)
                     .foregroundStyle(.secondary)
             }
+            self.personalStatus
             if self.controller.model.groups.isEmpty {
                 Text(L("cockpit_ui_no_local_usage"))
                     .foregroundStyle(.secondary)
@@ -152,5 +170,89 @@ struct CockpitCalendarView: View {
                 }
             }
         }
+    }
+
+    private var personalStatus: some View {
+        CockpitCalendarStatusEditor(
+            selected: self.feeling(on: self.selectedDay),
+            canRecord: CockpitCalendarProjection.canRecord(on: self.selectedDay, calendar: self.calendar),
+            errorMessage: self.planStore.errorMessage,
+            onSelect: { feeling in
+                let calendar = self.calendar
+                guard CockpitCalendarProjection.canRecord(on: self.selectedDay, calendar: calendar) else { return }
+                // Calendar totals can mix providers and profiles. Preserve prior measurements when editing.
+                self.planStore.setLocalComfortFeeling(
+                    feeling,
+                    for: self.feelingProvider,
+                    on: self.selectedDay,
+                    calendar: calendar)
+            },
+            onClear: {
+                self.planStore.clearLocalComfort(
+                    for: self.feelingProvider,
+                    on: self.selectedDay,
+                    calendar: self.calendar)
+            })
+    }
+}
+
+/// Pure-input editor shared by the live calendar and synthetic UI acceptance renders.
+struct CockpitCalendarStatusEditor: View {
+    let selected: CockpitFeeling?
+    let canRecord: Bool
+    var errorMessage: String?
+    let onSelect: (CockpitFeeling) -> Void
+    let onClear: () -> Void
+
+    var body: some View {
+        GroupBox(L("cockpit_ui_calendar_personal_status")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(L("cockpit_ui_calendar_subjective_note"))
+                    .font(.caption).foregroundStyle(.secondary)
+                HStack(spacing: 10) {
+                    ForEach([CockpitFeeling.light, .comfortable, .overloaded], id: \.self) { feeling in
+                        self.statusButton(feeling, selected: self.selected == feeling)
+                            .disabled(!self.canRecord)
+                    }
+                }
+                Button(L("cockpit_ui_calendar_clear")) { self.onClear() }
+                    .disabled(!self.canRecord || self.selected == nil)
+                if !self.canRecord {
+                    Label(L("cockpit_ui_calendar_future"), systemImage: "calendar.badge.exclamationmark")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                if let error = self.errorMessage {
+                    Label(error, systemImage: "exclamationmark.triangle")
+                        .font(.caption).foregroundStyle(.orange)
+                }
+            }
+            .padding(8)
+        }
+    }
+
+    private func statusButton(_ feeling: CockpitFeeling, selected: Bool) -> some View {
+        Button {
+            guard self.canRecord else { return }
+            self.onSelect(feeling)
+        } label: {
+            Label(feeling.calendarTitle, systemImage: selected ? "checkmark.circle.fill" : feeling.cockpitSymbol)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(
+                    selected ? Color.accentColor.opacity(0.16) : Color.primary.opacity(0.04),
+                    in: RoundedRectangle(cornerRadius: 8))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(selected ? Color.accentColor : Color.clear, lineWidth: 1.5)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityValue(L(selected ? "cockpit_ui_calendar_selected" : "cockpit_ui_calendar_unselected"))
+    }
+}
+
+extension CockpitFeeling {
+    var calendarTitle: String {
+        self == .overloaded ? L("cockpit_ui_calendar_overloaded") : self.cockpitTitle
     }
 }

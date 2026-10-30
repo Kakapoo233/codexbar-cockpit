@@ -54,7 +54,7 @@ struct CockpitMonthGridView: View {
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
                 if let feeling = self.days[day]?.feeling {
-                    Text(feeling.cockpitTitle).font(.caption2).foregroundStyle(.tint)
+                    Text(feeling.calendarTitle).font(.caption2).foregroundStyle(.tint)
                 }
             }
             .padding(9)
