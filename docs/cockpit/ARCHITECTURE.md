@@ -27,6 +27,8 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a
   fresh, complete ambient Token sample; editing history preserves the original measurement.
 - Settings remain in the canonical preferences window, including explicit import from CodexBar.
+- Receipt PNG saves use an asynchronous sheet owned by the receipt preview's actual window.
+  Saving blocks only that preview; detaching the preview cancels its pending save without writing.
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.
   `CockpitSettingsImport` exposes only a whitelist of presentation and provider selection settings.
 

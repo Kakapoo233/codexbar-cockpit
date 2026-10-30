@@ -1,5 +1,6 @@
 import AppKit
 import CodexBarCore
+import Observation
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -8,13 +9,16 @@ struct CockpitReceiptPreview: View {
     let receipt: CockpitReceiptModel
     @Environment(\.dismiss) private var dismiss
     @State private var message = L("cockpit_ui_preview_note")
+    @State private var imageSave = CockpitReceiptImageSave()
 
     var body: some View {
         VStack(spacing: 16) {
             HStack {
                 Text(L("cockpit_ui_preview_title")).font(.headline)
                 Spacer()
-                Button(L("cockpit_ui_done")) { self.dismiss() }.keyboardShortcut(.cancelAction)
+                Button(L("cockpit_ui_done")) { self.dismiss() }
+                    .keyboardShortcut(.cancelAction)
+                    .disabled(self.imageSave.isSaving)
             }
             ScrollView {
                 CockpitReceiptCardView(receipt: self.receipt)
@@ -28,16 +32,25 @@ struct CockpitReceiptPreview: View {
                     Label(L("cockpit_ui_copy_png"), systemImage: "photo.on.rectangle")
                 }
                 Button {
-                    if ShareStatsExporter.saveImage(self.receipt) { self.message = L("cockpit_ui_saved") }
+                    self.imageSave.save(self.receipt) { outcome in
+                        switch outcome {
+                        case .saved: self.message = L("cockpit_ui_saved")
+                        case .failed: self.message = L("cockpit_ui_export_error")
+                        case .cancelled: break
+                        }
+                    }
                 } label: {
                     Label(L("cockpit_ui_save_png"), systemImage: "square.and.arrow.down")
                 }
+                .disabled(!self.imageSave.canSave)
                 Spacer()
                 Text(self.message).font(.caption).foregroundStyle(.secondary)
             }
         }
         .padding(20)
         .frame(width: 700, height: 680)
+        .background(CockpitReceiptWindowReader { self.imageSave.attach(to: $0) })
+        .onDisappear { self.imageSave.attach(to: nil) }
     }
 }
 
@@ -188,20 +201,147 @@ extension ShareStatsExporter {
         pasteboard.clearContents()
         return pasteboard.writeObjects([item])
     }
+}
 
-    static func saveImage(_ receipt: CockpitReceiptModel) -> Bool {
-        guard let data = ShareStatsRenderer.pngData(for: receipt) else { return false }
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.png]
-        panel.canCreateDirectories = true
-        panel.nameFieldStringValue = "codexbar-cockpit-receipt.png"
-        guard panel.runModal() == .OK, let url = panel.url else { return false }
-        do {
-            try data.write(to: url, options: .atomic)
-            return true
-        } catch {
-            NSSound.beep()
-            return false
+@MainActor
+protocol CockpitReceiptSavePanel: AnyObject {
+    func begin(on window: NSWindow, completion: @escaping @MainActor (URL?) -> Void)
+    func cancel()
+}
+
+/// Keeps PNG saving scoped to the preview's own sheet, without an application-modal run loop.
+@MainActor
+@Observable
+final class CockpitReceiptImageSave {
+    enum Outcome: Equatable { case saved, cancelled, failed }
+
+    private(set) var isSaving = false
+    private(set) var hasWindow = false
+    @ObservationIgnored private weak var window: NSWindow?
+    @ObservationIgnored private var pending: Request?
+    private let render: @MainActor (CockpitReceiptModel) -> Data?
+    private let makePanel: @MainActor () -> any CockpitReceiptSavePanel
+    private let write: @MainActor (Data, URL) throws -> Void
+
+    private struct Request {
+        let id: UUID
+        let panel: any CockpitReceiptSavePanel
+        let completion: @MainActor (Outcome) -> Void
+    }
+
+    init(
+        render: @escaping @MainActor (CockpitReceiptModel) -> Data? = ShareStatsRenderer.pngData,
+        makePanel: @escaping @MainActor () -> any CockpitReceiptSavePanel = { CockpitReceiptNativeSavePanel() },
+        write: @escaping @MainActor (Data, URL) throws -> Void = { try $0.write(to: $1, options: .atomic) })
+    {
+        self.render = render
+        self.makePanel = makePanel
+        self.write = write
+    }
+
+    var canSave: Bool {
+        self.hasWindow && !self.isSaving
+    }
+
+    func attach(to window: NSWindow?) {
+        if window == nil || self.window !== window { self.cancel() }
+        self.window = window
+        self.hasWindow = window != nil
+    }
+
+    func save(_ receipt: CockpitReceiptModel, completion: @escaping @MainActor (Outcome) -> Void) {
+        guard !self.isSaving else { return }
+        guard let window = self.window, let data = self.render(receipt) else {
+            completion(.failed)
+            return
+        }
+        let request = Request(id: UUID(), panel: self.makePanel(), completion: completion)
+        let requestID = request.id
+        self.pending = request
+        self.isSaving = true
+        request.panel.begin(on: window) { [weak self] url in
+            guard let self, self.pending?.id == requestID else { return }
+            self.pending = nil
+            self.isSaving = false
+            guard let url else {
+                completion(.cancelled)
+                return
+            }
+            do {
+                try self.write(data, url)
+                completion(.saved)
+            } catch {
+                completion(.failed)
+            }
+        }
+    }
+
+    func cancel() {
+        guard let request = self.pending else { return }
+        self.pending = nil
+        self.isSaving = false
+        request.panel.cancel()
+        request.completion(.cancelled)
+    }
+}
+
+@MainActor
+private final class CockpitReceiptNativeSavePanel: CockpitReceiptSavePanel {
+    private let panel = NSSavePanel()
+    private weak var owner: NSWindow?
+
+    func begin(on window: NSWindow, completion: @escaping @MainActor (URL?) -> Void) {
+        self.owner = window
+        self.panel.allowedContentTypes = [.png]
+        self.panel.canCreateDirectories = true
+        self.panel.nameFieldStringValue = "codexbar-cockpit-receipt.png"
+        self.panel.beginSheetModal(for: window) { [weak self] response in
+            guard let self else { return }
+            self.panel.orderOut(nil)
+            self.owner = nil
+            completion(response == .OK ? self.panel.url : nil)
+        }
+    }
+
+    func cancel() {
+        self.owner?.endSheet(self.panel, returnCode: .cancel)
+        self.panel.orderOut(nil)
+        self.owner = nil
+    }
+}
+
+private struct CockpitReceiptWindowReader: NSViewRepresentable {
+    let onWindowChange: @MainActor (NSWindow?) -> Void
+
+    func makeNSView(context: Context) -> CockpitReceiptWindowView {
+        CockpitReceiptWindowView(onWindowChange: self.onWindowChange)
+    }
+
+    func updateNSView(_ nsView: CockpitReceiptWindowView, context: Context) {}
+
+    static func dismantleNSView(_ nsView: CockpitReceiptWindowView, coordinator: ()) {
+        nsView.onWindowChange(nil)
+        nsView.onWindowChange = { _ in }
+    }
+}
+
+@MainActor
+final class CockpitReceiptWindowView: NSView {
+    var onWindowChange: @MainActor (NSWindow?) -> Void
+
+    init(onWindowChange: @escaping @MainActor (NSWindow?) -> Void) {
+        self.onWindowChange = onWindowChange
+        super.init(frame: .zero)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.onWindowChange(self.window)
         }
     }
 }

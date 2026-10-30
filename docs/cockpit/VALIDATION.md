@@ -29,7 +29,6 @@ not run; focused coverage and the repository checks are the handoff gates.
 
 ## Manual acceptance still required
 
-- Open the menu-bar entry and navigate all four tabs with real local data.
 - Save a PNG and copy/paste it into another application.
 - Confirm the display-setting import and selected providers match the user's preferences.
 - Verify real-account quota and local-log coverage with the user's explicit authorization.
@@ -72,3 +71,32 @@ A user report of other settings failing still needs specific control names and r
 passing persistence tests does not establish that every reported UI problem has been resolved.
 Live popover keyboard input, outside-click dismissal, and PNG save/clipboard remain manual acceptance
 items when the computer-use accessibility connection is unavailable.
+
+### Live desktop follow-up
+
+On 2026-10-30, the user confirmed that all four pages work in the same panel and that Calendar shows
+the personal-state controls. Desktop screenshots and accessibility state also confirmed daily advice
+on Usage, real local statistics, the compact Calendar, task selection, and a rendered receipt preview.
+Changing the usage-bar fill setting from remaining to used appeared on the provider card; the setting
+was subsequently verified back at its original remaining mode. The automated acceptance actions did
+not create subjective experience records, and the original CodexBar was not replaced.
+
+The receipt Save PNG dialog opened, but the desktop tool raised Settings above it. A process sample
+confirmed that the application was still waiting inside `NSSavePanel.runModal`; this was an active
+application-modal dialog, not evidence of a deadlock or lost preference writes. The user cancelled it.
+PNG file creation and clipboard round-trip were not verified. Private screenshots, account data,
+usage values, and the process sample remain outside the repository.
+
+## Receipt save ownership (0.2.1)
+
+The application-modal receipt save was replaced by an asynchronous sheet attached to the preview's
+own window. Nine new synthetic tests passed for owner routing, pending-save lifetime, duplicate saves,
+cancellation, late callbacks, window removal, rendering failures, write errors, and a decodable PNG.
+The existing receipt-core and projection/UI suites also passed (17 tests), for 26 focused tests in
+three suites. `make check` passed with zero SwiftLint violations across 3,175 Swift files.
+Independent source review found no remaining blocking issues in the save lifecycle.
+The 0.2.1 development package passed strict signature/resource verification and the six-second
+isolated startup check with network access blocked and the build checkout unreadable.
+
+These tests use fake save panels and temporary files. They do not claim that the native nested save
+sheet, a real PNG save, or a clipboard round-trip has passed desktop acceptance.
