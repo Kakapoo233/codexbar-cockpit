@@ -77,6 +77,9 @@ struct UserProviderPluginTests {
         #expect(Self.pluginCardIDs(in: menu) == ["pluginCard:solo-meter"])
         #expect(settings.selectedMenuProvider == plugin.manifest.id)
         #expect(controller.manualRefreshProvider(for: menu) == plugin.manifest.id)
+        controller.lastMenuProvider = .codex
+        #expect(controller.resolveProviderForMenuPresentation(menu) == nil)
+        #expect(controller.lastMenuProvider == plugin.manifest.id)
     }
 
     @MainActor

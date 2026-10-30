@@ -18,6 +18,7 @@ extension StatusItemController {
         preserveHighlightedItem: Bool = false)
     {
         self.menuCardViewRecyclePool.removeAll(keepingCapacity: true)
+        guard !self.unifiedMenuPanelEnabledForController else { return }
         let menuKey = ObjectIdentifier(menu)
         if let displacedSelection {
             self.mergedSwitcherContentCaches[menuKey]?.removeValue(forKey: displacedSelection)

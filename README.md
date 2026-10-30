@@ -11,11 +11,11 @@ provider support with local planning and task workflows inspired by
 ## 设计目标
 
 - 保留 CodexBar 的全部提供商及菜单栏呈现。
-- 菜单栏展示额度和今日建议，点击打开独立的 Cockpit 窗口。
+- 点击菜单栏图标，在同一面板切换用量、统计、日历和小票；每日建议直接出现在用量页。
 - 复用现有统计账本，提供用量图表、月历、模型和项目统计。
 - 以本地自然日保存预算和体感记录；额度、Token 和估算金额各有明确口径。
 - 勾选任务生成 PNG 小票；父子 Agent 合并时避免重复计算。
-- 开发版使用独立设置与缓存，用户主动导入原 CodexBar 的主要显示设置。
+- 开发版使用独立设置与缓存，在“设置 → 通用”主动导入原 CodexBar 的主要显示设置。
 
 当前实现与未完成验收见 [开发清单](docs/cockpit/ROADMAP.md)，已完成检查见 [验证记录](docs/cockpit/VALIDATION.md)。
 
@@ -23,9 +23,9 @@ provider support with local planning and task workflows inspired by
 
 Native SwiftUI/AppKit rendering with synthetic data; these are not personal usage records.
 
-![Chinese planning and local experience panel](docs/cockpit/images/overview-zh.png)
+![Unified menu-bar usage panel with daily advice](docs/cockpit/images/unified-usage-zh.png)
 
-![Calendar with editable personal state](docs/cockpit/images/calendar-state-zh.png)
+![Calendar and personal state in the same menu-bar panel](docs/cockpit/images/unified-calendar-zh.png)
 
 ![Task receipt with partial costs and separate currencies](docs/cockpit/images/receipt-zh.png)
 
@@ -41,8 +41,8 @@ make check
 ./Scripts/package_cockpit.sh debug
 ```
 
-The bundle is `CodexBar Cockpit.app`. It is a menu-bar application; use **CodexBar Cockpit…** in the
-provider menu to open its persistent window. An independent application identity and data directory
+The bundle is `CodexBar Cockpit.app`. Click the status icon and switch pages in the same panel.
+An independent application identity and data directory
 allow testing alongside the original app. The full upstream test suite can be run with
 `./Scripts/test.sh --direct-workers 8`.
 

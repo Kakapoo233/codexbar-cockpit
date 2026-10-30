@@ -53,3 +53,22 @@ watchdog, after building the test bundle. It retains credential isolation, reads
 uses a separate temporary cache with bounded scanning, disables pricing refresh, and never initializes
 the application settings or writes the clipboard. It can validate partial coverage; it does not claim a
 complete historical scan. Generated images and data must not be committed or uploaded.
+
+## Unified menu-bar panel (0.2.0)
+
+Validated on 2026-10-30. The final build passed 211 focused Swift tests, run in eight isolated processes. One combined run hit a timing-sensitive row-identity assertion
+in an upstream native-menu test; the same suite passed alone and in the final isolated groups.
+The exact source of that timing interference was not established.
+
+Coverage includes original action sender identity, provider context on first open, provider switching,
+settings-driven refresh, expandable card height, submenu hydration and return navigation, shutdown,
+page-local reporting filters, persistence, and immediate budget observation. Real SwiftUI/AppKit renders
+of the unified usage and compact calendar pages use synthetic state and are committed as previews.
+The calendar keeps date/state controls above the month grid and follows the selected UI language.
+
+The strict project checks pass. The ad-hoc development package passed signature/resource checks
+and the six-second isolated startup test with network access blocked. It is isolated from the original CodexBar.
+A user report of other settings failing still needs specific control names and reproduction steps;
+passing persistence tests does not establish that every reported UI problem has been resolved.
+Live popover keyboard input, outside-click dismissal, and PNG save/clipboard remain manual acceptance
+items when the computer-use accessibility connection is unavailable.

@@ -1,7 +1,7 @@
 # Delivery and acceptance
 
 User-approved scope: all CodexBar providers; complete local statistics, calendar, planning, subjective
-feedback, and task receipts; native menu-bar summary and separate detail window; eventual replacement
+feedback, and task receipts; one menu-bar panel with peer pages; eventual replacement
 of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, intended public repository
 `Kakapoo233/codexbar-cockpit`.
 
@@ -15,7 +15,8 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 
 ## Integrated behavior
 
-- [x] Implement menu-bar entry and persistent native Cockpit window.
+- [x] Implement the initial menu-bar entry and native detail views (0.1.x).
+- [x] Replace the intermediate Cockpit window with one menu-bar panel (0.2.0).
 - [x] Retain existing provider and Usage & Spend capabilities.
 - [x] Implement monthly calendar driven by the same daily ledger.
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
@@ -23,7 +24,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Implement subjective feedback records and Token experience chart.
 - [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.
 - [x] Implement PNG preview, save, and clipboard export; render Chinese and missing-cost fixtures.
-- [ ] Manually verify window navigation, PNG save/clipboard, and migration with the user.
+- [ ] Manually verify same-panel navigation, settings, PNG save/clipboard, and migration with the user.
 
 ## Verification and release
 

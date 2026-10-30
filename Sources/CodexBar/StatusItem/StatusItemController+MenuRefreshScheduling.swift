@@ -225,6 +225,7 @@ extension StatusItemController {
     }
 
     func deferSwitcherMenuRebuildIfStillVisible(_ menu: NSMenu, provider: UsageProvider?) {
+        if self.refreshCockpitPanel(for: menu, resetNavigation: true) { return }
         self.providerSwitcherUpdateToken &+= 1
         let updateToken = self.providerSwitcherUpdateToken
         #if DEBUG
@@ -261,6 +262,10 @@ extension StatusItemController {
         closeHostedSubviewMenusBeforeRebuild: Bool = false,
         beforeRebuild: (@MainActor () -> Bool)? = nil)
     {
+        if self.cockpitMenuPanelController?.owns(menu) == true {
+            if beforeRebuild?() ?? true { self.cockpitMenuPanelController?.invalidate() }
+            return
+        }
         let key = ObjectIdentifier(menu)
         if closeHostedSubviewMenusBeforeRebuild {
             self.openMenuRebuildsClosingHostedSubviewMenus.insert(key)
@@ -291,6 +296,10 @@ extension StatusItemController {
         debounceNanoseconds: UInt64 = 0,
         beforeRebuild: (@MainActor () -> Bool)? = nil)
     {
+        if self.cockpitMenuPanelController?.owns(menu) == true {
+            if beforeRebuild?() ?? true { self.cockpitMenuPanelController?.invalidate() }
+            return
+        }
         if duringTracking, debounceNanoseconds == 0, !self.usesTaskSchedulerForTesting {
             if resyncReadinessBaselineAfterRebuild {
                 self.pendingMenuBaselineResyncs.insert(ObjectIdentifier(menu))

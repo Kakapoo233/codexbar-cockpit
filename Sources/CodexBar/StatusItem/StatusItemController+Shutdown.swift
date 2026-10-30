@@ -4,6 +4,8 @@ extension StatusItemController {
     func prepareForAppShutdown() {
         guard !self.hasPreparedForAppShutdown else { return }
         self.hasPreparedForAppShutdown = true
+        self.cockpitMenuPanelController?.shutdown()
+        self.cockpitMenuPanelController = nil
         #if DEBUG
         self.isReleasedForTesting = true
         #endif

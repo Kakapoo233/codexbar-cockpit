@@ -53,11 +53,13 @@ func spendDashboardMetricText(
     let parts = [
         cost.map {
             spendDashboardLowerBoundText(
-                UsageFormatter.currencyString($0, currencyCode: currencyCode), isLowerBound: costIsLowerBound)
+                UsageFormatter.currencyString($0, currencyCode: currencyCode),
+                isLowerBound: costIsLowerBound)
         },
         tokens.map {
             spendDashboardLowerBoundText(
-                L("%@ tokens", UsageFormatter.tokenCountString($0)), isLowerBound: tokensAreLowerBound)
+                L("%@ tokens", UsageFormatter.tokenCountString($0)),
+                isLowerBound: tokensAreLowerBound)
         },
     ].compactMap(\.self)
     return (parts.isEmpty ? "—" : parts.joined(separator: " · "))
@@ -116,6 +118,7 @@ func codexCostCatchUpProgressText(_ activity: CodexCostCatchUpActivity) -> Strin
 
 @MainActor
 struct SpendDashboardPane: View {
+    @Environment(\.cockpitPageActive) private var cockpitPageActive
     @Bindable var settings: SettingsStore
     @Bindable var store: UsageStore
     @State private var isVisible = false
@@ -157,7 +160,7 @@ struct SpendDashboardPane: View {
         }
         .background(FocusResigningBackground())
         .onAppear {
-            self.isVisible = true
+            self.isVisible = self.cockpitPageActive
             self.controller.update(configuration: self.configuration)
             self.controller.refreshIfStale()
             if !self.controller.isRefreshing {
@@ -184,6 +187,10 @@ struct SpendDashboardPane: View {
         }
         .onDisappear {
             self.isVisible = false
+            self.synchronizeCodexCostCatchUp()
+        }
+        .onChange(of: self.cockpitPageActive) { _, isActive in
+            self.isVisible = isActive
             self.synchronizeCodexCostCatchUp()
         }
         .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
@@ -1106,7 +1113,8 @@ struct SpendSessionRows: View {
         VStack(alignment: .leading, spacing: 12) {
             if self.sourceIDs.count > 1 {
                 Picker(L("Sources"), selection: Binding(
-                    get: { self.sourceID ?? "" }, set: { self.selectedSourceID = $0 }))
+                    get: { self.sourceID ?? "" },
+                    set: { self.selectedSourceID = $0 }))
                 {
                     ForEach(self.sourceIDs, id: \.self) { id in
                         Text(self.sourceName(id)).tag(id)

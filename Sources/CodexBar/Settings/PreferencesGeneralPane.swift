@@ -86,6 +86,7 @@ enum PreferredCurrencyOption {
 @MainActor
 struct GeneralPane: View {
     @Bindable var settings: SettingsStore
+    @State private var migrationMessage: String?
 
     var body: some View {
         Form {
@@ -173,6 +174,7 @@ struct GeneralPane: View {
             }
 
             PreferencesTransferSection(settings: self.settings)
+            self.codexBarImportSection
 
             Section {
                 LabeledContent(L("open_menu_shortcut_title")) {
@@ -196,5 +198,28 @@ struct GeneralPane: View {
         .toggleStyle(.switch)
         .scrollContentBackground(.hidden)
         .background(FocusResigningBackground())
+    }
+
+    private var codexBarImportSection: some View {
+        Section {
+            Button(L("cockpit_ui_import")) {
+                do {
+                    let count = try CockpitSettingsMigration.importFromInstalledCodexBar(into: self.settings)
+                    self.migrationMessage = L("cockpit_ui_import_success", count)
+                } catch {
+                    self.migrationMessage = L("cockpit_ui_import_error", error.localizedDescription)
+                }
+            }
+        } header: {
+            Text(L("cockpit_ui_import_title"))
+        }
+        .alert(L("cockpit_ui_import_title"), isPresented: Binding(
+            get: { self.migrationMessage != nil },
+            set: { if !$0 { self.migrationMessage = nil } }))
+        {
+            Button(L("cockpit_ui_ok")) { self.migrationMessage = nil }
+        } message: {
+            Text(self.migrationMessage ?? "")
+        }
     }
 }

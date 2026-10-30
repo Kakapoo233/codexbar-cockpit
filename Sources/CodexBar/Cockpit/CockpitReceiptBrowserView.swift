@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 struct CockpitReceiptBrowserView: View {
-    @Bindable var controller: SpendDashboardController
+    @State private var usage: CockpitUsageProjection
     let hidePersonalInfo: Bool
     @State private var selectedIDs = Set<String>()
     @State private var query = ""
@@ -13,9 +13,14 @@ struct CockpitReceiptBrowserView: View {
     @State private var isLoadingLineage = true
     @State private var lineageMessage: String?
 
+    init(controller: SpendDashboardController, hidePersonalInfo: Bool) {
+        self._usage = State(initialValue: CockpitUsageProjection(controller: controller))
+        self.hidePersonalInfo = hidePersonalInfo
+    }
+
     private var items: [CockpitReceiptLine] {
         CockpitReceiptModel.items(
-            model: self.controller.model,
+            model: self.usage.receiptModel,
             hidePersonalInfo: self.hidePersonalInfo,
             metadata: self.metadata,
             conflicting: self.conflicting)
@@ -65,7 +70,7 @@ struct CockpitReceiptBrowserView: View {
             .overlay {
                 if self.visibleItems.isEmpty {
                     ContentUnavailableView(
-                        self.controller.isRefreshing ? L("cockpit_ui_loading_sessions") : L("cockpit_ui_no_sessions"),
+                        self.usage.isRefreshing ? L("cockpit_ui_loading_sessions") : L("cockpit_ui_no_sessions"),
                         systemImage: "text.bubble",
                         description: Text(L("cockpit_ui_no_sessions_detail")))
                 }
@@ -84,7 +89,6 @@ struct CockpitReceiptBrowserView: View {
             }
         }
         .padding(24)
-        .onAppear { self.controller.selectDay(nil) }
         .task(id: self.lineageSources) { await self.loadLineage() }
         .onChange(of: self.items.map(\.id)) { _, ids in
             self.selectedIDs.formIntersection(ids)
@@ -108,16 +112,16 @@ struct CockpitReceiptBrowserView: View {
             Text(L("cockpit_ui_receipt")).font(.title2.weight(.semibold))
             Spacer()
             Picker(L("cockpit_ui_period"), selection: Binding(
-                get: { self.controller.selectedPeriod },
-                set: { self.controller.selectPeriod($0) }))
+                get: { self.usage.receiptPeriod },
+                set: { self.usage.receiptPeriod = $0 }))
             {
                 Text(L("cockpit_ui_last_7")).tag(CostReportingPeriod.rolling(days: 7))
                 Text(L("cockpit_ui_last_30")).tag(CostReportingPeriod.rolling(days: 30))
                 Text(L("cockpit_ui_last_90")).tag(CostReportingPeriod.rolling(days: 90))
                 Text(L("cockpit_ui_current_month")).tag(CostReportingPeriod.monthToDate)
                 Text(L("cockpit_ui_all")).tag(CostReportingPeriod.allTime)
-                if case let .rolling(days) = self.controller.selectedPeriod, ![7, 30, 90].contains(days) {
-                    Text(L("cockpit_ui_last_days", days)).tag(self.controller.selectedPeriod)
+                if case let .rolling(days) = self.usage.receiptPeriod, ![7, 30, 90].contains(days) {
+                    Text(L("cockpit_ui_last_days", days)).tag(self.usage.receiptPeriod)
                 }
             }
             .frame(width: 180)
@@ -126,8 +130,8 @@ struct CockpitReceiptBrowserView: View {
 
     private var scopeLabel: String {
         CockpitReceiptModel.scopeLabel(
-            for: self.controller.selectedPeriod,
-            timeZone: self.controller.configuration?.bucketCalendar.timeZone ?? .current)
+            for: self.usage.receiptPeriod,
+            timeZone: self.usage.calendar.timeZone)
     }
 
     private func selectionBinding(_ id: String) -> Binding<Bool> {
@@ -163,7 +167,7 @@ struct CockpitReceiptBrowserView: View {
     }
 
     private var lineageSources: [CockpitTaskLineageSource] {
-        self.controller.model.groups.filter { !$0.detailsExcludedFromTotals }.flatMap { group in
+        self.usage.receiptModel.groups.filter { !$0.detailsExcludedFromTotals }.flatMap { group in
             group.sessions.compactMap { row in
                 row.toolActivitySource.map { source in
                     CockpitTaskLineageSource(

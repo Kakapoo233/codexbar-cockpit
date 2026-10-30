@@ -2,8 +2,9 @@
 
 ## Product contract
 
-CodexBar remains the native menu-bar shell and provider collector. A persistent, ordinary macOS
-window hosts the Cockpit detail views. There is no floating widget or second Tauri process.
+CodexBar remains the native menu-bar shell and provider collector. One transient popover anchored
+to the status item hosts Usage, Statistics, Calendar, and Receipts as peer pages. Daily advice and
+personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
 ## Modules and interfaces
 
@@ -19,7 +20,13 @@ window hosts the Cockpit detail views. There is no floating widget or second Tau
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.
-- `CockpitWindowController` and SwiftUI views compose statistics, monthly calendar, plans, and receipts.
+- `CockpitMenuPanelController` owns the menu-bar popover; `CockpitPanelView` owns its peer pages.
+  The existing provider menu builders remain the source for provider cards and actions.
+- `CockpitUsageProjection` reads the shared statistics publication with page-local filters. Calendar
+  and Receipt navigation never writes the statistics page's reporting period or selected day.
+- Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a
+  fresh, complete ambient Token sample; editing history preserves the original measurement.
+- Settings remain in the canonical preferences window, including explicit import from CodexBar.
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.
   `CockpitSettingsImport` exposes only a whitelist of presentation and provider selection settings.
 

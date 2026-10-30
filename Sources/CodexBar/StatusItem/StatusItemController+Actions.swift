@@ -620,6 +620,10 @@ extension StatusItemController: StatusItemMenuPersistentActionDelegate {
 
     @discardableResult
     func closeOpenMenusFromShortcutIfNeeded() -> Bool {
+        if self.cockpitMenuPanelController?.isShown == true {
+            self.cockpitMenuPanelController?.close()
+            return true
+        }
         guard !self.openMenus.isEmpty else { return false }
 
         let menus = Array(self.openMenus.values)
@@ -651,6 +655,10 @@ extension StatusItemController: StatusItemMenuPersistentActionDelegate {
     }
 
     private func openSettings(pane: SettingsPane?) {
+        if pane == .usageSpend, self.unifiedMenuPanelEnabledForController {
+            self.showCockpitStatistics()
+            return
+        }
         // End status-menu tracking before AppDelegate schedules activation and presentation.
         // Otherwise AppKit can restore the previously active app after Settings is already visible.
         _ = self.closeOpenMenusFromShortcutIfNeeded()
@@ -700,7 +708,7 @@ extension StatusItemController: StatusItemMenuPersistentActionDelegate {
         }
     }
 
-    private func resolvedShortcutProvider() -> UsageProvider {
+    func resolvedShortcutProvider() -> UsageProvider {
         if let last = self.lastMenuProvider?.firstPartyProvider, self.isEnabled(last) {
             return last
         }

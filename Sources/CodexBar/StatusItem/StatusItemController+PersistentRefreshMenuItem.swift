@@ -14,7 +14,9 @@ extension StatusItemController {
             shortcutText: shortcutText,
             onClick: { [weak self, weak menu] in
                 guard let self, let menu else { return }
-                if let menu = menu as? StatusItemMenu {
+                if self.cockpitMenuPanelController?.owns(menu) == true {
+                    self.refreshMenuProviderNow(in: menu)
+                } else if let menu = menu as? StatusItemMenu {
                     menu.requestPersistentRefreshAction()
                 } else {
                     self.performPersistentRefreshAction(in: ObjectIdentifier(menu))

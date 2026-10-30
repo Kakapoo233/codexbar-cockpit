@@ -17,9 +17,12 @@ struct CockpitMonthGridView: View {
     let selectedDay: Date
     let days: [Date: CockpitCalendarDay]
     let select: (Date) -> Void
+    var compact = false
 
     private var weekdaySymbols: [String] {
-        let symbols = self.calendar.veryShortWeekdaySymbols
+        var labelsCalendar = self.calendar
+        labelsCalendar.locale = codexBarLocalizedLocale()
+        let symbols = labelsCalendar.veryShortWeekdaySymbols
         let offset = self.calendar.firstWeekday - 1
         return Array(symbols[offset...] + symbols[..<offset])
     }
@@ -32,7 +35,7 @@ struct CockpitMonthGridView: View {
             ForEach(Array(CockpitCalendarProjection.cells(month: self.month, calendar: self.calendar)
                     .enumerated()), id: \.offset)
             { _, day in
-                if let day { self.dayCell(day) } else { Color.clear.frame(height: 86) }
+                if let day { self.dayCell(day) } else { Color.clear.frame(height: self.compact ? 50 : 86) }
             }
         }
     }
@@ -42,23 +45,29 @@ struct CockpitMonthGridView: View {
         let selected = self.calendar.isDate(day, inSameDayAs: self.selectedDay)
         let dayNumber = self.calendar.component(.day, from: day)
         return Button { self.select(day) } label: {
-            VStack(alignment: .leading, spacing: 7) {
+            VStack(alignment: .leading, spacing: self.compact ? 3 : 7) {
                 HStack {
-                    Text(dayNumber.formatted()).font(.body.weight(.medium))
+                    Text(dayNumber.formatted()).font(self.compact ? .caption.weight(.medium) : .body.weight(.medium))
                     Spacer(minLength: 0)
                     if self.calendar.isDateInToday(day) {
                         Circle().fill(Color.accentColor).frame(width: 5, height: 5)
                     }
                 }
-                Text(tokens.map(UsageFormatter.tokenCountString) ?? "—")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                if let feeling = self.days[day]?.feeling {
+                HStack {
+                    Text(tokens.map(UsageFormatter.tokenCountString) ?? "—")
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                    if self.compact, let feeling = self.days[day]?.feeling {
+                        Spacer(minLength: 0)
+                        Image(systemName: feeling.cockpitSymbol).font(.caption2).foregroundStyle(.tint)
+                    }
+                }
+                if !self.compact, let feeling = self.days[day]?.feeling {
                     Text(feeling.calendarTitle).font(.caption2).foregroundStyle(.tint)
                 }
             }
-            .padding(9)
-            .frame(maxWidth: .infinity, minHeight: 86, alignment: .topLeading)
+            .padding(self.compact ? 6 : 9)
+            .frame(maxWidth: .infinity, minHeight: self.compact ? 50 : 86, alignment: .topLeading)
             .background(selected ? Color.accentColor.opacity(0.15) : Color.primary.opacity(0.035))
             .clipShape(RoundedRectangle(cornerRadius: 7))
             .overlay {

@@ -75,6 +75,7 @@ extension StatusItemController {
         selection: ProviderSwitcherSelection,
         context: MergedSwitcherContentCacheContext)
     {
+        guard !self.unifiedMenuPanelEnabledForController else { return }
         guard !items.isEmpty else { return }
 
         let entry = CachedMergedSwitcherMenuContent(
@@ -98,6 +99,7 @@ extension StatusItemController {
         tokenAccountDisplay: TokenAccountMenuDisplay?)
         -> [NSMenuItem]?
     {
+        guard !self.unifiedMenuPanelEnabledForController else { return nil }
         let key = ObjectIdentifier(menu)
         guard let entry = self.mergedSwitcherContentCaches[key]?[selection] else { return nil }
         guard entry.matches(
