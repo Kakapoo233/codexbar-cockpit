@@ -25,6 +25,8 @@ Native SwiftUI/AppKit rendering with synthetic data; these are not personal usag
 
 ![Chinese planning and local experience panel](docs/cockpit/images/overview-zh.png)
 
+![Calendar with editable personal state](docs/cockpit/images/calendar-state-zh.png)
+
 ![Task receipt with partial costs and separate currencies](docs/cockpit/images/receipt-zh.png)
 
 ## Build

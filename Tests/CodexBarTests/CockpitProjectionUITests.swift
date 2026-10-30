@@ -6,6 +6,77 @@ import Testing
 
 struct CockpitProjectionUITests {
     @Test
+    func `calendar state editing permits past and the whole current day but rejects future local days`() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 9)))
+        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: now))
+        let tonight = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 23)))
+        let tomorrow = try #require(calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)))
+        #expect(CockpitCalendarProjection.canRecord(on: yesterday, now: now, calendar: calendar))
+        #expect(CockpitCalendarProjection.canRecord(on: tonight, now: now, calendar: calendar))
+        #expect(!CockpitCalendarProjection.canRecord(on: tomorrow, now: now, calendar: calendar))
+    }
+
+    @Test
+    func `calendar selected status is isolated by provider day time zone and machine scope`() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+        let day = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 29, hour: 12)))
+        let key = CockpitCalendar.dateKey(for: day, calendar: calendar)
+        func record(
+            provider: String,
+            account: String = "local-machine",
+            dateKey: String? = nil,
+            timeZone: String? = nil,
+            feeling: CockpitFeeling,
+            order: TimeInterval = 0) -> CockpitComfortRecord
+        {
+            CockpitComfortRecord(
+                providerID: provider,
+                accountID: account,
+                localDateKey: dateKey ?? key,
+                timeZoneIdentifier: timeZone ?? calendar.timeZone.identifier,
+                recordedAt: day.addingTimeInterval(order),
+                feeling: feeling,
+                totalTokens: nil,
+                coverage: .partial)
+        }
+        let records = [
+            record(provider: "codex", feeling: .comfortable),
+            record(provider: "codex", feeling: .overloaded, order: 1),
+            record(provider: "claude", feeling: .light),
+            record(provider: "codex", account: "quota-account", feeling: .light, order: 3),
+            record(provider: "codex", dateKey: "2026-10-28", feeling: .light, order: 4),
+            record(provider: "codex", timeZone: "Asia/Shanghai", feeling: .light, order: 5),
+        ]
+        #expect(CockpitCalendarProjection.feeling(
+            on: day,
+            providerID: "codex",
+            records: records,
+            calendar: calendar) == .overloaded)
+        #expect(CockpitCalendarProjection.feeling(
+            on: day,
+            providerID: "claude",
+            records: records,
+            calendar: calendar) == .light)
+        let withoutCodexLocalDay = records.filter {
+            !($0.providerID == "codex" && $0.accountID == "local-machine"
+                && $0.localDateKey == key && $0.timeZoneIdentifier == calendar.timeZone.identifier)
+        }
+        #expect(CockpitCalendarProjection.feeling(
+            on: day,
+            providerID: "codex",
+            records: withoutCodexLocalDay,
+            calendar: calendar) == nil)
+        #expect(CockpitCalendarProjection.feeling(
+            on: day,
+            providerID: "claude",
+            records: withoutCodexLocalDay,
+            calendar: calendar) == .light)
+    }
+
+    @Test
     func `month cells preserve every local day across DST with Monday first`() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))

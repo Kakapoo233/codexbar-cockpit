@@ -87,4 +87,67 @@ struct CockpitPlanStoreTests {
             #expect(record.coverage == .complete)
         }
     }
+
+    @Test func `calendar feedback edits and clears only the selected provider day and zone`() throws {
+        try self.withStore { store, url in
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+            let day = try #require(ISO8601DateFormatter().date(from: "2026-10-30T03:30:00Z"))
+            let nextDay = try #require(calendar.date(byAdding: .day, value: 1, to: day))
+            var utc = calendar
+            utc.timeZone = try #require(TimeZone(secondsFromGMT: 0))
+            store.recordLocalComfort(.light, for: .codex, on: day, totalTokens: nil, calendar: calendar)
+            store.recordLocalComfort(.comfortable, for: .codex, on: nextDay, totalTokens: nil, calendar: calendar)
+            store.recordLocalComfort(.light, for: .claude, on: day, totalTokens: nil, calendar: calendar)
+            store.recordLocalComfort(.comfortable, for: .codex, on: day, totalTokens: nil, calendar: utc)
+            store.setLocalComfortFeeling(
+                .overloaded,
+                for: .codex,
+                on: day,
+                calendar: calendar)
+            let records = store.state.comfortRecords
+            #expect(records.count == 4)
+            let selected = try #require(records.first {
+                $0.providerID == "codex" && $0.localDateKey == "2026-10-29"
+                    && $0.timeZoneIdentifier == calendar.timeZone.identifier
+            })
+            #expect(selected.feeling == .overloaded)
+            #expect(selected.coverage == .partial)
+            #expect(selected.accountID == "local-machine")
+            #expect(CockpitPlanStore(fileURL: url).state == store.state)
+
+            store.clearLocalComfort(for: .codex, on: day, calendar: calendar)
+            #expect(store.state.comfortRecords == records.filter { $0.id != selected.id })
+            #expect(CockpitPlanStore(fileURL: url).state == store.state)
+            #expect(store.state.snapshots.isEmpty)
+            #expect(store.state.plans.isEmpty)
+        }
+    }
+
+    @Test func `editing a calendar feeling preserves its measured token sample`() throws {
+        try self.withStore { store, url in
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+            let observed = try #require(ISO8601DateFormatter().date(from: "2026-10-30T03:30:00Z"))
+            store.recordLocalComfort(
+                .comfortable,
+                for: .codex,
+                on: observed,
+                totalTokens: 12345,
+                coverage: .complete,
+                calendar: calendar)
+            store.setLocalComfortFeeling(
+                .overloaded,
+                for: .codex,
+                on: calendar.startOfDay(for: observed),
+                calendar: calendar)
+            let record = try #require(store.state.comfortRecords.first)
+            #expect(store.state.comfortRecords.count == 1)
+            #expect(record.feeling == .overloaded)
+            #expect(record.totalTokens == 12345)
+            #expect(record.coverage == .complete)
+            #expect(record.recordedAt == observed)
+            #expect(CockpitPlanStore(fileURL: url).state == store.state)
+        }
+    }
 }

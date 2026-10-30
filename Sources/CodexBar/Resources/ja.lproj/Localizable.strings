@@ -2865,3 +2865,12 @@
 "cockpit_ui_active_this_month" = "Tasks Active This Month";
 "cockpit_ui_all_scanned_tasks" = "All Available Task Ledgers";
 "cockpit_ui_full_session_scope" = "Each task includes all scanned usage, which may extend outside the activity filter.";
+
+/* Calendar personal status (English fallback outside en and zh-Hans). */
+"cockpit_ui_calendar_personal_status" = "Personal Status";
+"cockpit_ui_calendar_subjective_note" = "This records how usage felt on this Mac on the selected date. It does not change official quotas or account budgets.";
+"cockpit_ui_calendar_clear" = "Clear Status";
+"cockpit_ui_calendar_future" = "Future dates cannot be recorded. Select today or an earlier date.";
+"cockpit_ui_calendar_selected" = "Selected";
+"cockpit_ui_calendar_unselected" = "Not Selected";
+"cockpit_ui_calendar_overloaded" = "Overloaded";

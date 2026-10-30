@@ -18,6 +18,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Implement menu-bar entry and persistent native Cockpit window.
 - [x] Retain existing provider and Usage & Spend capabilities.
 - [x] Implement monthly calendar driven by the same daily ledger.
+- [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
 - [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
 - [x] Implement subjective feedback records and Token experience chart.
 - [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.

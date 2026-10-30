@@ -5,7 +5,7 @@ This is a development build, not a notarized public release.
 
 ## Automated coverage
 
-The focused Swift run covers 176 tests in 16 suites: planning and reset precision, local comfort
+The initial integration focused Swift run covered 176 tests in 16 suites: planning and reset precision, local comfort
 attribution, receipt totals and partial data, task lineage and inherited-history deduplication,
 account isolation and persistence, explicit settings import, fork identity, and menu labels.
 Tests use synthetic inputs and the repository's isolated test environment.
@@ -37,3 +37,19 @@ not run; focused coverage and the repository checks are the handoff gates.
 
 There is no configured fork update feed, Developer ID signature, or notarized downloadable release.
 The original CodexBar remains installed and its settings are not automatically migrated.
+
+## Calendar personal-state regression
+
+Version 0.1.1 passed 51 focused Cockpit tests across 7 suites and `make check`. Its separate opt-in
+native-data acceptance test also passed with private artifacts kept outside the repository.
+Direct editing for the selected calendar date has regression coverage for date, provider,
+time-zone and local-machine isolation; persistence after editing and clearing; future-day availability;
+and retaining the original measurement when changing only a feeling.
+
+`CockpitRealDataAcceptanceTests` is skipped by default. It requires explicit authorization,
+`CODEXBAR_COCKPIT_LIVE_ACCEPTANCE=1`, and the existing private directory
+`/private/tmp/codex-cockpit-live-validation/rendered`. Run it alone with a 90-second external process
+watchdog, after building the test bundle. It retains credential isolation, reads only native Codex logs,
+uses a separate temporary cache with bounded scanning, disables pricing refresh, and never initializes
+the application settings or writes the clipboard. It can validate partial coverage; it does not claim a
+complete historical scan. Generated images and data must not be committed or uploaded.

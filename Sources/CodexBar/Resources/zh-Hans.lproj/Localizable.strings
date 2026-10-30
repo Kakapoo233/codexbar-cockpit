@@ -2857,3 +2857,12 @@
 "cockpit_ui_active_this_month" = "本月至今活动的任务";
 "cockpit_ui_all_scanned_tasks" = "全部可用任务账本";
 "cockpit_ui_full_session_scope" = "各任务包含全部已扫描用量，可能含筛选范围外的使用。";
+
+/* Calendar personal status (English fallback outside en and zh-Hans). */
+"cockpit_ui_calendar_personal_status" = "个人状态";
+"cockpit_ui_calendar_subjective_note" = "选择仅记录这台 Mac 在所选日期的体感，不会改变官方额度或账号预算。";
+"cockpit_ui_calendar_clear" = "清除状态";
+"cockpit_ui_calendar_future" = "未来日期暂不能记录状态。请选择今天或过去的日期。";
+"cockpit_ui_calendar_selected" = "已选择";
+"cockpit_ui_calendar_unselected" = "未选择";
+"cockpit_ui_calendar_overloaded" = "过载";
