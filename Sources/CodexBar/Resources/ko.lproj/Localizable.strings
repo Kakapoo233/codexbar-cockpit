@@ -2894,3 +2894,7 @@
 "cockpit_ui_plan_read_error" = "기존 계획 기록을 읽을 수 없습니다. 원본 파일은 보존되었습니다: %@";
 
 "cockpit_ui_plan_save_error" = "계획 기록을 저장하지 못했습니다: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "메뉴 막대 텍스트를 영어로 표시";
+"menu_bar_english_text_subtitle" = "화면 상단 메뉴 막대의 텍스트에만 적용됩니다. 펼친 패널과 설정은 앱 언어를 그대로 사용합니다.";

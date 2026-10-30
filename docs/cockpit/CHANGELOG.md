@@ -1,5 +1,12 @@
 # Cockpit changes
 
+## 0.3.2 — English text in the top menu bar
+
+- Add an optional English-only text setting under Menu Bar. It affects the screen's top status items
+  and their layout preview; the expanded panel and settings keep the selected app language.
+- Persist the choice and include it in portable preference exports. Default remains off.
+- Separate layout caches by language so toggling restores the correct text and accessibility labels.
+
 ## 0.3.1 — Complete existing language support
 
 - Translate planning, calendar feedback, reset history and previews, task receipts, and import/error

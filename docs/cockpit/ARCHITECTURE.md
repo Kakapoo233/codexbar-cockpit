@@ -39,6 +39,8 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   They remain explicitly approximate; an overdue estimate is not rolled forward as a new prediction.
   Scheduled times are grouped using the calendar reporting zone; unknown times stay undated.
 - Settings remain in the canonical preferences window, including explicit import from CodexBar.
+- The optional English status-text preference is scoped to synchronous top-menu-bar rendering and
+  its layout preview. Expanded menus, Cockpit pages, settings, and notifications retain the app language.
 - Receipt PNG saves use an asynchronous sheet owned by the receipt preview's actual window.
   Saving blocks only that preview; detaching the preview cancels its pending save without writing.
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.

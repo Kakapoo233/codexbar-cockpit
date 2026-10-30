@@ -2916,3 +2916,7 @@
 "cockpit_ui_plan_save_error" = "计划记录未能保存：%@";
 "cockpit_ui_import_missing" = "未找到可导入的 CodexBar 设置。";
 "cockpit_ui_import_too_large" = "原设置文件过大，未进行导入。";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "菜单栏文字使用英文";
+"menu_bar_english_text_subtitle" = "仅影响屏幕顶部菜单栏文字，展开面板和设置仍使用应用语言。";

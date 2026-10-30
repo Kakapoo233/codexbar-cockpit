@@ -346,6 +346,11 @@ extension SettingsStore {
             key: "menuBarHighContrastOnInactiveDisplays") }
     }
 
+    var menuBarEnglishText: Bool {
+        get { self.defaultsState.menuBarEnglishText }
+        set { self.setDefault(\.menuBarEnglishText, newValue, key: "menuBarEnglishText") }
+    }
+
     var menuBarDisplayMode: MenuBarDisplayMode {
         get { MenuBarDisplayMode(rawValue: self.defaultsState.menuBarDisplayModeRaw ?? "") ?? .percent }
         set { self.setOptionalDefault(\.menuBarDisplayModeRaw, newValue.rawValue, key: "menuBarDisplayMode") }

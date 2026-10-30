@@ -2926,3 +2926,7 @@
 "cockpit_ui_import_too_large" = "El fitxer de configuració original és massa gran per importar-lo.";
 "cockpit_ui_plan_read_error" = "No es poden llegir els registres del pla; s'ha conservat el fitxer original: %@";
 "cockpit_ui_plan_save_error" = "No s'han pogut desar els registres del pla: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Utilitza l’anglès a la barra de menús";
+"menu_bar_english_text_subtitle" = "Només afecta el text de la barra de menús superior. El tauler desplegat i la configuració mantenen l’idioma de l’aplicació.";

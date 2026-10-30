@@ -2928,3 +2928,7 @@
 "cockpit_ui_plan_read_error" = "Catatan rencana yang ada tidak dapat dibaca; file asli telah dipertahankan: %@";
 
 "cockpit_ui_plan_save_error" = "Catatan rencana tidak dapat disimpan: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Gunakan bahasa Inggris di bar menu";
+"menu_bar_english_text_subtitle" = "Hanya memengaruhi teks pada bar menu di bagian atas layar. Panel yang dibuka dan pengaturan tetap menggunakan bahasa aplikasi.";

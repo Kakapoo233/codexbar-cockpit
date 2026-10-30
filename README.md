@@ -19,6 +19,7 @@ provider support with local planning and task workflows inspired by
 - 勾选任务生成 PNG 小票；父子 Agent 合并时避免重复计算。
 - 开发版使用独立设置与缓存，在“设置 → 通用”主动导入原 CodexBar 的主要显示设置。
 - 沿用现有 23 种语言；每日建议、日历、重置提醒和小票均有对应翻译。在“设置 → 通用 → 语言”选择，或跟随系统；阿拉伯语、波斯语支持从右向左排版。
+- 可在“设置 → 菜单栏”开启“菜单栏文字使用英文”，单独将屏幕顶部文字设为英文，展开面板继续使用当前语言。
 
 当前实现与未完成验收见 [开发清单](docs/cockpit/ROADMAP.md)，已完成检查见 [验证记录](docs/cockpit/VALIDATION.md)。
 

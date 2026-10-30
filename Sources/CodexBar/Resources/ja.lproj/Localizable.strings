@@ -2926,3 +2926,7 @@
 "cockpit_ui_plan_read_error" = "既存の計画記録を読み込めません。元のファイルは保持されています：%@";
 
 "cockpit_ui_plan_save_error" = "計画記録を保存できませんでした：%@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "メニューバーのテキストを英語で表示";
+"menu_bar_english_text_subtitle" = "画面上部のメニューバー内のテキストにのみ適用されます。展開したパネルと設定はアプリの言語のままです。";

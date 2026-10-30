@@ -41,6 +41,7 @@ struct SettingsDefaultsState {
     var menuBarPaceReservePositive: Bool
     var menuBarColorByProvider: Bool
     var menuBarHighContrastOnInactiveDisplays: Bool
+    var menuBarEnglishText: Bool
     var menuBarDisplayModeRaw: String?
     var menuBarShowsResetTimeWhenExhausted: Bool
     var kiroMenuBarDisplayModeRaw: String?

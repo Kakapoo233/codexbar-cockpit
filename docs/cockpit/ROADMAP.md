@@ -22,6 +22,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Implement monthly calendar driven by the same daily ledger.
 - [x] Add public reset history, source previews, local estimates, and early reminders (0.3.0).
 - [x] Complete Cockpit translations in the existing 23 languages, including localized formats and RTL receipt export (0.3.1).
+- [x] Add an independent English text option for the top menu bar while preserving the expanded panel language (0.3.2).
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
 - [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
 - [x] Implement subjective feedback records and Token experience chart.

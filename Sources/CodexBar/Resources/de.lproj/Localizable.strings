@@ -2920,3 +2920,7 @@
 "cockpit_ui_import_too_large" = "Die ursprüngliche Einstellungsdatei ist für den Import zu groß.";
 "cockpit_ui_plan_read_error" = "Vorhandene Planaufzeichnungen können nicht gelesen werden; die Originaldatei wurde beibehalten: %@";
 "cockpit_ui_plan_save_error" = "Planaufzeichnungen konnten nicht gespeichert werden: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Englisch in der Menüleiste verwenden";
+"menu_bar_english_text_subtitle" = "Betrifft nur den Text in der oberen Menüleiste. Das aufgeklappte Panel und die Einstellungen behalten die App-Sprache bei.";

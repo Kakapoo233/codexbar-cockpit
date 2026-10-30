@@ -622,6 +622,7 @@ extension SettingsStore {
             menuBarColorByProvider: userDefaults.bool(forKey: "menuBarColorByProvider"),
             menuBarHighContrastOnInactiveDisplays: userDefaults.object(
                 forKey: "menuBarHighContrastOnInactiveDisplays") as? Bool ?? false,
+            menuBarEnglishText: userDefaults.bool(forKey: "menuBarEnglishText"),
             menuBarDisplayModeRaw: userDefaults.string(forKey: "menuBarDisplayMode")
                 ?? MenuBarDisplayMode.percent.rawValue,
             menuBarShowsResetTimeWhenExhausted: userDefaults.object(

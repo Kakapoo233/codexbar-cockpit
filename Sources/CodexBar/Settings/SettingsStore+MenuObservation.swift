@@ -36,6 +36,7 @@ extension SettingsStore {
         _ = self.menuBarPaceReservePositive
         _ = self.menuBarColorByProvider
         _ = self.menuBarHighContrastOnInactiveDisplays
+        _ = self.menuBarEnglishText
         _ = self.unifiedIconSource
         _ = self.menuBarDisplayMode
         _ = self.menuBarShowsResetTimeWhenExhausted

@@ -2928,3 +2928,7 @@
 "cockpit_ui_plan_read_error" = "อ่านบันทึกแผนเดิมไม่ได้ โดยเก็บไฟล์ต้นฉบับไว้แล้ว: %@";
 
 "cockpit_ui_plan_save_error" = "บันทึกข้อมูลแผนไม่ได้: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "ใช้ภาษาอังกฤษในแถบเมนู";
+"menu_bar_english_text_subtitle" = "มีผลเฉพาะข้อความในแถบเมนูด้านบนเท่านั้น แผงที่เปิดจากแถบเมนูและการตั้งค่ายังคงใช้ภาษาของแอป";

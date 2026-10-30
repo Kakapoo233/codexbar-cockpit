@@ -31,6 +31,7 @@ public struct PreferencesDocument: Codable, Sendable {
         "showOptionalCreditsAndExtraUsage", "providerChangelogLinksEnabled", "providersSortedAlphabetically",
         "refreshAllProvidersOnMenuOpen", "mergeIcons", "mergeIconsStacked", "switcherShowsIcons",
         "menuBarColorByProvider",
+        "menuBarEnglishText",
         "cockpitResetForecastNotificationsEnabled",
     ])
     private static let stringChoices: [String: [String]] = [

@@ -2919,3 +2919,7 @@
 "cockpit_ui_import_too_large" = "Het oorspronkelijke instellingenbestand is te groot om te importeren.";
 "cockpit_ui_plan_read_error" = "Bestaande plangegevens kunnen niet worden gelezen; het oorspronkelijke bestand is behouden: %@";
 "cockpit_ui_plan_save_error" = "Plangegevens konden niet worden opgeslagen: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Engels gebruiken in de menubalk";
+"menu_bar_english_text_subtitle" = "Geldt alleen voor tekst in de bovenste menubalk. Het uitgeklapte paneel en de instellingen behouden de taal van de app.";

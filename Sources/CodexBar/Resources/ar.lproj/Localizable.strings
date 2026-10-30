@@ -2928,3 +2928,7 @@
 "cockpit_ui_import_too_large" = "ملف الإعدادات الأصلي كبير جدًا للاستيراد.";
 "cockpit_ui_plan_read_error" = "تعذرت قراءة سجلات الخطة؛ تم الاحتفاظ بالملف الأصلي: %@";
 "cockpit_ui_plan_save_error" = "تعذر حفظ سجلات الخطة: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "استخدام الإنجليزية في شريط القوائم";
+"menu_bar_english_text_subtitle" = "يؤثر فقط في النص المعروض في شريط القوائم العلوي. تظل اللوحة الموسعة والإعدادات بلغة التطبيق.";

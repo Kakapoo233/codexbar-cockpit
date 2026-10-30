@@ -20,6 +20,6 @@ jobs:
       - name: Build
         run: swift build --product CodexBar
       - name: Focused integration tests
-        run: make test-fast FILTER='Cockpit|ForkIdentityTests|ForkSettingsImportTests'
+        run: make test-fast FILTER='Cockpit|ForkIdentityTests|ForkSettingsImportTests|MenuBarEnglishTextTests'
       - name: Check
         run: make check

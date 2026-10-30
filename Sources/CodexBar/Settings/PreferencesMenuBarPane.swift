@@ -43,6 +43,12 @@ struct MenuBarPane: View {
                         Text(style.label)
                     })
 
+                Toggle(isOn: self.$settings.menuBarEnglishText) {
+                    SettingsRowLabel(
+                        L("menu_bar_english_text_title"),
+                        subtitle: L("menu_bar_english_text_subtitle"))
+                }
+
                 Toggle(isOn: self.$settings.menuBarHighContrastOnInactiveDisplays) {
                     SettingsRowLabel(
                         L("menu_bar_inactive_display_contrast_title"),
