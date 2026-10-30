@@ -1,5 +1,25 @@
 # Local integration validation
 
+## Restored quota comfort curve (0.5.0)
+
+On 2026-10-30, 81 focused tests in ten suites passed: `CockpitQuotaComfortTests`,
+`CockpitQuotaComfortUITests`, `CockpitComfortCoreTests`, `CockpitPlanCoreTests`, `CockpitPlanStoreTests`,
+`CockpitCalendarCaptureTests`, `CockpitPersonalUsageModelTests`, `CockpitProjectionUITests`,
+`CockpitNavigationIsolationTests`, and `CockpitCalendarPeriodTests`.
+
+Coverage includes independent formula values, grid-fit optimality, recency and partial-coverage
+weights, default/one-sample behavior, cumulative use above 100%, the upstream 90-feedback window,
+legacy JSON decoding, historical/archived observations, unknown-versus-zero data, and account/date/
+provider/time-zone isolation. Changing a feeling preserves its measurement and leaves plans and
+manual caps intact. Store tests use temporary paths and synthetic account snapshots.
+
+`make check` passed with 3,204 Swift files. A subsequent test-only macro compatibility adjustment
+passed focused formatting/lint before the final successful test run. Eight private synthetic renders
+cover default/fitted curves, Chinese/English, and 600/420-point widths; four complementary renders
+were visually inspected. No real-account data or new preview images are published with this change.
+The 0.5.0/build 12 development bundle passed strict signature verification and the isolated six-second
+startup/resource smoke check, including direct and symlinked CLI loading with the checkout unreadable.
+
 ## Pro allowance labels (0.4.2)
 
 On 2026-10-30, 164 focused tests in eight suites passed: `CodexPlanFormattingTests`,

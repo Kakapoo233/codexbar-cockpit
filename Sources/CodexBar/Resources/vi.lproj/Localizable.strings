@@ -3023,3 +3023,22 @@
 "cockpit_ui_comfort_recency" = "Các điểm xu hướng ưu tiên trải nghiệm gần đây hơn, với chu kỳ bán rã trọng số 14 ngày. Sửa ngày cũ không thay đổi tuổi dữ liệu. Đây là trải nghiệm dùng Token, không phải hạn mức chính thức.";
 
 "menu_bar_help_conditional_runout" = "So sánh số giờ ước tính đến khi hết hạn mức. Nếu không có ước tính cạn hạn mức, điều kiện là sai.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Ghi nhận cảm nhận";
+"cockpit_comfort_quota_tab" = "Đường cong thoải mái theo hạn mức";
+"cockpit_comfort_tokens_tab" = "Cảm nhận Token cục bộ";
+"cockpit_comfort_quota_scope" = "Phản hồi về hạn mức thuộc nhà cung cấp đã chọn và tài khoản hiện tại. Cảm nhận Token cục bộ được ghi riêng.";
+"cockpit_comfort_no_account" = "Làm mới mức sử dụng của nhà cung cấp để xác định tài khoản trước khi ghi phản hồi về hạn mức.";
+"cockpit_comfort_curve_title" = "Đường cong thoải mái";
+"cockpit_comfort_curve_knee" = "Điểm gãy đã khớp: %@";
+"cockpit_comfort_curve_default" = "Tham chiếu mặc định: %@";
+"cockpit_comfort_curve_x" = "Hạn mức đã dùng hôm nay (%)";
+"cockpit_comfort_curve_y" = "Điểm chủ quan (%)";
+"cockpit_comfort_curve_details" = "%@ quan sát · Chi tiết mô hình";
+"cockpit_comfort_curve_explanation" = "Nhẹ = 100%, vừa đủ = 80%, quá tải = 25%. Đây là điểm chủ quan, không phải hiệu suất đo được. Chỉ khớp điểm gãy của đường cong cố định gốc (0,1–100%); kế hoạch hằng ngày không thay đổi.";
+"cockpit_comfort_curve_weights" = "Phản hồi gần đây có trọng số cao hơn (chu kỳ bán rã 14 ngày); dữ liệu sử dụng không đầy đủ nhận trọng số 75%. Mức dùng tích lũy có thể vượt 100%, với điểm sàn 20%.";
+"cockpit_comfort_curve_empty" = "Chưa có phản hồi hạn mức dùng được. Đang hiển thị điểm gãy mặc định 25%; hãy chọn ngày và ghi cảm nhận.";
+"cockpit_comfort_quota_missing" = "Không có quan sát hạn mức dùng được cho ngày này. Cảm nhận vẫn được lưu nhưng không dùng để khớp đường cong.";
+"cockpit_comfort_quota_partial" = "Quan sát hạn mức này chưa đầy đủ nên có trọng số thấp hơn trong đường cong.";
+"cockpit_comfort_curve_sample" = "%@ · đã dùng %@ · %@";

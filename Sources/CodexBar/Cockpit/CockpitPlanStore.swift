@@ -148,6 +148,36 @@ final class CockpitPlanStore {
         self.save()
     }
 
+    func setQuotaComfortFeeling(
+        _ feeling: CockpitFeeling,
+        for provider: UsageProvider,
+        on date: Date,
+        now: Date = Date(),
+        calendar: Calendar = .current)
+    {
+        guard self.accounts[provider] != nil else { return }
+        if self.state.recordQuotaComfort(
+            feeling,
+            providerID: provider.rawValue,
+            accountID: self.accountID(for: provider),
+            on: date,
+            now: now,
+            calendar: calendar)
+        {
+            self.save()
+        }
+    }
+
+    func clearQuotaComfort(for provider: UsageProvider, on date: Date, calendar: Calendar = .current) {
+        guard self.accounts[provider] != nil else { return }
+        self.state.clearComfort(
+            providerID: provider.rawValue,
+            accountID: self.accountID(for: provider),
+            on: date,
+            calendar: calendar)
+        self.save()
+    }
+
     static func weeklyWindow(in snapshot: UsageSnapshot) -> RateWindow? {
         [snapshot.secondary, snapshot.primary, snapshot.tertiary].compactMap(\.self).first { window in
             guard let minutes = window.windowMinutes, let reset = window.resetsAt else { return false }

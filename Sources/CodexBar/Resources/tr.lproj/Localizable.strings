@@ -3023,3 +3023,22 @@
 "cockpit_ui_comfort_recency" = "Eğilim noktaları, 14 günlük ağırlık yarı ömrüyle yakın tarihli deneyimlere daha fazla önem verir. Eski bir günü düzenlemek yaşını değiştirmez. Bu, resmi kotayı değil Token kullanım deneyimini açıklar.";
 
 "menu_bar_help_conditional_runout" = "Kotanın tükenmesine kadar tahmin edilen saat sayısını karşılaştırır. Tükenme tahmini yoksa koşul yanlış olur.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Deneyim kayıtları";
+"cockpit_comfort_quota_tab" = "Kota konfor eğrisi";
+"cockpit_comfort_tokens_tab" = "Yerel Token deneyimi";
+"cockpit_comfort_quota_scope" = "Kota geri bildirimi, seçilen sağlayıcıya ve geçerli hesaba aittir. Yerel Token deneyimi ayrı kaydedilir.";
+"cockpit_comfort_no_account" = "Kota geri bildirimi kaydetmeden önce hesabı belirlemek için sağlayıcı kullanımını yenileyin.";
+"cockpit_comfort_curve_title" = "Konfor eğrisi";
+"cockpit_comfort_curve_knee" = "Uyarlanan büküm noktası: %@";
+"cockpit_comfort_curve_default" = "Varsayılan referans: %@";
+"cockpit_comfort_curve_x" = "Bugün kullanılan kota (%)";
+"cockpit_comfort_curve_y" = "Öznel puan (%)";
+"cockpit_comfort_curve_details" = "%@ gözlem · Model ayrıntıları";
+"cockpit_comfort_curve_explanation" = "Hafif = 100%, tam kararında = 80%, aşırı = 25%. Bunlar öznel puanlardır, ölçülen verimlilik değildir. Özgün sabit eğrinin yalnızca büküm noktası uyarlanır (0,1–100%); günlük planınız değişmez.";
+"cockpit_comfort_curve_weights" = "Yakın tarihli geri bildirimlerin ağırlığı daha yüksektir (yarı ömür 14 gün); eksik kullanım %75 ağırlık alır. Birikimli kullanım %100’ü aşabilir, puanın alt sınırı %20’dir.";
+"cockpit_comfort_curve_empty" = "Henüz kullanılabilir kota geri bildirimi yok. Varsayılan %25 büküm noktası gösteriliyor; bir tarih seçip deneyiminizi kaydedin.";
+"cockpit_comfort_quota_missing" = "Bu tarih için kullanılabilir kota gözlemi yok. Deneyiminiz kaydedilir ancak eğriyi uyarlamak için kullanılmaz.";
+"cockpit_comfort_quota_partial" = "Bu kota gözlemi eksiktir ve eğride daha düşük ağırlık alır.";
+"cockpit_comfort_curve_sample" = "%@ · %@ kullanıldı · %@";

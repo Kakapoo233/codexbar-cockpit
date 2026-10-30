@@ -3015,3 +3015,22 @@
 "cockpit_ui_comfort_recency" = "Trendpunten wegen recente ervaringen zwaarder, met een halfwaardetijd van 14 dagen. Het bewerken van een oudere dag verandert de leeftijd ervan niet. Dit beschrijft de ervaring met tokens, niet het officiële quotum.";
 
 "menu_bar_help_conditional_runout" = "Vergelijkt het geschatte aantal uren totdat het quotum opraakt. Als er geen schatting beschikbaar is, is de voorwaarde onwaar.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Ervaringsregistratie";
+"cockpit_comfort_quota_tab" = "Comfortcurve voor quotum";
+"cockpit_comfort_tokens_tab" = "Lokale Token-ervaring";
+"cockpit_comfort_quota_scope" = "Feedback over het quotum hoort bij de geselecteerde aanbieder en het huidige account. Lokale Token-ervaringen worden apart vastgelegd.";
+"cockpit_comfort_no_account" = "Vernieuw het gebruik van de aanbieder om een account te herkennen voordat je quotumfeedback vastlegt.";
+"cockpit_comfort_curve_title" = "Comfortcurve";
+"cockpit_comfort_curve_knee" = "Aangepast knikpunt: %@";
+"cockpit_comfort_curve_default" = "Standaardreferentie: %@";
+"cockpit_comfort_curve_x" = "Vandaag verbruikt quotum (%)";
+"cockpit_comfort_curve_y" = "Subjectieve score (%)";
+"cockpit_comfort_curve_details" = "%@ waarnemingen · Modeldetails";
+"cockpit_comfort_curve_explanation" = "Licht = 100%, precies goed = 80%, overbelast = 25%. Dit zijn subjectieve scores, geen gemeten efficiëntie. Alleen het knikpunt van de oorspronkelijke vaste curve wordt aangepast (0,1–100%); je dagplan verandert niet.";
+"cockpit_comfort_curve_weights" = "Recente feedback weegt zwaarder (halveringstijd van 14 dagen); gedeeltelijk gebruik krijgt 75% gewicht. Cumulatief gebruik kan boven 100% uitkomen, met een ondergrens van 20% voor de score.";
+"cockpit_comfort_curve_empty" = "Nog geen bruikbare quotumfeedback. Het standaardknikpunt van 25% wordt getoond; kies een datum en leg je ervaring vast.";
+"cockpit_comfort_quota_missing" = "Geen bruikbare quotumwaarneming voor deze datum. Je ervaring wordt opgeslagen, maar niet gebruikt om de curve aan te passen.";
+"cockpit_comfort_quota_partial" = "Deze quotumwaarneming is onvolledig en weegt minder zwaar in de curve.";
+"cockpit_comfort_curve_sample" = "%@ · %@ verbruikt · %@";

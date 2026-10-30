@@ -3024,3 +3024,22 @@
 "cockpit_ui_comfort_recency" = "Titik tren lebih membobotkan pengalaman terbaru, dengan waktu paruh 14 hari. Mengedit hari lama tidak mengubah usianya. Ini menggambarkan pengalaman Token, bukan kuota resmi.";
 
 "menu_bar_help_conditional_runout" = "Membandingkan perkiraan jam hingga kuota habis. Jika perkiraan kehabisan tidak tersedia, kondisi bernilai salah.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Catatan pengalaman";
+"cockpit_comfort_quota_tab" = "Kurva kenyamanan kuota";
+"cockpit_comfort_tokens_tab" = "Pengalaman Token lokal";
+"cockpit_comfort_quota_scope" = "Umpan balik kuota terkait dengan penyedia yang dipilih dan akun saat ini. Pengalaman Token lokal dicatat secara terpisah.";
+"cockpit_comfort_no_account" = "Segarkan penggunaan penyedia untuk mengenali akun sebelum mencatat umpan balik kuota.";
+"cockpit_comfort_curve_title" = "Kurva kenyamanan";
+"cockpit_comfort_curve_knee" = "Titik tekuk hasil pencocokan: %@";
+"cockpit_comfort_curve_default" = "Referensi bawaan: %@";
+"cockpit_comfort_curve_x" = "Kuota terpakai hari ini (%)";
+"cockpit_comfort_curve_y" = "Skor subjektif (%)";
+"cockpit_comfort_curve_details" = "%@ pengamatan · Detail model";
+"cockpit_comfort_curve_explanation" = "Ringan = 100%, pas = 80%, berlebihan = 25%. Ini adalah skor subjektif, bukan efisiensi terukur. Hanya titik tekuk kurva tetap asli yang dicocokkan (0,1–100%); rencana harian Anda tidak berubah.";
+"cockpit_comfort_curve_weights" = "Umpan balik terbaru berbobot lebih besar (waktu paruh 14 hari); penggunaan tidak lengkap mendapat bobot 75%. Penggunaan kumulatif dapat melebihi 100%, dengan batas bawah skor 20%.";
+"cockpit_comfort_curve_empty" = "Belum ada umpan balik kuota yang dapat digunakan. Titik tekuk bawaan 25% ditampilkan; pilih tanggal dan catat pengalaman Anda.";
+"cockpit_comfort_quota_missing" = "Tidak ada pengamatan kuota yang dapat digunakan untuk tanggal ini. Pengalaman Anda disimpan, tetapi tidak digunakan untuk mencocokkan kurva.";
+"cockpit_comfort_quota_partial" = "Pengamatan kuota ini tidak lengkap dan mendapat bobot lebih rendah dalam kurva.";
+"cockpit_comfort_curve_sample" = "%@ · %@ terpakai · %@";

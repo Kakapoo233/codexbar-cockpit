@@ -25,21 +25,24 @@ enum CockpitCalendarProjection {
     static func feeling(
         on date: Date,
         providerID: String,
+        accountID: String = "local-machine",
         records: [CockpitComfortRecord],
         calendar: Calendar) -> CockpitFeeling?
     {
-        self.record(on: date, providerID: providerID, records: records, calendar: calendar)?.feeling
+        self.record(on: date, providerID: providerID, accountID: accountID, records: records, calendar: calendar)?
+            .feeling
     }
 
     static func record(
         on date: Date,
         providerID: String,
+        accountID: String = "local-machine",
         records: [CockpitComfortRecord],
         calendar: Calendar) -> CockpitComfortRecord?
     {
         let key = CockpitCalendar.dateKey(for: date, calendar: calendar)
         return records.filter {
-            $0.providerID == providerID && $0.accountID == "local-machine"
+            $0.providerID == providerID && $0.accountID == accountID
                 && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == key
         }.max { $0.recordedAt < $1.recordedAt }
     }
@@ -55,6 +58,18 @@ enum CockpitCalendarProjection {
     }
 }
 
+enum CockpitExperienceMode: String, CaseIterable, Identifiable {
+    case quota, tokens
+
+    var id: String {
+        self.rawValue
+    }
+
+    var title: String {
+        L(self == .quota ? "cockpit_comfort_quota_tab" : "cockpit_comfort_tokens_tab")
+    }
+}
+
 @MainActor
 struct CockpitCalendarView: View {
     @State private var usage: CockpitUsageProjection
@@ -65,6 +80,7 @@ struct CockpitCalendarView: View {
     @State private var scale = CockpitCalendarScale.month
     @State private var metric = CockpitCalendarMetric.tokens
     @State private var feelingProvider = UsageProvider.codex
+    @State private var experienceMode = CockpitExperienceMode.quota
     private let todayTokens: @MainActor (UsageProvider, Calendar) -> Int?
 
     init(
@@ -166,7 +182,19 @@ struct CockpitCalendarView: View {
                     }
                     .frame(width: 200)
                 }
+                Picker(L("cockpit_comfort_mode"), selection: self.$experienceMode) {
+                    ForEach(CockpitExperienceMode.allCases) { mode in
+                        Text(mode.title).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                Text(L(self.experienceMode == .quota
+                        ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
+                    .font(.caption).foregroundStyle(.secondary)
                 self.personalStatus
+                if self.experienceMode == .quota {
+                    self.quotaFeedbackNotice
+                }
                 if [.month, .quarter, .year].contains(self.scale) {
                     if self.scale != .month {
                         Text(CockpitCalendarPeriod(
@@ -196,15 +224,23 @@ struct CockpitCalendarView: View {
                         scheduled: resetStore.pendingCalendarReset)
                 }
                 self.dayDetails
-                Text(L("cockpit_ui_local_experience_note"))
-                    .font(.caption).foregroundStyle(.secondary)
-                CockpitComfortChartView(
-                    model: CockpitComfortModel.build(
-                        records: self.comfortRecords,
-                        providerID: self.feelingProvider.rawValue,
-                        accountID: "local-machine",
-                        calendar: self.calendar),
-                    records: self.comfortRecords)
+                if self.experienceMode == .quota {
+                    CockpitQuotaComfortChartView(
+                        model: CockpitQuotaComfortModel.build(
+                            records: self.comfortRecords,
+                            providerID: self.feelingProvider.rawValue,
+                            accountID: self.experienceAccountID,
+                            calendar: self.calendar),
+                        records: self.comfortRecords)
+                } else {
+                    CockpitComfortChartView(
+                        model: CockpitComfortModel.build(
+                            records: self.comfortRecords,
+                            providerID: self.feelingProvider.rawValue,
+                            accountID: "local-machine",
+                            calendar: self.calendar),
+                        records: self.comfortRecords)
+                }
             }
             .padding(16)
         }
@@ -249,6 +285,7 @@ struct CockpitCalendarView: View {
         CockpitCalendarProjection.feeling(
             on: day,
             providerID: self.feelingProvider.rawValue,
+            accountID: self.experienceAccountID,
             records: self.planStore.state.comfortRecords,
             calendar: self.calendar)
     }
@@ -293,22 +330,72 @@ struct CockpitCalendarView: View {
     private var personalStatus: some View {
         CockpitCalendarStatusEditor(
             selected: self.feeling(on: self.selectedDay),
-            canRecord: CockpitCalendarProjection.canRecord(on: self.selectedDay, calendar: self.calendar),
+            canRecord: CockpitCalendarProjection.canRecord(on: self.selectedDay, calendar: self.calendar)
+                && (self.experienceMode == .tokens || self.hasQuotaAccount),
             errorMessage: self.planStore.errorMessage,
             onSelect: self.selectFeeling,
             onClear: {
-                self.planStore.clearLocalComfort(
-                    for: self.feelingProvider,
-                    on: self.selectedDay,
-                    calendar: self.calendar)
+                if self.experienceMode == .quota {
+                    self.planStore.clearQuotaComfort(
+                        for: self.feelingProvider, on: self.selectedDay, calendar: self.calendar)
+                } else {
+                    self.planStore.clearLocalComfort(
+                        for: self.feelingProvider, on: self.selectedDay, calendar: self.calendar)
+                }
             },
-            compact: true)
+            compact: true,
+            unavailableReason: self.experienceMode == .quota && !self.hasQuotaAccount
+                ? L("cockpit_comfort_no_account") : nil)
+    }
+
+    private var experienceAccountID: String {
+        self.experienceMode == .quota ? self.planStore.accountID(for: self.feelingProvider) : "local-machine"
+    }
+
+    private var hasQuotaAccount: Bool {
+        self.planStore.availableProviders.contains(self.feelingProvider)
+    }
+
+    @ViewBuilder
+    private var quotaFeedbackNotice: some View {
+        if self.hasQuotaAccount {
+            let record = CockpitCalendarProjection.record(
+                on: self.selectedDay,
+                providerID: self.feelingProvider.rawValue,
+                accountID: self.experienceAccountID,
+                records: self.comfortRecords,
+                calendar: self.calendar)
+            let usage = self.planStore.state.quotaComfortUsage(
+                providerID: self.feelingProvider.rawValue,
+                accountID: self.experienceAccountID,
+                on: self.selectedDay,
+                calendar: self.calendar)
+            let captured = record?.usedPercent != nil && record?.coverage != .unavailable
+            let used = captured ? record?.usedPercent : usage.usedPercent
+            let coverage = captured ? record?.coverage : usage.coverage
+            if let used {
+                Text("\(L("cockpit_comfort_curve_x")) · \(cockpitLocalizedPercent(used))")
+                    .font(.caption).monospacedDigit()
+                if coverage == .partial {
+                    Text(L("cockpit_comfort_quota_partial"))
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+            } else {
+                Text(L("cockpit_comfort_quota_missing"))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
     }
 
     private func selectFeeling(_ feeling: CockpitFeeling) {
         let now = Date()
         let calendar = self.calendar
         guard CockpitCalendarProjection.canRecord(on: self.selectedDay, now: now, calendar: calendar) else { return }
+        if self.experienceMode == .quota {
+            self.planStore.setQuotaComfortFeeling(
+                feeling, for: self.feelingProvider, on: self.selectedDay, now: now, calendar: calendar)
+            return
+        }
         let existing = CockpitCalendarProjection.record(
             on: self.selectedDay,
             providerID: self.feelingProvider.rawValue,
@@ -341,7 +428,7 @@ struct CockpitCalendarView: View {
 
     private var comfortRecords: [CockpitComfortRecord] {
         self.planStore.state.comfortRecords.filter {
-            $0.providerID == self.feelingProvider.rawValue && $0.accountID == "local-machine"
+            $0.providerID == self.feelingProvider.rawValue && $0.accountID == self.experienceAccountID
                 && $0.timeZoneIdentifier == self.calendar.timeZone.identifier
         }.sorted { $0.recordedAt > $1.recordedAt }
     }
@@ -355,6 +442,7 @@ struct CockpitCalendarStatusEditor: View {
     let onSelect: (CockpitFeeling) -> Void
     let onClear: () -> Void
     var compact = false
+    var unavailableReason: String?
 
     var body: some View {
         GroupBox(L("cockpit_ui_calendar_personal_status")) {
@@ -372,7 +460,9 @@ struct CockpitCalendarStatusEditor: View {
                 }
                 if !self.compact { self.clearButton }
                 if !self.canRecord {
-                    Label(L("cockpit_ui_calendar_future"), systemImage: "calendar.badge.exclamationmark")
+                    Label(
+                        self.unavailableReason ?? L("cockpit_ui_calendar_future"),
+                        systemImage: "calendar.badge.exclamationmark")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 if let error = self.errorMessage {

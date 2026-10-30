@@ -1,5 +1,16 @@
 # Cockpit changes
 
+## 0.5.0 — Restore the Cockpit comfort curve
+
+- Restore v0.3.4's fixed quota-comfort curve, fitting only its knee from subjective feedback.
+  Show the default 25% knee without data, fitted scatter points, hover details, and cumulative
+  daily quota use beyond 100%. Recent feedback has more weight; partial observations have less.
+- Switch between account-specific quota feedback and the existing local Token experience in the
+  calendar. Select a day to record, correct, or clear its feeling. Existing Token records remain intact.
+- Save quota samples independently by provider, account, calendar date, and time zone. Missing usage
+  stays unknown; changing a feeling preserves its measurement and never changes the daily plan or cap.
+- Add the curve, model explanation, and sample-state messages to all 23 existing languages.
+
 ## 0.4.2 — Updated Codex Pro plan labels
 
 - Display Pro 100 / Pro Lite as 10x, Pro 200 as 20x, and explicit Pro 500 names as 50x.

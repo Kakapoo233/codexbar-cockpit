@@ -3023,3 +3023,22 @@
 "cockpit_ui_comfort_recency" = "Punkty trendu mocniej uwzględniają niedawne doświadczenia, z okresem połowicznego zaniku wynoszącym 14 dni. Edycja starszego dnia zachowuje jego wiek. Opisuje to doświadczenie z tokenami, a nie oficjalny limit.";
 
 "menu_bar_help_conditional_runout" = "Porównuje szacowaną liczbę godzin do wyczerpania limitu. Jeśli szacunek wyczerpania nie jest dostępny, warunek jest fałszywy.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Zapis odczuć";
+"cockpit_comfort_quota_tab" = "Krzywa komfortu limitu";
+"cockpit_comfort_tokens_tab" = "Lokalne odczucia Token";
+"cockpit_comfort_quota_scope" = "Oceny limitu należą do wybranego dostawcy i bieżącego konta. Lokalne odczucia Token są zapisywane osobno.";
+"cockpit_comfort_no_account" = "Odśwież zużycie dostawcy, aby rozpoznać konto przed zapisaniem oceny limitu.";
+"cockpit_comfort_curve_title" = "Krzywa komfortu";
+"cockpit_comfort_curve_knee" = "Dopasowany punkt załamania: %@";
+"cockpit_comfort_curve_default" = "Domyślny punkt odniesienia: %@";
+"cockpit_comfort_curve_x" = "Limit zużyty dzisiaj (%)";
+"cockpit_comfort_curve_y" = "Ocena subiektywna (%)";
+"cockpit_comfort_curve_details" = "%@ obserwacji · Szczegóły modelu";
+"cockpit_comfort_curve_explanation" = "Lekko = 100%, w sam raz = 80%, przeciążenie = 25%. To oceny subiektywne, a nie zmierzona wydajność. Dopasowywany jest tylko punkt załamania oryginalnej stałej krzywej (0,1–100%); plan dzienny pozostaje bez zmian.";
+"cockpit_comfort_curve_weights" = "Nowsze oceny mają większą wagę (okres połowicznego zaniku 14 dni); niepełne zużycie otrzymuje wagę 75%. Łączne zużycie może przekraczać 100%, a minimalna ocena wynosi 20%.";
+"cockpit_comfort_curve_empty" = "Brak użytecznych ocen limitu. Wyświetlany jest domyślny punkt 25%; wybierz datę i zapisz swoje odczucia.";
+"cockpit_comfort_quota_missing" = "Brak użytecznej obserwacji limitu dla tej daty. Twoje odczucia są zapisywane, ale nie posłużą do dopasowania krzywej.";
+"cockpit_comfort_quota_partial" = "Ta obserwacja limitu jest niepełna i ma mniejszą wagę w krzywej.";
+"cockpit_comfort_curve_sample" = "%@ · zużyto %@ · %@";

@@ -89,6 +89,8 @@ public struct CockpitComfortRecord: Codable, Equatable, Sendable, Identifiable {
     public let feeling: CockpitFeeling
     public let totalTokens: Int?
     public let coverage: CockpitCoverage
+    /// Observed use of the selected account's quota during this calendar day; never derived from Tokens.
+    public let usedPercent: Double?
 
     public var id: String {
         "\(self.providerID)|\(self.accountID)|\(self.timeZoneIdentifier)|\(self.localDateKey)"
@@ -102,7 +104,8 @@ public struct CockpitComfortRecord: Codable, Equatable, Sendable, Identifiable {
         recordedAt: Date,
         feeling: CockpitFeeling,
         totalTokens: Int?,
-        coverage: CockpitCoverage)
+        coverage: CockpitCoverage,
+        usedPercent: Double? = nil)
     {
         self.providerID = providerID
         self.accountID = accountID
@@ -112,6 +115,9 @@ public struct CockpitComfortRecord: Codable, Equatable, Sendable, Identifiable {
         self.feeling = feeling
         self.totalTokens = totalTokens.flatMap { $0 >= 0 ? $0 : nil }
         self.coverage = coverage
+        self.usedPercent = usedPercent.flatMap {
+            $0.isFinite && (0...10000).contains($0) ? $0 : nil
+        }
     }
 }
 

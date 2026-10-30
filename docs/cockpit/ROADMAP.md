@@ -29,6 +29,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
 - [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
 - [x] Implement subjective feedback records and Token experience chart.
+- [x] Restore the upstream quota comfort curve with account-scoped feedback and native chart (0.5.0).
 - [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.
 - [x] Implement PNG preview, save, and clipboard export; render Chinese and missing-cost fixtures.
 - [x] Confirm same-panel navigation and visible calendar state controls with the user (0.2.0).

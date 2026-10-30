@@ -3017,3 +3017,22 @@
 "cockpit_ui_comfort_recency" = "Les points de tendance donnent plus de poids aux expériences récentes, avec une demi-vie de 14 jours. Modifier un jour ancien conserve son ancienneté. Cela décrit l’expérience d’utilisation des tokens, pas le quota officiel.";
 
 "menu_bar_help_conditional_runout" = "Compare le nombre estimé d’heures avant épuisement du quota. Si aucune estimation d’épuisement n’est disponible, la condition est fausse.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Ressenti enregistré";
+"cockpit_comfort_quota_tab" = "Courbe de confort du quota";
+"cockpit_comfort_tokens_tab" = "Ressenti Token local";
+"cockpit_comfort_quota_scope" = "Le ressenti lié au quota appartient au fournisseur sélectionné et au compte actuel. Le ressenti Token local est enregistré séparément.";
+"cockpit_comfort_no_account" = "Actualisez l’utilisation du fournisseur pour identifier un compte avant d’enregistrer un ressenti lié au quota.";
+"cockpit_comfort_curve_title" = "Courbe de confort";
+"cockpit_comfort_curve_knee" = "Point de flexion ajusté : %@";
+"cockpit_comfort_curve_default" = "Référence par défaut : %@";
+"cockpit_comfort_curve_x" = "Quota utilisé aujourd’hui (%)";
+"cockpit_comfort_curve_y" = "Score subjectif (%)";
+"cockpit_comfort_curve_details" = "%@ observations · Détails du modèle";
+"cockpit_comfort_curve_explanation" = "Léger = 100%, juste bien = 80%, surcharge = 25%. Ce sont des scores subjectifs, pas une efficacité mesurée. Seul le point de flexion de la courbe fixe d’origine est ajusté (0,1–100%) ; votre plan quotidien reste inchangé.";
+"cockpit_comfort_curve_weights" = "Les retours récents ont plus de poids (demi-vie de 14 jours) ; une utilisation partielle reçoit un poids de 75%. L’utilisation cumulée peut dépasser 100%, avec un score plancher de 20%.";
+"cockpit_comfort_curve_empty" = "Aucun retour exploitable sur le quota. Le point de flexion par défaut de 25% est affiché ; choisissez une date et enregistrez votre ressenti.";
+"cockpit_comfort_quota_missing" = "Aucune observation de quota exploitable pour cette date. Votre ressenti est enregistré, mais ne servira pas à ajuster la courbe.";
+"cockpit_comfort_quota_partial" = "Cette observation de quota est incomplète et reçoit moins de poids dans la courbe.";
+"cockpit_comfort_curve_sample" = "%@ · %@ utilisé · %@";

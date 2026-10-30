@@ -3000,3 +3000,22 @@
 "cockpit_ui_comfort_recency" = "趨勢點更重視近期體驗，權重半衰期為 14 天；修改歷史日期不會改變其年齡。這描述 Token 使用體驗，不代表官方額度。";
 
 "menu_bar_help_conditional_runout" = "比較預計距離額度耗盡的小時數；沒有可用的耗盡估算時，條件不成立。";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "體感記錄";
+"cockpit_comfort_quota_tab" = "配額舒適曲線";
+"cockpit_comfort_tokens_tab" = "本機 Token 體驗";
+"cockpit_comfort_quota_scope" = "配額體感屬於所選供應商的目前帳號，本機 Token 體感另行記錄。";
+"cockpit_comfort_no_account" = "請先重新整理供應商用量，辨識帳號後再記錄配額體感。";
+"cockpit_comfort_curve_title" = "舒適曲線";
+"cockpit_comfort_curve_knee" = "擬合轉折點：%@";
+"cockpit_comfort_curve_default" = "預設參考：%@";
+"cockpit_comfort_curve_x" = "當天已用配額（%）";
+"cockpit_comfort_curve_y" = "主觀評分（%）";
+"cockpit_comfort_curve_details" = "%@ 筆回饋 · 模型說明";
+"cockpit_comfort_curve_explanation" = "輕鬆=100%、剛剛好=80%、過載=25%。這些是主觀評分，並非實測效率。保留原版固定曲線，僅擬合轉折點（0.1–100%），不會修改每日計畫。";
+"cockpit_comfort_curve_weights" = "近期回饋權重較高，半衰期為14天；不完整用量以75%權重計入。累計用量可超過100%，評分下限為20%。";
+"cockpit_comfort_curve_empty" = "尚無可用配額回饋，顯示預設25%轉折點；請選擇日期並記錄體感。";
+"cockpit_comfort_quota_missing" = "此日期沒有可用配額觀測。體感仍會儲存，但不會參與曲線擬合。";
+"cockpit_comfort_quota_partial" = "此配額觀測不完整，擬合時會降低權重。";
+"cockpit_comfort_curve_sample" = "%@ · 已用%@ · %@";

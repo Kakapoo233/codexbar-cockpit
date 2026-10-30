@@ -3019,3 +3019,22 @@
 "cockpit_ui_comfort_recency" = "Os puntos de tendencia dan máis peso á experiencia recente, cunha semivida de 14 días. Editar un día anterior conserva a súa antigüidade. Isto describe a experiencia de uso de tokens, non a cota oficial.";
 
 "menu_bar_help_conditional_runout" = "Compara as horas estimadas ata esgotar a cota. Se non hai unha estimación de esgotamento dispoñible, a condición é falsa.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Rexistro de sensacións";
+"cockpit_comfort_quota_tab" = "Curva de confort da cota";
+"cockpit_comfort_tokens_tab" = "Sensación de Token local";
+"cockpit_comfort_quota_scope" = "As valoracións da cota pertencen ao provedor seleccionado e á conta actual. A sensación de Token local rexístrase por separado.";
+"cockpit_comfort_no_account" = "Actualiza o uso do provedor para identificar unha conta antes de rexistrar valoracións da cota.";
+"cockpit_comfort_curve_title" = "Curva de confort";
+"cockpit_comfort_curve_knee" = "Punto de inflexión axustado: %@";
+"cockpit_comfort_curve_default" = "Referencia predeterminada: %@";
+"cockpit_comfort_curve_x" = "Cota usada hoxe (%)";
+"cockpit_comfort_curve_y" = "Puntuación subxectiva (%)";
+"cockpit_comfort_curve_details" = "%@ observacións · Detalles do modelo";
+"cockpit_comfort_curve_explanation" = "Lixeiro = 100%, xusto = 80%, sobrecarga = 25%. Son puntuacións subxectivas, non eficiencia medida. Só se axusta o punto de inflexión da curva fixa orixinal (0,1–100%); non cambia o plan diario.";
+"cockpit_comfort_curve_weights" = "As valoracións recentes teñen máis peso (vida media de 14 días); o uso parcial recibe un peso do 75%. O uso acumulado pode superar o 100%, cunha puntuación mínima do 20%.";
+"cockpit_comfort_curve_empty" = "Aínda non hai valoracións de cota utilizables. Móstrase o punto predeterminado do 25%; selecciona unha data e rexistra como te sentiches.";
+"cockpit_comfort_quota_missing" = "Non hai observacións de cota utilizables para esta data. A sensación gárdase, pero non se usará para axustar a curva.";
+"cockpit_comfort_quota_partial" = "Esta observación da cota está incompleta e recibe menos peso na curva.";
+"cockpit_comfort_curve_sample" = "%@ · %@ usado · %@";

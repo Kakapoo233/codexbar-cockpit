@@ -3016,3 +3016,22 @@
 "cockpit_ui_comfort_recency" = "Los puntos de tendencia dan más peso a la experiencia reciente, con una semivida de 14 días. Editar un día anterior conserva su antigüedad. Esto describe la experiencia de uso de tokens, no la cuota oficial.";
 
 "menu_bar_help_conditional_runout" = "Compara las horas estimadas hasta agotar la cuota. Si no hay una estimación del agotamiento disponible, la condición no se cumple.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Registro de sensaciones";
+"cockpit_comfort_quota_tab" = "Curva de comodidad de la cuota";
+"cockpit_comfort_tokens_tab" = "Sensación de Token local";
+"cockpit_comfort_quota_scope" = "Las valoraciones de cuota pertenecen al proveedor seleccionado y a la cuenta actual. La sensación de Token local se registra por separado.";
+"cockpit_comfort_no_account" = "Actualiza el uso del proveedor para identificar una cuenta antes de registrar valoraciones de cuota.";
+"cockpit_comfort_curve_title" = "Curva de comodidad";
+"cockpit_comfort_curve_knee" = "Punto de inflexión ajustado: %@";
+"cockpit_comfort_curve_default" = "Referencia predeterminada: %@";
+"cockpit_comfort_curve_x" = "Cuota usada hoy (%)";
+"cockpit_comfort_curve_y" = "Puntuación subjetiva (%)";
+"cockpit_comfort_curve_details" = "%@ observaciones · Detalles del modelo";
+"cockpit_comfort_curve_explanation" = "Ligero = 100%, justo = 80%, sobrecarga = 25%. Son puntuaciones subjetivas, no una eficiencia medida. Solo se ajusta el punto de inflexión de la curva fija original (0,1–100%); no cambia tu plan diario.";
+"cockpit_comfort_curve_weights" = "Las valoraciones recientes pesan más (vida media de 14 días); el uso parcial recibe un peso del 75%. El uso acumulado puede superar el 100%, con una puntuación mínima del 20%.";
+"cockpit_comfort_curve_empty" = "Aún no hay valoraciones de cuota utilizables. Se muestra el punto predeterminado del 25%; selecciona una fecha y registra cómo te sentiste.";
+"cockpit_comfort_quota_missing" = "No hay observaciones de cuota utilizables para esta fecha. Tu sensación se guarda, pero no se usará para ajustar la curva.";
+"cockpit_comfort_quota_partial" = "Esta observación de cuota está incompleta y recibe menos peso en la curva.";
+"cockpit_comfort_curve_sample" = "%@ · %@ usado · %@";
