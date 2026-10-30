@@ -10,7 +10,9 @@ public struct CockpitComfortObservation: Equatable, Sendable, Identifiable {
     public let feeling: CockpitFeeling
     public let coverage: CockpitCoverage
 
-    public var score: Double { self.feeling.score }
+    public var score: Double {
+        self.feeling.score
+    }
 }
 
 public struct CockpitComfortPoint: Equatable, Sendable, Identifiable {
@@ -18,7 +20,9 @@ public struct CockpitComfortPoint: Equatable, Sendable, Identifiable {
     public let score: Double
     public let sampleCount: Int
 
-    public var id: Double { self.totalTokens }
+    public var id: Double {
+        self.totalTokens
+    }
 }
 
 /// Describes the user's recorded experience. It does not predict productivity or set official quota budgets.
@@ -54,8 +58,11 @@ public struct CockpitComfortModel: Equatable, Sendable {
         let observations = unique.values.sorted { $0.localDateKey < $1.localDateKey }.suffix(90).compactMap {
             guard let tokens = $0.totalTokens else { return nil as CockpitComfortObservation? }
             return CockpitComfortObservation(
-                id: $0.id, localDateKey: $0.localDateKey, totalTokens: tokens,
-                feeling: $0.feeling, coverage: $0.coverage)
+                id: $0.id,
+                localDateKey: $0.localDateKey,
+                totalTokens: tokens,
+                feeling: $0.feeling,
+                coverage: $0.coverage)
         }
         let complete = observations.filter { $0.coverage == .complete }
         let distinct = Set(complete.map(\.totalTokens))

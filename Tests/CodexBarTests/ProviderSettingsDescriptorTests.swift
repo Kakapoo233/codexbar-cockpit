@@ -423,7 +423,7 @@ struct ProviderSettingsDescriptorTests {
         let context = fixture.settingsContext(provider: .opencode)
         let picker = try #require(OpenCodeProviderImplementation().settingsPickers(context: context).first)
         let action = try #require(picker.trailingActions.first)
-        let service = "io.github.kakapoo233.codexbar-cockpit.tests.settings-cookie-missing-snapshot.\(UUID().uuidString)"
+        let service = "\(CockpitAppIdentity.bundleIdentifier).tests.cookie-missing.\(UUID().uuidString)"
         fixture.store.snapshots[.opencode] = UsageSnapshot(
             primary: nil,
             secondary: nil,

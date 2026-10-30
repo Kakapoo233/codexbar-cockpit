@@ -54,7 +54,9 @@ public struct CockpitTaskGroup: Sendable, Equatable, Identifiable {
     public let sessionIDs: [CockpitTaskIdentity]
     public let issues: Set<CockpitTaskLineageIssue>
 
-    public var id: CockpitTaskIdentity { self.rootID }
+    public var id: CockpitTaskIdentity {
+        self.rootID
+    }
 }
 
 /// Adds ownership to already-counted session usage; it never estimates or recounts tokens.
@@ -134,9 +136,13 @@ public struct CockpitTaskLineage: Sendable, Equatable {
         }
 
         var children: [CockpitTaskIdentity: Set<CockpitTaskIdentity>] = [:]
-        for (child, parent) in parents { children[parent, default: []].insert(child) }
+        for (child, parent) in parents {
+            children[parent, default: []].insert(child)
+        }
         var grouped: [CockpitTaskIdentity: [CockpitTaskIdentity]] = [:]
-        for (session, root) in roots { grouped[root, default: []].append(session) }
+        for (session, root) in roots {
+            grouped[root, default: []].append(session)
+        }
         let groups = grouped.keys.sorted().map { root in
             let members = (grouped[root] ?? []).sorted()
             return CockpitTaskGroup(

@@ -51,8 +51,11 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         }
         if let percent {
             self.personalCaps.append(CockpitPersonalCap(
-                providerID: providerID, accountID: accountID, localDateKey: day,
-                timeZoneIdentifier: calendar.timeZone.identifier, percent: percent))
+                providerID: providerID,
+                accountID: accountID,
+                localDateKey: day,
+                timeZoneIdentifier: calendar.timeZone.identifier,
+                percent: percent))
         }
         self.personalCaps = Array(self.personalCaps.suffix(400))
     }
@@ -67,10 +70,14 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         calendar: Calendar = .current)
     {
         let record = CockpitComfortRecord(
-            providerID: providerID, accountID: accountID,
+            providerID: providerID,
+            accountID: accountID,
             localDateKey: CockpitCalendar.dateKey(for: date, calendar: calendar),
-            timeZoneIdentifier: calendar.timeZone.identifier, recordedAt: date,
-            feeling: feeling, totalTokens: totalTokens, coverage: coverage)
+            timeZoneIdentifier: calendar.timeZone.identifier,
+            recordedAt: date,
+            feeling: feeling,
+            totalTokens: totalTokens,
+            coverage: coverage)
         self.comfortRecords.removeAll { $0.id == record.id }
         self.comfortRecords.append(record)
         self.comfortRecords = Array(self.comfortRecords.suffix(3000))
@@ -160,8 +167,10 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             used += max(0, maximum - baseline)
         }
         return CockpitDayUsage(
-            localDateKey: day, usedPercent: hasObservation ? Self.round(used) : nil,
-            coverage: complete ? .complete : .partial, sampleCount: today.count)
+            localDateKey: day,
+            usedPercent: hasObservation ? Self.round(used) : nil,
+            coverage: complete ? .complete : .partial,
+            sampleCount: today.count)
     }
 
     private struct QuotaSegment {
@@ -186,7 +195,9 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             if advancedReset, crossedReset || observedNewStart {
                 segments.append(current)
                 current = QuotaSegment(
-                    samples: [sample], latestReset: sample.resetsAt, beginsWithObservedReset: true)
+                    samples: [sample],
+                    latestReset: sample.resetsAt,
+                    beginsWithObservedReset: true)
             } else {
                 if sample.resetsAt != previous.resetsAt || sample.windowDuration != previous.windowDuration {
                     current.hasMetadataDrift = true
@@ -216,12 +227,17 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         let dayRemaining = interval.end.timeIntervalSince(snapshot.capturedAt)
         let additional = snapshot.remainingPercent * min(1, dayRemaining / untilReset)
         let used = self.dailyUsage(
-            providerID: snapshot.providerID, accountID: snapshot.accountID,
-            on: snapshot.capturedAt, calendar: calendar).usedPercent ?? 0
+            providerID: snapshot.providerID,
+            accountID: snapshot.accountID,
+            on: snapshot.capturedAt,
+            calendar: calendar).usedPercent ?? 0
         self.plans.append(CockpitDailyPlan(
-            providerID: snapshot.providerID, accountID: snapshot.accountID,
-            localDateKey: day, timeZoneIdentifier: calendar.timeZone.identifier,
-            anchorAt: snapshot.capturedAt, resetsAt: snapshot.resetsAt,
+            providerID: snapshot.providerID,
+            accountID: snapshot.accountID,
+            localDateKey: day,
+            timeZoneIdentifier: calendar.timeZone.identifier,
+            anchorAt: snapshot.capturedAt,
+            resetsAt: snapshot.resetsAt,
             suggestedPercent: Self.round(used + additional)))
         self.plans = Array(self.plans.suffix(400))
     }

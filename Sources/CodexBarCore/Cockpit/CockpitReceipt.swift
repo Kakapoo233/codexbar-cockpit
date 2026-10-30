@@ -36,7 +36,9 @@ public struct CockpitReceipt: Equatable, Sendable {
     public let knownCostUSD: Double?
     public let incompleteCostItemCount: Int
 
-    public var hasUnknownCost: Bool { self.incompleteCostItemCount > 0 }
+    public var hasUnknownCost: Bool {
+        self.incompleteCostItemCount > 0
+    }
 
     /// Uses provider/account/session identity. Equal titles and duplicate selections never merge different tasks.
     public static func build(items: [CockpitReceiptItem], selectedSessionIDs: Set<String>) -> Self {
@@ -48,7 +50,9 @@ public struct CockpitReceipt: Equatable, Sendable {
         var seen: Set<Identity> = []
         let selected = items.filter { item in
             selectedSessionIDs.contains(item.id) && seen.insert(Identity(
-                provider: item.providerID, account: item.accountID, session: item.id)).inserted
+                provider: item.providerID,
+                account: item.accountID,
+                session: item.id)).inserted
         }
         var knownTokens = 0
         var tokensComplete = true

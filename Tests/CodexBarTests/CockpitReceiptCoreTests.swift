@@ -10,8 +10,12 @@ struct CockpitReceiptCoreTests {
         unknown: Bool = false) -> CockpitReceiptItem
     {
         CockpitReceiptItem(
-            id: id, providerID: "codex", title: "Same task title",
-            totalTokens: tokens, knownCostUSD: cost, hasUnknownCost: unknown)
+            id: id,
+            providerID: "codex",
+            title: "Same task title",
+            totalTokens: tokens,
+            knownCostUSD: cost,
+            hasUnknownCost: unknown)
     }
 
     @Test
@@ -38,11 +42,13 @@ struct CockpitReceiptCoreTests {
     @Test
     func `missing values stay unknown while a measured zero is preserved`() {
         let unknown = CockpitReceipt.build(
-            items: [self.item("unknown", tokens: nil, cost: nil)], selectedSessionIDs: ["unknown"])
+            items: [self.item("unknown", tokens: nil, cost: nil)],
+            selectedSessionIDs: ["unknown"])
         #expect(unknown.totalTokens == nil)
         #expect(unknown.knownCostUSD == nil)
         let zero = CockpitReceipt.build(
-            items: [self.item("zero", tokens: 0, cost: 0)], selectedSessionIDs: ["zero"])
+            items: [self.item("zero", tokens: 0, cost: 0)],
+            selectedSessionIDs: ["zero"])
         #expect(zero.totalTokens == 0)
         #expect(zero.knownCostUSD == 0)
         #expect(!zero.hasUnknownCost)

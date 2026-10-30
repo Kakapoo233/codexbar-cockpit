@@ -44,7 +44,8 @@ struct ForkSettingsImportTests {
         #expect(result.providerConfig(for: .claude)?.enabled == false)
         #expect(result.providerConfig(for: .claude)?.source == .cli)
         #expect(result.providerConfig(for: .codex)?.apiKey == "EXISTING-FORK-KEY")
-        #expect(try !String(decoding: result.encodedData(), as: UTF8.self).contains("UPSTREAM"))
+        let exported = try #require(String(data: result.encodedData(), encoding: .utf8))
+        #expect(!exported.contains("UPSTREAM"))
     }
 
     @Test

@@ -9,7 +9,9 @@ struct CockpitComfortCoreTests {
         return calendar
     }
 
-    private var now: Date { Date(timeIntervalSince1970: 1_783_512_000) }
+    private var now: Date {
+        Date(timeIntervalSince1970: 1_783_512_000)
+    }
 
     private func record(
         day: String,
@@ -20,16 +22,24 @@ struct CockpitComfortCoreTests {
         feeling: CockpitFeeling = .comfortable) -> CockpitComfortRecord
     {
         CockpitComfortRecord(
-            providerID: provider, accountID: account, localDateKey: day,
+            providerID: provider,
+            accountID: account,
+            localDateKey: day,
             timeZoneIdentifier: self.calendar.timeZone.identifier,
-            recordedAt: self.now, feeling: feeling, totalTokens: tokens, coverage: coverage)
+            recordedAt: self.now,
+            feeling: feeling,
+            totalTokens: tokens,
+            coverage: coverage)
     }
 
     @Test
     func `partial experiences are shown as observations without inventing a fitted curve`() {
-        let records = (1...8).map { self.record(day: "2026-07-0\($0)", tokens: $0 * 100000, coverage: .partial) }
+        let records = (1...8).map { self.record(day: "2026-07-0\($0)", tokens: $0 * 100_000, coverage: .partial) }
         let model = CockpitComfortModel.build(
-            records: records, providerID: "codex", now: self.now, calendar: self.calendar)
+            records: records,
+            providerID: "codex",
+            now: self.now,
+            calendar: self.calendar)
         #expect(model.status == .insufficientData)
         #expect(model.points.isEmpty)
         #expect(model.completeSampleCount == 0)
@@ -39,10 +49,13 @@ struct CockpitComfortCoreTests {
     @Test
     func `seven varied complete days permit descriptive binned experience means`() {
         let records = (1...7).map {
-            self.record(day: "2026-07-0\($0)", tokens: $0 * 100000, feeling: $0 < 4 ? .light : .overloaded)
+            self.record(day: "2026-07-0\($0)", tokens: $0 * 100_000, feeling: $0 < 4 ? .light : .overloaded)
         }
         let model = CockpitComfortModel.build(
-            records: records, providerID: "codex", now: self.now, calendar: self.calendar)
+            records: records,
+            providerID: "codex",
+            now: self.now,
+            calendar: self.calendar)
         #expect(model.status == .ready)
         #expect(model.completeSampleCount == 7)
         #expect(model.points.count == 3)
@@ -62,7 +75,10 @@ struct CockpitComfortCoreTests {
             self.record(day: "2027-07-01", tokens: 500),
         ]
         let model = CockpitComfortModel.build(
-            records: records, providerID: "codex", now: self.now, calendar: self.calendar)
+            records: records,
+            providerID: "codex",
+            now: self.now,
+            calendar: self.calendar)
         #expect(model.observations.isEmpty)
         #expect(model.points.isEmpty)
     }

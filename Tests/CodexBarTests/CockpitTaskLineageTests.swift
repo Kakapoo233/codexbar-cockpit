@@ -116,19 +116,24 @@ struct CockpitTaskLineageTests {
         #expect(modern.isSubagent)
 
         let legacy = try #require(self.parse([
-            "id": "leaf", "source": "subagent", "forked_from_id": "root",
+            "id": "leaf",
+            "source": "subagent",
+            "forked_from_id": "root",
         ], expected: "leaf"))
         #expect(legacy.parentThreadID == "root")
         let fork = try #require(self.parse([
-            "id": "fork", "forkedFromId": "root", "source": "cli",
+            "id": "fork",
+            "forkedFromId": "root",
+            "source": "cli",
         ], expected: "fork"))
         #expect(!fork.isSubagent)
         #expect(fork.parentThreadID == nil)
         #expect(fork.forkedFromID == "root")
         #expect(self.parse(["id": "different"], expected: "leaf") == nil)
         #expect(self.parse(["id": "leaf", "parent_thread_id": "bad\nID"], expected: "leaf")?.parentThreadID == nil)
-        #expect(CockpitTaskLineageLoader.parse(line: Data("{\"type\":\"event_msg\"}".utf8),
-                                             expectedSessionID: "leaf") == nil)
+        #expect(CockpitTaskLineageLoader.parse(
+            line: Data("{\"type\":\"event_msg\"}".utf8),
+            expectedSessionID: "leaf") == nil)
     }
 
     @Test
@@ -158,9 +163,13 @@ struct CockpitTaskLineageTests {
         let directory = try self.makeDirectory()
         defer { try? FileManager.default.removeItem(at: directory) }
         let first = try self.writeSource(
-            directory: directory, filename: "first.jsonl", payload: ["id": "leaf", "parent_thread_id": "root-a"])
+            directory: directory,
+            filename: "first.jsonl",
+            payload: ["id": "leaf", "parent_thread_id": "root-a"])
         let second = try self.writeSource(
-            directory: directory, filename: "second.jsonl", payload: ["id": "leaf", "parent_thread_id": "root-b"])
+            directory: directory,
+            filename: "second.jsonl",
+            payload: ["id": "leaf", "parent_thread_id": "root-b"])
         let conflicting = try CockpitTaskLineageLoader.read(sources: [second, first])
         #expect(conflicting.metadata.isEmpty)
         #expect(conflicting.conflicting == [first.identity])
@@ -187,7 +196,8 @@ struct CockpitTaskLineageTests {
         let link = directory.appendingPathComponent("linked.jsonl")
         try FileManager.default.createSymbolicLink(at: link, withDestinationURL: source.source.fileURL)
         let linked = CockpitTaskLineageSource(
-            identity: source.identity, source: .init(fileURL: link, sessionID: "leaf"))
+            identity: source.identity,
+            source: .init(fileURL: link, sessionID: "leaf"))
         #expect(try CockpitTaskLineageLoader.read(sources: [linked]).unavailable == [source.identity])
         try Data("{\"type\":\"session_meta\",\"payload\":{\"id\":\"leaf\"".utf8).write(to: source.source.fileURL)
         #expect(try CockpitTaskLineageLoader.read(sources: [source]).metadata.isEmpty)

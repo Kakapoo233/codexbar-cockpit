@@ -20,7 +20,7 @@ const selected = process.argv.slice(2);
 if (selected.some((id) => !ids.includes(id))) throw new Error("Pass registered provider IDs to synchronize labels");
 if (!count) throw new Error("No registered providers");
 const counts = [
-  ["README.md", /(?<=alt="CodexBar — every AI coding limit in your menu bar\. )\d+(?= providers\.")/g],
+  ["README.upstream.md", /(?<=alt="CodexBar — every AI coding limit in your menu bar\. )\d+(?= providers\.")/g],
   ["docs/providers.md", /(?<=CodexBar currently registers )\d+(?= provider IDs)/g],
   ["docs/social.html", /(?<=<strong>)\d+(?= providers<\/strong>)/g],
   ["docs/index.html", /(?<=across )\d+(?= (?:AI coding )?providers)/g],
@@ -43,7 +43,7 @@ for (const entry of fs.readdirSync(path.join(root, directory), { recursive: true
   const name = source.match(/\bdisplayName: "([^"]+)"/)?.[1];
   if (!selected.includes(id) || !name) continue;
   const link = new RegExp(`\\[[^\\]\\n]+\\]\\(((?:docs/)?${id}\\.md)\\)`, "g");
-  for (const file of ["README.md", "docs/providers.md", "docs/plugins.md"]) {
+  for (const file of ["README.upstream.md", "docs/providers.md", "docs/plugins.md"]) {
     update(file, (text) => text.replace(link, (_, url) => `[${name}](${url})`));
   }
   update("docs/index.html", (text) =>

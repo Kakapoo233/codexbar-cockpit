@@ -56,7 +56,10 @@ function fixture(t) {
     `<meta content="old" property="og:image"><meta name="twitter:image" content="old">
     <meta property="og:description" content="Keep this description">`,
   );
-  write("README.md", '<img src="docs/social.png" alt="Social preview"><img src="unrelated.png" alt="Keep this">');
+  write(
+    "README.upstream.md",
+    '<img src="docs/social.png" alt="Social preview"><img src="unrelated.png" alt="Keep this">',
+  );
   write("rendered.png", pngFixture);
   write("docs/social.png", "previous image");
   return { root, write, read, update: () => updateSocialCard(root, path.join(root, "rendered.png")) };
@@ -74,9 +77,9 @@ test("updater records all rendered inputs and updates the three image references
   assert(fs.readFileSync(path.join(f.root, "docs/social.png")).equals(pngFixture));
   const url = `https://codexbar.app/social.png?v=${hash.slice(0, 16)}`;
   assert.equal(f.read("docs/index.html").split(url).length - 1, 2);
-  assert(f.read("README.md").includes(`src="docs/social.png?v=${hash.slice(0, 16)}"`));
+  assert(f.read("README.upstream.md").includes(`src="docs/social.png?v=${hash.slice(0, 16)}"`));
   assert(f.read("docs/index.html").includes('content="Keep this description"'));
-  assert(f.read("README.md").includes('<img src="unrelated.png" alt="Keep this">'));
+  assert(f.read("README.upstream.md").includes('<img src="unrelated.png" alt="Keep this">'));
 });
 
 for (const [name, relativePath, mutate] of [
@@ -101,7 +104,7 @@ test("check rejects a replaced PNG even when HTML and cache tokens are unchanged
   assert.throws(() => checkSocialCard(f.root), /Social card render is stale/);
 });
 
-for (const relativePath of ["docs/index.html", "README.md"]) {
+for (const relativePath of ["docs/index.html", "README.upstream.md"]) {
   test(`check rejects stale image cache tokens in ${relativePath}`, (t) => {
     const f = fixture(t);
     f.update();
