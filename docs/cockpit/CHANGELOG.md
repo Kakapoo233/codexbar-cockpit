@@ -1,5 +1,16 @@
 # Cockpit changes
 
+## 0.4.0 — Editor help and local Cockpit insights
+
+- Explain menu-bar layout items, presets, display options, and conditional rules on hover in all
+  23 existing languages. Disabled line-break items remain hoverable without accepting input.
+- Browse the calendar by day, week, month, quarter, or year and switch between Token and cost
+  views. Keep personal-state editing and reset markers; separate currencies and disclose missing history.
+- Add a local weekday calibration reference with a separate validation period and explicit
+  readiness/fallback states. Frozen daily suggestions and manual caps remain authoritative.
+- Weight recorded Token-experience trends toward recent days, without treating subjective
+  feedback as an official quota estimate.
+
 ## 0.3.2 — English text in the top menu bar
 
 - Add an optional English-only text setting under Menu Bar. It affects the screen's top status items

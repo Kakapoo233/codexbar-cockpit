@@ -2908,3 +2908,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "選單列文字使用英文";
 "menu_bar_english_text_subtitle" = "僅影響螢幕頂端選單列的文字，展開面板與設定仍使用應用程式語言。";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "顯示服務商圖示。";
+"menu_bar_help_provider" = "在用量旁顯示服務商名稱。";
+"menu_bar_help_account" = "顯示目前帳號標籤；隱私設定可能將其隱藏。";
+"menu_bar_help_percent" = "顯示所選額度週期的已用或剩餘百分比，遵循用量顯示設定；~ 表示估算值。";
+"menu_bar_help_scoped_weekly" = "顯示服務商提供的特定模型每週額度，與整體每週額度分開。";
+"menu_bar_help_automatic" = "使用服務商的自動用量指標；部分服務商顯示餘額或文字，而非百分比。";
+"menu_bar_help_pace" = "比較目前實際額度消耗與本週期此時的預期消耗；顯示的正負號遵循「速度符號」設定。";
+"menu_bar_help_usage_bar" = "用三個字元格顯示自動額度，遵循已用或剩餘的顯示設定。";
+"menu_bar_help_progress" = "用圖形進度列顯示所選額度週期，遵循已用或剩餘的顯示設定。";
+"menu_bar_help_reset_countdown" = "在重設時間可用時，顯示此額度週期距離重設還剩多久。";
+"menu_bar_help_reset_absolute" = "在重設時間可用時，顯示此額度週期重設的日期或時刻。";
+"menu_bar_help_runs_out" = "依目前消耗速度估算額度何時耗盡，或能否持續到重設。這是估算，不是重設時間。";
+"menu_bar_help_runs_out_compact" = "用更短的文字顯示相同的預計額度耗盡時間。";
+"menu_bar_help_balance" = "顯示服務商的餘額或消費數值，具體含義與單位因服務商而異。";
+"menu_bar_help_cost_today" = "顯示今日已記錄或估算的用量費用；估算值可能與服務商帳單不同。";
+"menu_bar_help_cost_window" = "顯示目前費用歷史期間內的費用；期間遵循費用歷史設定。";
+"menu_bar_help_spend_amount" = "以偏好的顯示貨幣呈現服務商消費限額中已使用的金額。";
+"menu_bar_help_spend_budget" = "以偏好的顯示貨幣同時呈現已用消費金額與上限；非貨幣限額無法取得。";
+"menu_bar_help_separator" = "在選單列項目之間加入一個可見的圓點。";
+"menu_bar_help_space" = "在選單列項目之間加入空白間隔。";
+"menu_bar_help_hidden" = "此條件分支不顯示任何內容。";
+"menu_bar_help_conditional" = "根據儲存的規則選擇顯示內容；資料無法取得時，該條件不成立。";
+"menu_bar_help_use_all" = "移除此服務商的專屬配置，重新使用「所有服務商」的共用配置。";
+"menu_bar_help_preview" = "有即時資料時使用即時資料；沒有快照時顯示範例資料。缺少欄位可能顯示為無法取得。";
+"menu_bar_help_remove_line_break" = "將兩行配置合併成一行。";
+"menu_bar_help_remove" = "將項目拖到這裡，即可從目前配置移除。";
+"menu_bar_help_line_break" = "開始選單列第二行；配置最多支援兩行。";
+"menu_bar_help_conditional_name" = "為可重用規則命名，方便在候選項目中找到它。";
+"menu_bar_help_conditional_add" = "建立可重用規則，根據用量、時間或費用選擇顯示項目。";
+"menu_bar_help_conditional_combinator" = "由左至右組合條件。AND 要求兩側結果均成立；OR 只需任一側結果成立。";
+"menu_bar_help_conditional_direction" = "選擇規則比較已用值還是剩餘值。";
+"menu_bar_help_conditional_comparison" = "選擇指標與臨界值的比較方式，例如大於或小於。";
+"menu_bar_help_conditional_threshold" = "設定比較臨界值，單位為 %@；無法取得的數值不會符合條件。";
+"menu_bar_help_conditional_remove" = "刪除此可重用規則，並移除已儲存配置中引用它的項目。";
+"menu_bar_help_conditional_duplicate" = "建立此規則的獨立副本，可分別編輯。";
+"menu_bar_help_conditional_save" = "儲存此規則，供選單列配置使用。";
+"menu_bar_help_conditional_cancel" = "關閉規則編輯器，不儲存本次修改。";
+"menu_bar_help_conditional_then" = "選擇組合條件成立時顯示的項目；選擇隱藏則不顯示內容。";
+"menu_bar_help_conditional_else" = "選擇組合條件不成立時顯示的項目；選擇隱藏則不顯示內容。";
+"menu_bar_help_conditional_remove_clause" = "從規則中移除此條件。";
+"menu_bar_help_conditional_add_clause" = "加入另一個條件；每條規則最多支援四個條件。";
+"menu_bar_help_conditional_pace" = "以百分點比較實際消耗減去預期消耗。正值表示消耗超前，負值表示有餘裕；「速度符號」顯示設定不改變此比較。";
+"menu_bar_help_conditional_currency" = "金額臨界值一律以美元（USD）比較，不受偏好的顯示貨幣影響。";
+"menu_bar_help_conditional_hours" = "比較使用小時為單位，支援小數小時。";
+"menu_bar_help_size" = "調整選單列文字與配置項目的大小。";
+"menu_bar_help_gap" = "調整相鄰配置項目之間的間距。";
+"menu_bar_help_vertical" = "在選單列內上下移動配置，微調對齊位置。";
+"menu_bar_help_monospaced" = "讓數字使用相同寬度，減少數值變化時的位置跳動。";
+"menu_bar_help_window_labels" = "加入簡短標籤以區分額度週期，例如工作階段和每週。";
+"menu_bar_help_preset" = "使用預設排列取代目前配置；之後仍可繼續自訂。";
+"menu_bar_help_preset_custom" = "目前配置已自訂，與預設不完全一致。";
+"menu_bar_help_style" = "選擇選單列圖示樣式；選擇「圖示與百分比」後可編輯下方配置。";
+"menu_bar_help_pace_sign" = "選擇速度的哪一側顯示為正號；僅影響顯示，不改變條件規則的比較。";
+"menu_bar_help_provider_color" = "使用服務商的識別色顯示選單列內容。";
+"menu_bar_help_switcher_rows" = "選擇合併服務商切換區顯示圖示還是用量進度。";
+"menu_bar_help_stacked_provider" = "選擇合併圖示這一行顯示的服務商；自動模式遵循可用服務商的順序。";
+"menu_bar_help_overview" = "選擇在總覽中顯示哪些已啟用的服務商，數量不超過顯示的上限；順序遵循服務商清單。";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "行事曆尺度";
+"cockpit_calendar_day" = "日";
+"cockpit_calendar_week" = "週";
+"cockpit_calendar_month" = "月";
+"cockpit_calendar_quarter" = "季度";
+"cockpit_calendar_year" = "年";
+"cockpit_calendar_metric" = "行事曆指標";
+"cockpit_calendar_now" = "今天";
+"cockpit_calendar_previous" = "上一個週期";
+"cockpit_calendar_next" = "下一個週期";
+"cockpit_calendar_period_total" = "此週期已記錄用量";
+"cockpit_calendar_partial" = "歷史可能不完整：≥ 表示已記錄的下限，— 表示無法取得。彙總不包含未來日期。";
+"cockpit_calendar_range" = "%@ 至 %@";
+"cockpit_calendar_quarter_title" = "%@ 年 · 第 %@ 季度";
+"cockpit_calendar_select_day" = "選擇某一天，查看服務商明細、個人狀態與重設事件。";
+"cockpit_calendar_currency_note" = "各幣別分別顯示；Token 彙總包含已納入的本機來源。";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "已觀測用量參考";
+"cockpit_ui_personal_collecting" = "正在累積週間用量規律：需要 21 個合格計畫日、12 個活躍日、平日與週末涵蓋，以及連續 7 日驗證資料。";
+"cockpit_ui_personal_coverage" = "%@ 個合格日 / %@ 個計畫日 · %@ 個活躍日";
+"cockpit_ui_personal_stale" = "缺少近期合格記錄，用量參考已暫停。";
+"cockpit_ui_personal_drift" = "近期用量規律變化較大，此參考暫未通過驗證。";
+"cockpit_ui_personal_no_gain" = "在驗證週中，週間規律模型未優於已凍結計畫的基準。";
+"cockpit_ui_personal_ready" = "個人週間規律在獨立的 7 日驗證期中提高了已觀測用量的預測準確度。";
+"cockpit_ui_personal_holdout" = "7 日平均誤差：基準 %@ → 個人 %@ 個百分點";
+"cockpit_ui_personal_note" = "僅參考已觀測時段，不估算全天用量。合格日需有 6 小時可靠觀測，且相鄰間隔不超過 90 分鐘；缺少的時段不補零。已凍結建議與個人上限繼續生效。";
+"cockpit_ui_comfort_weighted" = "依近期權重折算的完整樣本：%@";
+"cockpit_ui_comfort_recency" = "趨勢點更重視近期體驗，權重半衰期為 14 天；修改歷史日期不會改變其年齡。這描述 Token 使用體驗，不代表官方額度。";
+
+"menu_bar_help_conditional_runout" = "比較預計距離額度耗盡的小時數；沒有可用的耗盡估算時，條件不成立。";

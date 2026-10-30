@@ -2933,3 +2933,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Use English in menu bar";
 "menu_bar_english_text_subtitle" = "Only affects text in the top menu bar. The expanded panel and settings keep the app language.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Shows the provider’s icon.";
+"menu_bar_help_provider" = "Shows the provider’s name beside your usage.";
+"menu_bar_help_account" = "Shows the current account label when available. Privacy settings can hide it.";
+"menu_bar_help_percent" = "Shows the selected quota window as used or remaining percent, following your usage display setting. ~ marks an estimate.";
+"menu_bar_help_scoped_weekly" = "Shows a model-specific weekly quota when the provider supplies one, separately from the overall weekly quota.";
+"menu_bar_help_automatic" = "Uses the provider’s automatic usage metric. Some providers show a balance or text instead of a percentage.";
+"menu_bar_help_pace" = "Compares actual quota use with expected use at this point in the window. The displayed sign follows the Pace sign setting.";
+"menu_bar_help_usage_bar" = "Shows the automatic quota as a compact three-cell text meter, following the used or remaining setting.";
+"menu_bar_help_progress" = "Shows the selected quota window as a graphical bar, following the used or remaining setting.";
+"menu_bar_help_reset_countdown" = "Shows the time left until this quota window resets, when a reset time is available.";
+"menu_bar_help_reset_absolute" = "Shows the date or clock time when this quota window resets, when available.";
+"menu_bar_help_runs_out" = "Estimates when quota will run out at the current pace, or whether it will last until reset. This is an estimate, not a reset time.";
+"menu_bar_help_runs_out_compact" = "Shows the same estimated time to quota exhaustion in shorter text.";
+"menu_bar_help_balance" = "Shows the provider’s balance or spending figure. Its meaning and unit depend on the provider.";
+"menu_bar_help_cost_today" = "Shows today’s recorded or estimated usage cost. Estimates may differ from the provider’s bill.";
+"menu_bar_help_cost_window" = "Shows cost for the configured cost-history period. The period follows your cost history settings.";
+"menu_bar_help_spend_amount" = "Shows monetary spending used against the provider’s limit, in your preferred display currency.";
+"menu_bar_help_spend_budget" = "Shows monetary spending used and its limit in your preferred display currency. Non-monetary limits are unavailable.";
+"menu_bar_help_separator" = "Adds a visible dot between menu bar items.";
+"menu_bar_help_space" = "Adds blank spacing between menu bar items.";
+"menu_bar_help_hidden" = "Displays nothing for this conditional branch.";
+"menu_bar_help_conditional" = "Chooses what to display based on a saved rule. Unavailable data does not satisfy a condition.";
+"menu_bar_help_use_all" = "Removes this provider’s custom layout so it follows the shared All providers layout again.";
+"menu_bar_help_preview" = "Uses live data when available; without a snapshot it shows sample data. Missing fields may appear as unavailable.";
+"menu_bar_help_remove_line_break" = "Joins the two layout lines into one.";
+"menu_bar_help_remove" = "Drop an item here to remove it from this layout.";
+"menu_bar_help_line_break" = "Starts a second menu bar line. Layouts support up to two lines.";
+"menu_bar_help_conditional_name" = "Names this reusable rule so you can find it in the item palette.";
+"menu_bar_help_conditional_add" = "Creates a reusable rule that selects an item based on usage, time, or cost.";
+"menu_bar_help_conditional_combinator" = "Combines conditions from left to right. AND requires both results; OR requires either result.";
+"menu_bar_help_conditional_direction" = "Chooses whether the rule compares the used value or the remaining value.";
+"menu_bar_help_conditional_comparison" = "Chooses how the metric is compared with the threshold, such as greater than or less than.";
+"menu_bar_help_conditional_threshold" = "Sets the comparison threshold in %@. Unavailable values do not match.";
+"menu_bar_help_conditional_remove" = "Deletes this reusable rule and removes its items from saved layouts.";
+"menu_bar_help_conditional_duplicate" = "Creates a separate copy of this rule that you can edit independently.";
+"menu_bar_help_conditional_save" = "Saves this rule for use in menu bar layouts.";
+"menu_bar_help_conditional_cancel" = "Closes the rule editor without saving these edits.";
+"menu_bar_help_conditional_then" = "Selects the item shown when the combined condition is true. Choose Hide to show nothing.";
+"menu_bar_help_conditional_else" = "Selects the item shown when the combined condition is false. Choose Hide to show nothing.";
+"menu_bar_help_conditional_remove_clause" = "Removes this condition from the rule.";
+"menu_bar_help_conditional_add_clause" = "Adds another condition. A rule supports up to four conditions.";
+"menu_bar_help_conditional_pace" = "Compares actual use minus expected use in percentage points. Positive means faster consumption; negative means reserve. The Pace sign display setting does not change this comparison.";
+"menu_bar_help_conditional_currency" = "Money thresholds are compared in USD, regardless of the preferred display currency.";
+"menu_bar_help_conditional_hours" = "The comparison uses hours, including fractional hours.";
+"menu_bar_help_size" = "Changes the size of menu bar text and layout items.";
+"menu_bar_help_gap" = "Changes the spacing between adjacent layout items.";
+"menu_bar_help_vertical" = "Moves the layout vertically within the menu bar to fine-tune alignment.";
+"menu_bar_help_monospaced" = "Gives digits equal width so changing numbers cause less movement.";
+"menu_bar_help_window_labels" = "Adds short labels to distinguish quota windows, such as session and weekly.";
+"menu_bar_help_preset" = "Replaces this layout with a ready-made arrangement. You can customize it afterward.";
+"menu_bar_help_preset_custom" = "This layout has been customized and does not match a preset.";
+"menu_bar_help_style" = "Chooses the menu bar icon style. Use Icon and percentage to edit the layout below.";
+"menu_bar_help_pace_sign" = "Chooses which side of pace is shown with a plus sign. This affects display only, not conditional comparisons.";
+"menu_bar_help_provider_color" = "Uses the provider’s identifying color for its menu bar display.";
+"menu_bar_help_switcher_rows" = "Chooses whether the combined provider switcher shows icons or usage progress.";
+"menu_bar_help_stacked_provider" = "Chooses the provider shown on this line of the combined icon. Automatic follows the eligible provider order.";
+"menu_bar_help_overview" = "Chooses which enabled providers appear in Overview, up to the displayed limit. Their order follows the provider list.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Calendar scale";
+"cockpit_calendar_day" = "Day";
+"cockpit_calendar_week" = "Week";
+"cockpit_calendar_month" = "Month";
+"cockpit_calendar_quarter" = "Quarter";
+"cockpit_calendar_year" = "Year";
+"cockpit_calendar_metric" = "Calendar metric";
+"cockpit_calendar_now" = "Today";
+"cockpit_calendar_previous" = "Previous period";
+"cockpit_calendar_next" = "Next period";
+"cockpit_calendar_period_total" = "Recorded usage for this period";
+"cockpit_calendar_partial" = "Partial history: ≥ marks recorded lower bounds; — means unavailable. Future dates are excluded from totals.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · Q%@";
+"cockpit_calendar_select_day" = "Select a day to view provider details, personal status, and reset events.";
+"cockpit_calendar_currency_note" = "Currencies are shown separately. Token totals combine the included local sources.";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "Recorded-usage reference";
+"cockpit_ui_personal_collecting" = "Building your weekday pattern: needs 21 qualifying planned days, 12 active days, weekday/weekend coverage, and 7 consecutive validation days.";
+"cockpit_ui_personal_coverage" = "%@ qualifying / %@ planned days · %@ active days";
+"cockpit_ui_personal_stale" = "Recent qualifying history is missing; the reference is paused.";
+"cockpit_ui_personal_drift" = "Recent usage patterns changed too much to validate this reference.";
+"cockpit_ui_personal_no_gain" = "The weekday model did not improve on the frozen-plan baseline in the validation week.";
+"cockpit_ui_personal_ready" = "Your weekday pattern improved prediction of recorded usage on a separate 7-day validation period.";
+"cockpit_ui_personal_holdout" = "7-day mean error: baseline %@ → personal %@ percentage points";
+"cockpit_ui_personal_note" = "Recorded periods only, not a full-day estimate. Qualifying days need 6 hours of reliable observations and no gaps over 90 minutes. Missing periods are never filled with zero; your frozen suggestion and personal cap stay in control.";
+"cockpit_ui_comfort_weighted" = "Recency-weighted complete samples: %@";
+"cockpit_ui_comfort_recency" = "Trend points weight recent experience more, with a 14-day half-life. Editing an older day preserves its age. This describes Token experience, not official quota.";
+
+"menu_bar_help_conditional_runout" = "Compares estimated hours until quota exhaustion. If no exhaustion estimate is available, the condition is false.";

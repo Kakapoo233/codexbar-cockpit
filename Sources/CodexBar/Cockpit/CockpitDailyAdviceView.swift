@@ -34,6 +34,12 @@ struct CockpitDailyAdviceView: View {
                         status: self.planStore.status(for: provider),
                         setCap: { self.planStore.setPersonalCap($0, for: provider) },
                         layout: self.layout)
+                    CockpitPersonalInsightsView(
+                        model: CockpitPersonalUsageModel.build(
+                            state: self.planStore.state,
+                            providerID: provider.rawValue,
+                            accountID: self.planStore.accountID(for: provider)),
+                        status: self.planStore.status(for: provider))
                 }
             }
             if let error = self.planStore.errorMessage {

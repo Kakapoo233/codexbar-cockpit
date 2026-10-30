@@ -41,13 +41,16 @@ struct MenuBarPane: View {
                     label: { Text(L("menu_bar_style_title")) },
                     optionLabel: { style in
                         Text(style.label)
+                            .help(L("menu_bar_help_style"))
                     })
+                    .help(L("menu_bar_help_style"))
 
                 Toggle(isOn: self.$settings.menuBarEnglishText) {
                     SettingsRowLabel(
                         L("menu_bar_english_text_title"),
                         subtitle: L("menu_bar_english_text_subtitle"))
                 }
+                .help(L("menu_bar_english_text_subtitle"))
 
                 Toggle(isOn: self.$settings.menuBarHighContrastOnInactiveDisplays) {
                     SettingsRowLabel(
@@ -56,6 +59,7 @@ struct MenuBarPane: View {
                             + L("menu_bar_inactive_display_contrast_subtitle"))
                 }
                 .disabled(!Self.layoutEditorEnabled(for: self.settings.menuBarIconStyle))
+                .help(L("menu_bar_inactive_display_contrast_subtitle"))
 
                 Toggle(isOn: self.$settings.menuBarColorPace) {
                     SettingsRowLabel(
@@ -63,6 +67,7 @@ struct MenuBarPane: View {
                         subtitle: paceColorSubtitle)
                 }
                 .disabled(self.settings.menuBarIconStyle != .iconAndPercent)
+                .help(paceColorSubtitle)
 
                 SettingsMenuPicker(
                     selection: self.$settings.menuBarPaceReservePositive,
@@ -70,12 +75,15 @@ struct MenuBarPane: View {
                     label: { Text(L("Pace sign")) },
                     optionLabel: { reservePositive in
                         Text(reservePositive ? L("Reserve is +") : L("Ahead of pace is +"))
+                            .help(L("menu_bar_help_pace_sign"))
                     })
                     .disabled(self.settings.menuBarIconStyle != .iconAndPercent)
+                    .help(L("menu_bar_help_pace_sign"))
 
                 Toggle(isOn: self.$settings.menuBarColorByProvider) {
                     Text(L("Color by provider"))
                 }
+                .help(L("menu_bar_help_provider_color"))
             } header: {
                 Text(L("section_icon"))
             }
@@ -93,6 +101,7 @@ struct MenuBarPane: View {
                 Toggle(isOn: self.$settings.mergeIcons) {
                     SettingsRowLabel(L("merge_icons_title"), subtitle: L("merge_icons_subtitle"))
                 }
+                .help(L("merge_icons_subtitle"))
 
                 SettingsMenuPicker(
                     selection: Binding(
@@ -104,7 +113,9 @@ struct MenuBarPane: View {
                     },
                     optionLabel: { style in
                         Text(style.label)
+                            .help(L("merged_icon_style_subtitle"))
                     })
+                    .help(L("merged_icon_style_subtitle"))
                     .disabled(!self.mergedIconPresentation.canStack)
 
                 if let pair = self.mergedIconPresentation.stackedProviders {
@@ -130,13 +141,17 @@ struct MenuBarPane: View {
                     label: { SettingsRowLabel(L("switcher_rows_title")) },
                     optionLabel: { option in
                         Text(option.label)
+                            .help(L("menu_bar_help_switcher_rows"))
                     })
+                    .help(L("menu_bar_help_switcher_rows"))
                     .disabled(!self.settings.mergeIcons)
 
                 UnifiedIconSourcePicker(selection: self.$settings.unifiedIconSource)
+                    .help(L("merged_icon_source_subtitle"))
                     .disabled(!self.settings.mergeIcons || self.mergedIconPresentation.effectiveStyle == .stacked)
 
                 self.overviewProviderRow
+                    .help(L("menu_bar_help_overview"))
                     .disabled(!self.settings.mergeIcons)
                 Toggle(isOn: self.$settings.mergedOverviewAllAccounts) {
                     SettingsRowLabel(
@@ -144,6 +159,7 @@ struct MenuBarPane: View {
                         subtitle: L(
                             "Expand cached account usage. The six-provider limit still applies."))
                 }
+                .help(L("Expand cached account usage. The six-provider limit still applies."))
                 .disabled(!self.settings.mergeIcons)
             } header: {
                 Text(L("section_combined_icon"))
@@ -153,6 +169,7 @@ struct MenuBarPane: View {
                 Toggle(isOn: self.$settings.randomBlinkEnabled) {
                     SettingsRowLabel(L("surprise_me_title"), subtitle: L("surprise_me_subtitle"))
                 }
+                .help(L("surprise_me_subtitle"))
                 // Brand icons (including stacked rows, which require them) never draw blink frames.
                 .disabled(self.settings.menuBarShowsBrandIconWithPercent)
             } header: {
@@ -226,6 +243,7 @@ struct MenuBarPane: View {
                                 .font(.body)
                         }
                         .toggleStyle(.checkbox)
+                        .help(L("menu_bar_help_overview"))
                         .disabled(
                             !self.overviewSelectedProviders.contains(provider) &&
                                 self.overviewSelectedProviders.count >= Self.maxOverviewProviders)
@@ -259,7 +277,9 @@ struct MenuBarPane: View {
             optionLabel: { provider in
                 Text(provider.map(self.providerDisplayName)
                     ?? "\(L("Automatic")) (\(self.providerDisplayName(automaticProvider)))")
+                    .help(L("menu_bar_help_stacked_provider"))
             })
+            .help(L("menu_bar_help_stacked_provider"))
     }
 
     private var overviewSelectedProviders: [ProviderInstanceID] {

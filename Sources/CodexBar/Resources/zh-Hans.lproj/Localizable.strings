@@ -2920,3 +2920,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "菜单栏文字使用英文";
 "menu_bar_english_text_subtitle" = "仅影响屏幕顶部菜单栏文字，展开面板和设置仍使用应用语言。";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "显示服务商图标。";
+"menu_bar_help_provider" = "在用量旁显示服务商名称。";
+"menu_bar_help_account" = "显示当前账号标识；隐私设置可能将其隐藏。";
+"menu_bar_help_percent" = "显示所选额度周期的已用或剩余比例，遵循用量显示设置；~ 表示估算值。";
+"menu_bar_help_scoped_weekly" = "显示服务商提供的特定模型每周额度，与整体每周额度分开。";
+"menu_bar_help_automatic" = "使用服务商的自动用量指标；部分服务商显示余额或文字，而非百分比。";
+"menu_bar_help_pace" = "比较当前实际额度消耗与本周期此时的预期消耗；显示的正负号遵循“速度符号”设置。";
+"menu_bar_help_usage_bar" = "用三个字符格显示自动额度，遵循已用或剩余的显示设置。";
+"menu_bar_help_progress" = "用图形进度条显示所选额度周期，遵循已用或剩余的显示设置。";
+"menu_bar_help_reset_countdown" = "在重置时间可用时，显示此额度周期距离重置还剩多久。";
+"menu_bar_help_reset_absolute" = "在重置时间可用时，显示此额度周期重置的日期或时刻。";
+"menu_bar_help_runs_out" = "按当前消耗速度估算额度何时耗尽，或能否撑到重置。这是估算，不是重置时间。";
+"menu_bar_help_runs_out_compact" = "用更短的文字显示相同的预计额度耗尽时间。";
+"menu_bar_help_balance" = "显示服务商的余额或消费数值，具体含义与单位因服务商而异。";
+"menu_bar_help_cost_today" = "显示今日已记录或估算的用量费用；估算值可能与服务商账单不同。";
+"menu_bar_help_cost_window" = "显示当前费用历史周期内的费用；周期遵循费用历史设置。";
+"menu_bar_help_spend_amount" = "以首选显示货币展示服务商消费限额中已使用的金额。";
+"menu_bar_help_spend_budget" = "以首选显示货币同时展示已用消费金额与上限；非货币限额不可用。";
+"menu_bar_help_separator" = "在菜单栏项目之间添加一个可见的圆点。";
+"menu_bar_help_space" = "在菜单栏项目之间添加空白间隔。";
+"menu_bar_help_hidden" = "此条件分支不显示任何内容。";
+"menu_bar_help_conditional" = "根据保存的规则选择显示内容；数据不可用时，该条件不成立。";
+"menu_bar_help_use_all" = "移除此服务商的专属布局，重新使用“所有服务商”的共享布局。";
+"menu_bar_help_preview" = "有实时数据时使用实时数据；没有快照时显示示例数据。缺失字段可能显示为不可用。";
+"menu_bar_help_remove_line_break" = "将两行布局合并成一行。";
+"menu_bar_help_remove" = "将项目拖到这里，即可从当前布局移除。";
+"menu_bar_help_line_break" = "开始菜单栏第二行；布局最多支持两行。";
+"menu_bar_help_conditional_name" = "为可复用规则命名，方便在候选项目中找到它。";
+"menu_bar_help_conditional_add" = "创建可复用规则，根据用量、时间或费用选择显示项目。";
+"menu_bar_help_conditional_combinator" = "从左到右组合条件。AND 要求两侧结果均成立；OR 只需任一侧结果成立。";
+"menu_bar_help_conditional_direction" = "选择规则比较已用值还是剩余值。";
+"menu_bar_help_conditional_comparison" = "选择指标与阈值的比较方式，例如大于或小于。";
+"menu_bar_help_conditional_threshold" = "设置比较阈值，单位为 %@；不可用的数值不会匹配。";
+"menu_bar_help_conditional_remove" = "删除此可复用规则，并移除已保存布局中引用它的项目。";
+"menu_bar_help_conditional_duplicate" = "创建此规则的独立副本，可分别编辑。";
+"menu_bar_help_conditional_save" = "保存此规则，供菜单栏布局使用。";
+"menu_bar_help_conditional_cancel" = "关闭规则编辑器，不保存本次修改。";
+"menu_bar_help_conditional_then" = "选择组合条件成立时显示的项目；选择隐藏则不显示内容。";
+"menu_bar_help_conditional_else" = "选择组合条件不成立时显示的项目；选择隐藏则不显示内容。";
+"menu_bar_help_conditional_remove_clause" = "从规则中移除此条件。";
+"menu_bar_help_conditional_add_clause" = "添加另一个条件；每条规则最多支持四个条件。";
+"menu_bar_help_conditional_pace" = "按百分点比较实际消耗减去预期消耗。正值表示消耗超前，负值表示有余量；“速度符号”显示设置不改变此比较。";
+"menu_bar_help_conditional_currency" = "金额阈值始终以美元比较，不受首选显示货币影响。";
+"menu_bar_help_conditional_hours" = "比较使用小时为单位，支持小数小时。";
+"menu_bar_help_size" = "调整菜单栏文字与布局项目的大小。";
+"menu_bar_help_gap" = "调整相邻布局项目之间的间距。";
+"menu_bar_help_vertical" = "在菜单栏内上下移动布局，微调对齐位置。";
+"menu_bar_help_monospaced" = "让数字使用相同宽度，减少数值变化时的位置跳动。";
+"menu_bar_help_window_labels" = "添加简短标签以区分额度周期，例如会话和每周。";
+"menu_bar_help_preset" = "使用预设排列替换当前布局；之后仍可继续自定义。";
+"menu_bar_help_preset_custom" = "当前布局已自定义，与预设不完全一致。";
+"menu_bar_help_style" = "选择菜单栏图标样式；选择“图标和百分比”后可编辑下方布局。";
+"menu_bar_help_pace_sign" = "选择速度的哪一侧显示为正号；仅影响显示，不改变条件规则的比较。";
+"menu_bar_help_provider_color" = "使用服务商的标识色显示菜单栏内容。";
+"menu_bar_help_switcher_rows" = "选择合并服务商切换区显示图标还是用量进度。";
+"menu_bar_help_stacked_provider" = "选择合并图标这一行显示的服务商；自动模式遵循可用服务商的顺序。";
+"menu_bar_help_overview" = "选择在总览中显示哪些已启用的服务商，数量不超过显示的上限；顺序遵循服务商列表。";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "日历尺度";
+"cockpit_calendar_day" = "日";
+"cockpit_calendar_week" = "周";
+"cockpit_calendar_month" = "月";
+"cockpit_calendar_quarter" = "季度";
+"cockpit_calendar_year" = "年";
+"cockpit_calendar_metric" = "日历指标";
+"cockpit_calendar_now" = "今天";
+"cockpit_calendar_previous" = "上一个周期";
+"cockpit_calendar_next" = "下一个周期";
+"cockpit_calendar_period_total" = "此周期已记录用量";
+"cockpit_calendar_partial" = "历史可能不完整：≥ 表示已记录的下限，— 表示不可用。汇总不包含未来日期。";
+"cockpit_calendar_range" = "%@ 至 %@";
+"cockpit_calendar_quarter_title" = "%@ 年 · 第 %@ 季度";
+"cockpit_calendar_select_day" = "选择某一天，查看服务商明细、个人状态与重置事件。";
+"cockpit_calendar_currency_note" = "各币种分别显示；Token 汇总包含已纳入的本机来源。";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "已观测用量参考";
+"cockpit_ui_personal_collecting" = "正在积累星期用量规律：需要 21 个合格计划日、12 个活跃日、工作日与周末覆盖，以及连续 7 日验证数据。";
+"cockpit_ui_personal_coverage" = "%@ 个合格日 / %@ 个计划日 · %@ 个活跃日";
+"cockpit_ui_personal_stale" = "缺少近期合格记录，用量参考已暂停。";
+"cockpit_ui_personal_drift" = "近期用量规律变化较大，此参考暂未通过验证。";
+"cockpit_ui_personal_no_gain" = "在验证周中，星期规律模型未优于已冻结计划的基线。";
+"cockpit_ui_personal_ready" = "个人星期规律在独立的 7 日验证期中提高了已观测用量的预测准确度。";
+"cockpit_ui_personal_holdout" = "7 日平均误差：基线 %@ → 个人 %@ 个百分点";
+"cockpit_ui_personal_note" = "仅参考已观测时段，不估算全天用量。合格日需有 6 小时可靠观测，且相邻间隔不超过 90 分钟；缺失时段不补零。已冻结建议与个人上限继续生效。";
+"cockpit_ui_comfort_weighted" = "按近期权重折算的完整样本：%@";
+"cockpit_ui_comfort_recency" = "趋势点更重视近期体验，权重半衰期为 14 天；修改历史日期不会改变其年龄。这描述 Token 使用体验，不代表官方额度。";
+
+"menu_bar_help_conditional_runout" = "比较预计距离额度耗尽的小时数；没有可用的耗尽估算时，条件不成立。";

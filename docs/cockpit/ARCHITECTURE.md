@@ -14,6 +14,12 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   produces frozen daily recommendations, manual caps, observed use, and completeness.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
+- `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
+  Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
+  provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.
+  This reference does not rewrite frozen recommendations or personal caps.
+- `CockpitCalendarPeriod` and `CockpitCalendarLedger` provide page-local period browsing over loaded
+  history, with calendar-aware boundaries and separate currency totals.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to
   the explicit `local-machine` scope, independently of whichever quota account is currently selected.

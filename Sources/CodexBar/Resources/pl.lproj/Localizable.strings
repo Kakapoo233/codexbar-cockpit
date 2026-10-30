@@ -2931,3 +2931,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Używaj angielskiego na pasku menu";
 "menu_bar_english_text_subtitle" = "Dotyczy tylko tekstu na górnym pasku menu. Rozwinięty panel i ustawienia zachowują język aplikacji.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Pokazuje ikonę dostawcy.";
+"menu_bar_help_provider" = "Pokazuje nazwę dostawcy obok zużycia.";
+"menu_bar_help_account" = "Pokazuje etykietę bieżącego konta, jeśli jest dostępna. Ustawienia prywatności mogą ją ukryć.";
+"menu_bar_help_percent" = "Pokazuje wykorzystany lub pozostały procent wybranego okresu limitu zgodnie z ustawieniem wyświetlania zużycia. ~ oznacza szacunek.";
+"menu_bar_help_scoped_weekly" = "Pokazuje tygodniowy limit konkretnego modelu, jeśli dostawca go udostępnia, oddzielnie od ogólnego limitu tygodniowego.";
+"menu_bar_help_automatic" = "Używa automatycznej miary zużycia dostawcy. Niektórzy dostawcy pokazują saldo lub tekst zamiast wartości procentowej.";
+"menu_bar_help_pace" = "Porównuje rzeczywiste zużycie limitu z oczekiwanym w tym momencie okresu. Wyświetlany znak zależy od ustawienia znaku tempa.";
+"menu_bar_help_usage_bar" = "Pokazuje automatyczny limit jako zwarty wskaźnik tekstowy z trzema polami, zgodnie z ustawieniem wykorzystane lub pozostałe.";
+"menu_bar_help_progress" = "Pokazuje wybrany okres limitu jako pasek graficzny, zgodnie z ustawieniem wykorzystane lub pozostałe.";
+"menu_bar_help_reset_countdown" = "Pokazuje czas pozostały do odnowienia tego okresu limitu, jeśli termin jest dostępny.";
+"menu_bar_help_reset_absolute" = "Pokazuje datę lub godzinę odnowienia tego okresu limitu, jeśli jest dostępna.";
+"menu_bar_help_runs_out" = "Szacuje, kiedy limit wyczerpie się przy obecnym tempie lub czy wystarczy do odnowienia. To szacunek, a nie termin odnowienia.";
+"menu_bar_help_runs_out_compact" = "Pokazuje ten sam szacowany czas do wyczerpania limitu w krótszej formie.";
+"menu_bar_help_balance" = "Pokazuje saldo lub kwotę wydatków dostawcy. Znaczenie i jednostka zależą od dostawcy.";
+"menu_bar_help_cost_today" = "Pokazuje dzisiejszy zarejestrowany lub szacowany koszt zużycia. Szacunki mogą różnić się od rachunku dostawcy.";
+"menu_bar_help_cost_window" = "Pokazuje koszt dla okresu ustawionego w historii kosztów. Okres jest zgodny z ustawieniami tej historii.";
+"menu_bar_help_spend_amount" = "Pokazuje wykorzystane wydatki pieniężne z limitu dostawcy w preferowanej walucie wyświetlania.";
+"menu_bar_help_spend_budget" = "Pokazuje wykorzystane wydatki pieniężne i ich limit w preferowanej walucie wyświetlania. Limity niepieniężne są niedostępne.";
+"menu_bar_help_separator" = "Dodaje widoczną kropkę między elementami paska menu.";
+"menu_bar_help_space" = "Dodaje pusty odstęp między elementami paska menu.";
+"menu_bar_help_hidden" = "Nie wyświetla niczego dla tej gałęzi warunku.";
+"menu_bar_help_conditional" = "Wybiera wyświetlaną treść na podstawie zapisanej reguły. Niedostępne dane nie spełniają warunku.";
+"menu_bar_help_use_all" = "Usuwa własny układ tego dostawcy, aby ponownie używał wspólnego układu dla wszystkich dostawców.";
+"menu_bar_help_preview" = "Używa danych na żywo, gdy są dostępne; bez migawki pokazuje dane przykładowe. Brakujące pola mogą być oznaczone jako niedostępne.";
+"menu_bar_help_remove_line_break" = "Łączy dwa wiersze układu w jeden.";
+"menu_bar_help_remove" = "Upuść tutaj element, aby usunąć go z tego układu.";
+"menu_bar_help_line_break" = "Rozpoczyna drugi wiersz paska menu. Układy obsługują najwyżej dwa wiersze.";
+"menu_bar_help_conditional_name" = "Nadaje nazwę tej regule wielokrotnego użytku, aby można ją było znaleźć w palecie elementów.";
+"menu_bar_help_conditional_add" = "Tworzy regułę wielokrotnego użytku, która wybiera element według zużycia, czasu lub kosztu.";
+"menu_bar_help_conditional_combinator" = "Łączy warunki od lewej do prawej. AND wymaga obu wyników; OR wymaga dowolnego z nich.";
+"menu_bar_help_conditional_direction" = "Wybiera, czy reguła porównuje wartość wykorzystaną czy pozostałą.";
+"menu_bar_help_conditional_comparison" = "Wybiera sposób porównywania miary z progiem, na przykład większe lub mniejsze niż.";
+"menu_bar_help_conditional_threshold" = "Ustawia próg porównania w %@. Niedostępne wartości nie pasują.";
+"menu_bar_help_conditional_remove" = "Usuwa tę regułę wielokrotnego użytku i jej elementy z zapisanych układów.";
+"menu_bar_help_conditional_duplicate" = "Tworzy oddzielną kopię tej reguły, którą można edytować niezależnie.";
+"menu_bar_help_conditional_save" = "Zapisuje tę regułę do użycia w układach paska menu.";
+"menu_bar_help_conditional_cancel" = "Zamyka edytor reguł bez zapisywania tych zmian.";
+"menu_bar_help_conditional_then" = "Wybiera element wyświetlany, gdy połączony warunek jest prawdziwy. Wybierz Ukryj, aby nic nie pokazywać.";
+"menu_bar_help_conditional_else" = "Wybiera element wyświetlany, gdy połączony warunek jest fałszywy. Wybierz Ukryj, aby nic nie pokazywać.";
+"menu_bar_help_conditional_remove_clause" = "Usuwa ten warunek z reguły.";
+"menu_bar_help_conditional_add_clause" = "Dodaje kolejny warunek. Reguła obsługuje najwyżej cztery warunki.";
+"menu_bar_help_conditional_pace" = "Porównuje rzeczywiste zużycie minus oczekiwane zużycie w punktach procentowych. Wartość dodatnia oznacza szybsze zużycie, a ujemna zapas. Ustawienie znaku tempa nie zmienia tego porównania.";
+"menu_bar_help_conditional_currency" = "Progi pieniężne są porównywane w USD, niezależnie od preferowanej waluty wyświetlania.";
+"menu_bar_help_conditional_hours" = "Porównanie używa godzin, również ich części ułamkowych.";
+"menu_bar_help_size" = "Zmienia rozmiar tekstu i elementów układu na pasku menu.";
+"menu_bar_help_gap" = "Zmienia odstęp między sąsiadującymi elementami układu.";
+"menu_bar_help_vertical" = "Przesuwa układ pionowo w obrębie paska menu, aby dopasować wyrównanie.";
+"menu_bar_help_monospaced" = "Nadaje cyfrom jednakową szerokość, aby zmieniające się liczby mniej się przesuwały.";
+"menu_bar_help_window_labels" = "Dodaje krótkie etykiety odróżniające okresy limitu, takie jak sesja i tydzień.";
+"menu_bar_help_preset" = "Zastępuje ten układ gotowym rozmieszczeniem. Później można je dostosować.";
+"menu_bar_help_preset_custom" = "Ten układ został dostosowany i nie odpowiada żadnemu ustawieniu wstępnemu.";
+"menu_bar_help_style" = "Wybiera styl ikony paska menu. Użyj Ikona i procent, aby edytować układ poniżej.";
+"menu_bar_help_pace_sign" = "Wybiera, która strona tempa jest oznaczana plusem. Wpływa to tylko na wyświetlanie, a nie na porównania warunków.";
+"menu_bar_help_provider_color" = "Używa koloru identyfikującego dostawcę na pasku menu.";
+"menu_bar_help_switcher_rows" = "Wybiera, czy połączony przełącznik dostawców pokazuje ikony czy postęp zużycia.";
+"menu_bar_help_stacked_provider" = "Wybiera dostawcę wyświetlanego w tym wierszu połączonej ikony. Opcja Automatycznie używa kolejności odpowiednich dostawców.";
+"menu_bar_help_overview" = "Wybiera włączonych dostawców widocznych w Przeglądzie, do wyświetlanego limitu. Kolejność odpowiada liście dostawców.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Skala kalendarza";
+"cockpit_calendar_day" = "Dzień";
+"cockpit_calendar_week" = "Tydzień";
+"cockpit_calendar_month" = "Miesiąc";
+"cockpit_calendar_quarter" = "Kwartał";
+"cockpit_calendar_year" = "Rok";
+"cockpit_calendar_metric" = "Miara kalendarza";
+"cockpit_calendar_now" = "Dzisiaj";
+"cockpit_calendar_previous" = "Poprzedni okres";
+"cockpit_calendar_next" = "Następny okres";
+"cockpit_calendar_period_total" = "Zużycie zarejestrowane w tym okresie";
+"cockpit_calendar_partial" = "Niepełna historia: ≥ oznacza zarejestrowane dolne granice; — oznacza brak danych. Przyszłe daty są wykluczone z sum.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · kw. %@";
+"cockpit_calendar_select_day" = "Wybierz dzień, aby zobaczyć szczegóły dostawców, osobisty status i zdarzenia odnowienia limitu.";
+"cockpit_calendar_currency_note" = "Waluty są wyświetlane oddzielnie. Sumy tokenów łączą uwzględnione źródła lokalne.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Odniesienie do zarejestrowanego zużycia";
+"cockpit_ui_personal_collecting" = "Tworzenie wzorca według dni tygodnia: potrzeba 21 zaplanowanych dni spełniających kryteria, 12 dni aktywnych, danych z dni roboczych i weekendów oraz 7 kolejnych dni walidacji.";
+"cockpit_ui_personal_coverage" = "%@ dni spełniających kryteria / %@ zaplanowanych dni · %@ aktywnych dni";
+"cockpit_ui_personal_stale" = "Brakuje najnowszej historii spełniającej kryteria; odniesienie jest wstrzymane.";
+"cockpit_ui_personal_drift" = "Ostatnie wzorce zużycia zmieniły się zbyt mocno, aby zweryfikować to odniesienie.";
+"cockpit_ui_personal_no_gain" = "Model dni tygodnia nie poprawił wyniku względem podstawy zamrożonego planu w tygodniu walidacji.";
+"cockpit_ui_personal_ready" = "Twój wzorzec dni tygodnia poprawił prognozę zarejestrowanego zużycia w osobnym, 7-dniowym okresie walidacji.";
+"cockpit_ui_personal_holdout" = "Średni błąd z 7 dni: podstawa %@ → osobisty %@ punktów procentowych";
+"cockpit_ui_personal_note" = "Tylko zarejestrowane okresy, bez szacowania całego dnia. Dni spełniające kryteria wymagają 6 godzin wiarygodnych obserwacji bez przerw dłuższych niż 90 minut. Brakujące okresy nigdy nie są uzupełniane zerem; zamrożona sugestia i osobisty limit pozostają wiążące.";
+"cockpit_ui_comfort_weighted" = "Pełne próbki ważone według aktualności: %@";
+"cockpit_ui_comfort_recency" = "Punkty trendu mocniej uwzględniają niedawne doświadczenia, z okresem połowicznego zaniku wynoszącym 14 dni. Edycja starszego dnia zachowuje jego wiek. Opisuje to doświadczenie z tokenami, a nie oficjalny limit.";
+
+"menu_bar_help_conditional_runout" = "Porównuje szacowaną liczbę godzin do wyczerpania limitu. Jeśli szacunek wyczerpania nie jest dostępny, warunek jest fałszywy.";

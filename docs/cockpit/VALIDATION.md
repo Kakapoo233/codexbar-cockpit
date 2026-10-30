@@ -189,3 +189,25 @@ remain synthetic; desktop clicking of the installed settings toggle is not claim
 The 0.3.2 build 8 package passed signing/resource checks and isolated startup. It was installed over
 the independent developer app with a backup; the original CodexBar remains separate. Accessibility
 attachment still times out after launch, so on-device toggle clicks require manual acceptance.
+
+## Editor help and local insights (0.4.0)
+
+- `make test-fast FILTER='Cockpit|MenuBarLayout|StatusItemConditionalSignatureTests'`:
+  416 tests in 36 suites passed, including calendar periods, cross-currency partial totals,
+  normal weekly resets, non-midnight polling, observation corrections, old-state migration,
+  and unchanged frozen-plan/manual-cap behavior.
+- `make check`: passed; strict SwiftLint reported zero violations across 3,200 Swift files.
+  Follow-up edits also passed targeted formatting and strict lint.
+- Verified 85 new keys across all 23 existing locales, including matching format placeholders.
+- Synthetic quarterly/yearly cost calendars and the wide Usage sidebar rendered and were inspected.
+  New screenshots remain local; no private usage records or new images were published.
+- The 0.4.0 build 9 package passed signing/resource checks and isolated startup with network blocked
+  and the build checkout unreadable. The installed developer bundle was updated with a previous-version
+  backup; the original CodexBar installation was preserved.
+- Interactive desktop hover acceptance remains pending: the interface connection could not attach
+  during development, and the desktop was locked at the final launch attempt.
+
+The personal reference is limited to qualifying recorded periods, not a full-day quota forecast.
+It requires sufficient historical coverage and a separate successful validation week; collection,
+stale, drift, and no-gain states intentionally show no reference value. See [PARITY.md](PARITY.md)
+for remaining upstream algorithm and team/cloud differences.

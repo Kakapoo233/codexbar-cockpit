@@ -2930,3 +2930,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Usa l’inglese nella barra dei menu";
 "menu_bar_english_text_subtitle" = "Riguarda solo il testo nella barra dei menu in alto. Il pannello espanso e le impostazioni mantengono la lingua dell’app.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Mostra l’icona del fornitore.";
+"menu_bar_help_provider" = "Mostra il nome del fornitore accanto all’utilizzo.";
+"menu_bar_help_account" = "Mostra l’etichetta dell’account corrente, se disponibile. Le impostazioni di privacy possono nasconderla.";
+"menu_bar_help_percent" = "Mostra la percentuale utilizzata o rimanente del periodo di quota selezionato, secondo l’impostazione di visualizzazione dell’utilizzo. ~ indica una stima.";
+"menu_bar_help_scoped_weekly" = "Mostra la quota settimanale di un modello specifico, se fornita, separatamente dalla quota settimanale complessiva.";
+"menu_bar_help_automatic" = "Usa la metrica automatica del fornitore. Alcuni fornitori mostrano un saldo o del testo invece di una percentuale.";
+"menu_bar_help_pace" = "Confronta l’utilizzo effettivo della quota con quello previsto a questo punto del periodo. Il segno visualizzato segue l’impostazione del segno del ritmo.";
+"menu_bar_help_usage_bar" = "Mostra la quota automatica come un indicatore di testo compatto a tre celle, secondo l’impostazione utilizzato o rimanente.";
+"menu_bar_help_progress" = "Mostra il periodo di quota selezionato come una barra grafica, secondo l’impostazione utilizzato o rimanente.";
+"menu_bar_help_reset_countdown" = "Mostra il tempo rimasto prima del ripristino di questo periodo di quota, se l’orario è disponibile.";
+"menu_bar_help_reset_absolute" = "Mostra la data o l’ora di ripristino di questo periodo di quota, se disponibile.";
+"menu_bar_help_runs_out" = "Stima quando la quota si esaurirà al ritmo attuale o se durerà fino al ripristino. È una stima, non l’orario di ripristino.";
+"menu_bar_help_runs_out_compact" = "Mostra la stessa stima del tempo all’esaurimento della quota con un testo più breve.";
+"menu_bar_help_balance" = "Mostra il saldo o il valore di spesa del fornitore. Il significato e l’unità dipendono dal fornitore.";
+"menu_bar_help_cost_today" = "Mostra il costo di utilizzo registrato o stimato di oggi. Le stime possono differire dalla fattura del fornitore.";
+"menu_bar_help_cost_window" = "Mostra il costo per il periodo configurato nella cronologia dei costi. Il periodo segue le impostazioni della cronologia.";
+"menu_bar_help_spend_amount" = "Mostra la spesa monetaria utilizzata rispetto al limite del fornitore, nella valuta di visualizzazione preferita.";
+"menu_bar_help_spend_budget" = "Mostra la spesa monetaria utilizzata e il relativo limite nella valuta di visualizzazione preferita. I limiti non monetari non sono disponibili.";
+"menu_bar_help_separator" = "Aggiunge un punto visibile tra gli elementi della barra dei menu.";
+"menu_bar_help_space" = "Aggiunge uno spazio vuoto tra gli elementi della barra dei menu.";
+"menu_bar_help_hidden" = "Non mostra nulla per questo ramo della condizione.";
+"menu_bar_help_conditional" = "Sceglie cosa mostrare in base a una regola salvata. I dati non disponibili non soddisfano una condizione.";
+"menu_bar_help_use_all" = "Rimuove il layout personalizzato di questo fornitore, che torna a usare il layout condiviso di Tutti i fornitori.";
+"menu_bar_help_preview" = "Usa i dati in tempo reale quando disponibili; senza un’istantanea mostra dati di esempio. I campi mancanti possono apparire come non disponibili.";
+"menu_bar_help_remove_line_break" = "Unisce le due righe del layout in una sola.";
+"menu_bar_help_remove" = "Rilascia qui un elemento per rimuoverlo da questo layout.";
+"menu_bar_help_line_break" = "Inizia una seconda riga della barra dei menu. I layout supportano al massimo due righe.";
+"menu_bar_help_conditional_name" = "Assegna un nome a questa regola riutilizzabile per ritrovarla nella tavolozza degli elementi.";
+"menu_bar_help_conditional_add" = "Crea una regola riutilizzabile che seleziona un elemento in base a utilizzo, tempo o costo.";
+"menu_bar_help_conditional_combinator" = "Combina le condizioni da sinistra a destra. AND richiede entrambi i risultati; OR ne richiede almeno uno.";
+"menu_bar_help_conditional_direction" = "Sceglie se la regola confronta il valore utilizzato o quello rimanente.";
+"menu_bar_help_conditional_comparison" = "Sceglie come confrontare la metrica con la soglia, ad esempio maggiore o minore.";
+"menu_bar_help_conditional_threshold" = "Imposta la soglia di confronto in %@. I valori non disponibili non corrispondono.";
+"menu_bar_help_conditional_remove" = "Elimina questa regola riutilizzabile e rimuove i suoi elementi dai layout salvati.";
+"menu_bar_help_conditional_duplicate" = "Crea una copia separata di questa regola, modificabile in modo indipendente.";
+"menu_bar_help_conditional_save" = "Salva questa regola per usarla nei layout della barra dei menu.";
+"menu_bar_help_conditional_cancel" = "Chiude l’editor delle regole senza salvare queste modifiche.";
+"menu_bar_help_conditional_then" = "Seleziona l’elemento mostrato quando la condizione combinata è vera. Scegli Nascondi per non mostrare nulla.";
+"menu_bar_help_conditional_else" = "Seleziona l’elemento mostrato quando la condizione combinata è falsa. Scegli Nascondi per non mostrare nulla.";
+"menu_bar_help_conditional_remove_clause" = "Rimuove questa condizione dalla regola.";
+"menu_bar_help_conditional_add_clause" = "Aggiunge un’altra condizione. Una regola supporta al massimo quattro condizioni.";
+"menu_bar_help_conditional_pace" = "Confronta l’utilizzo effettivo meno quello previsto, in punti percentuali. Un valore positivo indica consumo più rapido; uno negativo indica riserva. L’impostazione del segno del ritmo non cambia questo confronto.";
+"menu_bar_help_conditional_currency" = "Le soglie monetarie vengono confrontate in USD, indipendentemente dalla valuta di visualizzazione preferita.";
+"menu_bar_help_conditional_hours" = "Il confronto usa le ore, comprese le frazioni di ora.";
+"menu_bar_help_size" = "Cambia la dimensione del testo e degli elementi del layout nella barra dei menu.";
+"menu_bar_help_gap" = "Cambia la spaziatura tra gli elementi adiacenti del layout.";
+"menu_bar_help_vertical" = "Sposta verticalmente il layout nella barra dei menu per regolare l’allineamento.";
+"menu_bar_help_monospaced" = "Assegna alle cifre la stessa larghezza per ridurre gli spostamenti quando cambiano i numeri.";
+"menu_bar_help_window_labels" = "Aggiunge etichette brevi per distinguere i periodi di quota, ad esempio sessione e settimana.";
+"menu_bar_help_preset" = "Sostituisce questo layout con una disposizione predefinita. Puoi personalizzarla in seguito.";
+"menu_bar_help_preset_custom" = "Questo layout è personalizzato e non corrisponde a un modello predefinito.";
+"menu_bar_help_style" = "Sceglie lo stile dell’icona della barra dei menu. Usa Icona e percentuale per modificare il layout qui sotto.";
+"menu_bar_help_pace_sign" = "Sceglie quale lato del ritmo viene mostrato con il segno più. Influisce solo sulla visualizzazione, non sui confronti delle condizioni.";
+"menu_bar_help_provider_color" = "Usa il colore identificativo del fornitore nella barra dei menu.";
+"menu_bar_help_switcher_rows" = "Sceglie se il selettore combinato dei fornitori mostra icone o l’avanzamento dell’utilizzo.";
+"menu_bar_help_stacked_provider" = "Sceglie il fornitore mostrato su questa riga dell’icona combinata. Automatico segue l’ordine dei fornitori idonei.";
+"menu_bar_help_overview" = "Sceglie quali fornitori abilitati appaiono nella panoramica, fino al limite indicato. L’ordine segue l’elenco dei fornitori.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Scala del calendario";
+"cockpit_calendar_day" = "Giorno";
+"cockpit_calendar_week" = "Settimana";
+"cockpit_calendar_month" = "Mese";
+"cockpit_calendar_quarter" = "Trimestre";
+"cockpit_calendar_year" = "Anno";
+"cockpit_calendar_metric" = "Metrica del calendario";
+"cockpit_calendar_now" = "Oggi";
+"cockpit_calendar_previous" = "Periodo precedente";
+"cockpit_calendar_next" = "Periodo successivo";
+"cockpit_calendar_period_total" = "Utilizzo registrato in questo periodo";
+"cockpit_calendar_partial" = "Cronologia parziale: ≥ indica i limiti inferiori registrati; — significa non disponibile. Le date future sono escluse dai totali.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · T%@";
+"cockpit_calendar_select_day" = "Seleziona un giorno per visualizzare i dettagli dei fornitori, lo stato personale e gli eventi di ripristino.";
+"cockpit_calendar_currency_note" = "Le valute vengono mostrate separatamente. I totali dei token combinano le fonti locali incluse.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Riferimento dell’utilizzo registrato";
+"cockpit_ui_personal_collecting" = "Creazione del tuo schema per giorno della settimana: servono 21 giorni pianificati idonei, 12 giorni attivi, copertura dei giorni feriali e del fine settimana e 7 giorni consecutivi di validazione.";
+"cockpit_ui_personal_coverage" = "%@ giorni idonei / %@ pianificati · %@ giorni attivi";
+"cockpit_ui_personal_stale" = "Manca una cronologia recente idonea; il riferimento è in pausa.";
+"cockpit_ui_personal_drift" = "Gli schemi di utilizzo recenti sono cambiati troppo per validare questo riferimento.";
+"cockpit_ui_personal_no_gain" = "Il modello per giorno della settimana non ha migliorato la base del piano congelato nella settimana di validazione.";
+"cockpit_ui_personal_ready" = "Il tuo schema per giorno della settimana ha migliorato la previsione dell’utilizzo registrato in un periodo separato di validazione di 7 giorni.";
+"cockpit_ui_personal_holdout" = "Errore medio su 7 giorni: base %@ → personale %@ punti percentuali";
+"cockpit_ui_personal_note" = "Solo periodi registrati, non una stima dell’intera giornata. I giorni idonei richiedono 6 ore di osservazioni affidabili senza intervalli superiori a 90 minuti. I periodi mancanti non vengono mai sostituiti con zero; il suggerimento congelato e il tuo limite personale restano validi.";
+"cockpit_ui_comfort_weighted" = "Campioni completi ponderati per recenza: %@";
+"cockpit_ui_comfort_recency" = "I punti della tendenza danno più peso alle esperienze recenti, con un’emivita di 14 giorni. Modificare un giorno precedente ne conserva l’età. Descrive l’esperienza d’uso dei token, non la quota ufficiale.";
+
+"menu_bar_help_conditional_runout" = "Confronta le ore stimate fino all’esaurimento della quota. Se non è disponibile una stima di esaurimento, la condizione è falsa.";

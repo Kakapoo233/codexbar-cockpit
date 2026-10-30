@@ -7,18 +7,35 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
     public private(set) var plans: [CockpitDailyPlan]
     public private(set) var personalCaps: [CockpitPersonalCap]
     public private(set) var comfortRecords: [CockpitComfortRecord]
+    public private(set) var observedDaySummaries: [CockpitObservedDaySummary]
 
     public init() {
         self.snapshots = []
         self.plans = []
         self.personalCaps = []
         self.comfortRecords = []
+        self.observedDaySummaries = []
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case snapshots, plans, personalCaps, comfortRecords, observedDaySummaries
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.snapshots = try values.decode([CockpitQuotaSnapshot].self, forKey: .snapshots)
+        self.plans = try values.decode([CockpitDailyPlan].self, forKey: .plans)
+        self.personalCaps = try values.decode([CockpitPersonalCap].self, forKey: .personalCaps)
+        self.comfortRecords = try values.decode([CockpitComfortRecord].self, forKey: .comfortRecords)
+        self.observedDaySummaries = try values.decodeIfPresent(
+            [CockpitObservedDaySummary].self, forKey: .observedDaySummaries) ?? []
     }
 
     /// Ignores invalid values and identical samples. Samples can arrive out of order.
     @discardableResult
     public mutating func record(_ snapshot: CockpitQuotaSnapshot, calendar: Calendar = .current) -> Bool {
         guard snapshot.isValid else { return false }
+        let latestAt = self.snapshots.last?.capturedAt
         let duplicate = self.snapshots.firstIndex {
             $0.providerID == snapshot.providerID && $0.accountID == snapshot.accountID
                 && $0.capturedAt == snapshot.capturedAt
@@ -33,7 +50,112 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         self.snapshots.sort { $0.capturedAt < $1.capturedAt }
         self.snapshots = Array(self.snapshots.suffix(8192))
         self.ensurePlan(for: snapshot, calendar: calendar)
+        let day = CockpitCalendar.dateKey(for: snapshot.capturedAt, calendar: calendar)
+        let summaryCount = self.observedDaySummaries.count
+        let previousSummary = self.observedDaySummaries.first {
+            $0.providerID == snapshot.providerID && $0.accountID == snapshot.accountID
+                && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == day
+        }
+        self.observedDaySummaries.removeAll {
+            $0.providerID == snapshot.providerID && $0.accountID == snapshot.accountID
+                && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == day
+        }
+        // Corrections to expired raw data cannot safely reconstruct the archived aggregate.
+        // Withdraw the measurement and training qualification until it can be reconstructed reliably.
+        if let archived = previousSummary,
+           !self.containsFullRawPeriod(of: archived, calendar: calendar)
+        {
+            self.observedDaySummaries.append(CockpitObservedDaySummary(
+                providerID: archived.providerID,
+                accountID: archived.accountID,
+                timeZoneIdentifier: archived.timeZoneIdentifier,
+                localDateKey: archived.localDateKey,
+                firstObservedAt: archived.firstObservedAt,
+                lastObservedAt: archived.lastObservedAt,
+                sampleCount: archived.sampleCount,
+                usedPercent: nil,
+                coverage: .unavailable,
+                qualifiesForCalibration: false,
+                unreconciledCorrection: true))
+        }
+        if let latestAt,
+           summaryCount != self.observedDaySummaries.count || !calendar.isDate(
+               latestAt, inSameDayAs: snapshot.capturedAt)
+        {
+            self.summarizeClosedDays(through: max(latestAt, snapshot.capturedAt), calendar: calendar)
+        }
         return true
+    }
+
+    /// Archives measured closed-day periods before bounded raw observations age out. This does not change
+    /// dailyUsage's strict completeness contract or rewrite any daily plan.
+    @discardableResult
+    public mutating func summarizeClosedDays(
+        through now: Date = Date(),
+        calendar: Calendar = .current) -> Bool
+    {
+        let today = calendar.startOfDay(for: now)
+        let zone = calendar.timeZone.identifier
+        var groups: [String: [CockpitQuotaSnapshot]] = [:]
+        for sample in self.snapshots where sample.isValid && sample.capturedAt < today {
+            let day = CockpitCalendar.dateKey(for: sample.capturedAt, calendar: calendar)
+            let id = "\(sample.providerID)|\(sample.accountID)|\(zone)|\(day)"
+            groups[id, default: []].append(sample)
+        }
+        var summaries = Dictionary(self.observedDaySummaries.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+        var changed = false
+        for (id, samples) in groups {
+            let points = samples.sorted { $0.capturedAt < $1.capturedAt }
+            guard let first = points.first, let last = points.last else { continue }
+            if summaries[id]?.unreconciledCorrection == true { continue }
+            if let existing = summaries[id], existing.lastObservedAt >= last.capturedAt,
+               existing.firstObservedAt <= first.capturedAt, existing.sampleCount >= points.count { continue }
+            let day = CockpitCalendar.dateKey(for: first.capturedAt, calendar: calendar)
+            guard let interval = calendar.dateInterval(of: .day, for: first.capturedAt) else { continue }
+            let usage = self.dailyUsage(
+                providerID: first.providerID,
+                accountID: first.accountID,
+                on: interval.end.addingTimeInterval(-0.001),
+                calendar: calendar)
+            let segments = Self.quotaSegments(points)
+            let span = last.capturedAt.timeIntervalSince(first.capturedAt)
+            let continuous = zip(points, points.dropFirst()).allSatisfy {
+                $1.capturedAt.timeIntervalSince($0.capturedAt) <= 5400
+            }
+            let qualifies = points.count >= 13 && span >= 21600 && span / interval.duration >= 0.25
+                && continuous && points.allSatisfy { $0.coverage == .complete }
+                && !segments.isEmpty && !segments.contains(where: \.hasMetadataDrift)
+                && usage.usedPercent != nil
+            summaries[id] = CockpitObservedDaySummary(
+                providerID: first.providerID,
+                accountID: first.accountID,
+                timeZoneIdentifier: zone,
+                localDateKey: day,
+                firstObservedAt: first.capturedAt,
+                lastObservedAt: last.capturedAt,
+                sampleCount: points.count,
+                usedPercent: usage.usedPercent,
+                coverage: usage.coverage,
+                qualifiesForCalibration: qualifies,
+                unreconciledCorrection: nil)
+            changed = true
+        }
+        guard changed else { return false }
+        self.observedDaySummaries = Array(summaries.values.sorted {
+            if $0.lastObservedAt != $1.lastObservedAt { return $0.lastObservedAt < $1.lastObservedAt }
+            return $0.id < $1.id
+        }.suffix(400))
+        return true
+    }
+
+    private func containsFullRawPeriod(of summary: CockpitObservedDaySummary, calendar: Calendar) -> Bool {
+        let points = self.snapshots.filter {
+            $0.providerID == summary.providerID && $0.accountID == summary.accountID
+                && CockpitCalendar.dateKey(for: $0.capturedAt, calendar: calendar) == summary.localDateKey
+        }
+        return points.count >= summary.sampleCount
+            && (points.first?.capturedAt ?? .distantFuture) <= summary.firstObservedAt
+            && (points.last?.capturedAt ?? .distantPast) >= summary.lastObservedAt
     }
 
     public mutating func setPersonalCap(

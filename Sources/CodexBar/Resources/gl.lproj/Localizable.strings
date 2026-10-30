@@ -2927,3 +2927,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Usar inglés na barra de menús";
 "menu_bar_english_text_subtitle" = "Só afecta ao texto da barra de menús superior. O panel despregado e a configuración manteñen o idioma da aplicación.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Mostra a icona do provedor.";
+"menu_bar_help_provider" = "Mostra o nome do provedor xunto ao uso.";
+"menu_bar_help_account" = "Mostra a etiqueta da conta actual cando está dispoñible. A configuración de privacidade pode ocultala.";
+"menu_bar_help_percent" = "Mostra a porcentaxe usada ou restante do período de cota seleccionado, segundo a configuración de visualización do uso. ~ indica unha estimación.";
+"menu_bar_help_scoped_weekly" = "Mostra a cota semanal dun modelo concreto, se o provedor a ofrece, separada da cota semanal xeral.";
+"menu_bar_help_automatic" = "Usa a métrica automática do provedor. Algúns provedores mostran un saldo ou texto no canto dunha porcentaxe.";
+"menu_bar_help_pace" = "Compara o uso real da cota co esperado neste punto do período. O signo mostrado segue a configuración do signo do ritmo.";
+"menu_bar_help_usage_bar" = "Mostra a cota automática como un indicador de texto compacto de tres celas, segundo a configuración de usado ou restante.";
+"menu_bar_help_progress" = "Mostra o período de cota seleccionado como unha barra gráfica, segundo a configuración de usado ou restante.";
+"menu_bar_help_reset_countdown" = "Mostra o tempo restante ata o restablecemento deste período de cota, cando se coñece a hora.";
+"menu_bar_help_reset_absolute" = "Mostra a data ou a hora de restablecemento deste período de cota, cando está dispoñible.";
+"menu_bar_help_runs_out" = "Estima cando se esgotará a cota ao ritmo actual ou se durará ata o restablecemento. É unha estimación, non a hora do restablecemento.";
+"menu_bar_help_runs_out_compact" = "Mostra a mesma estimación do tempo ata esgotar a cota cun texto máis breve.";
+"menu_bar_help_balance" = "Mostra o saldo ou a cifra de gasto do provedor. O significado e a unidade dependen do provedor.";
+"menu_bar_help_cost_today" = "Mostra o custo de uso rexistrado ou estimado de hoxe. As estimacións poden diferir da factura do provedor.";
+"menu_bar_help_cost_window" = "Mostra o custo do período configurado no historial de custos. O período segue a configuración dese historial.";
+"menu_bar_help_spend_amount" = "Mostra o gasto monetario usado do límite do provedor, na moeda de visualización preferida.";
+"menu_bar_help_spend_budget" = "Mostra o gasto monetario usado e o seu límite na moeda de visualización preferida. Os límites non monetarios non están dispoñibles.";
+"menu_bar_help_separator" = "Engade un punto visible entre os elementos da barra de menús.";
+"menu_bar_help_space" = "Engade un espazo en branco entre os elementos da barra de menús.";
+"menu_bar_help_hidden" = "Non mostra nada para esta rama da condición.";
+"menu_bar_help_conditional" = "Escolle que mostrar segundo unha regra gardada. Os datos non dispoñibles non cumpren ningunha condición.";
+"menu_bar_help_use_all" = "Elimina a disposición personalizada deste provedor para que volva usar a disposición compartida de Todos os provedores.";
+"menu_bar_help_preview" = "Usa datos en tempo real cando están dispoñibles; sen unha instantánea, mostra datos de exemplo. Os campos que faltan poden aparecer como non dispoñibles.";
+"menu_bar_help_remove_line_break" = "Une as dúas liñas da disposición nunha soa.";
+"menu_bar_help_remove" = "Solta un elemento aquí para retiralo desta disposición.";
+"menu_bar_help_line_break" = "Inicia unha segunda liña da barra de menús. As disposicións admiten ata dúas liñas.";
+"menu_bar_help_conditional_name" = "Dálle un nome a esta regra reutilizable para atopala na paleta de elementos.";
+"menu_bar_help_conditional_add" = "Crea unha regra reutilizable que selecciona un elemento segundo o uso, o tempo ou o custo.";
+"menu_bar_help_conditional_combinator" = "Combina as condicións de esquerda a dereita. AND require ambos os resultados; OR require calquera deles.";
+"menu_bar_help_conditional_direction" = "Escolle se a regra compara o valor usado ou o restante.";
+"menu_bar_help_conditional_comparison" = "Escolle como se compara a métrica co limiar, por exemplo, maior ou menor ca el.";
+"menu_bar_help_conditional_threshold" = "Establece o limiar de comparación en %@. Os valores non dispoñibles non coinciden.";
+"menu_bar_help_conditional_remove" = "Elimina esta regra reutilizable e retira os seus elementos das disposicións gardadas.";
+"menu_bar_help_conditional_duplicate" = "Crea unha copia separada desta regra que podes editar de forma independente.";
+"menu_bar_help_conditional_save" = "Garda esta regra para usala nas disposicións da barra de menús.";
+"menu_bar_help_conditional_cancel" = "Pecha o editor de regras sen gardar estes cambios.";
+"menu_bar_help_conditional_then" = "Selecciona o elemento que se mostra cando a condición combinada é verdadeira. Escolle Ocultar para non mostrar nada.";
+"menu_bar_help_conditional_else" = "Selecciona o elemento que se mostra cando a condición combinada é falsa. Escolle Ocultar para non mostrar nada.";
+"menu_bar_help_conditional_remove_clause" = "Retira esta condición da regra.";
+"menu_bar_help_conditional_add_clause" = "Engade outra condición. Unha regra admite ata catro condicións.";
+"menu_bar_help_conditional_pace" = "Compara o uso real menos o esperado en puntos porcentuais. Un valor positivo indica un consumo máis rápido; un negativo, reserva. A configuración do signo do ritmo non cambia esta comparación.";
+"menu_bar_help_conditional_currency" = "Os limiares monetarios compáranse en USD, independentemente da moeda de visualización preferida.";
+"menu_bar_help_conditional_hours" = "A comparación usa horas, incluídas as fraccións de hora.";
+"menu_bar_help_size" = "Cambia o tamaño do texto e dos elementos da disposición na barra de menús.";
+"menu_bar_help_gap" = "Cambia o espazo entre os elementos adxacentes da disposición.";
+"menu_bar_help_vertical" = "Move a disposición verticalmente dentro da barra de menús para axustar o aliñamento.";
+"menu_bar_help_monospaced" = "Dálles o mesmo ancho aos díxitos para reducir os desprazamentos cando cambian os números.";
+"menu_bar_help_window_labels" = "Engade etiquetas breves para distinguir os períodos de cota, como sesión e semana.";
+"menu_bar_help_preset" = "Substitúe esta disposición por unha predefinida. Podes personalizala despois.";
+"menu_bar_help_preset_custom" = "Esta disposición está personalizada e non coincide con ningunha predefinición.";
+"menu_bar_help_style" = "Escolle o estilo da icona da barra de menús. Usa Icona e porcentaxe para editar a disposición de abaixo.";
+"menu_bar_help_pace_sign" = "Escolle que lado do ritmo se mostra cun signo positivo. Só afecta á visualización, non ás comparacións das condicións.";
+"menu_bar_help_provider_color" = "Usa a cor identificativa do provedor na barra de menús.";
+"menu_bar_help_switcher_rows" = "Escolle se o selector combinado de provedores mostra iconas ou o progreso do uso.";
+"menu_bar_help_stacked_provider" = "Escolle o provedor que aparece nesta liña da icona combinada. Automático segue a orde dos provedores aptos.";
+"menu_bar_help_overview" = "Escolle os provedores activados que aparecen na vista xeral, ata o límite mostrado. A orde segue a lista de provedores.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Escala do calendario";
+"cockpit_calendar_day" = "Día";
+"cockpit_calendar_week" = "Semana";
+"cockpit_calendar_month" = "Mes";
+"cockpit_calendar_quarter" = "Trimestre";
+"cockpit_calendar_year" = "Ano";
+"cockpit_calendar_metric" = "Métrica do calendario";
+"cockpit_calendar_now" = "Hoxe";
+"cockpit_calendar_previous" = "Período anterior";
+"cockpit_calendar_next" = "Período seguinte";
+"cockpit_calendar_period_total" = "Uso rexistrado neste período";
+"cockpit_calendar_partial" = "Historial parcial: ≥ indica os límites inferiores rexistrados; — significa non dispoñible. As datas futuras exclúense dos totais.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · T%@";
+"cockpit_calendar_select_day" = "Selecciona un día para ver os detalles dos provedores, o estado persoal e os eventos de restablecemento.";
+"cockpit_calendar_currency_note" = "As moedas móstranse por separado. Os totais de tokens combinan as fontes locais incluídas.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Referencia do uso rexistrado";
+"cockpit_ui_personal_collecting" = "Estase creando o teu patrón por día da semana: fan falta 21 días planificados válidos, 12 días activos, cobertura de días laborables e fins de semana e 7 días consecutivos de validación.";
+"cockpit_ui_personal_coverage" = "%@ días válidos / %@ planificados · %@ días activos";
+"cockpit_ui_personal_stale" = "Falta un historial recente válido; a referencia está en pausa.";
+"cockpit_ui_personal_drift" = "Os patróns de uso recentes cambiaron demasiado para validar esta referencia.";
+"cockpit_ui_personal_no_gain" = "O modelo por día da semana non mellorou a base do plan conxelado durante a semana de validación.";
+"cockpit_ui_personal_ready" = "O teu patrón por día da semana mellorou a predición do uso rexistrado nun período independente de validación de 7 días.";
+"cockpit_ui_personal_holdout" = "Erro medio de 7 días: base %@ → persoal %@ puntos porcentuais";
+"cockpit_ui_personal_note" = "Só períodos rexistrados, non unha estimación do día completo. Os días válidos precisan 6 horas de observacións fiables sen intervalos de máis de 90 minutos. Os períodos ausentes nunca se enchen con cero; a suxestión conxelada e o límite persoal seguen vixentes.";
+"cockpit_ui_comfort_weighted" = "Mostras completas ponderadas pola súa proximidade no tempo: %@";
+"cockpit_ui_comfort_recency" = "Os puntos de tendencia dan máis peso á experiencia recente, cunha semivida de 14 días. Editar un día anterior conserva a súa antigüidade. Isto describe a experiencia de uso de tokens, non a cota oficial.";
+
+"menu_bar_help_conditional_runout" = "Compara as horas estimadas ata esgotar a cota. Se non hai unha estimación de esgotamento dispoñible, a condición é falsa.";

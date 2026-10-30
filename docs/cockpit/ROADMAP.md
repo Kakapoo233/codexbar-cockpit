@@ -22,6 +22,9 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Implement monthly calendar driven by the same daily ledger.
 - [x] Add public reset history, source previews, local estimates, and early reminders (0.3.0).
 - [x] Complete Cockpit translations in the existing 23 languages, including localized formats and RTL receipt export (0.3.1).
+- [x] Add localized hover help throughout the menu-bar layout editor (0.4.0).
+- [x] Add multi-scale calendar and Token/cost browsing over the loaded ledger (0.4.0).
+- [x] Add validated local weekday reference and recency-weighted experience trends (0.4.0).
 - [x] Add an independent English text option for the top menu bar while preserving the expanded panel language (0.3.2).
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
 - [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
@@ -42,3 +45,9 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [ ] User acceptance and final settings migration.
 - [x] Create public GitHub repository and publish the project foundation on the development branch.
 - [ ] Release automation/signing/update feed configured for this fork.
+
+## Upstream feature follow-up
+
+The v0.3.4 comparison is tracked in [PARITY.md](PARITY.md). Local behavior is adapted to
+the native menu-bar app; no floating Tauri shell is planned. Team/device allocation and
+Cloudflare synchronization remain separate extensions outside the current local integration.

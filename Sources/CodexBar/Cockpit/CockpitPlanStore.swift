@@ -26,6 +26,7 @@ final class CockpitPlanStore {
         guard FileManager.default.fileExists(atPath: self.fileURL.path) else { return }
         do {
             self.state = try JSONDecoder().decode(CockpitPlanState.self, from: Data(contentsOf: self.fileURL))
+            if self.state.summarizeClosedDays() { self.save() }
         } catch {
             self.canSave = false
             self.error = CockpitLocalizedMessage("cockpit_ui_plan_read_error", error.localizedDescription)
@@ -72,6 +73,7 @@ final class CockpitPlanStore {
         }
         self.accounts = currentAccounts
         self.availableProviders = currentAccounts.keys.sorted { $0.rawValue < $1.rawValue }
+        changed = self.state.summarizeClosedDays() || changed
         if changed { self.save() }
     }
 

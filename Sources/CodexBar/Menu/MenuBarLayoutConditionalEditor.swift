@@ -66,6 +66,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                     .foregroundStyle(.secondary)
                 TextField(L("menu_bar_layout_conditional_name_placeholder"), text: self.$conditional.name)
                     .textFieldStyle(.roundedBorder)
+                    .help(L("menu_bar_help_conditional_name"))
                 if !self.nameIsValid {
                     Text(L("menu_bar_layout_conditional_name_error"))
                         .font(.caption)
@@ -93,20 +94,22 @@ struct MenuBarLayoutConditionalEditorSheet: View {
             }
             .disabled(self.conditional.clauses.count >= 4)
             .buttonStyle(.link)
+            .help(L("menu_bar_help_conditional_add_clause"))
 
             HStack {
                 Text(L("menu_bar_layout_conditional_then"))
-                self.tokenMenu(selection: self.thenBinding)
+                self.tokenMenu(selection: self.thenBinding, branchHelp: L("menu_bar_help_conditional_then"))
             }
             HStack {
                 Text(L("menu_bar_layout_conditional_else"))
-                self.tokenMenu(selection: self.elseBinding)
+                self.tokenMenu(selection: self.elseBinding, branchHelp: L("menu_bar_help_conditional_else"))
             }
 
             Text(self.conditional.editorSummary(provider: self.provider))
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
+                .help(self.conditional.editorSummary(provider: self.provider))
 
             Divider()
 
@@ -115,6 +118,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                 Button(L("Cancel"), role: .cancel) {
                     self.dismiss()
                 }
+                .help(L("menu_bar_help_conditional_cancel"))
                 Button(L("menu_bar_layout_conditional_save")) {
                     self.onSave(
                         MenuBarLayoutConditionalDraft(
@@ -124,6 +128,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                 }
                 .keyboardShortcut(.defaultAction)
                 .disabled(!self.nameIsValid)
+                .help(L("menu_bar_help_conditional_save"))
             }
         }
         .padding(16)
@@ -140,39 +145,50 @@ struct MenuBarLayoutConditionalEditorSheet: View {
             if index > 0 {
                 Picker("", selection: self.combinatorBinding(index)) {
                     Text(L("menu_bar_layout_conditional_and")).tag(MenuBarConditionalCombinator.and)
+                        .help(L("menu_bar_help_conditional_combinator"))
                     Text(L("menu_bar_layout_conditional_or")).tag(MenuBarConditionalCombinator.or)
+                        .help(L("menu_bar_help_conditional_combinator"))
                 }
                 .labelsHidden()
                 .fixedSize()
+                .help(L("menu_bar_help_conditional_combinator"))
             }
 
             Picker("", selection: self.metricBinding(index)) {
                 ForEach(MenuBarConditionalMetric.allCases, id: \.self) { metric in
                     Text(metric.editorLabel(provider: self.provider)).tag(metric)
+                        .help(metric.editorHelp(provider: self.provider))
                 }
             }
             .labelsHidden()
+            .help(metric.editorHelp(provider: self.provider))
 
             if metric.supportsDirection {
                 Picker("", selection: self.directionBinding(index)) {
                     Text(L("menu_bar_layout_conditional_used")).tag(MenuBarConditionalDirection.used)
+                        .help(L("menu_bar_help_conditional_direction"))
                     Text(L("menu_bar_layout_conditional_remaining")).tag(MenuBarConditionalDirection.remaining)
+                        .help(L("menu_bar_help_conditional_direction"))
                 }
                 .labelsHidden()
                 .fixedSize()
+                .help(L("menu_bar_help_conditional_direction"))
             }
 
             Picker("", selection: self.comparisonBinding(index)) {
                 ForEach(MenuBarConditionalComparison.allCases, id: \.self) { comparison in
                     Text(comparison.symbol).tag(comparison)
+                        .help(L("menu_bar_help_conditional_comparison"))
                 }
             }
             .labelsHidden()
+            .help(L("menu_bar_help_conditional_comparison"))
 
             TextField("", value: self.thresholdBinding(index), format: .number)
                 .textFieldStyle(.roundedBorder)
                 .frame(width: 52)
                 .monospacedDigit()
+                .help(L("menu_bar_help_conditional_threshold", metric.thresholdUnit))
             Stepper(
                 value: self.thresholdBinding(index),
                 in: metric.thresholdRange,
@@ -181,6 +197,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                 EmptyView()
             }
             .labelsHidden()
+            .help(L("menu_bar_help_conditional_threshold", metric.thresholdUnit))
             Text(metric.thresholdUnit)
 
             if self.conditional.clauses.count > 1 {
@@ -190,6 +207,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                     Image(systemName: "minus.circle")
                 }
                 .buttonStyle(.plain)
+                .help(L("menu_bar_help_conditional_remove_clause"))
             }
         }
     }
@@ -271,7 +289,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
             set: { self.conditional.elseToken = $0 })
     }
 
-    private func tokenMenu(selection: Binding<MenuBarLayoutToken>) -> some View {
+    private func tokenMenu(selection: Binding<MenuBarLayoutToken>, branchHelp: String) -> some View {
         Menu {
             ForEach(MenuBarLayoutPaletteTokens.conditionalBranch, id: \.self) { token in
                 Button {
@@ -281,6 +299,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                         token.editorLabel(provider: self.provider),
                         systemImage: token.editorSystemImage)
                 }
+                .help(token.editorHelp(provider: self.provider))
             }
         } label: {
             MenuBarLayoutChipLabel(
@@ -288,6 +307,7 @@ struct MenuBarLayoutConditionalEditorSheet: View {
                 systemImage: selection.wrappedValue.editorSystemImage,
                 isSelected: false)
         }
+        .help(branchHelp + "\n" + selection.wrappedValue.editorHelp(provider: self.provider))
     }
 }
 

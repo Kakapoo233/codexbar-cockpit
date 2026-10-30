@@ -15,6 +15,7 @@ struct MenuBarLayoutEditorChip: View {
     let isDisabled: Bool
     let accessibilityLabel: String
     let accessibilityHint: String?
+    let helpText: String?
     let dragItem: MenuBarLayoutDragItem
     let activate: () -> Void
     var removeActionTitle: String?
@@ -27,6 +28,7 @@ struct MenuBarLayoutEditorChip: View {
         isDisabled: Bool = false,
         accessibilityLabel: String,
         accessibilityHint: String? = nil,
+        helpText: String? = nil,
         dragItem: MenuBarLayoutDragItem,
         activate: @escaping () -> Void,
         removeActionTitle: String? = nil,
@@ -38,6 +40,7 @@ struct MenuBarLayoutEditorChip: View {
         self.isDisabled = isDisabled
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityHint = accessibilityHint
+        self.helpText = helpText
         self.dragItem = dragItem
         self.activate = activate
         self.removeActionTitle = removeActionTitle
@@ -51,7 +54,7 @@ struct MenuBarLayoutEditorChip: View {
             isSelected: self.isSelected)
             .opacity(self.isDisabled ? 0.4 : 1)
             .contentShape(Capsule(style: .continuous))
-            .draggable(self.dragItem)
+            .modifier(MenuBarLayoutChipDrag(isEnabled: !self.isDisabled, item: self.dragItem))
             .onTapGesture(perform: self.handleActivate)
             .focusable(!self.isDisabled)
             .onKeyPress(keys: [.space, .return], phases: [.down]) { _ in
@@ -59,7 +62,7 @@ struct MenuBarLayoutEditorChip: View {
                 self.handleActivate()
                 return .handled
             }
-            .allowsHitTesting(!self.isDisabled)
+            .help(self.helpText ?? "")
             .accessibilityElement()
             .accessibilityAddTraits(.isButton)
             .accessibilityLabel(self.accessibilityLabel)
@@ -73,6 +76,20 @@ struct MenuBarLayoutEditorChip: View {
     private func handleActivate() {
         guard !self.isDisabled else { return }
         self.activate()
+    }
+}
+
+/// Disabled palette entries remain hoverable without starting a drag session.
+private struct MenuBarLayoutChipDrag: ViewModifier {
+    let isEnabled: Bool
+    let item: MenuBarLayoutDragItem
+
+    func body(content: Content) -> some View {
+        if self.isEnabled {
+            content.draggable(self.item)
+        } else {
+            content
+        }
     }
 }
 
