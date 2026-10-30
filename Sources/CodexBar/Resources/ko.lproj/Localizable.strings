@@ -2827,7 +2827,7 @@
 "cockpit_ui_weekly_remaining" = "Weekly Remaining";
 
 "cockpit_ui_local_experience" = "Usage Experience on This Mac";
-"cockpit_ui_local_experience_note" = "Device experience includes local history from all accounts on this Mac. It is recorded separately from the active account’s weekly quota plan above.";
+"cockpit_ui_local_experience_note" = "Device experience includes local history from all accounts on this Mac. It is recorded separately from the active account’s weekly quota plan.";
 "cockpit_ui_local_snapshot_note" = "Records verifiable device tokens so far today. If the snapshot is incomplete, stale, or belongs to a separate profile, only your experience is saved.";
 "cockpit_ui_active_last_days" = "Tasks Active in the Last %d Days";
 "cockpit_ui_active_this_month" = "Tasks Active This Month";
@@ -2842,3 +2842,5 @@
 "cockpit_ui_calendar_selected" = "Selected";
 "cockpit_ui_calendar_unselected" = "Not Selected";
 "cockpit_ui_calendar_overloaded" = "Overloaded";
+
+"cockpit_ui_daily_advice" = "Daily usage advice";

@@ -2851,7 +2851,7 @@
 "cockpit_ui_weekly_remaining" = "周额度剩余";
 
 "cockpit_ui_local_experience" = "这台 Mac 的使用体验";
-"cockpit_ui_local_experience_note" = "本机体感包含这台 Mac 上各账号的本地历史，与上方当前账号的周额度计划分开记录。";
+"cockpit_ui_local_experience_note" = "本机体感包含这台 Mac 上各账号的本地历史，与当前账号的周额度计划分开记录。";
 "cockpit_ui_local_snapshot_note" = "记录此刻可核对的今日本机 Tokens。快照不完整、已过期或来源独立时，仅保存感受。";
 "cockpit_ui_active_last_days" = "近 %d 天内活动的任务";
 "cockpit_ui_active_this_month" = "本月至今活动的任务";
@@ -2866,3 +2866,5 @@
 "cockpit_ui_calendar_selected" = "已选择";
 "cockpit_ui_calendar_unselected" = "未选择";
 "cockpit_ui_calendar_overloaded" = "过载";
+
+"cockpit_ui_daily_advice" = "每日使用建议";

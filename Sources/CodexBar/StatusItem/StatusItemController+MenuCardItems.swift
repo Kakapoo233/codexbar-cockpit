@@ -62,6 +62,13 @@ extension StatusItemController {
         let actionTarget = MenuCardActionTarget()
         let cardAction = ProviderCardAction(perform: { [weak self, actionTarget] action in
             guard let self else { return }
+            if let menu = actionTarget.item?.menu, self.cockpitMenuPanelController?.owns(menu) == true {
+                if action == .refresh {
+                    self.refreshMenuProviderNow(in: menu)
+                    return
+                }
+                self.cockpitMenuPanelController?.close()
+            }
             actionTarget.item?.menu?.cancelTracking()
             let (selector, object) = self.selector(for: action)
             let sender = NSMenuItem()
@@ -72,7 +79,7 @@ extension StatusItemController {
             content: AnyView(view
                 .environment(\.providerMenuChartSettings, self.settings)
                 .environment(\.providerCardAction, cardAction)),
-            showsSubmenuIndicator: submenu != nil,
+            showsSubmenuIndicator: submenu != nil && !self.unifiedMenuPanelEnabledForController,
             submenuIndicatorAlignment: submenuIndicatorAlignment,
             submenuIndicatorTopPadding: submenuIndicatorTopPadding,
             allowsMenuHighlight: allowsMenuHighlight,

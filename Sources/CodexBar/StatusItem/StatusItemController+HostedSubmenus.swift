@@ -465,7 +465,7 @@ extension StatusItemController {
                         snapshot: tokenSnapshot, calendar: self.settings.costUsageBucketCalendar))
                 performAfterClosingSessionMenu(submenu) {
                     SessionUsageNavigation.shared.request = .init(context: context, sessionID: sessionID)
-                    self.settingsOpenHandler?(.usageSpend)
+                    self.showCockpitStatistics()
                 }
             })
         let hosting = MenuHostingView(rootView: chartView.codexBarLocalized())

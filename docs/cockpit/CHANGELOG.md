@@ -1,5 +1,16 @@
 # Cockpit changes
 
+## 0.2.0 — Unified menu-bar panel
+
+- Replace the intermediate Cockpit window with Usage, Statistics, Calendar, and Receipts in one menu-bar panel.
+- Show daily usage advice and editable personal caps directly above the provider details.
+- Merge subjective feedback and the Token experience chart into Calendar.
+- Keep Calendar and Receipt filters separate from the Statistics selection.
+- Move explicit CodexBar settings import into General preferences.
+- Preserve provider action context on first open, refresh routing, and expandable card heights.
+- Keep calendar state controls visible at the top and localize month/weekday labels.
+
+
 ## 0.1.1
 
 - Add personal-state controls to the selected calendar date, with a visible selected state and a clear action.

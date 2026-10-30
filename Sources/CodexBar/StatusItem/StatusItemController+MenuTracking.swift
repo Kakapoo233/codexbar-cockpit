@@ -64,6 +64,7 @@ extension StatusItemController {
         #if DEBUG
         guard !self.isReleasedForTesting else { return }
         #endif
+        self.cockpitMenuPanelController?.invalidate()
         let preservesMergedSwitcherContentCaches = self.preservesMergedSwitcherContentCachesDuringInvalidation
         self.menuSession.invalidate(
             allowsStaleContent: allowStaleContentDuringDataRefresh,
@@ -103,6 +104,7 @@ extension StatusItemController {
     }
 
     func prepareAttachedClosedMenusIfNeeded() {
+        guard !self.unifiedMenuPanelEnabledForController else { return }
         guard self.isMenuRefreshEnabled else { return }
         guard self.openMenus.isEmpty else { return }
         guard !self.isMenuDataRefreshInFlight else { return }
@@ -471,6 +473,7 @@ extension StatusItemController {
     }
 
     func refreshOpenMenuIfStillVisible(_ menu: NSMenu, provider: UsageProvider?) {
+        if self.refreshCockpitPanel(for: menu) { return }
         let key = ObjectIdentifier(menu)
         guard self.openMenus[key] != nil else { return }
         if self.isHostedSubviewMenu(menu) {
@@ -493,6 +496,10 @@ extension StatusItemController {
         provider: UsageProvider,
         isCurrent: (@MainActor () -> Bool)? = nil)
     {
+        if self.cockpitMenuPanelController?.owns(menu) == true {
+            if isCurrent?() ?? true { self.cockpitMenuPanelController?.invalidate() }
+            return
+        }
         let key = ObjectIdentifier(menu)
         guard self.openMenus[key] != nil else { return }
         guard !self.isHostedSubviewMenu(menu) else { return }
@@ -513,6 +520,7 @@ extension StatusItemController {
     }
 
     func rebuildOpenMenuIfStillVisible(_ menu: NSMenu, provider: UsageProvider?) {
+        if self.refreshCockpitPanel(for: menu) { return }
         let key = ObjectIdentifier(menu)
         guard self.openMenus[key] != nil else { return }
         let isHostedSubviewMenu = self.isHostedSubviewMenu(menu)

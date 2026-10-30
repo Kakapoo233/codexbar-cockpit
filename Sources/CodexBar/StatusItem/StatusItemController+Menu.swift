@@ -111,32 +111,7 @@ extension StatusItemController {
             return
         }
 
-        var provider: UsageProvider?
-        if self.shouldMergeIcons {
-            let enabledProviders = self.store.enabledFirstPartyProvidersForDisplay()
-            let selection = self.resolvedMergedMenuSelection(enabledProviders: enabledProviders)
-            if Self.isUserPluginSelection(selection), let pluginID = selection?.instanceID {
-                self.lastMenuProvider = pluginID
-                provider = nil
-            } else {
-                // Provider-specific by design: Codex is the persisted menu identity fallback when selection is empty.
-                let resolvedProvider = self.resolvedMenuProvider(enabledProviders: enabledProviders)
-                self.lastMenuProvider = (resolvedProvider ?? .codex).instanceID
-                provider = resolvedProvider
-            }
-        } else {
-            if let menuProvider = self.menuProviders[ObjectIdentifier(menu)] {
-                self.lastMenuProvider = menuProvider
-                provider = menuProvider.firstPartyProvider
-            } else if menu === self.fallbackMenu {
-                self.lastMenuProvider = self.store.enabledProvidersForDisplay().first ?? .codex
-                provider = nil
-            } else {
-                let resolved = self.store.enabledProvidersForDisplay().first ?? .codex
-                self.lastMenuProvider = resolved
-                provider = resolved.firstPartyProvider
-            }
-        }
+        let provider = self.resolveProviderForMenuPresentation(menu)
 
         if self.isMenuRefreshEnabled, (provider?.instanceID ?? self.lastMenuProvider) == .codex {
             self.deferOpenAIDashboardRefreshUntilMenuCloses(reason: "parent menu open")
@@ -257,7 +232,7 @@ extension StatusItemController {
         let descriptor = self.makeMenuDescriptor(
             provider: selectedProvider,
             includeContextualActions: !isOverviewSelected && !isPluginSelected)
-        let menuWidth = self.menuCardWidth(
+        let menuWidth = self.cockpitMenuPanelController?.bridge.width ?? self.menuCardWidth(
             for: enabledProviders,
             selectedProvider: selectedProvider,
             descriptor: descriptor)
@@ -282,7 +257,7 @@ extension StatusItemController {
         let providerSwitcherWidthMatches = (menu.items.first?.view as? ProviderSwitcherView).map { view in
             abs(view.frame.width - menuWidth) <= 0.5
         } ?? false
-        let canSmartUpdate = self.shouldMergeIcons &&
+        let canSmartUpdate = !self.unifiedMenuPanelEnabledForController && self.shouldMergeIcons &&
             switcherProviderIDs.count > 1 &&
             !isOverviewSelected &&
             switcherProvidersMatch &&
@@ -323,7 +298,7 @@ extension StatusItemController {
             return
         }
 
-        let canPreserveProviderSwitcher = self.shouldMergeIcons &&
+        let canPreserveProviderSwitcher = !self.unifiedMenuPanelEnabledForController && self.shouldMergeIcons &&
             switcherProviderIDs.count > 1 &&
             switcherProvidersMatch &&
             switcherUsageBarsShowUsedMatch &&
@@ -811,7 +786,6 @@ extension StatusItemController {
         switcherSelection: ProviderSwitcherSelection,
         captureMenu: NSMenu? = nil)
     {
-        self.addCockpitMenuItems(to: menu, provider: context.currentProvider)
         if case let .provider(instanceID) = switcherSelection,
            UserProviderPluginRegistry.plugin(for: instanceID) != nil
         {
@@ -1143,6 +1117,28 @@ extension StatusItemController {
         return enabled.first(where: self.isEnabled) ?? enabled.first
     }
 
+    /// Both native menus and the panel must bind legacy actions to the provider before their first click.
+    func resolveProviderForMenuPresentation(_ menu: NSMenu) -> UsageProvider? {
+        if self.shouldMergeIcons {
+            let enabled = self.store.enabledFirstPartyProvidersForDisplay()
+            let selection = self.resolvedMergedMenuSelection(enabledProviders: enabled)
+            if Self.isUserPluginSelection(selection), let pluginID = selection?.instanceID {
+                self.lastMenuProvider = pluginID
+                return nil
+            }
+            let provider = self.resolvedMenuProvider(enabledProviders: enabled)
+            self.lastMenuProvider = (provider ?? .codex).instanceID
+            return provider
+        }
+        if let provider = self.menuProviders[ObjectIdentifier(menu)] {
+            self.lastMenuProvider = provider
+            return provider.firstPartyProvider
+        }
+        let provider = self.store.enabledProvidersForDisplay().first ?? .codex
+        self.lastMenuProvider = provider
+        return menu === self.fallbackMenu ? nil : provider.firstPartyProvider
+    }
+
     func menuProvider(for menu: NSMenu) -> UsageProvider? {
         if self.shouldMergeIcons {
             return self.resolvedMenuProvider()
@@ -1156,7 +1152,7 @@ extension StatusItemController {
         return self.store.enabledFirstPartyProvidersForDisplay().first ?? .codex
     }
 
-    private func scheduleOpenMenuRefresh(for menu: NSMenu) {
+    func scheduleOpenMenuRefresh(for menu: NSMenu) {
         // Queue refresh work only when visible menu data is missing or stale. Here "stale" means the last
         // provider fetch failed and needs a retry; periodic freshness is handled by the refresh timer.
         // AppKit menu tracking is modal, so starting provider refreshes while it is active can make the menu
@@ -1182,7 +1178,8 @@ extension StatusItemController {
             #if DEBUG
             self.onDelayedMenuRefreshAttemptForTesting?()
             #endif
-            guard self.openMenus[ObjectIdentifier(menu)] != nil else { return }
+            guard self.openMenus[ObjectIdentifier(menu)] != nil ||
+                self.cockpitMenuPanelController?.owns(menu) == true else { return }
             let refreshAllOnOpen = self.settings.refreshAllProvidersOnMenuOpen
             let enabledProviders = self.store.enabledProvidersForBackgroundWork()
             let visibleProviders = self.delayedRefreshRetryProviders(for: menu)
@@ -1652,7 +1649,7 @@ extension StatusItemController {
         return self.makeHostedSubviewPlaceholderMenu(chartID: Self.statusComponentsID, provider: provider)
     }
 
-    private func isOpenAIWebSubviewMenu(_ menu: NSMenu) -> Bool {
+    func isOpenAIWebSubviewMenu(_ menu: NSMenu) -> Bool {
         let ids: Set = [
             Self.usageBreakdownChartID,
             Self.creditsHistoryChartID,

@@ -123,7 +123,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     let store: UsageStore
     let settings: SettingsStore
     lazy var cockpitPlanStore = CockpitPlanStore()
-    var cockpitWindowController: CockpitWindowController?
+    var cockpitMenuPanelController: CockpitMenuPanelController?
     var cloudSyncState: CloudSyncState {
         didSet {
             guard oldValue !== self.cloudSyncState else { return }
@@ -142,6 +142,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     let statusBar: NSStatusBar
     let menuCardRenderingEnabledForController: Bool
     let menuRefreshEnabledForController: Bool
+    let unifiedMenuPanelEnabledForController: Bool
     var statusItem: NSStatusItem
     var statusItems: [ProviderInstanceID: NSStatusItem] = [:]
     /// App intent survives Tahoe changing `NSStatusItem.isVisible` after Control Center rejects its scene.
@@ -381,6 +382,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
         statusBar: NSStatusBar = .system,
         menuCardRenderingEnabled: Bool = StatusItemController.menuCardRenderingEnabled,
         menuRefreshEnabled: Bool = StatusItemController.menuRefreshEnabled,
+        unifiedMenuPanelEnabled: Bool = !SettingsStore.isRunningTests,
         observeProviderConfigNotifications: Bool = !SettingsStore.isRunningTests,
         cloudSyncState: CloudSyncState = CloudSyncState())
     {
@@ -414,6 +416,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
         self.lastSwitcherUsageBarsShowUsed = settings.usageBarsShowUsed
         self.menuCardRenderingEnabledForController = menuCardRenderingEnabled
         self.menuRefreshEnabledForController = menuRefreshEnabled
+        self.unifiedMenuPanelEnabledForController = unifiedMenuPanelEnabled
         let repairedStatusItemVisibilityKeys = MenuBarStatusItemDefaultsRepair
             .repairHiddenVisibilityDefaultsIfNeeded(defaults: settings.userDefaults)
         self.statusBar = statusBar
@@ -487,6 +490,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
         statusBar: NSStatusBar = .system,
         menuCardRenderingEnabled: Bool = StatusItemController.menuCardRenderingEnabled,
         menuRefreshEnabled: Bool = StatusItemController.menuRefreshEnabled,
+        unifiedMenuPanelEnabled: Bool = !SettingsStore.isRunningTests,
         observeProviderConfigNotifications: Bool = !SettingsStore.isRunningTests)
     {
         self.init(
@@ -500,6 +504,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
             statusBar: statusBar,
             menuCardRenderingEnabled: menuCardRenderingEnabled,
             menuRefreshEnabled: menuRefreshEnabled,
+            unifiedMenuPanelEnabled: unifiedMenuPanelEnabled,
             observeProviderConfigNotifications: observeProviderConfigNotifications)
     }
 
@@ -833,9 +838,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
         if self.mergedMenu == nil {
             self.mergedMenu = self.makeMenu()
         }
-        if self.statusItem.menu !== self.mergedMenu {
-            self.statusItem.menu = self.mergedMenu
-        }
+        self.attachPresentationMenu(self.mergedMenu, to: self.statusItem)
         self.prepareAttachedClosedMenusIfNeeded()
     }
 
@@ -852,16 +855,12 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
                         self.providerMenus[provider.instanceID] = self.makeMenu(for: provider)
                     }
                     let menu = self.providerMenus[provider.instanceID]
-                    if item.menu !== menu {
-                        item.menu = menu
-                    }
+                    self.attachPresentationMenu(menu, to: item)
                 } else if fallback == provider {
                     if self.fallbackMenu == nil {
                         self.fallbackMenu = self.makeMenu(for: nil)
                     }
-                    if item.menu !== self.fallbackMenu {
-                        item.menu = self.fallbackMenu
-                    }
+                    self.attachPresentationMenu(self.fallbackMenu, to: item)
                 }
             } else if let item = self.statusItems[provider.instanceID] {
                 item.menu = nil
@@ -883,7 +882,8 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
         let positions = keys.compactMap { key -> Double? in
             guard let value = defaults.object(forKey: key),
                   !MenuBarStatusItemPlacementPreflight.shouldClearPreferredPosition(
-                      value, maximumPreferredPosition: maximum)
+                      value,
+                      maximumPreferredPosition: maximum)
             else { return nil }
             return (value as? NSNumber)?.doubleValue
         }.sorted()
