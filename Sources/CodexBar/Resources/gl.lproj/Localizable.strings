@@ -3150,3 +3150,31 @@
 "Use default risk tolerance" = "Use default risk tolerance";
 "Use equal share" = "Use equal share";
 "Use your team's HTTPS service. Create with the bootstrap secret or join with an invitation." = "Use your team's HTTPS service. Create with the bootstrap secret or join with an invitation.";
+
+/* Cloudflare service setup: English fallback */
+"1. Deploy the sync service and its database in your Cloudflare account using the guide." = "1. Deploy the sync service and its database in your Cloudflare account using the guide.";
+"2. Copy the deployed HTTPS URL: use a workers.dev address or your custom domain." = "2. Copy the deployed HTTPS URL: use a workers.dev address or your custom domain.";
+"3. Use your configured BOOTSTRAP_SECRET to create a space, or an invitation to join one." = "3. Use your configured BOOTSTRAP_SECRET to create a space, or an invitation to join one.";
+"A name your teammates can recognize, such as Work Mac or Home Mac." = "A name your teammates can recognize, such as Work Mac or Home Mac.";
+"Ask the space owner to generate a new invitation in Members & Devices." = "Ask the space owner to generate a new invitation in Members & Devices.";
+"Check service address" = "Check service address";
+"Checks service reachability without sending keys, invitations or usage data." = "Checks service reachability without sending keys, invitations or usage data.";
+"Choose a name for the members sharing this Codex account." = "Choose a name for the members sharing this Codex account.";
+"Cloudflare Worker URL" = "Cloudflare Worker URL";
+"Cloudflare deployment guide" = "Cloudflare deployment guide";
+"Cloudflare synchronization" = "Cloudflare synchronization";
+"Connect to the sync service deployed in your own Cloudflare account." = "Connect to the sync service deployed in your own Cloudflare account.";
+"Each user can connect to their own service. Details are saved on this Mac after joining." = "Each user can connect to their own service. Details are saved on this Mac after joining.";
+"Enter the BOOTSTRAP_SECRET you configured for this Worker, not a Cloudflare API token." = "Enter the BOOTSTRAP_SECRET you configured for this Worker, not a Cloudflare API token.";
+"Join an existing space" = "Join an existing space";
+"My team" = "My team";
+"Open Cloudflare dashboard" = "Open Cloudflare dashboard";
+"Paste the deployed Worker's HTTPS address or custom domain, without an API path." = "Paste the deployed Worker's HTTPS address or custom domain, without an API path.";
+"Space creation secret" = "Space creation secret";
+"Sync service detected. Database access and credentials are checked when joining." = "Sync service detected. Database access and credentials are checked when joining.";
+"The creation secret is used once to create your space and is not saved by the app." = "The creation secret is used once to create your space and is not saved by the app.";
+"The service could not be verified. Check the address, deployment and network, then try again." = "The service could not be verified. Check the address, deployment and network, then try again.";
+"This address does not identify a supported Codex Cockpit sync service." = "This address does not identify a supported Codex Cockpit sync service.";
+"Use my Cloudflare" = "Use my Cloudflare";
+"Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
+"Where do I get these settings?" = "Where do I get these settings?";

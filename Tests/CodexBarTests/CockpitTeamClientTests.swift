@@ -9,6 +9,56 @@ struct CockpitTeamClientTests {
     private static let token = "ccs_" + String(repeating: "a", count: 43)
 
     @Test
+    func `service checks are read only and carry no device or bootstrap credential`() async throws {
+        let fixture = TeamClientFixture(pages: [
+            "{\"ok\":true,\"service\":\"codex-cockpit-sync\",\"version\":1}",
+        ])
+        let client = try CockpitTeamClient(endpoint: "https://example.invalid", load: { try await fixture.load($0) })
+        try await client.checkService()
+        let requests = await fixture.requests
+        #expect(requests.count == 1)
+        let request = try #require(requests.first)
+        #expect(request.httpMethod == "GET")
+        #expect(request.url?.absoluteString == "https://example.invalid/health")
+        #expect(request.httpBody == nil)
+        #expect(request.value(forHTTPHeaderField: "Authorization") == nil)
+        #expect(request.value(forHTTPHeaderField: "x-bootstrap-secret") == nil)
+        #expect(request.value(forHTTPHeaderField: "Cookie") == nil)
+        #expect(!request.httpShouldHandleCookies)
+    }
+
+    @Test
+    func `service checks reject a different service or unsupported protocol version`() async throws {
+        for page in [
+            "{\"ok\":true,\"service\":\"another-service\",\"version\":1}",
+            "{\"ok\":true,\"service\":\"codex-cockpit-sync\",\"version\":2}",
+        ] {
+            let fixture = TeamClientFixture(pages: [page])
+            let client = try CockpitTeamClient(
+                endpoint: "https://example.invalid",
+                load: { try await fixture.load($0) })
+            await #expect(throws: CockpitTeamError.unsupportedProtocol) { try await client.checkService() }
+        }
+    }
+
+    @Test
+    func `service checks reject incomplete malformed and unsuccessful health responses`() async throws {
+        for page in [
+            "<html>not a sync service</html>",
+            "{\"ok\":true}",
+            "{\"ok\":true,\"service\":\"codex-cockpit-sync\",\"version\":\"1\"}",
+            "{\"ok\":true,\"service\":null,\"version\":1}",
+            "{\"ok\":false,\"service\":\"codex-cockpit-sync\",\"version\":1}",
+        ] {
+            let fixture = TeamClientFixture(pages: [page])
+            let client = try CockpitTeamClient(
+                endpoint: "https://example.invalid",
+                load: { try await fixture.load($0) })
+            await #expect(throws: CockpitTeamError.invalidResponse) { try await client.checkService() }
+        }
+    }
+
+    @Test
     func `endpoints require an HTTPS origin and normalize only harmless spelling`() throws {
         #expect(try CockpitTeamClient.normalizeEndpoint(" HTTPS://EXAMPLE.INVALID/ ") == "https://example.invalid")
         #expect(try CockpitTeamClient.normalizeEndpoint("https://example.invalid:8443")

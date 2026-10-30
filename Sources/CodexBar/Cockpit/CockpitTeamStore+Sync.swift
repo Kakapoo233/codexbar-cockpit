@@ -106,7 +106,8 @@ extension CockpitTeamStore {
                 remote = try await client.sync(
                     snapshot,
                     settingsRevision: self.sharedSettings.revision,
-                    appVersion: "0.6.0",
+                    appVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+                        ?? "development",
                     token: token)
             } else {
                 remote = try await client.snapshots(token: token)

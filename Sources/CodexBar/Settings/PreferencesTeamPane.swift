@@ -9,7 +9,7 @@ struct PreferencesTeamPane: View {
     @State private var deviceName = ""
     @State private var bootstrapSecret = ""
     @State private var inviteCode = ""
-    @State private var createSpace = false
+    @State private var createSpace = true
     @State private var confirmedLogOwnership = false
     @State private var confirmsDisconnect = false
 
@@ -88,6 +88,9 @@ struct PreferencesTeamPane: View {
         .onAppear {
             if self.deviceName.isEmpty { self.deviceName = L("My Mac") }
         }
+        .onChange(of: self.endpoint) { _, _ in self.clearEnrollmentSecrets() }
+        .onChange(of: self.createSpace) { _, _ in self.clearEnrollmentSecrets() }
+        .onDisappear { self.clearEnrollmentSecrets() }
         .confirmationDialog(
             L("Disconnect this device?"),
             isPresented: self.$confirmsDisconnect,
@@ -104,33 +107,16 @@ struct PreferencesTeamPane: View {
     }
 
     private var enrollmentSection: some View {
-        Section {
-            TextField(L("HTTPS service address"), text: self.$endpoint)
-                .textContentType(.URL)
-            TextField(L("Device display name"), text: self.$deviceName)
-            Picker(L("Connection method"), selection: self.$createSpace) {
-                Text(L("Accept invitation")).tag(false)
-                Text(L("Create shared space")).tag(true)
-            }
-            .pickerStyle(.segmented)
-            if self.createSpace {
-                TextField(L("Shared space name"), text: self.$spaceName)
-                SecureField(L("Server bootstrap secret"), text: self.$bootstrapSecret)
-                    .help(L("The server operator's space-creation secret. It is cleared after submitting."))
-            } else {
-                SecureField(L("Invitation code"), text: self.$inviteCode)
-            }
-            Button(self.createSpace ? L("Create and connect") : L("Join shared space")) {
-                self.enroll()
-            }
-            .disabled(!self.canEnroll || self.teamStore.isBusy)
-        } header: {
-            Text(L("Team synchronization"))
-        } footer: {
-            Text(
-                L(
-                    "Use your team's HTTPS service. Create with the bootstrap secret or join with an invitation."))
-        }
+        PreferencesTeamSetupSection(
+            endpoint: self.$endpoint,
+            spaceName: self.$spaceName,
+            deviceName: self.$deviceName,
+            bootstrapSecret: self.$bootstrapSecret,
+            inviteCode: self.$inviteCode,
+            createSpace: self.$createSpace,
+            canEnroll: self.canEnroll,
+            isBusy: self.teamStore.isBusy,
+            onEnroll: self.enroll)
     }
 
     private var accountSection: some View {
@@ -185,12 +171,17 @@ struct PreferencesTeamPane: View {
     }
 
     private var canEnroll: Bool {
-        !self.endpoint.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        (try? CockpitTeamClient.normalizeEndpoint(self.endpoint)) != nil
             && !self.deviceName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && (self.createSpace
                 ? !self.spaceName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 && !self.bootstrapSecret.isEmpty
                 : !self.inviteCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+    }
+
+    private func clearEnrollmentSecrets() {
+        self.bootstrapSecret = ""
+        self.inviteCode = ""
     }
 
     private func enroll() {
