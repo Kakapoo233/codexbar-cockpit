@@ -65,11 +65,15 @@ struct CockpitMonthGridView: View {
                         .foregroundStyle(.secondary)
                     if self.compact, let feeling = self.days[day]?.feeling {
                         Spacer(minLength: 0)
-                        Image(systemName: feeling.cockpitSymbol).font(.caption2).foregroundStyle(.tint)
+                        Text(feeling.cockpitEmoji).font(.caption).accessibilityHidden(true)
                     }
                 }
                 if !self.compact, let feeling = self.days[day]?.feeling {
-                    Text(feeling.calendarTitle).font(.caption2).foregroundStyle(.tint)
+                    HStack(spacing: 4) {
+                        Text(feeling.cockpitEmoji).accessibilityHidden(true)
+                        Text(feeling.calendarTitle).foregroundStyle(.tint)
+                    }
+                    .font(.caption2)
                 }
                 if let model = self.days[day],
                    !model.resetKinds.isEmpty || model.hasResetForecast || model.hasScheduledReset
@@ -125,6 +129,7 @@ struct CockpitMonthGridView: View {
                 tokens.map(UsageFormatter.tokenCountString) ?? L("cockpit_ui_unknown"))]
         }
         if let model = self.days[day] {
+            if let feeling = model.feeling { parts.append(feeling.calendarTitle) }
             parts += model.resetKinds.map(\.cockpitTitle)
             if model.hasResetForecast { parts.append(L("cockpit_reset_estimate")) }
             if model.hasScheduledReset { parts.append(L("cockpit_reset_scheduled")) }

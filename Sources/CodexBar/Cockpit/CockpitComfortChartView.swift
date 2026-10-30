@@ -11,11 +11,11 @@ extension CockpitFeeling {
         }
     }
 
-    var cockpitSymbol: String {
+    var cockpitEmoji: String {
         switch self {
-        case .overloaded: "cloud.rain"
-        case .comfortable: "sun.haze"
-        case .light: "sun.max"
+        case .overloaded: "😵‍💫"
+        case .comfortable: "🙂"
+        case .light: "😌"
         }
     }
 }

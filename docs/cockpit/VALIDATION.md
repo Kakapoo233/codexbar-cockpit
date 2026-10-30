@@ -1,5 +1,13 @@
 # Local integration validation
 
+## Calendar feeling faces (0.5.1)
+
+On 2026-10-30, 17 existing tests across `CockpitCalendarPeriodScreenshotTests`,
+`CockpitCalendarCaptureTests`, and `CockpitProjectionUITests` passed. The synthetic quarterly calendar
+render was visually inspected: month cells use feeling faces, and the selected status button retains
+its face alongside a checkmark. `make check` passed with 3,204 Swift files. Preview images remain private.
+The 0.5.1/build 13 bundle passed strict signature verification and the isolated startup/resource check.
+
 ## Restored quota comfort curve (0.5.0)
 
 On 2026-10-30, 81 focused tests in ten suites passed: `CockpitQuotaComfortTests`,

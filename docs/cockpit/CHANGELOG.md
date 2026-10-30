@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.5.1 — Feeling icons in the calendar
+
+- Replace weather symbols with feeling faces: relaxed, comfortable, and overwhelmed.
+  Keep the same face in selected status buttons and month cells, with a separate selection checkmark.
+- Include the recorded feeling in month-cell hover and accessibility descriptions.
+
 ## 0.5.0 — Restore the Cockpit comfort curve
 
 - Restore v0.3.4's fixed quota-comfort curve, fitting only its knee from subjective feedback.
