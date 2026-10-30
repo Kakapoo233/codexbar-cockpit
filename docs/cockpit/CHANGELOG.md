@@ -1,5 +1,14 @@
 # Cockpit changes
 
+## 0.6.1 — Self-service Cloudflare configuration
+
+- Put self-hosted setup and invitation joining in a guided Settings form with Worker URL, device name,
+  space name and the relevant creation secret or invitation. Add examples, hover help and deployment links.
+- Add an anonymous service-address check; detect invalid endpoints and unsupported services without sending
+  keys, invitations or usage. Clarify that service reachability does not validate the database or membership.
+- Clear obsolete check results and unsubmitted secrets when the endpoint or setup flow changes.
+- Report the packaged app version in team sync metadata.
+
 ## 0.6.0 — Members, devices, and shared plans
 
 - Add a native Members & Devices peer page and canonical connection settings, plus the current member budget on Usage.

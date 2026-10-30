@@ -3133,3 +3133,31 @@
 "Keep this app open and retry saving the connection to preserve access." = "請保持應用程式開啟，並重試儲存連線，以保留空間存取權限。";
 
 "Retry saving connection" = "重試儲存連線";
+
+/* Cloudflare service setup */
+"1. Deploy the sync service and its database in your Cloudflare account using the guide." = "1. 按照部署指南，在你的 Cloudflare 帳號中部署同步服務及資料庫。";
+"2. Copy the deployed HTTPS URL: use a workers.dev address or your custom domain." = "2. 複製部署後的 HTTPS Worker 位址，支援 workers.dev 位址或自訂網域。";
+"3. Use your configured BOOTSTRAP_SECRET to create a space, or an invitation to join one." = "3. 使用你設定的 BOOTSTRAP_SECRET 建立空間，或使用邀請碼加入現有空間。";
+"A name your teammates can recognize, such as Work Mac or Home Mac." = "使用組員容易辨識的名稱，例如「工作 Mac」或「家用 Mac」。";
+"Ask the space owner to generate a new invitation in Members & Devices." = "請空間管理員在「組員與裝置」中產生新的邀請碼。";
+"Check service address" = "檢查服務位址";
+"Checks service reachability without sending keys, invitations or usage data." = "檢查服務能否存取，不會傳送金鑰、邀請碼或用量資料。";
+"Choose a name for the members sharing this Codex account." = "為共同使用此 Codex 帳號的團隊設定名稱。";
+"Cloudflare Worker URL" = "Cloudflare Worker 位址";
+"Cloudflare deployment guide" = "Cloudflare 部署指南";
+"Cloudflare synchronization" = "Cloudflare 同步";
+"Connect to the sync service deployed in your own Cloudflare account." = "連線至部署在你自己的 Cloudflare 帳號中的同步服務。";
+"Each user can connect to their own service. Details are saved on this Mac after joining." = "加入後，連線資訊儲存在此 Mac 上。每位使用者都可以連線至自己的服務。";
+"Enter the BOOTSTRAP_SECRET you configured for this Worker, not a Cloudflare API token." = "請輸入你為此 Worker 設定的 BOOTSTRAP_SECRET，而非 Cloudflare API 權杖。";
+"Join an existing space" = "加入現有空間";
+"My team" = "我的團隊";
+"Open Cloudflare dashboard" = "開啟 Cloudflare 控制台";
+"Paste the deployed Worker's HTTPS address or custom domain, without an API path." = "貼上部署後的 Worker HTTPS 位址或自訂網域，不含 API 路徑。";
+"Space creation secret" = "空間建立金鑰";
+"Sync service detected. Database access and credentials are checked when joining." = "已辨識同步服務。加入空間時會檢查資料庫存取和憑證。";
+"The creation secret is used once to create your space and is not saved by the app." = "建立金鑰僅在建立空間時使用一次，應用程式不會儲存。";
+"The service could not be verified. Check the address, deployment and network, then try again." = "無法驗證服務，請檢查位址、部署和網路後重試。";
+"This address does not identify a supported Codex Cockpit sync service." = "此位址未能辨識為受支援的 Codex Cockpit 同步服務。";
+"Use my Cloudflare" = "使用我的 Cloudflare";
+"Use the service address and invitation supplied by your team administrator." = "使用團隊管理員提供的服務位址和邀請碼。";
+"Where do I get these settings?" = "如何取得這些設定？";

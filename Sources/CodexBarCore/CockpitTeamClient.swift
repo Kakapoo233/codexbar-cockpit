@@ -49,6 +49,14 @@ public struct CockpitTeamClient: Sendable {
         return url.absoluteString
     }
 
+    /// Checks service identity and reachability only; this does not exercise its database or device credentials.
+    public func checkService() async throws {
+        let response: HealthResponse = try await self.send("/health")
+        guard response.service == "codex-cockpit-sync", response.version == 1 else {
+            throw CockpitTeamError.unsupportedProtocol
+        }
+    }
+
     public func createSpace(
         name: String,
         displayName: String,
@@ -298,6 +306,7 @@ private struct JoinRequest: Encodable { let inviteCode: String; let displayName:
 private struct DeviceRequest: Encodable { let deviceId: String }
 private struct InviteRequest: Encodable { let maxUses: Int; let expiresHours: Int }
 private struct SuccessResponse: Decodable { let ok: Bool }
+private struct HealthResponse: Decodable { let service: String; let version: Int }
 private struct SettingsResponse: Decodable { let sharedSettings: CockpitTeamSharedSettings }
 private struct SettingsRequest: Encodable { let expectedRevision: Int; let value: CockpitTeamSettingsValue }
 private struct GroupsRequest: Encodable { let expectedRevision: Int; let groups: CockpitTeamGroups }

@@ -1,5 +1,13 @@
 # Local integration validation
 
+## User-owned Cloudflare setup (0.6.1)
+
+On 2026-10-30, 28 tests across `CockpitTeamClientTests`, `CockpitTeamStoreTests`, and
+`CockpitTeamScreenshotTests` passed. New health-check fixtures verify anonymous GET requests, supported
+service identity/version, and malformed/unrecognized response handling. Existing enrollment and account
+isolation regressions remained green. `make check` passed with 3,224 Swift files and all 22 locale catalogs.
+The synthetic Chinese self-hosted setup form was visually inspected; no real server or credentials were used.
+
 ## Members and devices (0.6.0)
 
 On 2026-10-30, 63 tests in seven suites passed: five `CockpitTeam*` suites,
