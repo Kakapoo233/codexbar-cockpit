@@ -126,3 +126,27 @@ After the Mac was unlocked, 0.2.2 (build 5) was installed and its running execut
 The previous development bundle was backed up, and the original CodexBar remained running.
 Live pointer/scroll acceptance of the updated panel remains pending; the desktop accessibility
 connection still timed out after startup.
+
+## Public reset calendar and previews (0.3.0)
+
+On 2026-10-30, 85 focused tests in 13 suites passed, including the public API opt-in proof and
+synthetic native panel rendering. The API proof used anonymous requests and decoded all 69 current
+history entries; both scheduled reset and active watch were null at the time of verification.
+Non-null scheduled/watch behavior is covered with fixtures based on the published OpenAPI schema.
+
+Coverage includes complete pagination, invalid responses, UTC/DST grouping, unknown or missing
+source metadata, local-estimate sample rules, pending/expired forecasts, offline caches, independent
+status/history failures, settings persistence, portable preference import/export, and rate-limit
+backoff. Gated tests exercise a manual refresh joining a status-only request and stale notification
+submission completing after a newer delivery. A source review found no remaining blocking issues.
+
+Chinese and English synthetic calendar/usage renders were inspected at 960×700 and 676×460.
+Longer calendar content remains vertically scrollable. The new renders stay outside the public
+repository; committed preview images describe the earlier layout. An additional English render run
+passed. `make check` passed with zero SwiftLint violations across 3,187 Swift files.
+
+The 0.3.0 build 6 package passed signature/resource checks and the six-second isolated startup test.
+It was installed over the developer app with the previous bundle backed up; the original CodexBar
+remained running. The installed developer process and its public cache containing all 69 reset
+records were verified. Desktop accessibility timed out again after relaunch, so actual notification
+appearance/click-through and live calendar pointer interaction are not claimed as verified.

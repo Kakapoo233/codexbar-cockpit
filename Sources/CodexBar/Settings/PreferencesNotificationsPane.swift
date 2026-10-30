@@ -37,6 +37,12 @@ struct NotificationsPane: View {
                         subtitle: L("limit_reset_notifications_subtitle"))
                 }
 
+                Toggle(isOn: self.$settings.cockpitResetForecastNotificationsEnabled) {
+                    SettingsRowLabel(
+                        L("cockpit_reset_notice_setting_title"),
+                        subtitle: L("cockpit_reset_notice_setting_subtitle"))
+                }
+
                 let warningSettingsVisibility = QuotaWarningSettingsVisibility(
                     thresholdWarningsEnabled: self.settings.quotaWarningNotificationsEnabled,
                     predictiveWarningsEnabled: self.settings.predictivePaceWarningNotificationsEnabled)

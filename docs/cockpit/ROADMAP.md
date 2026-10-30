@@ -20,6 +20,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Adapt the expanded Usage page to wide columns and compact single-column layouts (0.2.2).
 - [x] Retain existing provider and Usage & Spend capabilities.
 - [x] Implement monthly calendar driven by the same daily ledger.
+- [x] Add public reset history, source previews, local estimates, and early reminders (0.3.0).
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
 - [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
 - [x] Implement subjective feedback records and Token experience chart.

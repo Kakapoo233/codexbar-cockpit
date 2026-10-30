@@ -123,6 +123,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     let store: UsageStore
     let settings: SettingsStore
     lazy var cockpitPlanStore = CockpitPlanStore()
+    lazy var cockpitResetHistoryStore = CockpitResetHistoryStore(settings: self.settings)
     var cockpitMenuPanelController: CockpitMenuPanelController?
     var cloudSyncState: CloudSyncState {
         didSet {
@@ -511,6 +512,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     private func wireBindings() {
         if !SettingsStore.isRunningTests {
             self.cockpitPlanStore.ingest(self.store)
+            self.startCockpitResetHistory()
         }
         self.observeStoreChanges()
         self.observeStoreIconChanges()

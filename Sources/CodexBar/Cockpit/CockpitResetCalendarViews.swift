@@ -1,0 +1,214 @@
+import CodexBarCore
+import SwiftUI
+
+extension CockpitResetKind {
+    var cockpitTitle: String {
+        switch self {
+        case .regular: L("cockpit_reset_regular")
+        case .banked: L("cockpit_reset_banked")
+        case .unknown: L("cockpit_reset_other")
+        }
+    }
+}
+
+func cockpitResetDateText(_ date: Date, calendar: Calendar) -> String {
+    var style = Date.FormatStyle.dateTime.year().month(.abbreviated).day().hour().minute()
+    style.timeZone = calendar.timeZone
+    style.locale = codexBarLocalizedLocale()
+    return date.formatted(style)
+}
+
+@MainActor
+extension CockpitResetHistoryStore {
+    var pendingCalendarReset: CockpitScheduledReset? {
+        self.status?.scheduledReset.flatMap { $0.isPending(at: Date()) ? $0 : nil }
+    }
+
+    var activeCalendarWatch: CockpitResetWatch? {
+        self.status?.activeWatch.flatMap { $0.isActive(at: Date()) ? $0 : nil }
+    }
+
+    var calendarLocalForecast: CockpitResetForecast? {
+        guard self.pendingCalendarReset == nil, self.activeCalendarWatch == nil else { return nil }
+        if let latest = self.status?.latestReset, latest.kind == .regular, let forecast = self.forecast,
+           latest.id != forecast.anchorEventID, latest.announcedAt > forecast.anchorDate { return nil }
+        return self.forecast
+    }
+}
+
+@MainActor
+struct CockpitResetSummaryView: View {
+    @Bindable var store: CockpitResetHistoryStore
+    let calendar: Calendar
+    let selectDate: (Date) -> Void
+
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text(L("cockpit_reset_history_title")).font(.headline)
+                    Spacer()
+                    Link("Codex Resets ↗", destination: CockpitResetHistoryClient.websiteURL)
+                    Button { Task { await self.store.refresh() } } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .disabled(self.store.isRefreshing)
+                    .accessibilityLabel(L("cockpit_reset_sync"))
+                }
+                if self.store.isRefreshing {
+                    Text(L("cockpit_reset_syncing")).font(.caption).foregroundStyle(.secondary)
+                } else if let synced = self.store.lastSyncedAt {
+                    Text(L(
+                        "cockpit_reset_sync_status",
+                        (self.store.history?.events.count ?? 0).formatted(),
+                        cockpitResetDateText(synced, calendar: self.calendar)))
+                        .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Text(L("cockpit_reset_not_synced")).font(.caption).foregroundStyle(.secondary)
+                }
+                if let checked = self.store.lastStatusSyncedAt {
+                    Text(L("cockpit_reset_status_checked", cockpitResetDateText(checked, calendar: self.calendar)))
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                if let error = self.store.errorMessage {
+                    Text(error).font(.caption).foregroundStyle(.orange)
+                }
+                if let scheduled = self.store.pendingCalendarReset {
+                    CockpitScheduledResetView(reset: scheduled, calendar: self.calendar, selectDate: self.selectDate)
+                } else if let watch = self.store.activeCalendarWatch {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label(L("cockpit_reset_watch_title"), systemImage: "binoculars.fill")
+                            .font(.subheadline.weight(.semibold)).foregroundStyle(.orange)
+                        Text(watch.forecastWindow).font(.callout)
+                        Text(L("cockpit_reset_watch_note", cockpitResetDateText(
+                            watch.expiresAt,
+                            calendar: self.calendar)))
+                            .font(.caption).foregroundStyle(.secondary)
+                        Link(L("cockpit_reset_original"), destination: watch.sourceURL).font(.caption)
+                    }
+                } else if let forecast = self.store.calendarLocalForecast {
+                    HStack(alignment: .top) {
+                        Label(
+                            L(
+                                "cockpit_reset_forecast_date",
+                                cockpitResetDateText(forecast.estimatedAt, calendar: self.calendar)),
+                            systemImage: "clock.badge.questionmark")
+                            .font(.subheadline.weight(.semibold)).foregroundStyle(.orange)
+                        Spacer()
+                        Button(L("cockpit_reset_show_date")) { self.selectDate(forecast.estimatedAt) }
+                    }
+                    Text(L("cockpit_reset_forecast_basis", forecast.sampleCount.formatted()))
+                        .font(.caption).foregroundStyle(.secondary)
+                    if forecast.isOverdue(at: Date()) {
+                        Text(L("cockpit_reset_forecast_overdue")).font(.caption).foregroundStyle(.orange)
+                    }
+                } else {
+                    Text(L("cockpit_reset_forecast_unavailable")).font(.caption).foregroundStyle(.secondary)
+                }
+                if let error = self.store.notificationErrorMessage {
+                    Text(error).font(.caption).foregroundStyle(.orange)
+                }
+                HStack(spacing: 16) {
+                    Label(L("cockpit_reset_regular"), systemImage: "arrow.counterclockwise.circle.fill")
+                        .foregroundStyle(.blue)
+                    Label(L("cockpit_reset_banked"), systemImage: "archivebox.fill").foregroundStyle(.purple)
+                    Label(L("cockpit_reset_estimate"), systemImage: "clock.badge.questionmark")
+                        .foregroundStyle(.orange)
+                    Label(L("cockpit_reset_scheduled"), systemImage: "calendar.badge.clock")
+                        .foregroundStyle(.teal)
+                }
+                .font(.caption)
+                Text(L("cockpit_reset_history_note")).font(.caption).foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(4)
+        }
+        .accessibilityIdentifier("cockpit-reset-summary")
+    }
+}
+
+@MainActor
+struct CockpitResetDayDetails: View {
+    let events: [CockpitResetEvent]
+    let forecast: CockpitResetForecast?
+    let selectedDay: Date
+    let calendar: Calendar
+    var scheduled: CockpitScheduledReset?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if let scheduled, let date = scheduled.scheduledFor,
+               self.calendar.isDate(date, inSameDayAs: self.selectedDay)
+            {
+                CockpitScheduledResetView(reset: scheduled, calendar: self.calendar, selectDate: { _ in })
+            }
+            if let forecast, self.calendar.isDate(forecast.estimatedAt, inSameDayAs: self.selectedDay) {
+                Label(
+                    L("cockpit_reset_forecast_date", cockpitResetDateText(
+                        forecast.estimatedAt,
+                        calendar: self.calendar)),
+                    systemImage: "clock.badge.questionmark")
+                    .foregroundStyle(.orange)
+                Text(L("cockpit_reset_forecast_basis", forecast.sampleCount.formatted()))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            ForEach(self.events) { event in
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(event.kind.cockpitTitle).font(.subheadline.weight(.semibold))
+                            Text(cockpitResetDateText(event.announcedAt, calendar: self.calendar))
+                                .font(.caption).foregroundStyle(.secondary)
+                            Spacer()
+                            if event.sourceURL != CockpitResetHistoryClient.websiteURL {
+                                Link(L("cockpit_reset_original"), destination: event.sourceURL)
+                            }
+                        }
+                        Text(event.text).font(.callout).textSelection(.enabled)
+                        HStack {
+                            Text(L(event.sourceType == "observed"
+                                    ? "cockpit_reset_observed_source" : "cockpit_reset_announcement_source"))
+                            Spacer()
+                            Link("Codex Resets ↗", destination: CockpitResetHistoryClient.websiteURL)
+                        }
+                        .font(.caption).foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(4)
+                }
+            }
+        }
+        .accessibilityIdentifier("cockpit-reset-day-details")
+    }
+}
+
+@MainActor
+private struct CockpitScheduledResetView: View {
+    let reset: CockpitScheduledReset
+    let calendar: Calendar
+    let selectDate: (Date) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Label(L("cockpit_reset_scheduled"), systemImage: "calendar.badge.clock")
+                    .font(.subheadline.weight(.semibold)).foregroundStyle(.teal)
+                Text(self.reset.kind.cockpitTitle).font(.caption).foregroundStyle(.secondary)
+                Spacer()
+                if let date = self.reset.scheduledFor {
+                    Button(L("cockpit_reset_show_date")) { self.selectDate(date) }
+                }
+            }
+            if let date = self.reset.scheduledFor {
+                Text(cockpitResetDateText(date, calendar: self.calendar)).font(.callout)
+                if date <= Date() {
+                    Text(L("cockpit_reset_scheduled_overdue")).font(.caption).foregroundStyle(.orange)
+                }
+            } else {
+                Text(L("cockpit_reset_scheduled_unspecified")).font(.callout)
+            }
+            Text(self.reset.text).font(.caption).lineLimit(3)
+            Link(L("cockpit_reset_original"), destination: self.reset.sourceURL).font(.caption)
+        }
+    }
+}

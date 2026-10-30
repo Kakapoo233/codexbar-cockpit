@@ -2,6 +2,11 @@ import AppKit
 import CodexBarCore
 
 extension StatusItemController {
+    func startCockpitResetHistory() {
+        self.cockpitResetHistoryStore.start()
+        AppNotifications.shared.configureResetCalendarAction { [weak self] in self?.showCockpitCalendar() }
+    }
+
     func attachPresentationMenu(_ menu: NSMenu?, to item: NSStatusItem) {
         if self.unifiedMenuPanelEnabledForController {
             self.configureCockpitStatusItem(item)
@@ -75,6 +80,17 @@ extension StatusItemController {
         let item = provider.map { self.lazyStatusItem(for: $0) } ?? self.statusItem
         guard let button = item.button else { return }
         self.ensureCockpitPanel().show(relativeTo: button, provider: provider, page: .statistics)
+    }
+
+    func showCockpitCalendar() {
+        if let panel = self.cockpitMenuPanelController, panel.isShown {
+            panel.navigation.page = .calendar
+            return
+        }
+        let provider = self.shouldMergeIcons ? nil : self.resolvedShortcutProvider()
+        let item = provider.map { self.lazyStatusItem(for: $0) } ?? self.statusItem
+        guard let button = item.button else { return }
+        self.ensureCockpitPanel().show(relativeTo: button, provider: provider, page: .calendar)
     }
 
     func cockpitPanelDidClose(menu: NSMenu?) {

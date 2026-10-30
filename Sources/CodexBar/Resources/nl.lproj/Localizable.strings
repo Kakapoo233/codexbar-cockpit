@@ -2873,3 +2873,45 @@
 "cockpit_ui_calendar_overloaded" = "Overloaded";
 
 "cockpit_ui_daily_advice" = "Daily usage advice";
+
+/* Codex reset calendar and previews. */
+"cockpit_reset_history_title" = "Codex reset announcements";
+"cockpit_reset_regular" = "Regular reset";
+"cockpit_reset_banked" = "Banked reset";
+"cockpit_reset_other" = "Other reset";
+"cockpit_reset_estimate" = "Local estimate";
+"cockpit_reset_sync" = "Sync reset announcements";
+"cockpit_reset_syncing" = "Syncing public announcements…";
+"cockpit_reset_sync_status" = "%@ records · Synced %@";
+"cockpit_reset_not_synced" = "No cached announcements yet.";
+"cockpit_reset_forecast_date" = "Local estimate: %@";
+"cockpit_reset_show_date" = "Show date";
+"cockpit_reset_forecast_basis" = "Median of the latest %@ regular-reset intervals within 180 days. An estimate, not an official commitment.";
+"cockpit_reset_forecast_overdue" = "The estimated time has passed. No new reset is confirmed; waiting for updated announcements.";
+"cockpit_reset_forecast_unavailable" = "Not enough recent regular-reset history to estimate a date.";
+"cockpit_reset_history_note" = "Dates follow announcement/observation times. Public announcements do not confirm a reset on your account.";
+"cockpit_reset_original" = "View source ↗";
+"cockpit_reset_observed_source" = "Community observation · Data from";
+"cockpit_reset_announcement_source" = "Public announcement · Data from";
+"cockpit_reset_notice_setting_title" = "Codex reset previews";
+"cockpit_reset_notice_setting_subtitle" = "Notify as soon as a new announcement, site forecast, or local estimate is available. Open the notification to view the calendar.";
+"cockpit_reset_sync_failed" = "Sync failed; cached data retained: %@";
+"cockpit_reset_cache_read_failed" = "Cannot read the reset cache; the existing file was preserved: %@";
+"cockpit_reset_cache_save_failed" = "Cannot save the reset cache: %@";
+"cockpit_reset_receipts_read_failed" = "Cannot read reminder history; reminders are paused to prevent duplicates: %@";
+"cockpit_reset_receipts_save_failed" = "Cannot save reminder history: %@";
+"cockpit_reset_forecast_notification_title" = "New Codex reset estimate";
+"cockpit_reset_forecast_notification_body" = "Estimated %@ from codex-resets.com history. Local estimate, not an official commitment. Open the calendar for details.";
+"cockpit_reset_notice_unavailable" = "Reminder could not be delivered. Check notification permission in macOS System Settings.";
+"cockpit_reset_status_checked" = "Previews checked %@";
+"cockpit_reset_watch_title" = "Codex Resets AI forecast";
+"cockpit_reset_watch_note" = "Not an official commitment. Forecast expires %@.";
+"cockpit_reset_scheduled" = "Announced · Pending";
+"cockpit_reset_scheduled_overdue" = "Announced time has passed; completion has not been confirmed.";
+"cockpit_reset_scheduled_unspecified" = "Upcoming reset announced; exact time not specified.";
+"cockpit_reset_scheduled_notification_title" = "Codex reset announced";
+"cockpit_reset_scheduled_notification_body" = "Announced for %@ via codex-resets.com. Pending execution; open the calendar for the source.";
+"cockpit_reset_scheduled_notification_unspecified" = "An upcoming Codex reset was announced via codex-resets.com. Exact time is unspecified; open the calendar for the source.";
+"cockpit_reset_watch_notification_title" = "Codex Resets forecast updated";
+"cockpit_reset_watch_notification_body" = "codex-resets.com AI forecast: %@. Not an official commitment; open the calendar for details.";
+"cockpit_reset_rate_limited" = "The source requested a pause. Next check after %@.";

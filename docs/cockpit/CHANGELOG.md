@@ -1,5 +1,15 @@
 # Cockpit changes
 
+## 0.3.0 — Reset history and early previews
+
+- Sync public Codex Resets history into the calendar with distinct regular and banked reset markers,
+  announcement-time grouping, original source links, and offline caches.
+- Surface scheduled announcements and expiring website AI forecasts as soon as available. When no
+  source preview exists, show an explicitly labeled local median-interval estimate.
+- Send deduplicated early notifications with a calendar destination and a persistent Notifications
+  setting. Public records never alter personal quotas, daily budgets, or subjective state.
+- Keep synchronization active while the menu is closed and usable when local usage tracking is off.
+
 ## 0.2.2 — Responsive wide menu layout
 
 - Use the expanded panel's width for a native usage column and a separate daily-advice sidebar.

@@ -587,6 +587,10 @@ extension SettingsStore {
             quotaWarningNotificationsEnabled: quotaWarnings.notificationsEnabled,
             predictivePaceWarningNotificationsEnabled: notificationDefaults.predictivePaceWarningNotificationsEnabled,
             limitResetNotificationsEnabled: notificationDefaults.limitResetNotificationsEnabled,
+            cockpitResetForecastNotificationsEnabled: Self.loadBoolDefault(
+                "cockpitResetForecastNotificationsEnabled",
+                fallback: true,
+                from: userDefaults),
             quotaWarningThresholdsRaw: quotaWarnings.thresholdsRaw,
             quotaWarningSessionThresholdsRaw: quotaWarnings.sessionThresholdsRaw,
             quotaWarningWeeklyThresholdsRaw: quotaWarnings.weeklyThresholdsRaw,

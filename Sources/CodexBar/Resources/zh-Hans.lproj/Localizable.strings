@@ -2868,3 +2868,45 @@
 "cockpit_ui_calendar_overloaded" = "过载";
 
 "cockpit_ui_daily_advice" = "每日使用建议";
+
+/* Codex reset calendar and previews. */
+"cockpit_reset_history_title" = "Codex 重置公告";
+"cockpit_reset_regular" = "常规重置";
+"cockpit_reset_banked" = "备用重置";
+"cockpit_reset_other" = "其他重置";
+"cockpit_reset_estimate" = "本机估算";
+"cockpit_reset_sync" = "同步重置公告";
+"cockpit_reset_syncing" = "正在同步公开公告…";
+"cockpit_reset_sync_status" = "%@ 条记录 · 同步于 %@";
+"cockpit_reset_not_synced" = "尚无公告缓存。";
+"cockpit_reset_forecast_date" = "本机估算：%@";
+"cockpit_reset_show_date" = "查看日期";
+"cockpit_reset_forecast_basis" = "根据近 180 天内最近 %@ 次常规重置间隔的中位数估算，不代表官方承诺。";
+"cockpit_reset_forecast_overdue" = "估算时间已过，尚未确认新重置，等待公告更新。";
+"cockpit_reset_forecast_unavailable" = "近期常规重置记录不足，暂无法估算日期。";
+"cockpit_reset_history_note" = "按公告或观察时间归入日期；公开公告不代表你的账户已完成重置。";
+"cockpit_reset_original" = "查看来源 ↗";
+"cockpit_reset_observed_source" = "社区观察 · 数据来源";
+"cockpit_reset_announcement_source" = "公开公告 · 数据来源";
+"cockpit_reset_notice_setting_title" = "Codex 重置预告提醒";
+"cockpit_reset_notice_setting_subtitle" = "发现新的重置预告、网站预测或本机估算时尽早提醒；点击通知打开日历。";
+"cockpit_reset_sync_failed" = "同步失败，已保留缓存：%@";
+"cockpit_reset_cache_read_failed" = "无法读取重置缓存，已保留原文件：%@";
+"cockpit_reset_cache_save_failed" = "重置缓存保存失败：%@";
+"cockpit_reset_receipts_read_failed" = "无法读取提醒记录，已暂停提醒以免重复：%@";
+"cockpit_reset_receipts_save_failed" = "提醒记录保存失败：%@";
+"cockpit_reset_forecast_notification_title" = "Codex 重置有新估算";
+"cockpit_reset_forecast_notification_body" = "根据 codex-resets.com 历史估算：%@。这是本机估算，非官方承诺。点击查看日历详情。";
+"cockpit_reset_notice_unavailable" = "提醒未能送达，请检查 macOS 系统设置中的通知权限。";
+"cockpit_reset_status_checked" = "预告检查于 %@";
+"cockpit_reset_watch_title" = "Codex Resets 网站 AI 预测";
+"cockpit_reset_watch_note" = "非官方承诺，此预测于 %@ 失效。";
+"cockpit_reset_scheduled" = "已公告 · 待执行";
+"cockpit_reset_scheduled_overdue" = "公告时间已过，尚未确认已执行。";
+"cockpit_reset_scheduled_unspecified" = "已公告将重置，具体时间未定。";
+"cockpit_reset_scheduled_notification_title" = "Codex 重置预告已公布";
+"cockpit_reset_scheduled_notification_body" = "codex-resets.com 收录了重置预告，预计 %@，尚待执行。点击查看日历与来源。";
+"cockpit_reset_scheduled_notification_unspecified" = "codex-resets.com 收录了新的 Codex 重置预告，具体时间未定。点击查看日历与来源。";
+"cockpit_reset_watch_notification_title" = "Codex Resets 预测更新";
+"cockpit_reset_watch_notification_body" = "codex-resets.com 网站 AI 预测：%@。非官方承诺，点击查看日历详情。";
+"cockpit_reset_rate_limited" = "来源要求暂缓请求，将于 %@ 后重试。";
