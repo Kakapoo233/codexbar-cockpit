@@ -88,11 +88,96 @@ struct CockpitStatusItemPanelTests {
         #expect(controller.cockpitMenuPanelController == nil)
     }
 
-    private func makeController(merged: Bool = true) -> StatusItemController {
+    @Test(arguments: [CGFloat(264), CGFloat(608)])
+    func `panel menu trees keep the column width despite oversized native menu measurement`(width: CGFloat) {
+        let controller = self.makeController()
+        defer { controller.releaseStatusItemsForTesting() }
+        let panel = CockpitMenuPanelController(owner: controller, presentationIsVisible: { false })
+        controller.cockpitMenuPanelController = panel
+        panel.bridge.width = width
+        let root = NSMenu()
+        let submenu = NSMenu()
+        let nested = NSMenu()
+        self.attach(submenu, to: root)
+        self.attach(nested, to: submenu)
+        nested.addItem(withTitle: "Leaf", action: nil, keyEquivalent: "")
+        panel.bridge.reload(root)
+
+        for menu in [root, submenu, nested] {
+            menu.minimumWidth = 1400
+            #expect(menu.size.width > width)
+            #expect(controller.renderedMenuWidth(for: menu) == width)
+        }
+    }
+
+    @Test
+    func `hosted detail hydration and refresh use the panel column width`() throws {
+        let controller = self.makeController(renderCards: true, statusChecksEnabled: true)
+        defer { controller.releaseStatusItemsForTesting() }
+        let panel = CockpitMenuPanelController(owner: controller, presentationIsVisible: { true })
+        controller.cockpitMenuPanelController = panel
+        let initialWidth = CockpitPanelLayout(width: 960).menuCardWidth
+        panel.bridge.width = initialWidth
+        let componentName = ProviderDescriptorRegistry.descriptor(for: .claude)
+            .metadata.statusComponentAllowlist?.first ?? "API"
+        controller.store.statusComponents[.claude] = [
+            ProviderStatusComponent(id: "synthetic-api", name: componentName, indicator: .none, status: "operational"),
+        ]
+        let root = NSMenu()
+        let submenu = controller.makeHostedSubviewPlaceholderMenu(
+            chartID: StatusItemController.statusComponentsID, provider: .claude)
+        self.attach(submenu, to: root)
+        root.minimumWidth = 1400
+        submenu.minimumWidth = 1400
+        panel.bridge.reload(root)
+        #expect(root.size.width > initialWidth)
+
+        panel.bridge.hydrate(submenu)
+        let firstView = try #require(submenu.items.compactMap(\.view).first)
+        #expect(firstView.frame.width == initialWidth)
+
+        let refreshedWidth = CockpitPanelLayout(width: 816).menuCardWidth
+        panel.bridge.width = refreshedWidth
+        panel.bridge.hydrate(submenu)
+        let refreshedView = try #require(submenu.items.compactMap(\.view).first)
+        #expect(refreshedView.frame.width == refreshedWidth)
+        #expect(controller.openMenus.isEmpty)
+    }
+
+    @Test
+    func `menus outside the panel retain native width resolution`() {
+        let controller = self.makeController()
+        defer { controller.releaseStatusItemsForTesting() }
+        let panel = CockpitMenuPanelController(owner: controller, presentationIsVisible: { true })
+        controller.cockpitMenuPanelController = panel
+        panel.bridge.width = 608
+        panel.bridge.reload(NSMenu())
+
+        for minimumWidth in [CGFloat(0), CGFloat(1400)] {
+            let outside = NSMenu()
+            outside.minimumWidth = minimumWidth
+            outside.addItem(withTitle: "Native menu", action: nil, keyEquivalent: "")
+            #expect(controller.renderedMenuWidth(for: outside) == StatusItemController.resolvedRenderedMenuWidth(
+                menuWidth: outside.size.width, trackedWindowWidth: nil))
+        }
+    }
+
+    private func attach(_ submenu: NSMenu, to parent: NSMenu) {
+        let title = String(repeating: "Synthetic long native menu title ", count: 20)
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.submenu = submenu
+        parent.addItem(item)
+    }
+
+    private func makeController(
+        merged: Bool = true,
+        renderCards: Bool = false,
+        statusChecksEnabled: Bool = false) -> StatusItemController
+    {
         let settings = testSettingsStore(
             suiteName: "CockpitStatusItemPanelTests",
             userDefaults: InMemoryUserDefaults())
-        settings.statusChecksEnabled = false
+        settings.statusChecksEnabled = statusChecksEnabled
         settings.refreshFrequency = .manual
         settings.mergeIcons = merged
         settings.selectedMenuProvider = .codex
@@ -123,7 +208,7 @@ struct CockpitStatusItemPanelTests {
             updater: DisabledUpdaterController(),
             preferencesSelection: PreferencesSelection(),
             statusBar: testStatusBar(),
-            menuCardRenderingEnabled: false,
+            menuCardRenderingEnabled: renderCards,
             menuRefreshEnabled: false,
             unifiedMenuPanelEnabled: true,
             observeProviderConfigNotifications: false)

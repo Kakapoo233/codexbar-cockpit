@@ -59,7 +59,7 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
         self.navigation.page = page
         let visibleFrame = button.window?.screen?.visibleFrame ?? NSScreen.main?.visibleFrame
         let size = Self.contentSize(available: visibleFrame?.size ?? NSSize(width: 1024, height: 768))
-        self.bridge.width = max(260, size.width - 56)
+        self.bridge.width = CockpitPanelLayout(width: size.width).menuCardWidth
         self.rebuild(preservingPath: false)
         if self.popover.contentViewController == nil {
             self.popover.contentViewController = NSHostingController(rootView: CockpitPanelView(
@@ -67,7 +67,7 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
                 store: owner.store,
                 planStore: owner.cockpitPlanStore,
                 navigation: self.navigation,
-                usageContent: AnyView(CockpitMenuBridgeView(bridge: self.bridge).padding(.horizontal, 16)),
+                usageContent: AnyView(CockpitMenuBridgeView(bridge: self.bridge)),
                 onSettings: { [weak owner] in owner?.showSettingsGeneral() },
                 onRefresh: { [weak self] in self?.refresh() }).codexBarLocalized())
         }
@@ -89,7 +89,7 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
     }
 
     static func contentSize(available: NSSize) -> NSSize {
-        NSSize(width: min(760, max(320, available.width - 24)), height: min(650, max(300, available.height - 40)))
+        CockpitPanelLayout.boundedSize(available: available)
     }
 
     func owns(_ menu: NSMenu) -> Bool {

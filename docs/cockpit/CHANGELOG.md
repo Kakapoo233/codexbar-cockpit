@@ -1,5 +1,12 @@
 # Cockpit changes
 
+## 0.2.2 — Responsive wide menu layout
+
+- Use the expanded panel's width for a native usage column and a separate daily-advice sidebar.
+- Keep provider cards, account controls, and their original actions together in the main column.
+- Fit original card widths to the available column, including the submenu indicator.
+- Fall back to one scrolling column on smaller screens and compact navigation when needed.
+
 ## 0.2.1 — Receipt save window ownership
 
 - Attach the PNG save dialog to its receipt preview instead of blocking every application window.

@@ -81,20 +81,36 @@ struct CockpitPanelView: View {
     }
 
     private var navigationBar: some View {
+        ViewThatFits(in: .horizontal) {
+            self.navigationButtons(showsTitles: true)
+            self.navigationButtons(showsTitles: false)
+        }
+        .buttonStyle(.borderless)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+    }
+
+    private func navigationButtons(showsTitles: Bool) -> some View {
         HStack(spacing: 8) {
             ForEach(CockpitPanelPage.allCases) { page in
                 Button {
                     self.navigation.page = page
                 } label: {
-                    Label(page.title, systemImage: page.symbol)
-                        .font(.system(size: 13, weight: self.navigation.page == page ? .semibold : .regular))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(
-                            self.navigation.page == page ? Color.accentColor.opacity(0.15) : .clear,
-                            in: RoundedRectangle(cornerRadius: 7))
+                    HStack(spacing: 6) {
+                        Image(systemName: page.symbol)
+                        if showsTitles { Text(page.title) }
+                    }
+                    .font(.system(size: 13, weight: self.navigation.page == page ? .semibold : .regular))
+                    .fixedSize(horizontal: true, vertical: false)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(
+                        self.navigation.page == page ? Color.accentColor.opacity(0.15) : .clear,
+                        in: RoundedRectangle(cornerRadius: 7))
                 }
                 .buttonStyle(.plain)
+                .help(page.title)
+                .accessibilityLabel(page.title)
                 .accessibilityIdentifier("cockpit-panel-page-\(page.rawValue)")
                 .accessibilityAddTraits(self.navigation.page == page ? .isSelected : [])
             }
@@ -112,23 +128,14 @@ struct CockpitPanelView: View {
             .help(L("Settings..."))
             .accessibilityLabel(L("Settings..."))
         }
-        .buttonStyle(.borderless)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
     }
 
     @ViewBuilder
     private func content(for page: CockpitPanelPage) -> some View {
         switch page {
         case .usage:
-            ScrollView {
-                VStack(spacing: 12) {
-                    CockpitDailyAdviceView(planStore: self.planStore, providers: self.navigation.planningProviders)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 14)
-                    self.usageContent
-                }
-                .padding(.bottom, 12)
+            GeometryReader { geometry in
+                self.usagePage(layout: CockpitPanelLayout(width: geometry.size.width))
             }
         case .statistics:
             SpendDashboardPane(settings: self.settings, store: self.store)
@@ -136,6 +143,42 @@ struct CockpitPanelView: View {
             CockpitCalendarView(controller: self.controller, planStore: self.planStore, todayTokens: self.todayTokens)
         case .receipt:
             CockpitReceiptBrowserView(controller: self.controller, hidePersonalInfo: self.settings.hidePersonalInfo)
+        }
+    }
+
+    @ViewBuilder
+    private func usagePage(layout: CockpitPanelLayout) -> some View {
+        if layout.usesSidebar {
+            HStack(alignment: .top, spacing: CockpitPanelLayout.columnSpacing) {
+                ScrollView {
+                    self.usageContent.padding(.bottom, 12)
+                }
+                .frame(width: layout.mainColumnWidth)
+                .accessibilityIdentifier("cockpit-usage-main-column")
+                ScrollView {
+                    CockpitDailyAdviceView(
+                        planStore: self.planStore,
+                        providers: self.navigation.planningProviders,
+                        layout: .sidebar)
+                        .padding(.bottom, 12)
+                }
+                .frame(width: CockpitPanelLayout.sidebarWidth)
+                .accessibilityIdentifier("cockpit-usage-advice-column")
+            }
+            .padding(.horizontal, CockpitPanelLayout.contentInset)
+            .padding(.top, 14)
+            .accessibilityIdentifier("cockpit-usage-wide-layout")
+        } else {
+            ScrollView {
+                VStack(spacing: 12) {
+                    CockpitDailyAdviceView(planStore: self.planStore, providers: self.navigation.planningProviders)
+                    self.usageContent
+                }
+                .padding(.horizontal, CockpitPanelLayout.contentInset)
+                .padding(.top, 14)
+                .padding(.bottom, 12)
+            }
+            .accessibilityIdentifier("cockpit-usage-compact-layout")
         }
     }
 

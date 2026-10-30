@@ -22,6 +22,9 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   independent forks remain independent work.
 - `CockpitMenuPanelController` owns the menu-bar popover; `CockpitPanelView` owns its peer pages.
   The existing provider menu builders remain the source for provider cards and actions.
+- `CockpitPanelLayout` shares screen, column, and native-card widths between the controller and view.
+  Wide Usage pages keep the complete provider menu beside an independently scrolling advice column;
+  narrow pages use one scrolling column. Native cards are built for the main column before mounting.
 - `CockpitUsageProjection` reads the shared statistics publication with page-local filters. Calendar
   and Receipt navigation never writes the statistics page's reporting period or selected day.
 - Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a

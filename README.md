@@ -12,6 +12,7 @@ provider support with local planning and task workflows inspired by
 
 - 保留 CodexBar 的全部提供商及菜单栏呈现。
 - 点击菜单栏图标，在同一面板切换用量、统计、日历和小票；每日建议直接出现在用量页。
+- 宽屏用量页采用双栏：左侧保留完整提供商卡片和操作，右侧显示每日建议与个人上限；小屏自动切回单栏。
 - 复用现有统计账本，提供用量图表、月历、模型和项目统计。
 - 以本地自然日保存预算和体感记录；额度、Token 和估算金额各有明确口径。
 - 勾选任务生成 PNG 小票；父子 Agent 合并时避免重复计算。
@@ -24,6 +25,8 @@ provider support with local planning and task workflows inspired by
 Native SwiftUI/AppKit rendering with synthetic data; these are not personal usage records.
 
 ![Unified menu-bar usage panel with daily advice](docs/cockpit/images/unified-usage-zh.png)
+
+[Compact single-column fallback](docs/cockpit/images/unified-usage-compact-zh.png)
 
 ![Calendar and personal state in the same menu-bar panel](docs/cockpit/images/unified-calendar-zh.png)
 

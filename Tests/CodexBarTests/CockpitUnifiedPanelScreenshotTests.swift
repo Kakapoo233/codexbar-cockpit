@@ -18,7 +18,9 @@ struct CockpitUnifiedPanelScreenshotTests {
         defer { try? FileManager.default.removeItem(at: temporary) }
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
 
-        try await CodexBarLocalizationOverride.$appLanguage.withValue("zh-Hans") {
+        let language = ProcessInfo.processInfo.environment["CODEXBAR_COCKPIT_PROOF_LANGUAGE"] == "en" ? "en" : "zh-Hans"
+        let languageSuffix = language == "en" ? "en" : "zh"
+        try await CodexBarLocalizationOverride.$appLanguage.withValue(language) {
             let now = Date()
             let settings = try Self.makeSettings(in: temporary)
             let store = UsageStore(
@@ -76,50 +78,73 @@ struct CockpitUnifiedPanelScreenshotTests {
             #expect(plan.availableProviders == [.claude])
             #expect(plan.status(for: .claude).effectiveCapPercent == 18)
 
-            let bridge = CockpitMenuBridge()
-            bridge.width = 704
-            let card = try Self.makeCard(quota: quota, tokens: tokens, now: now, width: bridge.width)
-            let menu = Self.makeMenu(card: card)
-            bridge.reload(menu)
-            let navigation = CockpitPanelNavigation()
-            navigation.planningProviders = [.claude]
-            let root = CockpitPanelView(
-                settings: settings,
-                store: store,
-                planStore: plan,
-                navigation: navigation,
-                usageContent: AnyView(CockpitMenuBridgeView(bridge: bridge).padding(.horizontal, 16)),
-                onSettings: {},
-                onRefresh: {})
-            let size = CGSize(width: 760, height: 650)
-            let host = NSHostingView(rootView: root
-                .environment(\.colorScheme, .light)
-                .environment(\.locale, Locale(identifier: "zh_Hans_CN")))
-            host.appearance = NSAppearance(named: .aqua)
-            host.frame = CGRect(origin: .zero, size: size)
-            let window = NSWindow(contentRect: host.frame, styleMask: [.borderless], backing: .buffered, defer: false)
-            window.isReleasedWhenClosed = false
-            window.appearance = NSAppearance(named: .aqua)
-            window.contentView = host
-            defer {
-                window.contentView = nil
-                window.close()
+            for size in [CockpitPanelLayout.preferredSize, CGSize(width: 676, height: 460)] {
+                let layout = CockpitPanelLayout(width: size.width)
+                let bridge = CockpitMenuBridge()
+                bridge.width = layout.menuCardWidth
+                let card = try Self.makeCard(
+                    quota: quota, tokens: tokens, now: now, width: bridge.width, language: language)
+                let menu = Self.makeMenu(card: card)
+                bridge.reload(menu)
+                let navigation = CockpitPanelNavigation()
+                navigation.planningProviders = [.claude]
+                let root = CockpitPanelView(
+                    settings: settings,
+                    store: store,
+                    planStore: plan,
+                    navigation: navigation,
+                    usageContent: AnyView(CockpitMenuBridgeView(bridge: bridge)),
+                    onSettings: {},
+                    onRefresh: {})
+                let host = NSHostingView(rootView: root
+                    .environment(\.colorScheme, .light)
+                    .environment(\.locale, Locale(identifier: language)))
+                host.appearance = NSAppearance(named: .aqua)
+                host.frame = CGRect(origin: .zero, size: size)
+                let window = NSWindow(
+                    contentRect: host.frame,
+                    styleMask: [.borderless],
+                    backing: .buffered,
+                    defer: false)
+                window.isReleasedWhenClosed = false
+                window.appearance = NSAppearance(named: .aqua)
+                window.contentView = host
+                defer {
+                    window.contentView = nil
+                    window.close()
+                }
+
+                try await Self.settle(host, controller: controller)
+                #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
+                #expect(menu.items.contains { $0.view === card })
+                let cardFrame = card.convert(card.bounds, to: host)
+                #expect(abs(card.bounds.width - layout.menuCardWidth) < 1)
+                #expect(cardFrame.minX >= 0)
+                #expect(cardFrame.maxX <= CockpitPanelLayout.contentInset + layout.mainColumnWidth + 1)
+                let suffix = layout.usesSidebar ? "" : "-compact"
+                try Self.capture(
+                    host,
+                    size: size,
+                    to: output.appendingPathComponent("cockpit-unified-usage\(suffix)-synthetic-\(languageSuffix).png"))
+
+                let hostedItem = try #require(menu.items.first { $0.view === card })
+                #expect(bridge.openSubmenu(hostedItem))
+                try await Self.settle(host, controller: controller)
+                #expect(bridge.goBack())
+                try await Self.settle(host, controller: controller)
+                #expect(menu.items.contains { $0 === hostedItem && $0.view === card })
+                #expect(card.window === window)
+                #expect(abs(card.bounds.width - layout.menuCardWidth) < 1)
+
+                if layout.usesSidebar {
+                    navigation.page = .calendar
+                    try await Self.settle(host, controller: controller)
+                    try Self.capture(
+                        host,
+                        size: size,
+                        to: output.appendingPathComponent("cockpit-unified-calendar-synthetic-\(languageSuffix).png"))
+                }
             }
-
-            try await Self.settle(host, controller: controller)
-            #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
-            #expect(menu.items.contains { $0.view === card })
-            try Self.capture(
-                host,
-                size: size,
-                to: output.appendingPathComponent("cockpit-unified-usage-synthetic-zh.png"))
-
-            navigation.page = .calendar
-            try await Self.settle(host, controller: controller)
-            try Self.capture(
-                host,
-                size: size,
-                to: output.appendingPathComponent("cockpit-unified-calendar-synthetic-zh.png"))
         }
     }
 
@@ -206,7 +231,8 @@ struct CockpitUnifiedPanelScreenshotTests {
         quota: UsageSnapshot,
         tokens: CostUsageTokenSnapshot,
         now: Date,
-        width: CGFloat) throws -> NSHostingView<AnyView>
+        width: CGFloat,
+        language: String) throws -> NSHostingView<AnyView>
     {
         let metadata = try #require(ProviderDefaults.metadata[.claude])
         let model = UsageMenuCardView.Model.make(.init(
@@ -232,7 +258,7 @@ struct CockpitUnifiedPanelScreenshotTests {
             now: now))
         let card = NSHostingView(rootView: AnyView(UsageMenuCardView(model: model, width: width)
                 .environment(\.colorScheme, .light)
-                .environment(\.locale, Locale(identifier: "zh_Hans_CN"))))
+                .environment(\.locale, Locale(identifier: language))))
         card.appearance = NSAppearance(named: .aqua)
         card.frame = NSRect(x: 0, y: 0, width: width, height: max(1, ceil(card.fittingSize.height)))
         card.layoutSubtreeIfNeeded()
@@ -245,6 +271,8 @@ struct CockpitUnifiedPanelScreenshotTests {
         menu.addItem(NSMenuItem(title: "合成数据预览 · 不读取真实账号或日志", action: nil, keyEquivalent: ""))
         let item = NSMenuItem(title: "Claude · 合成用量卡片", action: nil, keyEquivalent: "")
         item.view = card
+        item.submenu = NSMenu(title: "Synthetic account details")
+        item.submenu?.addItem(NSMenuItem(title: "合成账号详情 · 保留原提供商菜单操作", action: nil, keyEquivalent: ""))
         menu.addItem(item)
         menu.addItem(.separator())
         let details = NSMenuItem(title: "查看合成提供商详情", action: nil, keyEquivalent: "")
@@ -288,8 +316,8 @@ struct CockpitUnifiedPanelScreenshotTests {
         let context = try #require(NSGraphicsContext(bitmapImageRep: bitmap))
         host.displayIgnoringOpacity(host.bounds, in: context)
         let png = try #require(bitmap.representation(using: .png, properties: [:]))
-        #expect(bitmap.pixelsWide == 760)
-        #expect(bitmap.pixelsHigh == 650)
+        #expect(bitmap.pixelsWide == Int(size.width))
+        #expect(bitmap.pixelsHigh == Int(size.height))
         try png.write(to: url)
     }
 
