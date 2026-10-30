@@ -246,7 +246,7 @@ struct PreferencesView: View {
         case .iCloudSync:
             ICloudSyncPane(settings: self.settings, state: self.cloudSyncState)
         case .usageSpend:
-            SpendDashboardPane(settings: self.settings, store: self.store)
+            SpendDashboardPane(settings: self.settings, store: self.store, showsTimeZoneControls: true)
         case .notifications:
             NotificationsPane(settings: self.settings)
         case .menuBar:

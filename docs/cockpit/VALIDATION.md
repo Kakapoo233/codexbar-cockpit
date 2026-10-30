@@ -211,3 +211,13 @@ The personal reference is limited to qualifying recorded periods, not a full-day
 It requires sufficient historical coverage and a separate successful validation week; collection,
 stale, drift, and no-gain states intentionally show no reference value. See [PARITY.md](PARITY.md)
 for remaining upstream algorithm and team/cloud differences.
+
+## Statistics time-zone settings placement (0.4.1)
+
+- The menu-bar Statistics page hides time-zone configuration; Settings → Usage & Spend retains
+  the existing picker and current-Mac-zone action against the same persisted setting.
+- 20 tests in SpendTimeZoneControlsTests, CockpitNavigationIsolationTests, and CockpitProjectionUITests
+  passed, including persistence, immediate reporting-day changes, and calendar navigation isolation.
+- `make check` passed with zero SwiftLint violations. Debug packaging and signing checks passed.
+- Packaged offline startup passed. Version 0.4.1 build 10 was installed with the previous developer
+  bundle backed up; desktop acceptance remains pending while the Mac is locked.
