@@ -10,6 +10,7 @@ and the existing CodexBar collectors; it does not embed a second Tauri applicati
 | Local statistics | Existing Usage & Spend dashboard, provider/project/session breakdown and reporting periods | Retained history depends on the selected data sources and scan settings |
 | Personal weekday calibration | Optional local reference with history readiness, separate seven-day validation, stale/drift/no-gain fallbacks | Adapted to observed native quota history; not a new official quota |
 | Subjective Token experience | Calendar feelings, correctable history, recent-experience weighted trend | Descriptive native trend; not the upstream fitted comfort-curve parameter or a productivity forecast |
+| Quota comfort curve | Original smooth-knee function, 0.1–100% knee fit, fixed subjective scores, 14-day decay, partial-data weighting, default/fitted chart and hover details | Direct current-account observations; no team cost-share allocation or reset-risk heatmap |
 | Usage calendar | Day/week/month/quarter/year browsing, Token/cost selection, daily details | Uses loaded local history; unscanned days remain unknown |
 | Reset history | Public history, scheduled previews, local estimates, and early notices | Public reset events never change account quotas or personal plans |
 | Task receipt | Searchable task selection, parent/subagent union, PNG preview/save/copy | Totals cover scanned task sessions and disclose partial cost |

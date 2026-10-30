@@ -3022,3 +3022,22 @@
 "cockpit_ui_comfort_recency" = "Els punts de tendència donen més pes a l’experiència recent, amb una semivida de 14 dies. Editar un dia anterior en conserva l’antiguitat. Això descriu l’experiència d’ús de tokens, no la quota oficial.";
 
 "menu_bar_help_conditional_runout" = "Compara les hores estimades fins a esgotar la quota. Si no hi ha cap estimació d’esgotament disponible, la condició és falsa.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Registre de sensacions";
+"cockpit_comfort_quota_tab" = "Corba de confort de la quota";
+"cockpit_comfort_tokens_tab" = "Sensació de Token local";
+"cockpit_comfort_quota_scope" = "Les valoracions de la quota pertanyen al proveïdor seleccionat i al compte actual. La sensació de Token local es registra per separat.";
+"cockpit_comfort_no_account" = "Actualitza l’ús del proveïdor per identificar un compte abans de registrar valoracions de la quota.";
+"cockpit_comfort_curve_title" = "Corba de confort";
+"cockpit_comfort_curve_knee" = "Punt d’inflexió ajustat: %@";
+"cockpit_comfort_curve_default" = "Referència predeterminada: %@";
+"cockpit_comfort_curve_x" = "Quota utilitzada avui (%)";
+"cockpit_comfort_curve_y" = "Puntuació subjectiva (%)";
+"cockpit_comfort_curve_details" = "%@ observacions · Detalls del model";
+"cockpit_comfort_curve_explanation" = "Lleuger = 100%, just = 80%, sobrecàrrega = 25%. Són puntuacions subjectives, no eficiència mesurada. Només s’ajusta el punt d’inflexió de la corba fixa original (0,1–100%); no canvia el pla diari.";
+"cockpit_comfort_curve_weights" = "Les valoracions recents tenen més pes (semivida de 14 dies); l’ús parcial rep un pes del 75%. L’ús acumulat pot superar el 100%, amb una puntuació mínima del 20%.";
+"cockpit_comfort_curve_empty" = "Encara no hi ha valoracions de quota utilitzables. Es mostra el punt predeterminat del 25%; selecciona una data i registra com t’has sentit.";
+"cockpit_comfort_quota_missing" = "No hi ha observacions de quota utilitzables per a aquesta data. La sensació es desa, però no s’utilitzarà per ajustar la corba.";
+"cockpit_comfort_quota_partial" = "Aquesta observació de quota és incompleta i rep menys pes a la corba.";
+"cockpit_comfort_curve_sample" = "%@ · %@ utilitzat · %@";

@@ -189,7 +189,8 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         on date: Date = Date(),
         totalTokens: Int? = nil,
         coverage: CockpitCoverage = .partial,
-        calendar: Calendar = .current)
+        calendar: Calendar = .current,
+        usedPercent: Double? = nil)
     {
         let record = CockpitComfortRecord(
             providerID: providerID,
@@ -199,10 +200,97 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             recordedAt: date,
             feeling: feeling,
             totalTokens: totalTokens,
-            coverage: coverage)
+            coverage: coverage,
+            usedPercent: usedPercent)
         self.comfortRecords.removeAll { $0.id == record.id }
         self.comfortRecords.append(record)
         self.comfortRecords = Array(self.comfortRecords.suffix(3000))
+    }
+
+    /// Reads only observations belonging to the selected account and calendar day.
+    /// Archived measurements remain usable after their raw snapshots have aged out.
+    public func quotaComfortUsage(
+        providerID: String,
+        accountID: String,
+        on date: Date = Date(),
+        now: Date = Date(),
+        calendar: Calendar = .current) -> CockpitDayUsage
+    {
+        let day = date.timeIntervalSince1970.isFinite
+            ? CockpitCalendar.dateKey(for: date, calendar: calendar) : ""
+        let unavailable = CockpitDayUsage(
+            localDateKey: day, usedPercent: nil, coverage: .unavailable, sampleCount: 0)
+        guard !providerID.isEmpty, !accountID.isEmpty,
+              accountID != "unidentified", accountID != "local-machine",
+              date.timeIntervalSince1970.isFinite, now.timeIntervalSince1970.isFinite,
+              let interval = calendar.dateInterval(of: .day, for: date),
+              interval.start <= now else { return unavailable }
+        let archived = self.observedDaySummaries.first {
+            $0.providerID == providerID && $0.accountID == accountID
+                && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == day
+        }
+        // A late correction withdrew this aggregate; do not revive an incomplete raw fragment.
+        if archived?.unreconciledCorrection == true { return unavailable }
+        let through = min(now, interval.end.addingTimeInterval(-0.001))
+        let measured = self.dailyUsage(
+            providerID: providerID, accountID: accountID, on: through, calendar: calendar)
+        if let archived, interval.end <= now,
+           !self.containsFullRawPeriod(of: archived, calendar: calendar) || measured.usedPercent == nil,
+           let used = archived.usedPercent, used.isFinite, (0...10000).contains(used),
+           archived.coverage != .unavailable
+        {
+            return CockpitDayUsage(
+                localDateKey: day,
+                usedPercent: used,
+                coverage: archived.coverage,
+                sampleCount: archived.sampleCount)
+        }
+        guard let used = measured.usedPercent, used.isFinite, (0...10000).contains(used),
+              measured.coverage != .unavailable else { return unavailable }
+        return measured
+    }
+
+    /// A feeling correction keeps its original measurement. A missing measurement may be filled
+    /// later from that same day's observations, without copying today's usage into historical days.
+    @discardableResult
+    public mutating func recordQuotaComfort(
+        _ feeling: CockpitFeeling,
+        providerID: String,
+        accountID: String,
+        on date: Date = Date(),
+        now: Date = Date(),
+        calendar: Calendar = .current) -> Bool
+    {
+        guard !providerID.isEmpty, !accountID.isEmpty,
+              accountID != "unidentified", accountID != "local-machine",
+              date.timeIntervalSince1970.isFinite, now.timeIntervalSince1970.isFinite,
+              calendar.startOfDay(for: date) <= calendar.startOfDay(for: now) else { return false }
+        let day = CockpitCalendar.dateKey(for: date, calendar: calendar)
+        let previous = self.comfortRecords.filter {
+            $0.providerID == providerID && $0.accountID == accountID
+                && $0.timeZoneIdentifier == calendar.timeZone.identifier && $0.localDateKey == day
+        }.max { $0.recordedAt < $1.recordedAt }
+        let measured = self.quotaComfortUsage(
+            providerID: providerID, accountID: accountID, on: date, now: now, calendar: calendar)
+        let preserve = previous.flatMap { record in
+            record.usedPercent.flatMap { used in
+                used.isFinite && (0...10000).contains(used) && record.coverage != .unavailable ? record : nil
+            }
+        }
+        let record = CockpitComfortRecord(
+            providerID: providerID,
+            accountID: accountID,
+            localDateKey: day,
+            timeZoneIdentifier: calendar.timeZone.identifier,
+            recordedAt: now,
+            feeling: feeling,
+            totalTokens: nil,
+            coverage: preserve?.coverage ?? measured.coverage,
+            usedPercent: preserve?.usedPercent ?? measured.usedPercent)
+        self.comfortRecords.removeAll { $0.id == record.id }
+        self.comfortRecords.append(record)
+        self.comfortRecords = Array(self.comfortRecords.suffix(3000))
+        return true
     }
 
     public mutating func clearComfort(

@@ -23,6 +23,12 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to
   the explicit `local-machine` scope, independently of whichever quota account is currently selected.
+- `CockpitQuotaComfortModel` restores the upstream fixed smooth-knee quota curve. Weighted least squares
+  fits only the knee on a 0.1% grid, with fixed subjective scores and a 14-day recency half-life.
+  Its samples use observed account quota changes, including labeled partial coverage and archived daily
+  observations. Calendar quota feedback is scoped by provider/account/day/time zone; corrections preserve
+  captured measurements. Token feedback is a separate calendar mode and is never converted into quota.
+  Missing samples show the 25% baseline curve; fitted output never rewrites frozen plans or personal caps.
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.

@@ -3017,3 +3017,22 @@
 "cockpit_ui_comfort_recency" = "Trendpunkter ger större vikt åt färska erfarenheter, med en halveringstid på 14 dagar. När en äldre dag redigeras behåller den sin ålder. Detta beskriver erfarenheten av tokenanvändning, inte den officiella kvoten.";
 
 "menu_bar_help_conditional_runout" = "Jämför det uppskattade antalet timmar tills kvoten tar slut. Om ingen sådan uppskattning finns är villkoret falskt.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Upplevelseregister";
+"cockpit_comfort_quota_tab" = "Komfortkurva för kvot";
+"cockpit_comfort_tokens_tab" = "Lokal Token-upplevelse";
+"cockpit_comfort_quota_scope" = "Kvotfeedback hör till den valda leverantören och det aktuella kontot. Lokal Token-upplevelse registreras separat.";
+"cockpit_comfort_no_account" = "Uppdatera leverantörens användning för att identifiera ett konto innan du registrerar kvotfeedback.";
+"cockpit_comfort_curve_title" = "Komfortkurva";
+"cockpit_comfort_curve_knee" = "Anpassad brytpunkt: %@";
+"cockpit_comfort_curve_default" = "Standardreferens: %@";
+"cockpit_comfort_curve_x" = "Kvot använd i dag (%)";
+"cockpit_comfort_curve_y" = "Subjektiv poäng (%)";
+"cockpit_comfort_curve_details" = "%@ observationer · Modelldetaljer";
+"cockpit_comfort_curve_explanation" = "Lätt = 100%, lagom = 80%, överbelastad = 25%. Detta är subjektiva poäng, inte uppmätt effektivitet. Endast brytpunkten i den ursprungliga fasta kurvan anpassas (0,1–100%); din dagsplan ändras inte.";
+"cockpit_comfort_curve_weights" = "Nyare feedback väger tyngre (halveringstid 14 dagar); ofullständig användning får 75% vikt. Samlad användning kan överstiga 100%, med en lägsta poäng på 20%.";
+"cockpit_comfort_curve_empty" = "Ingen användbar kvotfeedback ännu. Standardbrytpunkten 25% visas; välj ett datum och registrera din upplevelse.";
+"cockpit_comfort_quota_missing" = "Ingen användbar kvotobservation för detta datum. Din upplevelse sparas men används inte för att anpassa kurvan.";
+"cockpit_comfort_quota_partial" = "Denna kvotobservation är ofullständig och får mindre vikt i kurvan.";
+"cockpit_comfort_curve_sample" = "%@ · %@ använt · %@";

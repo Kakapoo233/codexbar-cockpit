@@ -3022,3 +3022,22 @@
 "cockpit_ui_comfort_recency" = "傾向の各点は最近の体験を重視し、重みの半減期は14日です。過去の日付を編集しても経過日数は変わりません。これは Token の使用体験を示すもので、公式の割り当てではありません。";
 
 "menu_bar_help_conditional_runout" = "割り当ての枯渇までの推定時間を時間単位で比較します。枯渇時刻を推定できない場合、条件は偽になります。";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "体感の記録";
+"cockpit_comfort_quota_tab" = "クォータの快適曲線";
+"cockpit_comfort_tokens_tab" = "ローカル Token の体感";
+"cockpit_comfort_quota_scope" = "クォータの体感は、選択したプロバイダーの現在のアカウントに属します。ローカル Token の体感は別に記録されます。";
+"cockpit_comfort_no_account" = "クォータの体感を記録する前に、プロバイダーの使用量を更新してアカウントを識別してください。";
+"cockpit_comfort_curve_title" = "快適曲線";
+"cockpit_comfort_curve_knee" = "推定した屈曲点：%@";
+"cockpit_comfort_curve_default" = "既定の参考値：%@";
+"cockpit_comfort_curve_x" = "本日のクォータ使用量（%）";
+"cockpit_comfort_curve_y" = "主観的スコア（%）";
+"cockpit_comfort_curve_details" = "%@ 件の記録 · モデルの詳細";
+"cockpit_comfort_curve_explanation" = "軽い=100%、ちょうどよい=80%、過負荷=25%。これらは主観的なスコアであり、実測の効率ではありません。元の固定曲線の屈曲点のみを推定します（0.1–100%）。毎日の計画は変更しません。";
+"cockpit_comfort_curve_weights" = "最近の記録ほど重みが大きくなります（半減期14日）。不完全な使用量の重みは75%です。累積使用量は100%を超える場合があり、スコアの下限は20%です。";
+"cockpit_comfort_curve_empty" = "利用可能なクォータの記録はまだありません。既定の屈曲点25%を表示しています。日付を選んで体感を記録してください。";
+"cockpit_comfort_quota_missing" = "この日付には利用可能なクォータの観測がありません。体感は保存されますが、曲線の推定には使われません。";
+"cockpit_comfort_quota_partial" = "このクォータの観測は不完全なため、曲線での重みが小さくなります。";
+"cockpit_comfort_curve_sample" = "%@ · 使用量 %@ · %@";

@@ -3025,3 +3025,22 @@
 "cockpit_ui_comfort_recency" = "Trend points weight recent experience more, with a 14-day half-life. Editing an older day preserves its age. This describes Token experience, not official quota.";
 
 "menu_bar_help_conditional_runout" = "Compares estimated hours until quota exhaustion. If no exhaustion estimate is available, the condition is false.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Experience records";
+"cockpit_comfort_quota_tab" = "Quota comfort curve";
+"cockpit_comfort_tokens_tab" = "Local Token experience";
+"cockpit_comfort_quota_scope" = "Quota feedback belongs to the selected provider and current account. Local Token feedback is recorded separately.";
+"cockpit_comfort_no_account" = "Refresh provider usage to identify an account before recording quota feedback.";
+"cockpit_comfort_curve_title" = "Comfort curve";
+"cockpit_comfort_curve_knee" = "Fitted knee: %@";
+"cockpit_comfort_curve_default" = "Default reference: %@";
+"cockpit_comfort_curve_x" = "Quota used today (%)";
+"cockpit_comfort_curve_y" = "Subjective score (%)";
+"cockpit_comfort_curve_details" = "%@ observations · Model details";
+"cockpit_comfort_curve_explanation" = "Light = 100%, just right = 80%, overloaded = 25%. These are subjective scores, not measured efficiency. The original fixed curve fits only its knee (0.1–100%); it does not change your daily plan.";
+"cockpit_comfort_curve_weights" = "Recent feedback weighs more (14-day half-life); partial usage receives 75% weight. Cumulative usage can exceed 100%, with a 20% score floor.";
+"cockpit_comfort_curve_empty" = "No usable quota feedback yet. Showing the default 25% knee; select a date and record how it felt.";
+"cockpit_comfort_quota_missing" = "No usable quota observation for this date. Your feeling is saved but will not train the curve.";
+"cockpit_comfort_quota_partial" = "This quota observation is incomplete and receives less weight in the curve.";
+"cockpit_comfort_curve_sample" = "%@ · %@ used · %@";

@@ -3016,3 +3016,22 @@
 "cockpit_ui_comfort_recency" = "Trendpunkte gewichten aktuelle Erfahrungen stärker, mit einer Halbwertszeit von 14 Tagen. Das Bearbeiten eines älteren Tages erhält dessen Alter. Dies beschreibt die Token-Erfahrung, nicht das offizielle Kontingent.";
 
 "menu_bar_help_conditional_runout" = "Vergleicht die geschätzten Stunden bis zum Aufbrauchen des Kontingents. Ist keine Schätzung verfügbar, ist die Bedingung nicht erfüllt.";
+
+/* Cockpit quota comfort curve */
+"cockpit_comfort_mode" = "Empfindungsprotokoll";
+"cockpit_comfort_quota_tab" = "Komfortkurve des Kontingents";
+"cockpit_comfort_tokens_tab" = "Lokales Token-Empfinden";
+"cockpit_comfort_quota_scope" = "Rückmeldungen zum Kontingent gehören zum ausgewählten Anbieter und aktuellen Konto. Das lokale Token-Empfinden wird separat erfasst.";
+"cockpit_comfort_no_account" = "Aktualisiere die Anbieternutzung, um ein Konto zu erkennen, bevor du Rückmeldungen zum Kontingent erfasst.";
+"cockpit_comfort_curve_title" = "Komfortkurve";
+"cockpit_comfort_curve_knee" = "Angepasster Knickpunkt: %@";
+"cockpit_comfort_curve_default" = "Standardreferenz: %@";
+"cockpit_comfort_curve_x" = "Heute verbrauchtes Kontingent (%)";
+"cockpit_comfort_curve_y" = "Subjektive Bewertung (%)";
+"cockpit_comfort_curve_details" = "%@ Beobachtungen · Modelldetails";
+"cockpit_comfort_curve_explanation" = "Leicht = 100%, genau richtig = 80%, überlastet = 25%. Dies sind subjektive Bewertungen, keine gemessene Effizienz. Bei der ursprünglichen festen Kurve wird nur der Knickpunkt angepasst (0,1–100%); dein Tagesplan bleibt unverändert.";
+"cockpit_comfort_curve_weights" = "Neuere Rückmeldungen werden stärker gewichtet (Halbwertszeit 14 Tage); unvollständige Nutzung erhält 75% Gewicht. Die kumulierte Nutzung kann 100% überschreiten, die Bewertung sinkt nicht unter 20%.";
+"cockpit_comfort_curve_empty" = "Noch keine nutzbaren Rückmeldungen zum Kontingent. Der Standardknickpunkt von 25% wird angezeigt; wähle ein Datum und erfasse dein Empfinden.";
+"cockpit_comfort_quota_missing" = "Für dieses Datum gibt es keine nutzbare Kontingentbeobachtung. Dein Empfinden wird gespeichert, aber nicht für die Kurvenanpassung verwendet.";
+"cockpit_comfort_quota_partial" = "Diese Kontingentbeobachtung ist unvollständig und wird in der Kurve geringer gewichtet.";
+"cockpit_comfort_curve_sample" = "%@ · %@ verbraucht · %@";
