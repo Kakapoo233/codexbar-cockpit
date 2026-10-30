@@ -27,9 +27,20 @@ final class CockpitResetHistoryStore {
     private(set) var isRefreshing = false
     private(set) var lastSyncedAt: Date?
     private(set) var lastStatusSyncedAt: Date?
-    private(set) var statusErrorMessage: String?
-    private(set) var errorMessage: String?
-    private(set) var notificationErrorMessage: String?
+    private var statusErrorNotice: CockpitLocalizedMessage?
+    var statusErrorMessage: String? {
+        self.statusErrorNotice?.text
+    }
+
+    private var errorNotice: CockpitLocalizedMessage?
+    var errorMessage: String? {
+        self.errorNotice?.text
+    }
+
+    private var notificationErrorNotice: CockpitLocalizedMessage?
+    var notificationErrorMessage: String? {
+        self.notificationErrorNotice?.text
+    }
 
     @ObservationIgnored private let cacheURL: URL
     @ObservationIgnored private let receiptsURL: URL
@@ -56,8 +67,8 @@ final class CockpitResetHistoryStore {
     @ObservationIgnored private var hasFreshStatus = false
     @ObservationIgnored private var historySyncedAt: Date?
     @ObservationIgnored private var currentRequestIncludesHistory = false
-    @ObservationIgnored private var cacheReadError: String?
-    @ObservationIgnored private var receiptsReadError: String?
+    @ObservationIgnored private var cacheReadError: CockpitLocalizedMessage?
+    @ObservationIgnored private var receiptsReadError: CockpitLocalizedMessage?
     @ObservationIgnored private var retryNotBefore: Date?
 
     convenience init(settings: SettingsStore) {
@@ -146,7 +157,7 @@ final class CockpitResetHistoryStore {
             return
         }
         if let retryNotBefore, retryNotBefore > self.now() {
-            self.errorMessage = L("cockpit_reset_rate_limited", Self.dateText(retryNotBefore))
+            self.errorNotice = CockpitLocalizedMessage("cockpit_reset_rate_limited", date: retryNotBefore)
             return
         }
         let id = UUID()
@@ -172,7 +183,7 @@ final class CockpitResetHistoryStore {
     }
 
     private func load(id: UUID, needsHistory: Bool) async {
-        var failure: String?
+        var failure: CockpitLocalizedMessage?
         var reloadHistory = needsHistory
         var succeeded = false
         if let fetchStatus {
@@ -183,7 +194,7 @@ final class CockpitResetHistoryStore {
                 self.currentRequestIncludesHistory = reloadHistory
                 self.status = status
                 self.lastStatusSyncedAt = self.now()
-                self.statusErrorMessage = nil
+                self.statusErrorNotice = nil
                 self.hasFreshStatus = abs(self.now().timeIntervalSince(status.generatedAt)) <= 5 * 60
                 succeeded = true
                 // Announced plans should be visible and notified before a slower history backfill finishes.
@@ -192,7 +203,7 @@ final class CockpitResetHistoryStore {
                 guard !Task.isCancelled, self.refreshID == id else { return }
                 self.hasFreshStatus = false
                 failure = self.refreshError(error)
-                self.statusErrorMessage = failure
+                self.statusErrorNotice = failure
             }
         }
         if reloadHistory, self.retryNotBefore.map({ $0 <= self.now() }) != false {
@@ -213,7 +224,7 @@ final class CockpitResetHistoryStore {
         } else if let history {
             self.forecast = CockpitResetForecast.estimate(events: history.events, now: self.now())
         }
-        self.errorMessage = failure ?? self.cacheReadError
+        self.errorNotice = failure ?? self.cacheReadError
         if succeeded {
             self.saveCache()
         }
@@ -224,22 +235,22 @@ final class CockpitResetHistoryStore {
         self.history?.events.contains { $0.id == id } == true
     }
 
-    private func refreshError(_ error: any Error) -> String {
+    private func refreshError(_ error: any Error) -> CockpitLocalizedMessage {
         if let error = error as? CockpitResetHistoryError, case let .rateLimited(retryAfter) = error {
             let retry = self.now().addingTimeInterval(retryAfter)
             self.retryNotBefore = retry
-            return L("cockpit_reset_rate_limited", Self.dateText(retry))
+            return CockpitLocalizedMessage("cockpit_reset_rate_limited", date: retry)
         }
-        return L("cockpit_reset_sync_failed", error.localizedDescription)
+        return CockpitLocalizedMessage("cockpit_reset_sync_failed", error.localizedDescription)
     }
 
     func notificationPreferenceDidChange() {
         if self.notificationsEnabled() {
-            self.notificationErrorMessage = self.receiptsReadError
+            self.notificationErrorNotice = self.receiptsReadError
             self.postForecastIfNeeded()
         } else {
             self.cancelNotices()
-            self.notificationErrorMessage = nil
+            self.notificationErrorNotice = nil
         }
     }
 
@@ -337,11 +348,11 @@ final class CockpitResetHistoryStore {
                     self.remove(identifier)
                     self.activeNotificationIdentifiers.remove(identifier)
                     if self.isStarted, self.notificationsEnabled() {
-                        self.notificationErrorMessage = L("cockpit_reset_notice_unavailable")
+                        self.notificationErrorNotice = CockpitLocalizedMessage("cockpit_reset_notice_unavailable")
                     }
                     return
                 }
-                self.notificationErrorMessage = nil
+                self.notificationErrorNotice = nil
                 self.deliveredAnchors.append(candidate.key)
                 self.deliveredAnchors = Array(self.deliveredAnchors.suffix(64))
                 self.saveReceipts()
@@ -349,11 +360,7 @@ final class CockpitResetHistoryStore {
     }
 
     private static func dateText(_ date: Date) -> String {
-        let zone = TimeZone.current
-        var style = Date.FormatStyle.dateTime.year().month(.abbreviated).day().hour().minute()
-            .locale(codexBarLocalizedLocale())
-        style.timeZone = zone
-        return "\(date.formatted(style)) \(zone.abbreviation(for: date) ?? zone.identifier)"
+        CockpitLocalizedMessage.dateText(date)
     }
 
     private func cancelNotices() {
@@ -387,8 +394,8 @@ extension CockpitResetHistoryStore {
             self.forecast = cache.history.flatMap { CockpitResetForecast.estimate(events: $0.events, now: self.now()) }
         } catch {
             self.canSaveCache = false
-            self.cacheReadError = L("cockpit_reset_cache_read_failed", error.localizedDescription)
-            self.errorMessage = self.cacheReadError
+            self.cacheReadError = CockpitLocalizedMessage("cockpit_reset_cache_read_failed", error.localizedDescription)
+            self.errorNotice = self.cacheReadError
         }
     }
 
@@ -399,8 +406,10 @@ extension CockpitResetHistoryStore {
                 .suffix(64))
         } catch {
             self.canSaveReceipts = false
-            self.receiptsReadError = L("cockpit_reset_receipts_read_failed", error.localizedDescription)
-            self.notificationErrorMessage = self.receiptsReadError
+            self.receiptsReadError = CockpitLocalizedMessage(
+                "cockpit_reset_receipts_read_failed",
+                error.localizedDescription)
+            self.notificationErrorNotice = self.receiptsReadError
         }
     }
 
@@ -414,7 +423,7 @@ extension CockpitResetHistoryStore {
                 statusSyncedAt: self.lastStatusSyncedAt,
                 lastSyncedAt: self.lastSyncedAt), to: self.cacheURL)
         } catch {
-            self.errorMessage = L("cockpit_reset_cache_save_failed", error.localizedDescription)
+            self.errorNotice = CockpitLocalizedMessage("cockpit_reset_cache_save_failed", error.localizedDescription)
         }
     }
 
@@ -423,7 +432,9 @@ extension CockpitResetHistoryStore {
         do {
             try Self.write(self.deliveredAnchors, to: self.receiptsURL)
         } catch {
-            self.notificationErrorMessage = L("cockpit_reset_receipts_save_failed", error.localizedDescription)
+            self.notificationErrorNotice = CockpitLocalizedMessage(
+                "cockpit_reset_receipts_save_failed",
+                error.localizedDescription)
         }
     }
 

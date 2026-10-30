@@ -2910,3 +2910,9 @@
 "cockpit_reset_watch_notification_title" = "Codex Resets 预测更新";
 "cockpit_reset_watch_notification_body" = "codex-resets.com 网站 AI 预测：%@。非官方承诺，点击查看日历详情。";
 "cockpit_reset_rate_limited" = "来源要求暂缓请求，将于 %@ 后重试。";
+
+/* Cockpit persistence and import errors. */
+"cockpit_ui_plan_read_error" = "无法读取已有计划记录，已保留原文件：%@";
+"cockpit_ui_plan_save_error" = "计划记录未能保存：%@";
+"cockpit_ui_import_missing" = "未找到可导入的 CodexBar 设置。";
+"cockpit_ui_import_too_large" = "原设置文件过大，未进行导入。";

@@ -60,7 +60,7 @@ struct CockpitResetSummaryView: View {
                 } else if let synced = self.store.lastSyncedAt {
                     Text(L(
                         "cockpit_reset_sync_status",
-                        (self.store.history?.events.count ?? 0).formatted(),
+                        codexBarLocalizedInteger(self.store.history?.events.count ?? 0),
                         cockpitResetDateText(synced, calendar: self.calendar)))
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
@@ -97,7 +97,7 @@ struct CockpitResetSummaryView: View {
                         Spacer()
                         Button(L("cockpit_reset_show_date")) { self.selectDate(forecast.estimatedAt) }
                     }
-                    Text(L("cockpit_reset_forecast_basis", forecast.sampleCount.formatted()))
+                    Text(L("cockpit_reset_forecast_basis", codexBarLocalizedInteger(forecast.sampleCount)))
                         .font(.caption).foregroundStyle(.secondary)
                     if forecast.isOverdue(at: Date()) {
                         Text(L("cockpit_reset_forecast_overdue")).font(.caption).foregroundStyle(.orange)
@@ -149,7 +149,7 @@ struct CockpitResetDayDetails: View {
                         calendar: self.calendar)),
                     systemImage: "clock.badge.questionmark")
                     .foregroundStyle(.orange)
-                Text(L("cockpit_reset_forecast_basis", forecast.sampleCount.formatted()))
+                Text(L("cockpit_reset_forecast_basis", codexBarLocalizedInteger(forecast.sampleCount)))
                     .font(.caption).foregroundStyle(.secondary)
             }
             ForEach(self.events) { event in

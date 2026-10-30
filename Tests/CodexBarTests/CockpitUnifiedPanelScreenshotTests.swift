@@ -18,8 +18,9 @@ struct CockpitUnifiedPanelScreenshotTests {
         defer { try? FileManager.default.removeItem(at: temporary) }
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
 
-        let language = ProcessInfo.processInfo.environment["CODEXBAR_COCKPIT_PROOF_LANGUAGE"] == "en" ? "en" : "zh-Hans"
-        let languageSuffix = language == "en" ? "en" : "zh"
+        let requestedLanguage = ProcessInfo.processInfo.environment["CODEXBAR_COCKPIT_PROOF_LANGUAGE"] ?? "zh-Hans"
+        let language = AppLanguage(rawValue: requestedLanguage)?.rawValue ?? "zh-Hans"
+        let languageSuffix = language == "zh-Hans" ? "zh" : language
         try await CodexBarLocalizationOverride.$appLanguage.withValue(language) {
             let now = Date()
             let settings = try Self.makeSettings(in: temporary)
@@ -102,8 +103,8 @@ struct CockpitUnifiedPanelScreenshotTests {
                     onSettings: {},
                     onRefresh: {})
                 let host = NSHostingView(rootView: root
-                    .environment(\.colorScheme, .light)
-                    .environment(\.locale, Locale(identifier: language)))
+                    .codexBarLocalized()
+                    .environment(\.colorScheme, .light))
                 host.appearance = NSAppearance(named: .aqua)
                 host.frame = CGRect(origin: .zero, size: size)
                 let window = NSWindow(
@@ -123,9 +124,12 @@ struct CockpitUnifiedPanelScreenshotTests {
                 #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
                 #expect(menu.items.contains { $0.view === card })
                 let cardFrame = card.convert(card.bounds, to: host)
+                let columnStart = codexBarLocalizedLayoutDirection() == .rightToLeft
+                    ? size.width - CockpitPanelLayout.contentInset - layout.mainColumnWidth
+                    : CockpitPanelLayout.contentInset
                 #expect(abs(card.bounds.width - layout.menuCardWidth) < 1)
-                #expect(cardFrame.minX >= 0)
-                #expect(cardFrame.maxX <= CockpitPanelLayout.contentInset + layout.mainColumnWidth + 1)
+                #expect(cardFrame.minX >= columnStart - 1)
+                #expect(cardFrame.maxX <= columnStart + layout.mainColumnWidth + 1)
                 let suffix = layout.usesSidebar ? "" : "-compact"
                 try Self.capture(
                     host,

@@ -50,7 +50,8 @@ struct CockpitMonthGridView: View {
         return Button { self.select(day) } label: {
             VStack(alignment: .leading, spacing: self.compact ? 3 : 7) {
                 HStack {
-                    Text(dayNumber.formatted()).font(self.compact ? .caption.weight(.medium) : .body.weight(.medium))
+                    Text(codexBarLocalizedInteger(dayNumber))
+                        .font(self.compact ? .caption.weight(.medium) : .body.weight(.medium))
                     Spacer(minLength: 0)
                     if self.calendar.isDateInToday(day) {
                         Circle().fill(Color.accentColor).frame(width: 5, height: 5)

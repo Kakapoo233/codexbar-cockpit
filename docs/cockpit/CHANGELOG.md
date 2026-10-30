@@ -1,5 +1,13 @@
 # Cockpit changes
 
+## 0.3.1 — Complete existing language support
+
+- Translate planning, calendar feedback, reset history and previews, task receipts, and import/error
+  messages across all 23 existing app languages, without adding language choices.
+- Format planning percentages, calendar numbers, and receipt dates using the selected app language.
+- Keep retained error and preview messages in the current language and apply right-to-left layout
+  to exported Arabic and Persian receipts.
+
 ## 0.3.0 — Reset history and early previews
 
 - Sync public Codex Resets history into the calendar with distinct regular and banked reset markers,

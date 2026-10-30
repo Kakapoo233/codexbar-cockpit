@@ -11,7 +11,7 @@ struct CockpitReceiptBrowserView: View {
     @State private var metadata: [CockpitTaskIdentity: CockpitTaskLineageMetadata] = [:]
     @State private var conflicting = Set<CockpitTaskIdentity>()
     @State private var isLoadingLineage = true
-    @State private var lineageMessage: String?
+    @State private var lineageMessageKey: String?
 
     init(controller: SpendDashboardController, hidePersonalInfo: Bool) {
         self._usage = State(initialValue: CockpitUsageProjection(controller: controller))
@@ -46,8 +46,8 @@ struct CockpitReceiptBrowserView: View {
                 .font(.caption).foregroundStyle(.secondary)
             if self.isLoadingLineage {
                 Label(L("cockpit_ui_loading_lineage"), systemImage: "hourglass").font(.caption)
-            } else if let message = self.lineageMessage {
-                Label(message, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange)
+            } else if let key = self.lineageMessageKey {
+                Label(L(key), systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange)
             }
             HStack {
                 TextField(L("cockpit_ui_search"), text: self.$query).textFieldStyle(.roundedBorder)
@@ -182,21 +182,21 @@ struct CockpitReceiptBrowserView: View {
         self.isLoadingLineage = true
         self.metadata = [:]
         self.conflicting = []
-        self.lineageMessage = nil
+        self.lineageMessageKey = nil
         do {
             let result = try await CockpitTaskLineageLoader.load(sources: self.lineageSources)
             try Task.checkCancellation()
             self.metadata = result.metadata
             self.conflicting = result.conflicting
             if result.wasLimited || !result.unavailable.isEmpty || !result.conflicting.isEmpty {
-                self.lineageMessage = L("cockpit_ui_lineage_warning")
+                self.lineageMessageKey = "cockpit_ui_lineage_warning"
             }
             self.isLoadingLineage = false
         } catch is CancellationError {
             // The new selection owns loading state; cancelled work cannot publish into it.
         } catch {
             guard !Task.isCancelled else { return }
-            self.lineageMessage = L("cockpit_ui_lineage_error")
+            self.lineageMessageKey = "cockpit_ui_lineage_error"
             self.isLoadingLineage = false
         }
     }

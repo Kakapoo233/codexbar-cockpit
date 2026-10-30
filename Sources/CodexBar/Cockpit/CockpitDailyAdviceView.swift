@@ -164,7 +164,7 @@ struct CockpitDailyAdviceRow: View {
     }
 
     private func percent(_ value: Double?) -> String {
-        value.map { $0.formatted(.number.precision(.fractionLength(1))) + "%" } ?? "—"
+        value.map(cockpitLocalizedPercent) ?? "—"
     }
 
     private var capBinding: Binding<Double> {
