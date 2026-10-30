@@ -8,7 +8,11 @@ import Observation
 @Observable
 final class CockpitPlanStore {
     private(set) var state: CockpitPlanState
-    private(set) var errorMessage: String?
+    private var error: CockpitLocalizedMessage?
+    var errorMessage: String? {
+        self.error?.text
+    }
+
     private(set) var availableProviders: [UsageProvider] = []
     private var accounts: [UsageProvider: String] = [:]
     @ObservationIgnored private let fileURL: URL
@@ -24,7 +28,7 @@ final class CockpitPlanStore {
             self.state = try JSONDecoder().decode(CockpitPlanState.self, from: Data(contentsOf: self.fileURL))
         } catch {
             self.canSave = false
-            self.errorMessage = "无法读取已有计划记录，已保留原文件：\(error.localizedDescription)"
+            self.error = CockpitLocalizedMessage("cockpit_ui_plan_read_error", error.localizedDescription)
         }
     }
 
@@ -158,9 +162,9 @@ final class CockpitPlanStore {
             let data = try JSONEncoder().encode(self.state)
             try data.write(to: self.fileURL, options: .atomic)
             try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: self.fileURL.path)
-            self.errorMessage = nil
+            self.error = nil
         } catch {
-            self.errorMessage = "计划记录未能保存：\(error.localizedDescription)"
+            self.error = CockpitLocalizedMessage("cockpit_ui_plan_save_error", error.localizedDescription)
         }
     }
 }

@@ -34,6 +34,6 @@ struct CockpitPlanSummaryView: View {
 
     private func percent(_ value: Double?, partial: Bool = false) -> String {
         guard let value else { return "—" }
-        return (partial ? "≥ " : "") + value.formatted(.number.precision(.fractionLength(1))) + "%"
+        return (partial ? "≥ " : "") + cockpitLocalizedPercent(value)
     }
 }

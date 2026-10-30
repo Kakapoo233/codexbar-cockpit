@@ -8,7 +8,7 @@ import UniformTypeIdentifiers
 struct CockpitReceiptPreview: View {
     let receipt: CockpitReceiptModel
     @Environment(\.dismiss) private var dismiss
-    @State private var message = L("cockpit_ui_preview_note")
+    @State private var messageKey = "cockpit_ui_preview_note"
     @State private var imageSave = CockpitReceiptImageSave()
 
     var body: some View {
@@ -26,16 +26,16 @@ struct CockpitReceiptPreview: View {
             .background(Color.gray.opacity(0.08))
             HStack {
                 Button {
-                    self.message = ShareStatsExporter
-                        .copyImage(self.receipt) ? L("cockpit_ui_copied") : L("cockpit_ui_export_error")
+                    self.messageKey = ShareStatsExporter
+                        .copyImage(self.receipt) ? "cockpit_ui_copied" : "cockpit_ui_export_error"
                 } label: {
                     Label(L("cockpit_ui_copy_png"), systemImage: "photo.on.rectangle")
                 }
                 Button {
                     self.imageSave.save(self.receipt) { outcome in
                         switch outcome {
-                        case .saved: self.message = L("cockpit_ui_saved")
-                        case .failed: self.message = L("cockpit_ui_export_error")
+                        case .saved: self.messageKey = "cockpit_ui_saved"
+                        case .failed: self.messageKey = "cockpit_ui_export_error"
                         case .cancelled: break
                         }
                     }
@@ -44,7 +44,7 @@ struct CockpitReceiptPreview: View {
                 }
                 .disabled(!self.imageSave.canSave)
                 Spacer()
-                Text(self.message).font(.caption).foregroundStyle(.secondary)
+                Text(L(self.messageKey)).font(.caption).foregroundStyle(.secondary)
             }
         }
         .padding(20)
@@ -135,9 +135,13 @@ struct CockpitReceiptCardView: View {
             Text(L("cockpit_ui_receipt_task_count", self.receipt.items.count))
             Text(self.receipt.scopeLabel).font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Text(self.receipt.createdAt.formatted(date: .abbreviated, time: .shortened))
+            Text(Self.dateText(self.receipt.createdAt))
                 .font(.caption).foregroundStyle(.secondary)
         }
+    }
+
+    static func dateText(_ date: Date) -> String {
+        date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(codexBarLocalizedLocale()))
     }
 
     private var footer: some View {
@@ -171,7 +175,7 @@ extension ShareStatsRenderer {
     /// Uses the same native, offline bitmap path as the existing share card.
     static func pngData(for receipt: CockpitReceiptModel) -> Data? {
         let size = CockpitReceiptCardView.size(for: receipt)
-        let view = NSHostingView(rootView: CockpitReceiptCardView(receipt: receipt))
+        let view = NSHostingView(rootView: CockpitReceiptCardView(receipt: receipt).codexBarLocalized())
         view.frame = CGRect(origin: .zero, size: size)
         view.layoutSubtreeIfNeeded()
         guard let representation = NSBitmapImageRep(

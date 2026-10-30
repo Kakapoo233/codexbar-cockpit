@@ -849,6 +849,10 @@ struct LocalizationLanguageCatalogTests {
             "spend_performance_seconds",
             "spend_tools_coverage",
             "spend_tools_milliseconds",
+            // Product branding and the standard Italian confirmation label are shared.
+            "cockpit_ui_brand",
+            "cockpit_ui_brand_receipt",
+            "cockpit_ui_ok",
         ]
         let unchanged = Set(english.keys.filter { italian[$0] == english[$0] })
         #expect(unchanged == intentionallyUnchanged)

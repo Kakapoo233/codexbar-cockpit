@@ -9,8 +9,8 @@ enum CockpitSettingsMigration {
 
         var errorDescription: String? {
             switch self {
-            case .noSettings: "未找到可导入的 CodexBar 设置。"
-            case .fileTooLarge: "原设置文件过大，未进行导入。"
+            case .noSettings: L("cockpit_ui_import_missing")
+            case .fileTooLarge: L("cockpit_ui_import_too_large")
             }
         }
     }

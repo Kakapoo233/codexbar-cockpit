@@ -2923,3 +2923,9 @@
 "cockpit_reset_watch_notification_title" = "Codex Resets forecast updated";
 "cockpit_reset_watch_notification_body" = "codex-resets.com AI forecast: %@. Not an official commitment; open the calendar for details.";
 "cockpit_reset_rate_limited" = "The source requested a pause. Next check after %@.";
+
+/* Cockpit persistence and import errors. */
+"cockpit_ui_plan_read_error" = "Cannot read existing plan records; the original file was preserved: %@";
+"cockpit_ui_plan_save_error" = "Plan records could not be saved: %@";
+"cockpit_ui_import_missing" = "No CodexBar settings were found to import.";
+"cockpit_ui_import_too_large" = "The original settings file is too large to import.";

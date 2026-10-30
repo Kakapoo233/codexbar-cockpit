@@ -150,3 +150,25 @@ It was installed over the developer app with the previous bundle backed up; the 
 remained running. The installed developer process and its public cache containing all 69 reset
 records were verified. Desktop accessibility timed out again after relaunch, so actual notification
 appearance/click-through and live calendar pointer interaction are not claimed as verified.
+
+## Existing language completion (0.3.1)
+
+On 2026-10-30, all 154 Cockpit keys were checked in the existing 23 language catalogs. Non-Cockpit
+translations were preserved. Placeholder signatures, protected literals, duplicate-key checks,
+and nonempty translation coverage passed. The language list was not expanded.
+
+The focused Cockpit and localization run passed 231 tests in 31 suites. An additional Arabic
+native-panel render passed after making the column-bounds assertion aware of right-to-left layout.
+Coverage includes retained error text and retry dates after a language change, selected-language
+percentages and receipt dates, existing reset synchronization behavior, and offline receipt exports.
+`make check` passed with zero violations in 3,189 Swift files; later test-only adjustments passed
+targeted formatting and strict lint checks.
+
+Synthetic German and Arabic Usage/Calendar panels were rendered at 960×700 and 676×460. German,
+Arabic, Persian, Japanese, and Traditional Chinese receipt exports were inspected for wrapping,
+footer visibility, and direction. The images stay outside the repository. These checks do not
+constitute native-speaker linguistic review of every translation or live language-picker acceptance.
+
+The 0.3.1 build 7 package passed signing/resource checks and isolated six-second startup, then replaced
+the independent developer bundle after backing up 0.3.0. Desktop accessibility still timed out when
+attaching to the accessory app; real panel clicks and language-picker operation remain unverified.
