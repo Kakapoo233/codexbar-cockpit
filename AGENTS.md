@@ -1,3 +1,18 @@
+# CodexBar Cockpit fork
+
+This repository is an independent macOS menu-bar integration of CodexBar and Codex Cockpit.
+Before changing integration behavior, read `docs/cockpit/ARCHITECTURE.md`. Product scope and acceptance
+are tracked in `docs/cockpit/ROADMAP.md`. The pinned upstream origins are recorded in `UPSTREAM.md`.
+
+Use the fork packaging script `Scripts/package_cockpit.sh` for local delivery. Launch the resulting
+CodexBar Cockpit bundle only; keep existing CodexBar installations running unless the user asks to
+replace them. Store app-owned data through CockpitAppIdentity. Authentication and provider log input
+paths remain provider-owned. Test with synthetic data and temporary paths.
+
+The upstream release instructions below describe upstream infrastructure. Fork releases require
+fork-owned signing, update feeds, and CI configuration. Local development uses ad-hoc signing and
+no automatic update feed. Public source publication and replacing the installed app are separate actions.
+
 # Repository Guidelines
 
 ## Project Structure & Modules
