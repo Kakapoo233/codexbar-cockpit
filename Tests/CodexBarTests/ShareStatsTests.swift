@@ -11,7 +11,7 @@ struct ShareStatsTests {
     }
 
     @Test
-    func `descriptor share plan labels preserve the legacy central table`() throws {
+    func `descriptor share plan labels match the known catalog`() throws {
         var fingerprint: UInt64 = 1_469_598_103_934_665_603
         for descriptor in ProviderDescriptorRegistry.all where !descriptor.metadata.sharePlanLabels.isEmpty {
             Self.hash(descriptor.id.rawValue, into: &fingerprint)
@@ -21,7 +21,7 @@ struct ShareStatsTests {
             }
         }
 
-        #expect(fingerprint == 2_500_333_924_415_227_190)
+        #expect(fingerprint == 14_576_260_847_838_850_283)
     }
 
     @Test
@@ -136,6 +136,31 @@ struct ShareStatsTests {
         #expect(Self.subscriptionName(provider: .cursor, rawName: "sk-live-example") == nil)
         #expect(Self.subscriptionName(provider: .claude, rawName: "internal.example") == nil)
         #expect(Self.subscriptionName(provider: .claude, rawName: "Max", accountOrganization: "Max") == nil)
+    }
+
+    @Test(arguments: [
+        ("prolite", "Pro 10x"),
+        ("Codex Pro Lite", "Pro 10x"),
+        ("Pro 100", "Pro 10x"),
+        ("pro_100", "Pro 10x"),
+        ("Codex Pro $100", "Pro 10x"),
+        ("Pro 200", "Pro 20x"),
+        ("pro-200", "Pro 20x"),
+        ("Codex pro200", "Pro 20x"),
+        ("Pro 500", "Pro 50x"),
+        ("pro500", "Pro 50x"),
+        ("Codex Pro $500", "Pro 50x"),
+        ("Pro 10x", "Pro 10x"),
+        ("Pro 20x", "Pro 20x"),
+        ("Pro 50x", "Pro 50x"),
+    ])
+    func `Codex share labels match current known Pro allowances`(raw: String, expected: String) {
+        #expect(Self.subscriptionName(provider: .codex, rawName: raw)?.displayName == expected)
+    }
+
+    @Test(arguments: ["Pro 300", "pro_future", "Pro 500 person@example.com", "Pro 500 /Users/private"])
+    func `unknown Pro share labels remain excluded`(raw: String) {
+        #expect(Self.subscriptionName(provider: .codex, rawName: raw) == nil)
     }
 
     @Test

@@ -1,5 +1,14 @@
 # Cockpit changes
 
+## 0.4.2 — Updated Codex Pro plan labels
+
+- Display Pro 100 / Pro Lite as 10x, Pro 200 as 20x, and explicit Pro 500 names as 50x.
+  Share the current mapping across menus, CLI output, dashboard scraping, and share cards.
+- Preserve server-reported usage percentages and unknown plan names. Do not double the existing
+  Pro 200 20x label: the October 29 update brings its lower allowance up to the higher allowance.
+- References: [OpenAI Pro tier update](https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers)
+  and [Tibo's Pro 500 confirmation](https://x.com/thsottiaux/status/2115851811576053881).
+
 ## 0.4.1 — Statistics time-zone settings placement
 
 - Keep the statistics time-zone picker and current-Mac-zone action in Settings → Usage & Spend.

@@ -1,13 +1,35 @@
 import Foundation
 
 public enum CodexPlanFormatting {
-    private static let exactDisplayNames: [String: String] = [
-        "pro": "Pro 20x",
-        "prolite": "Pro 5x",
-        "pro_lite": "Pro 5x",
-        "pro-lite": "Pro 5x",
-        "pro lite": "Pro 5x",
-    ]
+    /// Current Work/Codex plan labels as of 2026-10-29; these never scale measured usage.
+    /// Pro 200 retains its higher allowance; only its previously lower allowance doubled.
+    static let exactDisplayNames: [String: String] = {
+        var names = [
+            "pro": "Pro 20x",
+            "prolite": "Pro 10x",
+            "pro_lite": "Pro 10x",
+            "pro-lite": "Pro 10x",
+            "pro lite": "Pro 10x",
+        ]
+        for (price, multiplier) in [(100, 10), (200, 20), (500, 50)] {
+            let displayName = "Pro \(multiplier)x"
+            // Recognize explicit price-bearing names, without guessing undocumented backend SKUs.
+            for alias in ["pro \(price)", "pro_\(price)", "pro-\(price)", "pro\(price)", "pro $\(price)"] {
+                names[alias] = displayName
+            }
+        }
+        return names
+    }()
+
+    /// Keep share-card values closed and non-identifying, including already formatted snapshots.
+    static let sharePlanLabels: [String: String] = {
+        var labels = Self.exactDisplayNames
+        for (alias, displayName) in Self.exactDisplayNames {
+            labels["codex \(alias)"] = displayName
+            labels[displayName.lowercased()] = displayName
+        }
+        return labels
+    }()
 
     private static let uppercaseWords: Set<String> = [
         "cbp",

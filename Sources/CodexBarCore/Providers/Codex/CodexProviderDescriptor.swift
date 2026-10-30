@@ -46,13 +46,10 @@ public enum CodexProviderDescriptor {
                 sharePlanLabels: [
                     "guest": "Guest", "free": "Free", "go": "Go", "plus": "Plus", "plus plan": "Plus",
                     "chatgpt plus": "Plus", "chatgpt-plus": "Plus", "chatgpt_plus": "Plus",
-                    "pro": "Pro 20x", "codex pro": "Pro 20x",
-                    "prolite": "Pro 5x", "pro_lite": "Pro 5x", "pro-lite": "Pro 5x",
-                    "pro lite": "Pro 5x", "codex pro lite": "Pro 5x",
                     "free_workspace": "Free Workspace", "team": "Team", "business": "Business",
                     "education": "Education", "quorum": "Quorum", "k12": "K12",
                     "enterprise": "Enterprise", "edu": "Edu",
-                ],
+                ].merging(CodexPlanFormatting.sharePlanLabels, uniquingKeysWith: { _, plan in plan }),
                 debugPane: ProviderDebugPaneCapabilities(
                     probeLogOrder: 0,
                     notificationSimulationOrder: 0,

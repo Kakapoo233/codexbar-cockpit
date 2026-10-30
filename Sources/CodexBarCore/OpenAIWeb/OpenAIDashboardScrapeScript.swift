@@ -1,4 +1,9 @@
 #if os(macOS)
+import Foundation
+
+private let codexPlanDisplayNamesJSON = (try? JSONEncoder().encode(CodexPlanFormatting.exactDisplayNames))
+    .flatMap { String(bytes: $0, encoding: .utf8) } ?? "{}"
+
 let openAIDashboardScrapeScript = """
 
     (() => {
@@ -185,13 +190,7 @@ let openAIDashboardScrapeScript = """
         const trimmed = String(raw || '').trim();
         if (!trimmed) return null;
         const lower = trimmed.toLowerCase();
-        const exact = {
-          pro: 'Pro 20x',
-          prolite: 'Pro 5x',
-          'pro_lite': 'Pro 5x',
-          'pro-lite': 'Pro 5x',
-          'pro lite': 'Pro 5x'
-        };
+        const exact = \(codexPlanDisplayNamesJSON);
         if (exact[lower]) return exact[lower];
         const cleaned = cleanPlanName(trimmed);
         if (!cleaned) return trimmed;

@@ -1,5 +1,21 @@
 # Local integration validation
 
+## Pro allowance labels (0.4.2)
+
+On 2026-10-30, 164 focused tests in eight suites passed: `CodexPlanFormattingTests`,
+`OpenAIDashboardScrapeScriptTests`, `OpenAIDashboardParserTests`, `ProviderQuotaFixtureContractTests`,
+`CodexPresentationCharacterizationTests`, `CLISnapshotTests`, `ShareStatsTests`, and
+`OpenAIDashboardFetcherCreditsWaitTests`. These cover current price-bearing plan names,
+Pro Lite's 10x label, unchanged Pro 200 20x, explicit Pro 500 50x, repeated formatting,
+unknown-name preservation, closed share labels, and unchanged server usage percentages.
+The WebKit cases use synthetic local HTML. `make check` passed, including strict lint over 3,200 Swift files.
+The 0.4.2/build 11 development bundle passed strict signature verification and the isolated six-second
+startup/resource smoke check, including direct and symlinked CLI loading with the checkout unreadable.
+
+Price-specific labels require an explicit plan name. The existing generic `pro` mapping remains
+20x; the app does not infer undocumented account SKUs or rescale measured quota data.
+Older explicitly formatted labels are preserved until a fresh provider snapshot arrives.
+
 Validated on Apple Silicon, macOS 27.0.1, Xcode 27 and Swift 6.4 (2026-10-29).
 This is a development build, not a notarized public release.
 

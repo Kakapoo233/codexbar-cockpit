@@ -28,7 +28,30 @@ struct OpenAIDashboardScrapeScriptTests {
         #expect(dict["bodyHTML"] == nil)
         #expect(dict["signedInEmail"] as? String == "user@example.com")
         #expect(dict["authStatus"] as? String == "logged_in")
-        #expect(dict["accountPlan"] as? String == "Pro 5x")
+        #expect(dict["accountPlan"] as? String == "Pro 10x")
+    }
+
+    @Test(arguments: [
+        ("Pro 100", "Pro 10x"),
+        ("Codex Pro 200", "Pro 20x"),
+        ("pro_500", "Pro 50x"),
+        ("Pro $500", "Pro 50x"),
+        ("Pro 50x", "Pro 50x"),
+        ("Pro 5x", "Pro 5x"),
+        ("Pro 300", "Pro 300"),
+    ])
+    func `scraper uses current explicit Pro allowance labels`(raw: String, expected: String) async throws {
+        if Self.shouldSkipOnCI() { return }
+
+        let html = Self.bootstrapAccountHTML.replacingOccurrences(of: "Codex Pro Lite", with: raw)
+        let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        _ = webView.loadHTMLString(html, baseURL: nil)
+        try await Self.waitForFixture(webView, elementID: "account-fixture")
+
+        let any = try await webView.evaluateJavaScript(openAIDashboardScrapeScript)
+        let dict = try #require(any as? [String: Any])
+        #expect(dict["accountPlan"] as? String == expected)
+        #expect(CodexPlanFormatting.displayName(dict["accountPlan"] as? String) == expected)
     }
 
     @Test
