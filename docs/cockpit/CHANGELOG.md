@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.2.1 — Receipt save window ownership
+
+- Attach the PNG save dialog to its receipt preview instead of blocking every application window.
+- Prevent duplicate save dialogs and clean up an unfinished save when the preview disappears.
+
 ## 0.2.0 — Unified menu-bar panel
 
 - Replace the intermediate Cockpit window with Usage, Statistics, Calendar, and Receipts in one menu-bar panel.
