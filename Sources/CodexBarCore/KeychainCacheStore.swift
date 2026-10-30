@@ -41,8 +41,8 @@ public enum KeychainCacheStore {
     }
 
     private static let log = CodexBarLog.logger(LogCategories.keychainCache)
-    private static let cacheService = "com.steipete.codexbar.cache"
-    private static let cacheLabel = "CodexBar Cache"
+    private static let cacheService = CockpitAppIdentity.keychainCacheService
+    private static let cacheLabel = "CodexBar Cockpit Cache"
     @TaskLocal private static var serviceOverride: String?
     @TaskLocal private static var forceImplicitTestStore = false
     @TaskLocal private static var forceRealKeychainPath = false

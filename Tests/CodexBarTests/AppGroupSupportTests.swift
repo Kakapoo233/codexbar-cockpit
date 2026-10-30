@@ -6,17 +6,19 @@ struct AppGroupSupportTests {
     @Test
     func `app group identifiers use resolved team-prefixed release and debug variants`() {
         #expect(
-            AppGroupSupport.currentGroupID(teamID: "Y5PE65HELJ", bundleID: "com.steipete.codexbar")
-                == "Y5PE65HELJ.com.steipete.codexbar")
+            AppGroupSupport.currentGroupID(teamID: "Y5PE65HELJ", bundleID: "io.github.kakapoo233.codexbar-cockpit")
+                == "Y5PE65HELJ.io.github.kakapoo233.codexbar-cockpit")
         #expect(
-            AppGroupSupport.currentGroupID(teamID: "ABCDE12345", bundleID: "com.steipete.codexbar.debug")
-                == "ABCDE12345.com.steipete.codexbar.debug")
+            AppGroupSupport.currentGroupID(
+                teamID: "ABCDE12345",
+                bundleID: "io.github.kakapoo233.codexbar-cockpit.debug")
+                == "ABCDE12345.io.github.kakapoo233.codexbar-cockpit.debug")
         #expect(
-            AppGroupSupport.legacyGroupID(for: "com.steipete.codexbar")
-                == "group.com.steipete.codexbar")
+            AppGroupSupport.legacyGroupID(for: "io.github.kakapoo233.codexbar-cockpit")
+                == "group.io.github.kakapoo233.codexbar-cockpit")
         #expect(
-            AppGroupSupport.legacyGroupID(for: "com.steipete.codexbar.debug")
-                == "group.com.steipete.codexbar.debug")
+            AppGroupSupport.legacyGroupID(for: "io.github.kakapoo233.codexbar-cockpit.debug")
+                == "group.io.github.kakapoo233.codexbar-cockpit.debug")
     }
 
     @Test
@@ -172,7 +174,7 @@ private struct MigrationFixture {
     func migrate(currentDefaultsAvailable: Bool = true) -> AppGroupSupport.MigrationResult {
         // nil is intentional only for the unavailable-target case: container lookup is stubbed to nil.
         AppGroupSupport.migrateLegacyDataIfNeeded(
-            bundleID: "com.steipete.codexbar",
+            bundleID: "io.github.kakapoo233.codexbar-cockpit",
             standardDefaults: self.standardDefaults,
             fileManager: self.fileManager,
             homeDirectory: self.root.appendingPathComponent("home", isDirectory: true),

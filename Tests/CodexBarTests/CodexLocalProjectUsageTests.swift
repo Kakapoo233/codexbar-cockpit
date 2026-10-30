@@ -224,7 +224,7 @@ struct CodexLocalProjectUsageTests {
         defer { env.cleanup() }
 
         let day = Date()
-        let project = env.root.appendingPathComponent("CodexBar", isDirectory: true)
+        let project = env.root.appendingPathComponent(CockpitAppIdentity.storageDirectoryName, isDirectory: true)
         let projectSource = project.appendingPathComponent("Sources", isDirectory: true)
         try FileManager.default.createDirectory(
             at: project.appendingPathComponent(".git", isDirectory: true),
@@ -310,7 +310,7 @@ struct CodexLocalProjectUsageTests {
         defer { env.cleanup() }
 
         let day = Date()
-        let project = env.root.appendingPathComponent("CodexBar", isDirectory: true)
+        let project = env.root.appendingPathComponent(CockpitAppIdentity.storageDirectoryName, isDirectory: true)
         try FileManager.default.createDirectory(
             at: project.appendingPathComponent(".git", isDirectory: true),
             withIntermediateDirectories: true)
@@ -644,7 +644,7 @@ struct CodexLocalProjectUsageTests {
         defer { env.cleanup() }
 
         let day = Date()
-        let project = env.root.appendingPathComponent("CodexBar", isDirectory: true)
+        let project = env.root.appendingPathComponent(CockpitAppIdentity.storageDirectoryName, isDirectory: true)
         try FileManager.default.createDirectory(
             at: project.appendingPathComponent(".git", isDirectory: true),
             withIntermediateDirectories: true)
@@ -775,7 +775,7 @@ struct CodexLocalProjectUsageTests {
         defer { env.cleanup() }
 
         let day = Date()
-        let project = env.root.appendingPathComponent("CodexBar", isDirectory: true)
+        let project = env.root.appendingPathComponent(CockpitAppIdentity.storageDirectoryName, isDirectory: true)
         let projectSource = project.appendingPathComponent("Sources", isDirectory: true)
         try FileManager.default.createDirectory(
             at: project.appendingPathComponent(".git", isDirectory: true),

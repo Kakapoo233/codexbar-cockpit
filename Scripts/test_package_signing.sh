@@ -86,7 +86,7 @@ import tempfile
 from pathlib import Path
 
 source = Path(sys.argv[1]).read_text()
-start = source.index('BUNDLE_ID="com.steipete.codexbar"')
+start = source.index('BUNDLE_ID="io.github.kakapoo233.codexbar-cockpit"')
 end = source.index('BUILD_TIMESTAMP=', start)
 generation = source[start:end]
 start = source.index('if [[ "$EMBED_PROVISIONING_PROFILE" == "1" ]]; then')
@@ -117,12 +117,12 @@ for team, configuration, signing, profile_present in itertools.product(
         identity_stub = f'security() {{ echo \'  1) {"A" * 40} "{env["APP_IDENTITY"]}"\'; }}'
         result = subprocess.run(['bash', '-eu', '-c', identity_stub + '\n' + helper + '\n' + generation + '\n' + embedding],
                                 env=env, capture_output=True, text=True)
-        cloudkit = team == 'Y5PE65HELJ' and configuration == 'release' and signing == 'identity'
+        cloudkit = False  # Fork builds never inherit upstream CloudKit entitlements or profiles.
         if cloudkit and not profile_present:
             assert result.returncode != 0 and 'Missing' in result.stderr, result.stderr
             continue
         assert result.returncode == 0, (team, configuration, signing, profile_present, result.stderr)
-        bundle = 'com.steipete.codexbar' + ('.debug' if configuration == 'debug' else '')
+        bundle = 'io.github.kakapoo233.codexbar-cockpit' + ('.debug' if configuration == 'debug' else '')
         expected_group = f'{team}.{bundle}'
         app_entitlements = plistlib.loads((root / '.build/entitlements/CodexBar.entitlements').read_bytes())
         widget_entitlements = plistlib.loads((root / '.build/entitlements/CodexBarWidget.entitlements').read_bytes())
@@ -195,7 +195,7 @@ with tempfile.TemporaryDirectory(prefix='codexbar-identity-test-') as directory:
         app_entitlements = plistlib.loads(app_path.read_bytes())
         widget_entitlements = plistlib.loads((app_path.parent / 'CodexBarWidget.entitlements').read_bytes())
         suffix = '.debug' if configuration == 'debug' else ''
-        expected_group = [f'{expected_team}.com.steipete.codexbar{suffix}']
+        expected_group = [f'{expected_team}.io.github.kakapoo233.codexbar-cockpit{suffix}']
         expected_app = {'com.apple.security.application-groups': expected_group}
         if lldb == '1':
             expected_app['com.apple.security.get-task-allow'] = True

@@ -117,7 +117,7 @@ struct CommandCodeProviderTests {
 
     @Test
     func `automatic cookie fetch retries Vivaldi after stale earlier browser session`() async throws {
-        let service = "com.steipete.codexbar.tests.commandcode-retry.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.commandcode-retry.\(UUID().uuidString)"
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainCacheStore.withImplicitTestStoreForTesting {
                 let recorder = CookieAttemptRecorder()
@@ -148,7 +148,7 @@ struct CommandCodeProviderTests {
 
     @Test
     func `automatic cookie fetch does not hide non-auth failure with later session`() async {
-        let service = "com.steipete.codexbar.tests.commandcode-failure.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.commandcode-failure.\(UUID().uuidString)"
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
                 let recorder = CookieAttemptRecorder()
@@ -177,7 +177,7 @@ struct CommandCodeProviderTests {
     @Test
     func `validated browser session persists for subsequent automatic fetch`() async throws {
         let provider = UsageProvider.commandcode
-        let service = "com.steipete.codexbar.tests.commandcode-cache.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.commandcode-cache.\(UUID().uuidString)"
         let recorder = CookieAttemptRecorder()
         let browserLoadRecorder = CookieAttemptRecorder()
 
@@ -215,7 +215,7 @@ struct CommandCodeProviderTests {
 
     @Test
     func `saved sessions preserve their HTTP credentials and rejected selections never fall back`() async throws {
-        let service = "com.steipete.codexbar.tests.commandcode-accounts.\(UUID())"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.commandcode-accounts.\(UUID())"
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainCacheStore.withImplicitTestStoreForTesting {
                 try await CommandCodeUsageFetcher.withIsolatedPlanCacheForTesting {
@@ -321,7 +321,7 @@ struct CommandCodeProviderTests {
 
     @Test
     func `empty manual sessions cannot use cached or browser accounts`() async throws {
-        let service = "com.steipete.codexbar.tests.commandcode-empty.\(UUID())"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.commandcode-empty.\(UUID())"
         try await KeychainCacheStore.withServiceOverrideForTesting(service) {
             try await KeychainCacheStore.withImplicitTestStoreForTesting {
                 CookieHeaderCache.store(

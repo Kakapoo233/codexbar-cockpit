@@ -38,7 +38,7 @@ for line in sys.stdin:
         sock.bind(('127.0.0.1',0))
         port = sock.getsockname()[1]
     environment = {'PATH':'/usr/bin:/bin','HOME':str(home),'CODEX_HOME':str(home/'.codex'),
-        'CODEXBAR_CONFIG':str(config),'CODEX_CLI_PATH':str(stub),'CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS':'1',
+        'CODEXBAR_COCKPIT_CONFIG':str(config),'CODEX_CLI_PATH':str(stub),'CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS':'1',
         'XDG_CACHE_HOME':str(home/'.cache')}
     with (root/'server.log').open('w') as log:
         child = subprocess.Popen([str(binary),'serve','--port',str(port),'--refresh-interval','0'],env=environment,stdout=log,stderr=log)

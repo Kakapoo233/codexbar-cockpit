@@ -8,8 +8,8 @@ struct ClaudeOAuthApplicationDefaultsTests {
         var requestedDomains: [String] = []
 
         let defaults = ClaudeOAuthApplicationDefaults.resolve(
-            domain: "com.steipete.codexbar",
-            currentBundleIdentifier: "com.steipete.codexbar",
+            domain: "io.github.kakapoo233.codexbar-cockpit",
+            currentBundleIdentifier: "io.github.kakapoo233.codexbar-cockpit",
             suiteFactory: { domain in
                 requestedDomains.append(domain)
                 return nil
@@ -26,15 +26,15 @@ struct ClaudeOAuthApplicationDefaultsTests {
         var requestedDomains: [String] = []
 
         let defaults = ClaudeOAuthApplicationDefaults.resolve(
-            domain: "com.steipete.codexbar",
-            currentBundleIdentifier: "com.steipete.codexbar.widget",
+            domain: "io.github.kakapoo233.codexbar-cockpit",
+            currentBundleIdentifier: "io.github.kakapoo233.codexbar-cockpit.widget",
             suiteFactory: { domain in
                 requestedDomains.append(domain)
                 return suite
             })
 
         #expect(defaults === suite)
-        #expect(requestedDomains == ["com.steipete.codexbar"])
+        #expect(requestedDomains == ["io.github.kakapoo233.codexbar-cockpit"])
     }
 
     @Test
@@ -42,7 +42,7 @@ struct ClaudeOAuthApplicationDefaultsTests {
         var requestedDomains: [String] = []
 
         let defaults = ClaudeOAuthApplicationDefaults.resolve(
-            domain: "com.steipete.codexbar",
+            domain: "io.github.kakapoo233.codexbar-cockpit",
             currentBundleIdentifier: nil,
             suiteFactory: { domain in
                 requestedDomains.append(domain)
@@ -50,6 +50,6 @@ struct ClaudeOAuthApplicationDefaultsTests {
             })
 
         #expect(defaults === UserDefaults.standard)
-        #expect(requestedDomains == ["com.steipete.codexbar"])
+        #expect(requestedDomains == ["io.github.kakapoo233.codexbar-cockpit"])
     }
 }

@@ -38,11 +38,14 @@ import sys
 from pathlib import Path
 
 plist = plistlib.loads(Path(sys.argv[1]).read_bytes())
-assert plist.get("SUAutomaticallyUpdate") is True
+assert plist.get("SUAutomaticallyUpdate") is False
+assert plist.get("CFBundleName") == "CodexBar Cockpit"
+assert plist.get("CFBundleExecutable") == "CodexBarCockpit"
+assert "SUPublicEDKey" not in plist
 declarations = plist.get("UTExportedTypeDeclarations")
 assert declarations == [{
-    "UTTypeIdentifier": "com.steipete.codexbar.menu-layout-item",
-    "UTTypeDescription": "CodexBar menu bar layout token",
+    "UTTypeIdentifier": "io.github.kakapoo233.codexbar-cockpit.menu-layout-item",
+    "UTTypeDescription": "CodexBar Cockpit menu bar layout token",
     "UTTypeConformsTo": ["public.data"],
     "UTTypeTagSpecification": {},
 }]

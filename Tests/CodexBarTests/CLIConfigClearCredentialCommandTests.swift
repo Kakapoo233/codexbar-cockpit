@@ -144,7 +144,7 @@ struct CLIConfigClearCredentialCommandTests {
 
     private static func run(root: URL, arguments: [String]) async throws -> String {
         let environment = [
-            "CODEXBAR_CONFIG": root.appendingPathComponent("config.json").path,
+            "CODEXBAR_COCKPIT_CONFIG": root.appendingPathComponent("config.json").path,
             "HOME": root.path,
             "CFFIXED_USER_HOME": root.path,
             "CODEX_HOME": root.appendingPathComponent(".codex").path,

@@ -1,7 +1,5 @@
 # Changelog
 
-## 0.82.1 — Unreleased
-
 ## 0.82.0 — 2026-10-26
 
 ### Highlights

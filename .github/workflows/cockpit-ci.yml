@@ -1,0 +1,25 @@
+name: Cockpit CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cockpit-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Toolchain
+        run: swift --version
+      - name: Build
+        run: swift build --product CodexBar
+      - name: Focused integration tests
+        run: make test-fast FILTER='Cockpit|ForkIdentityTests|ForkSettingsImportTests'
+      - name: Check
+        run: make check

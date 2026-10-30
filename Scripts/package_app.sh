@@ -15,7 +15,7 @@ resolve_package_signing_mode() {
 
 resolve_package_signing_identity() {
   if [[ "$SIGNING_MODE" == "adhoc" ]]; then
-    APP_TEAM_ID="${APP_TEAM_ID:-Y5PE65HELJ}"
+    APP_TEAM_ID="${APP_TEAM_ID:-COCKPIT000}"
     return
   fi
 
@@ -261,8 +261,8 @@ for ARCH in "${ARCH_LIST[@]}"; do
   stage_build_products "$ARCH"
 done
 
-APP_FINAL="$ROOT/CodexBar.app"
-APP_STAGE="$ROOT/.build/package/CodexBar.app"
+APP_FINAL="$ROOT/CodexBar Cockpit.app"
+APP_STAGE="$ROOT/.build/package/CodexBar Cockpit.app"
 rm -rf "$APP_STAGE"
 APP="$APP_STAGE"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Frameworks"
@@ -275,11 +275,12 @@ if [[ -f "$ICON_SOURCE" ]]; then
   iconutil --convert icns --output "$ICON_TARGET" "$ICON_SOURCE"
 fi
 
-BUNDLE_ID="com.steipete.codexbar"
-FEED_URL="https://raw.githubusercontent.com/steipete/CodexBar/main/appcast.xml"
-AUTO_CHECKS=true
+BUNDLE_ID="io.github.kakapoo233.codexbar-cockpit"
+# A fork must configure its own signed update channel before enabling updates.
+FEED_URL=""
+AUTO_CHECKS=false
 if [[ "$LOWER_CONF" == "debug" ]]; then
-  BUNDLE_ID="com.steipete.codexbar.debug"
+  BUNDLE_ID="io.github.kakapoo233.codexbar-cockpit.debug"
   FEED_URL=""
   AUTO_CHECKS=false
 fi
@@ -364,10 +365,10 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>CodexBar</string>
-    <key>CFBundleDisplayName</key><string>CodexBar</string>
+    <key>CFBundleName</key><string>CodexBar Cockpit</string>
+    <key>CFBundleDisplayName</key><string>CodexBar Cockpit</string>
     <key>CFBundleIdentifier</key><string>${BUNDLE_ID}</string>
-    <key>CFBundleExecutable</key><string>CodexBar</string>
+    <key>CFBundleExecutable</key><string>CodexBarCockpit</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>${MARKETING_VERSION}</string>
     <key>CFBundleVersion</key><string>${BUILD_NUMBER}</string>
@@ -376,17 +377,16 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleIconFile</key><string>Icon</string>
     <key>NSHumanReadableCopyright</key><string>© 2026 Peter Steinberger. MIT License.</string>
     <key>SUFeedURL</key><string>${FEED_URL}</string>
-    <key>SUPublicEDKey</key><string>AGCY8w5vHirVfGGDGc8Szc5iuOqupZSh9pMj/Qs67XI=</string>
     <key>SUEnableAutomaticChecks</key><${AUTO_CHECKS}/>
-    <key>SUAutomaticallyUpdate</key><true/>
+    <key>SUAutomaticallyUpdate</key><false/>
     <key>CodexBuildTimestamp</key><string>${BUILD_TIMESTAMP}</string>
     <key>CodexGitCommit</key><string>${GIT_COMMIT}</string>
     <key>CodexBarTeamID</key><string>${APP_TEAM_ID}</string>
     <key>UTExportedTypeDeclarations</key>
     <array>
         <dict>
-            <key>UTTypeIdentifier</key><string>com.steipete.codexbar.menu-layout-item</string>
-            <key>UTTypeDescription</key><string>CodexBar menu bar layout token</string>
+            <key>UTTypeIdentifier</key><string>io.github.kakapoo233.codexbar-cockpit.menu-layout-item</string>
+            <key>UTTypeDescription</key><string>CodexBar Cockpit menu bar layout token</string>
             <key>UTTypeConformsTo</key>
             <array>
                 <string>public.data</string>
@@ -558,8 +558,8 @@ install_widget_extension() {
   verify_binary_arches "$widget_app/Contents/MacOS/CodexBarWidget" "${ARCH_LIST[@]}"
 }
 
-install_binary "CodexBar" "$APP/Contents/MacOS/CodexBar"
-strip_release_binary "$APP/Contents/MacOS/CodexBar"
+install_binary "CodexBar" "$APP/Contents/MacOS/CodexBarCockpit"
+strip_release_binary "$APP/Contents/MacOS/CodexBarCockpit"
 # Ship CodexBarCLI alongside the app for easy symlinking.
 install_binary "CodexBarCLI" "$APP/Contents/Helpers/CodexBarCLI"
 strip_release_binary "$APP/Contents/Helpers/CodexBarCLI"
@@ -575,7 +575,7 @@ swiftpm_bin_path "${ARCH_LIST[0]}" PREFERRED_BUILD_DIR
 SPARKLE_SOURCE=$(codexbar_require_product_directory "$PREFERRED_BUILD_DIR" Sparkle.framework packaging)
 cp -R "$SPARKLE_SOURCE" "$APP/Contents/Frameworks/"
 chmod -R a+rX "$APP/Contents/Frameworks/Sparkle.framework"
-install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/CodexBar"
+install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/CodexBarCockpit"
 # Re-sign Sparkle and all nested components with the selected package identity.
 SPARKLE="$APP/Contents/Frameworks/Sparkle.framework"
 if [[ "$SIGNING_MODE" == "adhoc" ]]; then
@@ -634,6 +634,10 @@ if [[ ! -d "$CORE_RESOURCE_BUNDLE" ]]; then
 fi
 rm -rf "$APP/Contents/Helpers/CodexBar_CodexBarCore.bundle"
 cp -R "$CORE_RESOURCE_BUNDLE" "$APP/Contents/Helpers/"
+
+# Include readable license notices in the actual app distribution, alongside the shared resource.
+python3 "$ROOT/Scripts/acknowledgements.py" --text-output "$APP/Contents/Resources/THIRD_PARTY_NOTICES"
+cp "$ROOT/LICENSE" "$APP/Contents/Resources/LICENSE"
 
 # Ensure contents are writable before stripping attributes and signing.
 chmod -R u+w "$APP"

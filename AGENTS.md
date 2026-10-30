@@ -1,3 +1,18 @@
+# CodexBar Cockpit fork
+
+This repository is an independent macOS menu-bar integration of CodexBar and Codex Cockpit.
+Before changing integration behavior, read `docs/cockpit/ARCHITECTURE.md`. Product scope and acceptance
+are tracked in `docs/cockpit/ROADMAP.md`. The pinned upstream origins are recorded in `UPSTREAM.md`.
+
+Use the fork packaging script `Scripts/package_cockpit.sh` for local delivery. Launch the resulting
+CodexBar Cockpit bundle only; keep existing CodexBar installations running unless the user asks to
+replace them. Store app-owned data through CockpitAppIdentity. Authentication and provider log input
+paths remain provider-owned. Test with synthetic data and temporary paths.
+
+The upstream release instructions below describe upstream infrastructure. Fork releases require
+fork-owned signing, update feeds, and CI configuration. Local development uses ad-hoc signing and
+no automatic update feed. Public source publication and replacing the installed app are separate actions.
+
 # Repository Guidelines
 
 ## Project Structure & Modules
@@ -7,10 +22,10 @@
 - `docs`: release notes and process (`docs/RELEASING.md`, screenshots). Root-level zips/appcast are generated artifacts—avoid editing except during releases.
 
 ## Build, Test, Run
-- Dev loop: `./Scripts/compile_and_run.sh` kills old instances, builds, packages, relaunches `CodexBar.app`, and confirms it stays running; add `--test` for the sharded full suite.
+- Dev loop: `./Scripts/compile_and_run.sh` restarts only this fork, builds and packages `CodexBar Cockpit.app`; add `--test` for the sharded full suite.
 - Quick build/test: `swift build` (debug) or `swift build -c release`; `make test` for the sharded full suite.
-- Package locally: `./Scripts/package_app.sh` to refresh `CodexBar.app`, then restart with `pkill -x CodexBar || pkill -f CodexBar.app || true; cd /Users/steipete/Projects/codexbar && open -n /Users/steipete/Projects/codexbar/CodexBar.app`.
-- Release publication is owned by `.github/workflows/release.yml`; use its default dry-run dispatch to rehearse. Repo build/signing stays in `Scripts/sign-and-notarize.sh`; see `docs/RELEASING.md`.
+- Package locally: `./Scripts/package_cockpit.sh debug`. Only launch the resulting fork bundle; never terminate the original CodexBar process.
+- Fork CI is `.github/workflows/cockpit-ci.yml`. Upstream release workflows are inactive references under `docs/cockpit/upstream-workflows/`; signed public fork releases are not configured yet.
 
 ## Coding Style & Naming
 - Enforce SwiftFormat/SwiftLint: run `swiftformat Sources Tests` and `swiftlint --strict`. 4-space indent, 120-char lines, explicit `self` is intentional—do not remove.
@@ -39,13 +54,13 @@
 ## Agent Notes
 - Use the provided scripts and package manager (SwiftPM); avoid adding dependencies or tooling without confirmation.
 - Menu bar automation: capture the target screen first and verify the CodexBar icon is visibly onscreen. Reject `click-extra` success when coordinates fall outside display bounds; hidden menu extras are not click proof.
-- Validate UI/runtime behavior against the freshly built bundle; restart via the pkill+open command above to avoid running stale binaries.
-- To guarantee the right bundle is running after a rebuild, use: `pkill -x CodexBar || pkill -f CodexBar.app || true; cd /Users/steipete/Projects/codexbar && open -n /Users/steipete/Projects/codexbar/CodexBar.app`.
+- Validate UI/runtime behavior against the freshly built fork bundle; use the fork-only launch script to avoid running stale binaries.
+- For isolated packaged startup validation, use `Scripts/verify_packaged_app_launch.sh "CodexBar Cockpit.app"`; it uses synthetic settings and blocks network access.
 - For CLI-testable provider/parser/settings behavior, use CLI/focused tests instead of `Scripts/package_app.sh` or `./Scripts/compile_and_run.sh`.
 - Run `./Scripts/compile_and_run.sh` only when UI/runtime behavior needs bundle-level validation; it builds, tests, packages, relaunches, and verifies the app stays running.
 - Widget/Tahoe UI issues: use Parallels macOS VM plus screenshots/clicks for autonomous verification.
 - Release workflow: wait for completion and verify the complete artifact/feed/tap handoff; do not publish locally.
-- Sparkle release key: CI `SPARKLE_PRIVATE_KEY` must match the existing AGCY public key in `.github/release.json`; never substitute another app’s key.
+- Sparkle is disabled in this fork until a fork-owned key and update feed are configured; never use upstream release credentials or feeds.
 - Swift concurrency: treat sibling `async let` tasks as a review red flag when one child is required and another is optional/best-effort. Prefer sequential awaits or a drained `withThrowingTaskGroup` that surfaces required failures and explicitly contains optional failures; crash stacks mentioning `swift_task_dealloc` or `asyncLet_finish_after_task_completion` should trigger an audit of nearby `async let` usage.
 - Prefer modern SwiftUI/Observation macros: use `@Observable` models with `@State` ownership and `@Bindable` in views; avoid `ObservableObject`, `@ObservedObject`, and `@StateObject`.
 - Favor modern macOS 15+ APIs over legacy/deprecated counterparts when refactoring (Observation, new display link APIs, updated menu item styling, etc.).

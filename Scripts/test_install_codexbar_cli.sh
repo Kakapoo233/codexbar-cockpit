@@ -19,7 +19,7 @@ assert os.geteuid() != 0, "Run installer regression tests as a non-root user."
 source = Path(sys.argv[1]).read_text()
 temp = Path(sys.argv[2]).resolve()
 assert source.startswith("#!/bin/sh -p\n")
-app_line = 'APP="/Applications/CodexBar.app"'
+app_line = 'APP="/Applications/CodexBar Cockpit.app"'
 assert source.count(app_line) == 1
 assert source.count("/usr/bin/osascript") == 1
 assert 'HELPER="$APP/Contents/Helpers/CodexBarCLI"' in source
@@ -102,7 +102,7 @@ cases = [
 
 baseline = run_installer()
 assert baseline.returncode == 0, baseline.stderr
-assert "CodexBar CLI installed." in baseline.stdout
+assert "CodexBar Cockpit CLI installed." in baseline.stdout
 expected_capture = json.loads(capture.read_text())
 assert expected_capture["args"] == ["-", str(helper)]
 assert expected_capture["environment"]["PATH"] == environment["PATH"]
@@ -141,7 +141,7 @@ for missing in (False, True):
         failed = run_installer(functions, inherited)
         assert failed.returncode == 1, (label, failed.stderr)
         assert failed.stderr == (
-            f"CodexBarCLI helper not found at {helper}. Please reinstall CodexBar.\n"
+            f"CodexBarCLI helper not found at {helper}. Please reinstall CodexBar Cockpit.\n"
         ), label
         assert failed.stdout == "", label
         assert not capture.exists(), label
@@ -159,8 +159,8 @@ generated = subprocess.run(["/usr/bin/osascript", "-", str(helper)], input=captu
                            env=environment, capture_output=True, text=True, check=True).stdout
 assert shlex.split(generated) == [
     "set", "-eu", "/bin/mkdir", "-p", "/usr/local/bin", "/opt/homebrew/bin",
-    "/bin/ln", "-sf", str(helper), "/usr/local/bin/codexbar",
-    "/bin/ln", "-sf", str(helper), "/opt/homebrew/bin/codexbar",
+    "/bin/ln", "-sf", str(helper), "/usr/local/bin/codexbar-cockpit",
+    "/bin/ln", "-sf", str(helper), "/opt/homebrew/bin/codexbar-cockpit",
 ]
 
 # Run only the captured shell body with both destinations replaced by temp paths.
@@ -172,16 +172,21 @@ def local_command(case):
     return root, command
 
 root, command = local_command("success")
+for prefix in ("local", "homebrew"):
+    old_cli = root / prefix / "bin/codexbar"
+    old_cli.parent.mkdir(parents=True)
+    old_cli.symlink_to("/synthetic/upstream-cli")
 subprocess.run(["/bin/sh", "-c", command], env=environment, check=True)
 for prefix in ("local", "homebrew"):
-    assert os.readlink(root / prefix / "bin/codexbar") == str(helper)
+    assert os.readlink(root / prefix / "bin/codexbar-cockpit") == str(helper)
+    assert os.readlink(root / prefix / "bin/codexbar") == "/synthetic/upstream-cli"
 
 for tool in ("/bin/mkdir", "/bin/ln"):
     root, command = local_command(Path(tool).name + "-failure")
     command = command.replace(tool, "/usr/bin/false", 1)
     failed = subprocess.run(["/bin/sh", "-c", command], env=environment, capture_output=True)
     assert failed.returncode != 0
-    assert not (root / "homebrew/bin/codexbar").is_symlink(), "Continued after an install failure"
+    assert not (root / "homebrew/bin/codexbar-cockpit").is_symlink(), "Continued after an install failure"
 
 print("CLI installer tests passed (nonprivileged command capture and temporary symlinks).")
 PY

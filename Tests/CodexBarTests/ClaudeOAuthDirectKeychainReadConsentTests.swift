@@ -234,7 +234,7 @@ struct ClaudeOAuthDirectKeychainReadConsentTests {
             configStore: testConfigStore(suiteName: suite),
             zaiTokenStore: NoopZaiTokenStore(),
             syntheticTokenStore: NoopSyntheticTokenStore())
-        let service = "com.steipete.codexbar.cache.consent-tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.consent-tests.\(UUID().uuidString)"
         let pendingStore = ClaudeOAuthCredentialsStore.PendingCacheClearMemoryStore()
         let revocationStore = ClaudeOAuthCredentialsStore.DirectKeychainReadConsentRevocationMarkerStore()
         let root = FileManager.default.temporaryDirectory

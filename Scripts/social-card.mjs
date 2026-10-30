@@ -172,14 +172,14 @@ function imageReferences(repoRoot, imageHash) {
     index = replaceTagAttribute(index, "meta", (attrs) => attrs[attribute] === name, "content", imageURL, name);
   }
   const readme = replaceTagAttribute(
-    fs.readFileSync(path.join(repoRoot, "README.md"), "utf8"),
+    fs.readFileSync(path.join(repoRoot, "README.upstream.md"), "utf8"),
     "img",
     (attrs) => /^docs\/social\.png(?:[?#]|$)/.test(attrs.src ?? ""),
     "src",
     `${imagePath}${query}`,
     "README social card",
   );
-  return { "docs/index.html": index, "README.md": readme };
+  return { "docs/index.html": index, "README.upstream.md": readme };
 }
 
 export function checkSocialCard(repoRoot) {

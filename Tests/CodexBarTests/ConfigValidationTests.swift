@@ -489,13 +489,13 @@ struct ConfigValidationTests {
 
     private static func configURL(in directory: URL) -> URL {
         directory
-            .appendingPathComponent("codexbar", isDirectory: true)
+            .appendingPathComponent(CockpitAppIdentity.configDirectoryName, isDirectory: true)
             .appendingPathComponent("config.json")
     }
 
     private static func legacyConfigURL(in home: URL) -> URL {
         home
-            .appendingPathComponent(".codexbar", isDirectory: true)
+            .appendingPathComponent(CockpitAppIdentity.legacyConfigDirectoryName, isDirectory: true)
             .appendingPathComponent("config.json")
     }
 }

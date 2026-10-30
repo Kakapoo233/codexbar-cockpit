@@ -119,7 +119,9 @@ run_harness() {
     --swift-command-arg=fake-swift
 }
 
-python3 - "${ROOT_DIR}/.github/workflows/ci.yml" <<'PY'
+# Keep the inherited helper contracts tied to the archived upstream CI they supported.
+# The active fork workflow is independently checked by test_cockpit_workflow.py.
+python3 - "${ROOT_DIR}/docs/cockpit/upstream-workflows/ci.yml.txt" <<'PY'
 import pathlib
 import re
 import sys

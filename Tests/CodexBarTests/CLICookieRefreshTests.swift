@@ -131,7 +131,7 @@ struct CLICookieRefreshTests {
     func `failed refresh preserves default cookie and unrelated account scopes`() async {
         let provider = UsageProvider.opencode
         let accountScope = CookieHeaderCache.Scope.managedAccount(UUID())
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
 
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -170,7 +170,7 @@ struct CLICookieRefreshTests {
     @Test
     func `successful refresh keeps replacement cookie`() async {
         let provider = UsageProvider.opencode
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
 
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -205,7 +205,7 @@ struct CLICookieRefreshTests {
     @Test
     func `successful provider result without a staged cookie fails safely`() async {
         let provider = UsageProvider.opencode
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
 
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -229,7 +229,7 @@ struct CLICookieRefreshTests {
 
     @Test
     func `validated nonpersistent refresh succeeds without changing persisted cookies`() async {
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
                 CookieHeaderCache.store(provider: .langdock, cookieHeader: "old-test-cookie", sourceLabel: "Test old")
@@ -250,7 +250,7 @@ struct CLICookieRefreshTests {
     func `multiple staged replacements fail before changing persisted cookies`() async {
         let provider = UsageProvider.opencode
         let accountScope = CookieHeaderCache.Scope.managedAccount(UUID())
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
 
         await KeychainCacheStore.withServiceOverrideForTesting(service) {
             await KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -291,7 +291,7 @@ struct CLICookieRefreshTests {
     @Test
     func `commit detaches the gate before later writes`() {
         let provider = UsageProvider.opencode
-        let service = "com.steipete.codexbar.tests.cookie-refresh.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.cookie-refresh.\(UUID().uuidString)"
 
         KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.withImplicitTestStoreForTesting {
@@ -481,7 +481,7 @@ struct CLICookieRefreshTests {
         BrowserCookieAccessGate.recordDenied(for: .chrome)
         let storage = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: storage) }
-        let service = "com.steipete.codexbar.tests.header-import.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.tests.header-import.\(UUID().uuidString)"
         let domain = "cookies.example.test"
         let broker = ProviderInteractionContext.$current.withValue(.userInitiated) {
             BrowserCookieAccessGate.withExplicitRetry(bypassingCooldown: true) {

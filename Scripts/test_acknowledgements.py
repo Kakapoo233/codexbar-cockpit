@@ -3,7 +3,9 @@
 import copy
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 
@@ -55,10 +57,25 @@ class AcknowledgementsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'missing'):
             notices.check(notices.ROOT, entries)
 
-    def test_release_archives_export_the_common_resource(self):
-        workflow = (notices.ROOT / '.github/workflows/release-cli.yml').read_text()
-        self.assertIn('Scripts/acknowledgements.py --text-output "$OUT_DIR/THIRD_PARTY_NOTICES"', workflow)
-        self.assertIn('CodexBarCLI codexbar VERSION THIRD_PARTY_NOTICES CodexBar_CodexBarCore.bundle', workflow)
+    def test_fork_app_distribution_exports_the_common_resource_and_readable_notices(self):
+        package = (notices.ROOT / 'Scripts/package_app.sh').read_text()
+        self.assertIn('cp -R "$bundle" "$APP/Contents/Resources/"', package)
+        self.assertIn('CORE_RESOURCE_BUNDLE="${PREFERRED_BUILD_DIR}/CodexBar_CodexBarCore.bundle"', package)
+        self.assertIn('cp -R "$CORE_RESOURCE_BUNDLE" "$APP/Contents/Helpers/"', package)
+        export = 'python3 "$ROOT/Scripts/acknowledgements.py" --text-output "$APP/Contents/Resources/THIRD_PARTY_NOTICES"'
+        license_copy = 'cp "$ROOT/LICENSE" "$APP/Contents/Resources/LICENSE"'
+        self.assertEqual(package.count(export), 1)
+        self.assertEqual(package.count(license_copy), 1)
+        self.assertLess(package.index(export), package.index('# Finally sign the app bundle itself'))
+        # Execute the actual packaging commands without compiling, signing, or launching an app.
+        with tempfile.TemporaryDirectory() as temporary:
+            app = Path(temporary) / 'CodexBar Cockpit.app'
+            (app / 'Contents/Resources').mkdir(parents=True)
+            subprocess.run(['/bin/bash', '-eu', '-c', export + '\n' + license_copy],
+                           env=dict(os.environ, ROOT=str(notices.ROOT), APP=str(app)),
+                           check=True, capture_output=True, text=True)
+            self.assertEqual((app / 'Contents/Resources/THIRD_PARTY_NOTICES').read_text(), notices.render(self.entries))
+            self.assertEqual((app / 'Contents/Resources/LICENSE').read_bytes(), (notices.ROOT / 'LICENSE').read_bytes())
 
 
 if __name__ == '__main__':

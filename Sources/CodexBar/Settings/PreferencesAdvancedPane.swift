@@ -89,8 +89,8 @@ extension AdvancedPane {
         }
 
         let destinations = [
-            "/usr/local/bin/codexbar",
-            "/opt/homebrew/bin/codexbar",
+            "/usr/local/bin/codexbar-cockpit",
+            "/opt/homebrew/bin/codexbar-cockpit",
         ]
 
         var installed: [String] = []

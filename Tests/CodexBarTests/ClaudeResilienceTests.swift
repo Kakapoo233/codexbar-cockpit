@@ -5,171 +5,111 @@ import Testing
 
 struct ClaudeResilienceTests {
     @Test
-    func `cancelled Claude refresh never publishes an error`() async throws {
-        try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-            let tempDir = FileManager.default.temporaryDirectory
-                .appendingPathComponent(UUID().uuidString, isDirectory: true)
-            try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
-
-            try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                let store = try await MainActor.run {
-                    let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-cancellation")
-                    settings.refreshFrequency = .manual
-                    settings.statusChecksEnabled = false
-                    settings.claudeUsageDataSource = .cli
-                    settings.claudeOAuthKeychainPromptMode = .never
-
-                    let metadata = ProviderRegistry.shared.metadata
-                    for provider in UsageProvider.allCases {
-                        try settings.setProviderEnabled(
-                            provider: provider,
-                            metadata: #require(metadata[provider]),
-                            enabled: provider == .claude)
-                    }
-
-                    let store = UsageStore(
-                        fetcher: UsageFetcher(environment: [:]),
-                        browserDetection: BrowserDetection(cacheTTL: 0),
-                        settings: settings,
-                        startupBehavior: .testing,
-                        environmentBase: [:])
-                    let baseSpec = try #require(store.providerSpecs[.claude])
-                    let descriptor = ProviderDescriptor(
-                        id: .claude,
-                        metadata: baseSpec.descriptor.metadata,
-                        branding: baseSpec.descriptor.branding,
-                        tokenCost: baseSpec.descriptor.tokenCost,
-                        fetchPlan: ProviderFetchPlan(
-                            sourceModes: [.cli],
-                            pipeline: ProviderFetchPipeline { _ in [CancellationFetchStrategy()] }),
-                        cli: baseSpec.descriptor.cli)
-                    store.providerSpecs[.claude] = ProviderSpec(
-                        style: baseSpec.style,
-                        isEnabled: baseSpec.isEnabled,
-                        descriptor: descriptor,
-                        makeFetchContext: baseSpec.makeFetchContext)
-                    return store
-                }
-
-                await store.refreshProvider(.claude)
-                let result = await MainActor.run {
-                    (
-                        hasSnapshot: store.snapshot(for: .claude) != nil,
-                        error: store.error(for: .claude))
-                }
-
-                #expect(!result.hasSnapshot)
-                #expect(result.error == nil)
-            }
-        }
-    }
-
-    @Test
     func `superseded credential change clears prior Claude state after cancellation`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                let tempDir = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                let fileURL = tempDir.appendingPathComponent("credentials.json")
-                try Data("{}".utf8).write(to: fileURL)
+                try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                    let tempDir = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                    let fileURL = tempDir.appendingPathComponent("credentials.json")
+                    try Data("{}".utf8).write(to: fileURL)
 
-                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                    #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
-                    let cancellations = CredentialSwapCancellationSequence(credentialsFileURL: fileURL)
+                    try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                        #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
+                        let cancellations = CredentialSwapCancellationSequence(credentialsFileURL: fileURL)
 
-                    let store = try await MainActor.run {
-                        let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-cancelled-auth-change")
-                        settings.refreshFrequency = .manual
-                        settings.statusChecksEnabled = false
-                        settings.claudeUsageDataSource = .cli
-                        settings.claudeOAuthKeychainPromptMode = .never
+                        let store = try await MainActor.run {
+                            let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-cancelled-auth-change")
+                            settings.refreshFrequency = .manual
+                            settings.statusChecksEnabled = false
+                            settings.claudeUsageDataSource = .cli
+                            settings.claudeOAuthKeychainPromptMode = .never
 
-                        let metadata = ProviderRegistry.shared.metadata
-                        for provider in UsageProvider.allCases {
-                            try settings.setProviderEnabled(
-                                provider: provider,
-                                metadata: #require(metadata[provider]),
-                                enabled: provider == .claude)
+                            let metadata = ProviderRegistry.shared.metadata
+                            for provider in UsageProvider.allCases {
+                                try settings.setProviderEnabled(
+                                    provider: provider,
+                                    metadata: #require(metadata[provider]),
+                                    enabled: provider == .claude)
+                            }
+
+                            let store = UsageStore(
+                                fetcher: UsageFetcher(environment: [:]),
+                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                settings: settings,
+                                startupBehavior: .testing,
+                                environmentBase: [:])
+                            store._setSnapshotForTesting(
+                                UsageSnapshot(
+                                    primary: RateWindow(
+                                        usedPercent: 12,
+                                        windowMinutes: 300,
+                                        resetsAt: nil,
+                                        resetDescription: nil),
+                                    secondary: nil,
+                                    updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                    identity: ProviderIdentitySnapshot(
+                                        providerID: .claude,
+                                        accountEmail: "old@example.com",
+                                        accountOrganization: nil,
+                                        loginMethod: "Pro")),
+                                provider: .claude)
+                            store._setTokenSnapshotForTesting(
+                                CostUsageTokenSnapshot(
+                                    sessionTokens: 4200,
+                                    sessionCostUSD: 1.25,
+                                    last30DaysTokens: 42000,
+                                    last30DaysCostUSD: 12.50,
+                                    daily: [],
+                                    updatedAt: Date(timeIntervalSince1970: 1_800_000_001)),
+                                provider: .claude)
+
+                            let baseSpec = try #require(store.providerSpecs[.claude])
+                            let descriptor = ProviderDescriptor(
+                                id: .claude,
+                                metadata: baseSpec.descriptor.metadata,
+                                branding: baseSpec.descriptor.branding,
+                                tokenCost: baseSpec.descriptor.tokenCost,
+                                fetchPlan: ProviderFetchPlan(
+                                    sourceModes: [.cli],
+                                    pipeline: ProviderFetchPipeline { _ in
+                                        [CancellationAfterCredentialSwapFetchStrategy(cancellations: cancellations)]
+                                    }),
+                                cli: baseSpec.descriptor.cli)
+                            store.providerSpecs[.claude] = ProviderSpec(
+                                style: baseSpec.style,
+                                isEnabled: baseSpec.isEnabled,
+                                descriptor: descriptor,
+                                makeFetchContext: baseSpec.makeFetchContext)
+                            return store
                         }
 
-                        let store = UsageStore(
-                            fetcher: UsageFetcher(environment: [:]),
-                            browserDetection: BrowserDetection(cacheTTL: 0),
-                            settings: settings,
-                            startupBehavior: .testing,
-                            environmentBase: [:])
-                        store._setSnapshotForTesting(
-                            UsageSnapshot(
-                                primary: RateWindow(
-                                    usedPercent: 12,
-                                    windowMinutes: 300,
-                                    resetsAt: nil,
-                                    resetDescription: nil),
-                                secondary: nil,
-                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                                identity: ProviderIdentitySnapshot(
-                                    providerID: .claude,
-                                    accountEmail: "old@example.com",
-                                    accountOrganization: nil,
-                                    loginMethod: "Pro")),
-                            provider: .claude)
-                        store._setTokenSnapshotForTesting(
-                            CostUsageTokenSnapshot(
-                                sessionTokens: 4200,
-                                sessionCostUSD: 1.25,
-                                last30DaysTokens: 42000,
-                                last30DaysCostUSD: 12.50,
-                                daily: [],
-                                updatedAt: Date(timeIntervalSince1970: 1_800_000_001)),
-                            provider: .claude)
+                        let olderRefresh = Task {
+                            await store.refreshProvider(.claude)
+                        }
+                        await cancellations.waitUntilStarted(count: 1)
+                        let newerRefresh = Task {
+                            await store.refreshProvider(.claude)
+                        }
+                        await newerRefresh.value
+                        await olderRefresh.value
+                        let result = await MainActor.run {
+                            (
+                                hasSnapshot: store.snapshot(for: .claude) != nil,
+                                hasTokenSnapshot: store.tokenSnapshot(for: .claude) != nil,
+                                error: store.error(for: .claude))
+                        }
 
-                        let baseSpec = try #require(store.providerSpecs[.claude])
-                        let descriptor = ProviderDescriptor(
-                            id: .claude,
-                            metadata: baseSpec.descriptor.metadata,
-                            branding: baseSpec.descriptor.branding,
-                            tokenCost: baseSpec.descriptor.tokenCost,
-                            fetchPlan: ProviderFetchPlan(
-                                sourceModes: [.cli],
-                                pipeline: ProviderFetchPipeline { _ in
-                                    [CancellationAfterCredentialSwapFetchStrategy(cancellations: cancellations)]
-                                }),
-                            cli: baseSpec.descriptor.cli)
-                        store.providerSpecs[.claude] = ProviderSpec(
-                            style: baseSpec.style,
-                            isEnabled: baseSpec.isEnabled,
-                            descriptor: descriptor,
-                            makeFetchContext: baseSpec.makeFetchContext)
-                        return store
+                        #expect(!result.hasSnapshot)
+                        #expect(!result.hasTokenSnapshot)
+                        #expect(result.error == nil)
                     }
-
-                    let olderRefresh = Task {
-                        await store.refreshProvider(.claude)
-                    }
-                    await cancellations.waitUntilStarted(count: 1)
-                    let newerRefresh = Task {
-                        await store.refreshProvider(.claude)
-                    }
-                    await newerRefresh.value
-                    await olderRefresh.value
-                    let result = await MainActor.run {
-                        (
-                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                            hasTokenSnapshot: store.tokenSnapshot(for: .claude) != nil,
-                            error: store.error(for: .claude))
-                    }
-
-                    #expect(!result.hasSnapshot)
-                    #expect(!result.hasTokenSnapshot)
-                    #expect(result.error == nil)
                 }
             }
-        }
     }
 
     @Test
@@ -482,393 +422,402 @@ struct ClaudeResilienceTests {
 
     @Test
     func `credentials change clears prior Claude snapshot for non transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                let tempDir = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                let fileURL = tempDir.appendingPathComponent("credentials.json")
-                try Data("{}".utf8).write(to: fileURL)
+                try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                    let tempDir = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                    let fileURL = tempDir.appendingPathComponent("credentials.json")
+                    try Data("{}".utf8).write(to: fileURL)
 
-                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                    #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
+                    try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                        #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
 
-                    let store = try await MainActor.run {
-                        let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-auth-change")
-                        settings.refreshFrequency = .manual
-                        settings.statusChecksEnabled = false
-                        settings.claudeUsageDataSource = .cli
+                        let store = try await MainActor.run {
+                            let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-auth-change")
+                            settings.refreshFrequency = .manual
+                            settings.statusChecksEnabled = false
+                            settings.claudeUsageDataSource = .cli
 
-                        let metadata = ProviderRegistry.shared.metadata
-                        for provider in UsageProvider.allCases {
-                            try settings.setProviderEnabled(
-                                provider: provider,
-                                metadata: #require(metadata[provider]),
-                                enabled: provider == .claude)
+                            let metadata = ProviderRegistry.shared.metadata
+                            for provider in UsageProvider.allCases {
+                                try settings.setProviderEnabled(
+                                    provider: provider,
+                                    metadata: #require(metadata[provider]),
+                                    enabled: provider == .claude)
+                            }
+
+                            let store = UsageStore(
+                                fetcher: UsageFetcher(environment: [:]),
+                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                settings: settings,
+                                startupBehavior: .testing,
+                                environmentBase: [:])
+                            let prior = UsageSnapshot(
+                                primary: RateWindow(
+                                    usedPercent: 12,
+                                    windowMinutes: 300,
+                                    resetsAt: nil,
+                                    resetDescription: nil),
+                                secondary: nil,
+                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                identity: ProviderIdentitySnapshot(
+                                    providerID: .claude,
+                                    accountEmail: "old@example.com",
+                                    accountOrganization: nil,
+                                    loginMethod: "Pro"))
+                            store._setSnapshotForTesting(prior, provider: .claude)
+
+                            let baseSpec = try #require(store.providerSpecs[.claude])
+                            let descriptor = ProviderDescriptor(
+                                id: .claude,
+                                metadata: baseSpec.descriptor.metadata,
+                                branding: baseSpec.descriptor.branding,
+                                tokenCost: baseSpec.descriptor.tokenCost,
+                                fetchPlan: ProviderFetchPlan(
+                                    sourceModes: [.cli],
+                                    pipeline: ProviderFetchPipeline { _ in
+                                        [AuthFailureFetchStrategy(credentialsFileURL: fileURL)]
+                                    }),
+                                cli: baseSpec.descriptor.cli)
+                            store.providerSpecs[.claude] = ProviderSpec(
+                                style: baseSpec.style,
+                                isEnabled: baseSpec.isEnabled,
+                                descriptor: descriptor,
+                                makeFetchContext: baseSpec.makeFetchContext)
+                            return store
                         }
 
-                        let store = UsageStore(
-                            fetcher: UsageFetcher(environment: [:]),
-                            browserDetection: BrowserDetection(cacheTTL: 0),
-                            settings: settings,
-                            startupBehavior: .testing,
-                            environmentBase: [:])
-                        let prior = UsageSnapshot(
-                            primary: RateWindow(
-                                usedPercent: 12,
-                                windowMinutes: 300,
-                                resetsAt: nil,
-                                resetDescription: nil),
-                            secondary: nil,
-                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                            identity: ProviderIdentitySnapshot(
-                                providerID: .claude,
-                                accountEmail: "old@example.com",
-                                accountOrganization: nil,
-                                loginMethod: "Pro"))
-                        store._setSnapshotForTesting(prior, provider: .claude)
+                        await store.refreshProvider(.claude)
+                        let result = await MainActor.run {
+                            (
+                                hasSnapshot: store.snapshot(for: .claude) != nil,
+                                hasError: store.error(for: .claude) != nil)
+                        }
 
-                        let baseSpec = try #require(store.providerSpecs[.claude])
-                        let descriptor = ProviderDescriptor(
-                            id: .claude,
-                            metadata: baseSpec.descriptor.metadata,
-                            branding: baseSpec.descriptor.branding,
-                            tokenCost: baseSpec.descriptor.tokenCost,
-                            fetchPlan: ProviderFetchPlan(
-                                sourceModes: [.cli],
-                                pipeline: ProviderFetchPipeline { _ in
-                                    [AuthFailureFetchStrategy(credentialsFileURL: fileURL)]
-                                }),
-                            cli: baseSpec.descriptor.cli)
-                        store.providerSpecs[.claude] = ProviderSpec(
-                            style: baseSpec.style,
-                            isEnabled: baseSpec.isEnabled,
-                            descriptor: descriptor,
-                            makeFetchContext: baseSpec.makeFetchContext)
-                        return store
+                        #expect(!result.hasSnapshot)
+                        #expect(result.hasError)
                     }
-
-                    await store.refreshProvider(.claude)
-                    let result = await MainActor.run {
-                        (
-                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                            hasError: store.error(for: .claude) != nil)
-                    }
-
-                    #expect(!result.hasSnapshot)
-                    #expect(result.hasError)
                 }
             }
-        }
     }
 
     @Test
     func `credentials change clears prior Claude snapshot for transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                let tempDir = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                let fileURL = tempDir.appendingPathComponent("credentials.json")
-                try Data("{}".utf8).write(to: fileURL)
+                try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                    let tempDir = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                    let fileURL = tempDir.appendingPathComponent("credentials.json")
+                    try Data("{}".utf8).write(to: fileURL)
 
-                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                    #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
+                    try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                        #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
 
-                    let store = try await MainActor.run {
-                        let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-transient-auth-change")
-                        settings.refreshFrequency = .manual
-                        settings.statusChecksEnabled = false
-                        settings.claudeUsageDataSource = .cli
+                        let store = try await MainActor.run {
+                            let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-transient-auth-change")
+                            settings.refreshFrequency = .manual
+                            settings.statusChecksEnabled = false
+                            settings.claudeUsageDataSource = .cli
 
-                        let metadata = ProviderRegistry.shared.metadata
-                        for provider in UsageProvider.allCases {
-                            try settings.setProviderEnabled(
-                                provider: provider,
-                                metadata: #require(metadata[provider]),
-                                enabled: provider == .claude)
+                            let metadata = ProviderRegistry.shared.metadata
+                            for provider in UsageProvider.allCases {
+                                try settings.setProviderEnabled(
+                                    provider: provider,
+                                    metadata: #require(metadata[provider]),
+                                    enabled: provider == .claude)
+                            }
+
+                            let store = UsageStore(
+                                fetcher: UsageFetcher(environment: [:]),
+                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                settings: settings,
+                                startupBehavior: .testing,
+                                environmentBase: [:])
+                            let prior = UsageSnapshot(
+                                primary: RateWindow(
+                                    usedPercent: 12,
+                                    windowMinutes: 300,
+                                    resetsAt: nil,
+                                    resetDescription: nil),
+                                secondary: nil,
+                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                identity: ProviderIdentitySnapshot(
+                                    providerID: .claude,
+                                    accountEmail: "old@example.com",
+                                    accountOrganization: nil,
+                                    loginMethod: "Pro"))
+                            store._setSnapshotForTesting(prior, provider: .claude)
+
+                            let baseSpec = try #require(store.providerSpecs[.claude])
+                            let descriptor = ProviderDescriptor(
+                                id: .claude,
+                                metadata: baseSpec.descriptor.metadata,
+                                branding: baseSpec.descriptor.branding,
+                                tokenCost: baseSpec.descriptor.tokenCost,
+                                fetchPlan: ProviderFetchPlan(
+                                    sourceModes: [.cli],
+                                    pipeline: ProviderFetchPipeline { _ in
+                                        [TransientFailureAfterCredentialSwapFetchStrategy(credentialsFileURL: fileURL)]
+                                    }),
+                                cli: baseSpec.descriptor.cli)
+                            store.providerSpecs[.claude] = ProviderSpec(
+                                style: baseSpec.style,
+                                isEnabled: baseSpec.isEnabled,
+                                descriptor: descriptor,
+                                makeFetchContext: baseSpec.makeFetchContext)
+                            return store
                         }
 
-                        let store = UsageStore(
-                            fetcher: UsageFetcher(environment: [:]),
-                            browserDetection: BrowserDetection(cacheTTL: 0),
-                            settings: settings,
-                            startupBehavior: .testing,
-                            environmentBase: [:])
-                        let prior = UsageSnapshot(
-                            primary: RateWindow(
-                                usedPercent: 12,
-                                windowMinutes: 300,
-                                resetsAt: nil,
-                                resetDescription: nil),
-                            secondary: nil,
-                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                            identity: ProviderIdentitySnapshot(
-                                providerID: .claude,
-                                accountEmail: "old@example.com",
-                                accountOrganization: nil,
-                                loginMethod: "Pro"))
-                        store._setSnapshotForTesting(prior, provider: .claude)
+                        await store.refreshProvider(.claude)
+                        let result = await MainActor.run {
+                            (
+                                hasSnapshot: store.snapshot(for: .claude) != nil,
+                                hasError: store.error(for: .claude) != nil)
+                        }
 
-                        let baseSpec = try #require(store.providerSpecs[.claude])
-                        let descriptor = ProviderDescriptor(
-                            id: .claude,
-                            metadata: baseSpec.descriptor.metadata,
-                            branding: baseSpec.descriptor.branding,
-                            tokenCost: baseSpec.descriptor.tokenCost,
-                            fetchPlan: ProviderFetchPlan(
-                                sourceModes: [.cli],
-                                pipeline: ProviderFetchPipeline { _ in
-                                    [TransientFailureAfterCredentialSwapFetchStrategy(credentialsFileURL: fileURL)]
-                                }),
-                            cli: baseSpec.descriptor.cli)
-                        store.providerSpecs[.claude] = ProviderSpec(
-                            style: baseSpec.style,
-                            isEnabled: baseSpec.isEnabled,
-                            descriptor: descriptor,
-                            makeFetchContext: baseSpec.makeFetchContext)
-                        return store
+                        #expect(!result.hasSnapshot)
+                        #expect(result.hasError)
                     }
-
-                    await store.refreshProvider(.claude)
-                    let result = await MainActor.run {
-                        (
-                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                            hasError: store.error(for: .claude) != nil)
-                    }
-
-                    #expect(!result.hasSnapshot)
-                    #expect(result.hasError)
                 }
             }
-        }
     }
 
     @Test
     func `keychain change does not affect normal Claude refresh`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 1,
-                createdAt: 1,
-                persistentRefHash: "old")
-            let currentFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 2,
-                createdAt: 1,
-                persistentRefHash: "new")
-            let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
-                fingerprint: storedFingerprint)
+                let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 1,
+                    createdAt: 1,
+                    persistentRefHash: "old")
+                let currentFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 2,
+                    createdAt: 1,
+                    persistentRefHash: "new")
+                let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
+                    fingerprint: storedFingerprint)
 
-            try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
-                fingerprintStore)
-            {
-                try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
-                    try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
-                        try await KeychainAccessGate.withTaskOverrideForTesting(false) {
-                            try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
-                                try await ClaudeOAuthCredentialsStore.withClaudeKeychainOverridesForTesting(
-                                    data: nil,
-                                    fingerprint: currentFingerprint)
-                                {
-                                    try await ClaudeOAuthCredentialsStore
-                                        .withIsolatedCredentialsFileTrackingForTesting {
-                                            let tempDir = FileManager.default.temporaryDirectory
-                                                .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                                            try FileManager.default.createDirectory(
-                                                at: tempDir,
-                                                withIntermediateDirectories: true)
-                                            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
+                try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
+                    fingerprintStore)
+                {
+                    try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
+                        try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
+                            try await KeychainAccessGate.withTaskOverrideForTesting(false) {
+                                try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
+                                    try await ClaudeOAuthCredentialsStore.withClaudeKeychainOverridesForTesting(
+                                        data: nil,
+                                        fingerprint: currentFingerprint)
+                                    {
+                                        try await ClaudeOAuthCredentialsStore
+                                            .withIsolatedCredentialsFileTrackingForTesting {
+                                                let tempDir = FileManager.default.temporaryDirectory
+                                                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                                                try FileManager.default.createDirectory(
+                                                    at: tempDir,
+                                                    withIntermediateDirectories: true)
+                                                let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
 
-                                            try await ClaudeOAuthCredentialsStore
-                                                .withCredentialsURLOverrideForTesting(fileURL) {
-                                                    let store = try await MainActor.run {
-                                                        let settings = Self.makeSettingsStore(
-                                                            suite: "ClaudeResilienceTests-keychain-auth-change")
-                                                        settings.refreshFrequency = .manual
-                                                        settings.statusChecksEnabled = false
-                                                        settings.claudeUsageDataSource = .cli
+                                                try await ClaudeOAuthCredentialsStore
+                                                    .withCredentialsURLOverrideForTesting(fileURL) {
+                                                        let store = try await MainActor.run {
+                                                            let settings = Self.makeSettingsStore(
+                                                                suite: "ClaudeResilienceTests-keychain-auth-change")
+                                                            settings.refreshFrequency = .manual
+                                                            settings.statusChecksEnabled = false
+                                                            settings.claudeUsageDataSource = .cli
 
-                                                        let metadata = ProviderRegistry.shared.metadata
-                                                        for provider in UsageProvider.allCases {
-                                                            try settings.setProviderEnabled(
-                                                                provider: provider,
-                                                                metadata: #require(metadata[provider]),
-                                                                enabled: provider == .claude)
+                                                            let metadata = ProviderRegistry.shared.metadata
+                                                            for provider in UsageProvider.allCases {
+                                                                try settings.setProviderEnabled(
+                                                                    provider: provider,
+                                                                    metadata: #require(metadata[provider]),
+                                                                    enabled: provider == .claude)
+                                                            }
+
+                                                            let store = UsageStore(
+                                                                fetcher: UsageFetcher(environment: [:]),
+                                                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                                                settings: settings,
+                                                                startupBehavior: .testing,
+                                                                environmentBase: [:])
+                                                            let prior = UsageSnapshot(
+                                                                primary: RateWindow(
+                                                                    usedPercent: 12,
+                                                                    windowMinutes: 300,
+                                                                    resetsAt: nil,
+                                                                    resetDescription: nil),
+                                                                secondary: nil,
+                                                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                                                identity: ProviderIdentitySnapshot(
+                                                                    providerID: .claude,
+                                                                    accountEmail: "old@example.com",
+                                                                    accountOrganization: nil,
+                                                                    loginMethod: "Pro"))
+                                                            store._setSnapshotForTesting(prior, provider: .claude)
+
+                                                            let baseSpec = try #require(store.providerSpecs[.claude])
+                                                            let descriptor = ProviderDescriptor(
+                                                                id: .claude,
+                                                                metadata: baseSpec.descriptor.metadata,
+                                                                branding: baseSpec.descriptor.branding,
+                                                                tokenCost: baseSpec.descriptor.tokenCost,
+                                                                fetchPlan: ProviderFetchPlan(
+                                                                    sourceModes: [.cli],
+                                                                    pipeline: ProviderFetchPipeline { _ in
+                                                                        [TimeoutFetchStrategy()]
+                                                                    }),
+                                                                cli: baseSpec.descriptor.cli)
+                                                            store.providerSpecs[.claude] = ProviderSpec(
+                                                                style: baseSpec.style,
+                                                                isEnabled: baseSpec.isEnabled,
+                                                                descriptor: descriptor,
+                                                                makeFetchContext: baseSpec.makeFetchContext)
+                                                            return store
                                                         }
 
-                                                        let store = UsageStore(
-                                                            fetcher: UsageFetcher(environment: [:]),
-                                                            browserDetection: BrowserDetection(cacheTTL: 0),
-                                                            settings: settings,
-                                                            startupBehavior: .testing,
-                                                            environmentBase: [:])
-                                                        let prior = UsageSnapshot(
-                                                            primary: RateWindow(
-                                                                usedPercent: 12,
-                                                                windowMinutes: 300,
-                                                                resetsAt: nil,
-                                                                resetDescription: nil),
-                                                            secondary: nil,
-                                                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                                                            identity: ProviderIdentitySnapshot(
-                                                                providerID: .claude,
-                                                                accountEmail: "old@example.com",
-                                                                accountOrganization: nil,
-                                                                loginMethod: "Pro"))
-                                                        store._setSnapshotForTesting(prior, provider: .claude)
+                                                        await store.refreshProvider(.claude)
+                                                        let result = await MainActor.run {
+                                                            (
+                                                                hasSnapshot: store.snapshot(for: .claude) != nil,
+                                                                hasError: store.error(for: .claude) != nil,
+                                                                storedFingerprint: fingerprintStore.fingerprint)
+                                                        }
 
-                                                        let baseSpec = try #require(store.providerSpecs[.claude])
-                                                        let descriptor = ProviderDescriptor(
-                                                            id: .claude,
-                                                            metadata: baseSpec.descriptor.metadata,
-                                                            branding: baseSpec.descriptor.branding,
-                                                            tokenCost: baseSpec.descriptor.tokenCost,
-                                                            fetchPlan: ProviderFetchPlan(
-                                                                sourceModes: [.cli],
-                                                                pipeline: ProviderFetchPipeline { _ in
-                                                                    [TimeoutFetchStrategy()]
-                                                                }),
-                                                            cli: baseSpec.descriptor.cli)
-                                                        store.providerSpecs[.claude] = ProviderSpec(
-                                                            style: baseSpec.style,
-                                                            isEnabled: baseSpec.isEnabled,
-                                                            descriptor: descriptor,
-                                                            makeFetchContext: baseSpec.makeFetchContext)
-                                                        return store
+                                                        #expect(result.hasSnapshot)
+                                                        #expect(!result.hasError)
+                                                        #expect(result.storedFingerprint == storedFingerprint)
                                                     }
-
-                                                    await store.refreshProvider(.claude)
-                                                    let result = await MainActor.run {
-                                                        (
-                                                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                                                            hasError: store.error(for: .claude) != nil,
-                                                            storedFingerprint: fingerprintStore.fingerprint)
-                                                    }
-
-                                                    #expect(result.hasSnapshot)
-                                                    #expect(!result.hasError)
-                                                    #expect(result.storedFingerprint == storedFingerprint)
-                                                }
-                                        }
+                                            }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
     }
 
     @Test
     func `keychain removal does not affect normal Claude refresh`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 1,
-                createdAt: 1,
-                persistentRefHash: "old")
-            let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
-                fingerprint: storedFingerprint)
-            let keychainStore = ClaudeOAuthCredentialsStore.ClaudeKeychainOverrideStore(data: nil, fingerprint: nil)
+                let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 1,
+                    createdAt: 1,
+                    persistentRefHash: "old")
+                let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
+                    fingerprint: storedFingerprint)
+                let keychainStore = ClaudeOAuthCredentialsStore.ClaudeKeychainOverrideStore(data: nil, fingerprint: nil)
 
-            try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
-                fingerprintStore)
-            {
-                try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
-                    try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
-                        try await KeychainAccessGate.withTaskOverrideForTesting(false) {
-                            try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
-                                try await ClaudeOAuthCredentialsStore.withMutableClaudeKeychainOverrideStoreForTesting(
-                                    keychainStore)
-                                {
+                try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
+                    fingerprintStore)
+                {
+                    try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
+                        try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
+                            try await KeychainAccessGate.withTaskOverrideForTesting(false) {
+                                try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
                                     try await ClaudeOAuthCredentialsStore
-                                        .withIsolatedCredentialsFileTrackingForTesting {
-                                            let tempDir = FileManager.default.temporaryDirectory
-                                                .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                                            try FileManager.default.createDirectory(
-                                                at: tempDir,
-                                                withIntermediateDirectories: true)
-                                            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
-
+                                        .withMutableClaudeKeychainOverrideStoreForTesting(
+                                            keychainStore)
+                                        {
                                             try await ClaudeOAuthCredentialsStore
-                                                .withCredentialsURLOverrideForTesting(fileURL) {
-                                                    let store = try await MainActor.run {
-                                                        let settings = Self.makeSettingsStore(
-                                                            suite: "ClaudeResilienceTests-keychain-auth-removal")
-                                                        settings.refreshFrequency = .manual
-                                                        settings.statusChecksEnabled = false
-                                                        settings.claudeUsageDataSource = .cli
+                                                .withIsolatedCredentialsFileTrackingForTesting {
+                                                    let tempDir = FileManager.default.temporaryDirectory
+                                                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                                                    try FileManager.default.createDirectory(
+                                                        at: tempDir,
+                                                        withIntermediateDirectories: true)
+                                                    let fileURL = tempDir
+                                                        .appendingPathComponent("missing-credentials.json")
 
-                                                        let metadata = ProviderRegistry.shared.metadata
-                                                        for provider in UsageProvider.allCases {
-                                                            try settings.setProviderEnabled(
-                                                                provider: provider,
-                                                                metadata: #require(metadata[provider]),
-                                                                enabled: provider == .claude)
+                                                    try await ClaudeOAuthCredentialsStore
+                                                        .withCredentialsURLOverrideForTesting(fileURL) {
+                                                            let store = try await MainActor.run {
+                                                                let settings = Self.makeSettingsStore(
+                                                                    suite: "ClaudeResilience-keychain-auth")
+                                                                settings.refreshFrequency = .manual
+                                                                settings.statusChecksEnabled = false
+                                                                settings.claudeUsageDataSource = .cli
+
+                                                                let metadata = ProviderRegistry.shared.metadata
+                                                                for provider in UsageProvider.allCases {
+                                                                    try settings.setProviderEnabled(
+                                                                        provider: provider,
+                                                                        metadata: #require(metadata[provider]),
+                                                                        enabled: provider == .claude)
+                                                                }
+
+                                                                let store = UsageStore(
+                                                                    fetcher: UsageFetcher(environment: [:]),
+                                                                    browserDetection: BrowserDetection(cacheTTL: 0),
+                                                                    settings: settings,
+                                                                    startupBehavior: .testing,
+                                                                    environmentBase: [:])
+                                                                let prior = UsageSnapshot(
+                                                                    primary: RateWindow(
+                                                                        usedPercent: 12,
+                                                                        windowMinutes: 300,
+                                                                        resetsAt: nil,
+                                                                        resetDescription: nil),
+                                                                    secondary: nil,
+                                                                    updatedAt: Date(
+                                                                        timeIntervalSince1970: 1_800_000_000),
+                                                                    identity: ProviderIdentitySnapshot(
+                                                                        providerID: .claude,
+                                                                        accountEmail: "old@example.com",
+                                                                        accountOrganization: nil,
+                                                                        loginMethod: "Pro"))
+                                                                store._setSnapshotForTesting(prior, provider: .claude)
+
+                                                                let baseSpec = try #require(store
+                                                                    .providerSpecs[.claude])
+                                                                let descriptor = ProviderDescriptor(
+                                                                    id: .claude,
+                                                                    metadata: baseSpec.descriptor.metadata,
+                                                                    branding: baseSpec.descriptor.branding,
+                                                                    tokenCost: baseSpec.descriptor.tokenCost,
+                                                                    fetchPlan: ProviderFetchPlan(
+                                                                        sourceModes: [.cli],
+                                                                        pipeline: ProviderFetchPipeline { _ in
+                                                                            [TimeoutFetchStrategy()]
+                                                                        }),
+                                                                    cli: baseSpec.descriptor.cli)
+                                                                store.providerSpecs[.claude] = ProviderSpec(
+                                                                    style: baseSpec.style,
+                                                                    isEnabled: baseSpec.isEnabled,
+                                                                    descriptor: descriptor,
+                                                                    makeFetchContext: baseSpec.makeFetchContext)
+                                                                return store
+                                                            }
+
+                                                            await store.refreshProvider(.claude)
+                                                            let result = await MainActor.run {
+                                                                (
+                                                                    hasSnapshot: store.snapshot(for: .claude) != nil,
+                                                                    hasError: store.error(for: .claude) != nil,
+                                                                    storedFingerprint: fingerprintStore.fingerprint)
+                                                            }
+
+                                                            #expect(result.hasSnapshot)
+                                                            #expect(!result.hasError)
+                                                            #expect(result.storedFingerprint == storedFingerprint)
                                                         }
-
-                                                        let store = UsageStore(
-                                                            fetcher: UsageFetcher(environment: [:]),
-                                                            browserDetection: BrowserDetection(cacheTTL: 0),
-                                                            settings: settings,
-                                                            startupBehavior: .testing,
-                                                            environmentBase: [:])
-                                                        let prior = UsageSnapshot(
-                                                            primary: RateWindow(
-                                                                usedPercent: 12,
-                                                                windowMinutes: 300,
-                                                                resetsAt: nil,
-                                                                resetDescription: nil),
-                                                            secondary: nil,
-                                                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                                                            identity: ProviderIdentitySnapshot(
-                                                                providerID: .claude,
-                                                                accountEmail: "old@example.com",
-                                                                accountOrganization: nil,
-                                                                loginMethod: "Pro"))
-                                                        store._setSnapshotForTesting(prior, provider: .claude)
-
-                                                        let baseSpec = try #require(store.providerSpecs[.claude])
-                                                        let descriptor = ProviderDescriptor(
-                                                            id: .claude,
-                                                            metadata: baseSpec.descriptor.metadata,
-                                                            branding: baseSpec.descriptor.branding,
-                                                            tokenCost: baseSpec.descriptor.tokenCost,
-                                                            fetchPlan: ProviderFetchPlan(
-                                                                sourceModes: [.cli],
-                                                                pipeline: ProviderFetchPipeline { _ in
-                                                                    [TimeoutFetchStrategy()]
-                                                                }),
-                                                            cli: baseSpec.descriptor.cli)
-                                                        store.providerSpecs[.claude] = ProviderSpec(
-                                                            style: baseSpec.style,
-                                                            isEnabled: baseSpec.isEnabled,
-                                                            descriptor: descriptor,
-                                                            makeFetchContext: baseSpec.makeFetchContext)
-                                                        return store
-                                                    }
-
-                                                    await store.refreshProvider(.claude)
-                                                    let result = await MainActor.run {
-                                                        (
-                                                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                                                            hasError: store.error(for: .claude) != nil,
-                                                            storedFingerprint: fingerprintStore.fingerprint)
-                                                    }
-
-                                                    #expect(result.hasSnapshot)
-                                                    #expect(!result.hasError)
-                                                    #expect(result.storedFingerprint == storedFingerprint)
                                                 }
                                         }
                                 }
@@ -877,318 +826,381 @@ struct ClaudeResilienceTests {
                     }
                 }
             }
-        }
     }
 }
 
 extension ClaudeResilienceTests {
     @Test
+    func `cancelled Claude refresh never publishes an error`() async throws {
+        try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+            let tempDir = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
+
+            try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                let store = try await MainActor.run {
+                    let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-cancellation")
+                    settings.refreshFrequency = .manual
+                    settings.statusChecksEnabled = false
+                    settings.claudeUsageDataSource = .cli
+                    settings.claudeOAuthKeychainPromptMode = .never
+
+                    let metadata = ProviderRegistry.shared.metadata
+                    for provider in UsageProvider.allCases {
+                        try settings.setProviderEnabled(
+                            provider: provider,
+                            metadata: #require(metadata[provider]),
+                            enabled: provider == .claude)
+                    }
+
+                    let store = UsageStore(
+                        fetcher: UsageFetcher(environment: [:]),
+                        browserDetection: BrowserDetection(cacheTTL: 0),
+                        settings: settings,
+                        startupBehavior: .testing,
+                        environmentBase: [:])
+                    let baseSpec = try #require(store.providerSpecs[.claude])
+                    let descriptor = ProviderDescriptor(
+                        id: .claude,
+                        metadata: baseSpec.descriptor.metadata,
+                        branding: baseSpec.descriptor.branding,
+                        tokenCost: baseSpec.descriptor.tokenCost,
+                        fetchPlan: ProviderFetchPlan(
+                            sourceModes: [.cli],
+                            pipeline: ProviderFetchPipeline { _ in [CancellationFetchStrategy()] }),
+                        cli: baseSpec.descriptor.cli)
+                    store.providerSpecs[.claude] = ProviderSpec(
+                        style: baseSpec.style,
+                        isEnabled: baseSpec.isEnabled,
+                        descriptor: descriptor,
+                        makeFetchContext: baseSpec.makeFetchContext)
+                    return store
+                }
+
+                await store.refreshProvider(.claude)
+                let result = await MainActor.run {
+                    (
+                        hasSnapshot: store.snapshot(for: .claude) != nil,
+                        error: store.error(for: .claude))
+                }
+
+                #expect(!result.hasSnapshot)
+                #expect(result.error == nil)
+            }
+        }
+    }
+
+    @Test
     func `keychain probe denial preserves prior Claude snapshot for transient failure`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 1,
-                createdAt: 1,
-                persistentRefHash: "old")
-            let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
-                fingerprint: storedFingerprint)
-            let deniedStore = ClaudeOAuthKeychainAccessGate.DeniedUntilStore()
-            deniedStore.deniedUntil = Date(timeIntervalSinceNow: 3600)
+                let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 1,
+                    createdAt: 1,
+                    persistentRefHash: "old")
+                let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
+                    fingerprint: storedFingerprint)
+                let deniedStore = ClaudeOAuthKeychainAccessGate.DeniedUntilStore()
+                deniedStore.deniedUntil = Date(timeIntervalSinceNow: 3600)
 
-            try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
-                fingerprintStore)
-            {
-                try await ClaudeOAuthKeychainAccessGate.withDeniedUntilStoreOverrideForTesting(deniedStore) {
-                    try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
-                        try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                            let tempDir = FileManager.default.temporaryDirectory
-                                .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                            try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
+                try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
+                    fingerprintStore)
+                {
+                    try await ClaudeOAuthKeychainAccessGate.withDeniedUntilStoreOverrideForTesting(deniedStore) {
+                        try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
+                            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                                let tempDir = FileManager.default.temporaryDirectory
+                                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                                let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
 
-                            try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                                let (store, prior) = try await MainActor.run {
-                                    let settings = Self.makeSettingsStore(
-                                        suite: "ClaudeResilienceTests-keychain-denial")
-                                    settings.refreshFrequency = .manual
-                                    settings.statusChecksEnabled = false
-                                    settings.claudeUsageDataSource = .cli
+                                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                                    let (store, prior) = try await MainActor.run {
+                                        let settings = Self.makeSettingsStore(
+                                            suite: "ClaudeResilienceTests-keychain-denial")
+                                        settings.refreshFrequency = .manual
+                                        settings.statusChecksEnabled = false
+                                        settings.claudeUsageDataSource = .cli
 
-                                    let metadata = ProviderRegistry.shared.metadata
-                                    for provider in UsageProvider.allCases {
-                                        try settings.setProviderEnabled(
-                                            provider: provider,
-                                            metadata: #require(metadata[provider]),
-                                            enabled: provider == .claude)
+                                        let metadata = ProviderRegistry.shared.metadata
+                                        for provider in UsageProvider.allCases {
+                                            try settings.setProviderEnabled(
+                                                provider: provider,
+                                                metadata: #require(metadata[provider]),
+                                                enabled: provider == .claude)
+                                        }
+
+                                        let store = UsageStore(
+                                            fetcher: UsageFetcher(environment: [:]),
+                                            browserDetection: BrowserDetection(cacheTTL: 0),
+                                            settings: settings,
+                                            startupBehavior: .testing,
+                                            environmentBase: [:])
+                                        let prior = UsageSnapshot(
+                                            primary: RateWindow(
+                                                usedPercent: 12,
+                                                windowMinutes: 300,
+                                                resetsAt: nil,
+                                                resetDescription: nil),
+                                            secondary: nil,
+                                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                            identity: ProviderIdentitySnapshot(
+                                                providerID: .claude,
+                                                accountEmail: "old@example.com",
+                                                accountOrganization: nil,
+                                                loginMethod: "Pro"))
+                                        store._setSnapshotForTesting(prior, provider: .claude)
+
+                                        let baseSpec = try #require(store.providerSpecs[.claude])
+                                        let descriptor = ProviderDescriptor(
+                                            id: .claude,
+                                            metadata: baseSpec.descriptor.metadata,
+                                            branding: baseSpec.descriptor.branding,
+                                            tokenCost: baseSpec.descriptor.tokenCost,
+                                            fetchPlan: ProviderFetchPlan(
+                                                sourceModes: [.cli],
+                                                pipeline: ProviderFetchPipeline { _ in [TimeoutFetchStrategy()] }),
+                                            cli: baseSpec.descriptor.cli)
+                                        store.providerSpecs[.claude] = ProviderSpec(
+                                            style: baseSpec.style,
+                                            isEnabled: baseSpec.isEnabled,
+                                            descriptor: descriptor,
+                                            makeFetchContext: baseSpec.makeFetchContext)
+                                        return (store, prior)
                                     }
 
-                                    let store = UsageStore(
-                                        fetcher: UsageFetcher(environment: [:]),
-                                        browserDetection: BrowserDetection(cacheTTL: 0),
-                                        settings: settings,
-                                        startupBehavior: .testing,
-                                        environmentBase: [:])
-                                    let prior = UsageSnapshot(
-                                        primary: RateWindow(
-                                            usedPercent: 12,
-                                            windowMinutes: 300,
-                                            resetsAt: nil,
-                                            resetDescription: nil),
-                                        secondary: nil,
-                                        updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                                        identity: ProviderIdentitySnapshot(
-                                            providerID: .claude,
-                                            accountEmail: "old@example.com",
-                                            accountOrganization: nil,
-                                            loginMethod: "Pro"))
-                                    store._setSnapshotForTesting(prior, provider: .claude)
+                                    await store.refreshProvider(.claude)
+                                    let result = await MainActor.run {
+                                        (
+                                            updatedAt: store.snapshot(for: .claude)?.updatedAt,
+                                            hasError: store.error(for: .claude) != nil,
+                                            storedFingerprint: fingerprintStore.fingerprint)
+                                    }
 
-                                    let baseSpec = try #require(store.providerSpecs[.claude])
-                                    let descriptor = ProviderDescriptor(
-                                        id: .claude,
-                                        metadata: baseSpec.descriptor.metadata,
-                                        branding: baseSpec.descriptor.branding,
-                                        tokenCost: baseSpec.descriptor.tokenCost,
-                                        fetchPlan: ProviderFetchPlan(
-                                            sourceModes: [.cli],
-                                            pipeline: ProviderFetchPipeline { _ in [TimeoutFetchStrategy()] }),
-                                        cli: baseSpec.descriptor.cli)
-                                    store.providerSpecs[.claude] = ProviderSpec(
-                                        style: baseSpec.style,
-                                        isEnabled: baseSpec.isEnabled,
-                                        descriptor: descriptor,
-                                        makeFetchContext: baseSpec.makeFetchContext)
-                                    return (store, prior)
+                                    #expect(result.updatedAt == prior.updatedAt)
+                                    #expect(!result.hasError)
+                                    #expect(result.storedFingerprint == storedFingerprint)
                                 }
-
-                                await store.refreshProvider(.claude)
-                                let result = await MainActor.run {
-                                    (
-                                        updatedAt: store.snapshot(for: .claude)?.updatedAt,
-                                        hasError: store.error(for: .claude) != nil,
-                                        storedFingerprint: fingerprintStore.fingerprint)
-                                }
-
-                                #expect(result.updatedAt == prior.updatedAt)
-                                #expect(!result.hasError)
-                                #expect(result.storedFingerprint == storedFingerprint)
                             }
                         }
                     }
                 }
             }
-        }
     }
 
     @Test
     func `keychain change does not affect reset backfill`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            let resetDate = Date(timeIntervalSince1970: 1_900_000_000)
-            let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 1,
-                createdAt: 1,
-                persistentRefHash: "old")
-            let currentFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
-                modifiedAt: 2,
-                createdAt: 1,
-                persistentRefHash: "new")
-            let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
-                fingerprint: storedFingerprint)
+                let resetDate = Date(timeIntervalSince1970: 1_900_000_000)
+                let storedFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 1,
+                    createdAt: 1,
+                    persistentRefHash: "old")
+                let currentFingerprint = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprint(
+                    modifiedAt: 2,
+                    createdAt: 1,
+                    persistentRefHash: "new")
+                let fingerprintStore = ClaudeOAuthCredentialsStore.ClaudeKeychainFingerprintStore(
+                    fingerprint: storedFingerprint)
 
-            try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
-                fingerprintStore)
-            {
-                try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
-                    try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
-                        try await KeychainAccessGate.withTaskOverrideForTesting(false) {
-                            try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
-                                try await ClaudeOAuthCredentialsStore.withClaudeKeychainOverridesForTesting(
-                                    data: nil,
-                                    fingerprint: currentFingerprint)
-                                {
-                                    try await ClaudeOAuthCredentialsStore
-                                        .withIsolatedCredentialsFileTrackingForTesting {
-                                            let tempDir = FileManager.default.temporaryDirectory
-                                                .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                                            try FileManager.default.createDirectory(
-                                                at: tempDir,
-                                                withIntermediateDirectories: true)
-                                            let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
+                try await ClaudeOAuthCredentialsStore.withClaudeKeychainFingerprintStoreOverrideForTesting(
+                    fingerprintStore)
+                {
+                    try await ClaudeOAuthKeychainPromptPreference.withTaskOverrideForTesting(.always) {
+                        try await ClaudeOAuthCredentialsStore.withKeychainAccessOverrideForTesting(false) {
+                            try await KeychainAccessGate.withTaskOverrideForTesting(false) {
+                                try await ClaudeOAuthKeychainAccessGate.withShouldAllowPromptOverrideForTesting(true) {
+                                    try await ClaudeOAuthCredentialsStore.withClaudeKeychainOverridesForTesting(
+                                        data: nil,
+                                        fingerprint: currentFingerprint)
+                                    {
+                                        try await ClaudeOAuthCredentialsStore
+                                            .withIsolatedCredentialsFileTrackingForTesting {
+                                                let tempDir = FileManager.default.temporaryDirectory
+                                                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                                                try FileManager.default.createDirectory(
+                                                    at: tempDir,
+                                                    withIntermediateDirectories: true)
+                                                let fileURL = tempDir.appendingPathComponent("missing-credentials.json")
 
-                                            try await ClaudeOAuthCredentialsStore
-                                                .withCredentialsURLOverrideForTesting(fileURL) {
-                                                    let store = try await MainActor.run {
-                                                        let settings = Self.makeSettingsStore(
-                                                            suite: "ClaudeResilienceTests-keychain-auth-consumed")
-                                                        settings.refreshFrequency = .manual
-                                                        settings.statusChecksEnabled = false
-                                                        settings.claudeUsageDataSource = .cli
+                                                try await ClaudeOAuthCredentialsStore
+                                                    .withCredentialsURLOverrideForTesting(fileURL) {
+                                                        let store = try await MainActor.run {
+                                                            let settings = Self.makeSettingsStore(
+                                                                suite: "ClaudeResilienceTests-keychain-auth-consumed")
+                                                            settings.refreshFrequency = .manual
+                                                            settings.statusChecksEnabled = false
+                                                            settings.claudeUsageDataSource = .cli
 
-                                                        let metadata = ProviderRegistry.shared.metadata
-                                                        for provider in UsageProvider.allCases {
-                                                            try settings.setProviderEnabled(
-                                                                provider: provider,
-                                                                metadata: #require(metadata[provider]),
-                                                                enabled: provider == .claude)
+                                                            let metadata = ProviderRegistry.shared.metadata
+                                                            for provider in UsageProvider.allCases {
+                                                                try settings.setProviderEnabled(
+                                                                    provider: provider,
+                                                                    metadata: #require(metadata[provider]),
+                                                                    enabled: provider == .claude)
+                                                            }
+
+                                                            let store = UsageStore(
+                                                                fetcher: UsageFetcher(environment: [:]),
+                                                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                                                settings: settings,
+                                                                startupBehavior: .testing,
+                                                                environmentBase: [:])
+                                                            let prior = UsageSnapshot(
+                                                                primary: RateWindow(
+                                                                    usedPercent: 12,
+                                                                    windowMinutes: 300,
+                                                                    resetsAt: resetDate,
+                                                                    resetDescription: "old reset"),
+                                                                secondary: nil,
+                                                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                                                identity: nil)
+                                                            store._setSnapshotForTesting(prior, provider: .claude)
+                                                            store.lastKnownResetSnapshots[.claude] = prior
+
+                                                            let baseSpec = try #require(store.providerSpecs[.claude])
+                                                            let descriptor = ProviderDescriptor(
+                                                                id: .claude,
+                                                                metadata: baseSpec.descriptor.metadata,
+                                                                branding: baseSpec.descriptor.branding,
+                                                                tokenCost: baseSpec.descriptor.tokenCost,
+                                                                fetchPlan: ProviderFetchPlan(
+                                                                    sourceModes: [.cli],
+                                                                    pipeline: ProviderFetchPipeline { _ in
+                                                                        [SuccessfulFetchStrategy()]
+                                                                    }),
+                                                                cli: baseSpec.descriptor.cli)
+                                                            store.providerSpecs[.claude] = ProviderSpec(
+                                                                style: baseSpec.style,
+                                                                isEnabled: baseSpec.isEnabled,
+                                                                descriptor: descriptor,
+                                                                makeFetchContext: baseSpec.makeFetchContext)
+                                                            return store
                                                         }
 
-                                                        let store = UsageStore(
-                                                            fetcher: UsageFetcher(environment: [:]),
-                                                            browserDetection: BrowserDetection(cacheTTL: 0),
-                                                            settings: settings,
-                                                            startupBehavior: .testing,
-                                                            environmentBase: [:])
-                                                        let prior = UsageSnapshot(
-                                                            primary: RateWindow(
-                                                                usedPercent: 12,
-                                                                windowMinutes: 300,
-                                                                resetsAt: resetDate,
-                                                                resetDescription: "old reset"),
-                                                            secondary: nil,
-                                                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                                                            identity: nil)
-                                                        store._setSnapshotForTesting(prior, provider: .claude)
-                                                        store.lastKnownResetSnapshots[.claude] = prior
+                                                        await store.refreshProvider(.claude)
+                                                        let firstReset = await MainActor.run {
+                                                            store.snapshot(for: .claude)?.primary?.resetsAt
+                                                        }
+                                                        #expect(firstReset == resetDate)
+                                                        #expect(fingerprintStore.fingerprint == storedFingerprint)
 
-                                                        let baseSpec = try #require(store.providerSpecs[.claude])
-                                                        let descriptor = ProviderDescriptor(
-                                                            id: .claude,
-                                                            metadata: baseSpec.descriptor.metadata,
-                                                            branding: baseSpec.descriptor.branding,
-                                                            tokenCost: baseSpec.descriptor.tokenCost,
-                                                            fetchPlan: ProviderFetchPlan(
-                                                                sourceModes: [.cli],
-                                                                pipeline: ProviderFetchPipeline { _ in
-                                                                    [SuccessfulFetchStrategy()]
-                                                                }),
-                                                            cli: baseSpec.descriptor.cli)
-                                                        store.providerSpecs[.claude] = ProviderSpec(
-                                                            style: baseSpec.style,
-                                                            isEnabled: baseSpec.isEnabled,
-                                                            descriptor: descriptor,
-                                                            makeFetchContext: baseSpec.makeFetchContext)
-                                                        return store
+                                                        await MainActor.run {
+                                                            let seed = UsageSnapshot(
+                                                                primary: RateWindow(
+                                                                    usedPercent: 10,
+                                                                    windowMinutes: 300,
+                                                                    resetsAt: resetDate,
+                                                                    resetDescription: "fresh reset"),
+                                                                secondary: nil,
+                                                                updatedAt: Date(timeIntervalSince1970: 1_800_000_050),
+                                                                identity: nil)
+                                                            store.lastKnownResetSnapshots[.claude] = seed
+                                                        }
+
+                                                        await store.refreshProvider(.claude)
+                                                        let secondReset = await MainActor.run {
+                                                            store.snapshot(for: .claude)?.primary?.resetsAt
+                                                        }
+
+                                                        #expect(secondReset == resetDate)
+                                                        #expect(fingerprintStore.fingerprint == storedFingerprint)
                                                     }
-
-                                                    await store.refreshProvider(.claude)
-                                                    let firstReset = await MainActor.run {
-                                                        store.snapshot(for: .claude)?.primary?.resetsAt
-                                                    }
-                                                    #expect(firstReset == resetDate)
-                                                    #expect(fingerprintStore.fingerprint == storedFingerprint)
-
-                                                    await MainActor.run {
-                                                        let seed = UsageSnapshot(
-                                                            primary: RateWindow(
-                                                                usedPercent: 10,
-                                                                windowMinutes: 300,
-                                                                resetsAt: resetDate,
-                                                                resetDescription: "fresh reset"),
-                                                            secondary: nil,
-                                                            updatedAt: Date(timeIntervalSince1970: 1_800_000_050),
-                                                            identity: nil)
-                                                        store.lastKnownResetSnapshots[.claude] = seed
-                                                    }
-
-                                                    await store.refreshProvider(.claude)
-                                                    let secondReset = await MainActor.run {
-                                                        store.snapshot(for: .claude)?.primary?.resetsAt
-                                                    }
-
-                                                    #expect(secondReset == resetDate)
-                                                    #expect(fingerprintStore.fingerprint == storedFingerprint)
-                                                }
-                                        }
+                                            }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
     }
 
     @Test
     func `credentials change before fetch clears stale reset backfill`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                let tempDir = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                let fileURL = tempDir.appendingPathComponent("credentials.json")
-                try Data("{\"old\":true}".utf8).write(to: fileURL)
+                try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                    let tempDir = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                    let fileURL = tempDir.appendingPathComponent("credentials.json")
+                    try Data("{\"old\":true}".utf8).write(to: fileURL)
 
-                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                    #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
-                    try Data("{\"new\":true,\"version\":2}".utf8).write(to: fileURL)
+                    try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                        #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
+                        try Data("{\"new\":true,\"version\":2}".utf8).write(to: fileURL)
 
-                    let store = try await MainActor.run {
-                        let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-prefetch-auth-change")
-                        settings.refreshFrequency = .manual
-                        settings.statusChecksEnabled = false
-                        settings.claudeUsageDataSource = .cli
+                        let store = try await MainActor.run {
+                            let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-prefetch-auth-change")
+                            settings.refreshFrequency = .manual
+                            settings.statusChecksEnabled = false
+                            settings.claudeUsageDataSource = .cli
 
-                        let metadata = ProviderRegistry.shared.metadata
-                        for provider in UsageProvider.allCases {
-                            try settings.setProviderEnabled(
-                                provider: provider,
-                                metadata: #require(metadata[provider]),
-                                enabled: provider == .claude)
+                            let metadata = ProviderRegistry.shared.metadata
+                            for provider in UsageProvider.allCases {
+                                try settings.setProviderEnabled(
+                                    provider: provider,
+                                    metadata: #require(metadata[provider]),
+                                    enabled: provider == .claude)
+                            }
+
+                            let store = UsageStore(
+                                fetcher: UsageFetcher(environment: [:]),
+                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                settings: settings,
+                                startupBehavior: .testing,
+                                environmentBase: [:])
+                            let prior = UsageSnapshot(
+                                primary: RateWindow(
+                                    usedPercent: 12,
+                                    windowMinutes: 300,
+                                    resetsAt: Date(timeIntervalSince1970: 1_900_000_000),
+                                    resetDescription: "old reset"),
+                                secondary: nil,
+                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                identity: nil)
+                            store._setSnapshotForTesting(prior, provider: .claude)
+                            store.lastKnownResetSnapshots[.claude] = prior
+
+                            let baseSpec = try #require(store.providerSpecs[.claude])
+                            let descriptor = ProviderDescriptor(
+                                id: .claude,
+                                metadata: baseSpec.descriptor.metadata,
+                                branding: baseSpec.descriptor.branding,
+                                tokenCost: baseSpec.descriptor.tokenCost,
+                                fetchPlan: ProviderFetchPlan(
+                                    sourceModes: [.cli],
+                                    pipeline: ProviderFetchPipeline { _ in [SuccessfulFetchStrategy()] }),
+                                cli: baseSpec.descriptor.cli)
+                            store.providerSpecs[.claude] = ProviderSpec(
+                                style: baseSpec.style,
+                                isEnabled: baseSpec.isEnabled,
+                                descriptor: descriptor,
+                                makeFetchContext: baseSpec.makeFetchContext)
+                            return store
                         }
 
-                        let store = UsageStore(
-                            fetcher: UsageFetcher(environment: [:]),
-                            browserDetection: BrowserDetection(cacheTTL: 0),
-                            settings: settings,
-                            startupBehavior: .testing,
-                            environmentBase: [:])
-                        let prior = UsageSnapshot(
-                            primary: RateWindow(
-                                usedPercent: 12,
-                                windowMinutes: 300,
-                                resetsAt: Date(timeIntervalSince1970: 1_900_000_000),
-                                resetDescription: "old reset"),
-                            secondary: nil,
-                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                            identity: nil)
-                        store._setSnapshotForTesting(prior, provider: .claude)
-                        store.lastKnownResetSnapshots[.claude] = prior
+                        await store.refreshProvider(.claude)
+                        let reset = await MainActor.run {
+                            store.snapshot(for: .claude)?.primary?.resetsAt
+                        }
 
-                        let baseSpec = try #require(store.providerSpecs[.claude])
-                        let descriptor = ProviderDescriptor(
-                            id: .claude,
-                            metadata: baseSpec.descriptor.metadata,
-                            branding: baseSpec.descriptor.branding,
-                            tokenCost: baseSpec.descriptor.tokenCost,
-                            fetchPlan: ProviderFetchPlan(
-                                sourceModes: [.cli],
-                                pipeline: ProviderFetchPipeline { _ in [SuccessfulFetchStrategy()] }),
-                            cli: baseSpec.descriptor.cli)
-                        store.providerSpecs[.claude] = ProviderSpec(
-                            style: baseSpec.style,
-                            isEnabled: baseSpec.isEnabled,
-                            descriptor: descriptor,
-                            makeFetchContext: baseSpec.makeFetchContext)
-                        return store
+                        #expect(reset == nil)
                     }
-
-                    await store.refreshProvider(.claude)
-                    let reset = await MainActor.run {
-                        store.snapshot(for: .claude)?.primary?.resetsAt
-                    }
-
-                    #expect(reset == nil)
                 }
             }
-        }
     }
 
     @Test
@@ -1298,90 +1310,91 @@ extension ClaudeResilienceTests {
 
     @Test
     func `credentials change during successful Claude fetch applies fresh snapshot without stale reset`() async throws {
-        try await KeychainCacheStore.withServiceOverrideForTesting("com.steipete.codexbar.cache.tests.\(UUID())") {
-            KeychainCacheStore.setTestStoreForTesting(true)
-            defer { KeychainCacheStore.setTestStoreForTesting(false) }
+        try await KeychainCacheStore
+            .withServiceOverrideForTesting("io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID())") {
+                KeychainCacheStore.setTestStoreForTesting(true)
+                defer { KeychainCacheStore.setTestStoreForTesting(false) }
 
-            try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
-                let tempDir = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(UUID().uuidString, isDirectory: true)
-                try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-                let fileURL = tempDir.appendingPathComponent("credentials.json")
-                try Data("{\"old\":true}".utf8).write(to: fileURL)
+                try await ClaudeOAuthCredentialsStore.withIsolatedCredentialsFileTrackingForTesting {
+                    let tempDir = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+                    let fileURL = tempDir.appendingPathComponent("credentials.json")
+                    try Data("{\"old\":true}".utf8).write(to: fileURL)
 
-                try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
-                    #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
+                    try await ClaudeOAuthCredentialsStore.withCredentialsURLOverrideForTesting(fileURL) {
+                        #expect(ClaudeOAuthCredentialsStore.invalidateCacheIfCredentialsFileChanged())
 
-                    let store = try await MainActor.run {
-                        let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-midfetch-auth-change")
-                        settings.refreshFrequency = .manual
-                        settings.statusChecksEnabled = false
-                        settings.claudeUsageDataSource = .cli
+                        let store = try await MainActor.run {
+                            let settings = Self.makeSettingsStore(suite: "ClaudeResilienceTests-midfetch-auth-change")
+                            settings.refreshFrequency = .manual
+                            settings.statusChecksEnabled = false
+                            settings.claudeUsageDataSource = .cli
 
-                        let metadata = ProviderRegistry.shared.metadata
-                        for provider in UsageProvider.allCases {
-                            try settings.setProviderEnabled(
-                                provider: provider,
-                                metadata: #require(metadata[provider]),
-                                enabled: provider == .claude)
+                            let metadata = ProviderRegistry.shared.metadata
+                            for provider in UsageProvider.allCases {
+                                try settings.setProviderEnabled(
+                                    provider: provider,
+                                    metadata: #require(metadata[provider]),
+                                    enabled: provider == .claude)
+                            }
+
+                            let store = UsageStore(
+                                fetcher: UsageFetcher(environment: [:]),
+                                browserDetection: BrowserDetection(cacheTTL: 0),
+                                settings: settings,
+                                startupBehavior: .testing,
+                                environmentBase: [:])
+                            let prior = UsageSnapshot(
+                                primary: RateWindow(
+                                    usedPercent: 12,
+                                    windowMinutes: 300,
+                                    resetsAt: Date(timeIntervalSince1970: 1_900_000_000),
+                                    resetDescription: "old reset"),
+                                secondary: nil,
+                                updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                identity: ProviderIdentitySnapshot(
+                                    providerID: .claude,
+                                    accountEmail: "old@example.com",
+                                    accountOrganization: nil,
+                                    loginMethod: "Pro"))
+                            store._setSnapshotForTesting(prior, provider: .claude)
+                            store.lastKnownResetSnapshots[.claude] = prior
+
+                            let baseSpec = try #require(store.providerSpecs[.claude])
+                            let descriptor = ProviderDescriptor(
+                                id: .claude,
+                                metadata: baseSpec.descriptor.metadata,
+                                branding: baseSpec.descriptor.branding,
+                                tokenCost: baseSpec.descriptor.tokenCost,
+                                fetchPlan: ProviderFetchPlan(
+                                    sourceModes: [.cli],
+                                    pipeline: ProviderFetchPipeline { _ in
+                                        [SuccessfulCredentialSwapFetchStrategy(credentialsFileURL: fileURL)]
+                                    }),
+                                cli: baseSpec.descriptor.cli)
+                            store.providerSpecs[.claude] = ProviderSpec(
+                                style: baseSpec.style,
+                                isEnabled: baseSpec.isEnabled,
+                                descriptor: descriptor,
+                                makeFetchContext: baseSpec.makeFetchContext)
+                            return store
                         }
 
-                        let store = UsageStore(
-                            fetcher: UsageFetcher(environment: [:]),
-                            browserDetection: BrowserDetection(cacheTTL: 0),
-                            settings: settings,
-                            startupBehavior: .testing,
-                            environmentBase: [:])
-                        let prior = UsageSnapshot(
-                            primary: RateWindow(
-                                usedPercent: 12,
-                                windowMinutes: 300,
-                                resetsAt: Date(timeIntervalSince1970: 1_900_000_000),
-                                resetDescription: "old reset"),
-                            secondary: nil,
-                            updatedAt: Date(timeIntervalSince1970: 1_800_000_000),
-                            identity: ProviderIdentitySnapshot(
-                                providerID: .claude,
-                                accountEmail: "old@example.com",
-                                accountOrganization: nil,
-                                loginMethod: "Pro"))
-                        store._setSnapshotForTesting(prior, provider: .claude)
-                        store.lastKnownResetSnapshots[.claude] = prior
+                        await store.refreshProvider(.claude)
+                        let result = await MainActor.run {
+                            (
+                                hasSnapshot: store.snapshot(for: .claude) != nil,
+                                hasError: store.error(for: .claude) != nil,
+                                reset: store.lastKnownResetSnapshots[.claude]?.primary?.resetsAt)
+                        }
 
-                        let baseSpec = try #require(store.providerSpecs[.claude])
-                        let descriptor = ProviderDescriptor(
-                            id: .claude,
-                            metadata: baseSpec.descriptor.metadata,
-                            branding: baseSpec.descriptor.branding,
-                            tokenCost: baseSpec.descriptor.tokenCost,
-                            fetchPlan: ProviderFetchPlan(
-                                sourceModes: [.cli],
-                                pipeline: ProviderFetchPipeline { _ in
-                                    [SuccessfulCredentialSwapFetchStrategy(credentialsFileURL: fileURL)]
-                                }),
-                            cli: baseSpec.descriptor.cli)
-                        store.providerSpecs[.claude] = ProviderSpec(
-                            style: baseSpec.style,
-                            isEnabled: baseSpec.isEnabled,
-                            descriptor: descriptor,
-                            makeFetchContext: baseSpec.makeFetchContext)
-                        return store
+                        #expect(result.hasSnapshot)
+                        #expect(!result.hasError)
+                        #expect(result.reset == nil)
                     }
-
-                    await store.refreshProvider(.claude)
-                    let result = await MainActor.run {
-                        (
-                            hasSnapshot: store.snapshot(for: .claude) != nil,
-                            hasError: store.error(for: .claude) != nil,
-                            reset: store.lastKnownResetSnapshots[.claude]?.primary?.resetsAt)
-                    }
-
-                    #expect(result.hasSnapshot)
-                    #expect(!result.hasError)
-                    #expect(result.reset == nil)
                 }
             }
-        }
     }
 
     @MainActor
@@ -1414,9 +1427,7 @@ private struct TimeoutFetchStrategy: ProviderFetchStrategy {
     let id = "test.timeout"
     let kind: ProviderFetchKind = .cli
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         throw ClaudeStatusProbeError.timedOut
@@ -1431,9 +1442,7 @@ private struct AllClaudeSourcesFailureStrategy: ProviderFetchStrategy {
     let id = "test.all-claude-sources-failed"
     let kind = ProviderFetchKind.oauth
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         throw ClaudeOAuthCredentialsError.keychainAccessRevoked
@@ -1448,9 +1457,7 @@ private struct CancellationFetchStrategy: ProviderFetchStrategy {
     let id = "test.cancellation"
     let kind: ProviderFetchKind = .cli
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         throw CancellationError()
@@ -1466,9 +1473,7 @@ private struct CancellationAfterCredentialSwapFetchStrategy: ProviderFetchStrate
     let kind: ProviderFetchKind = .cli
     let cancellations: CredentialSwapCancellationSequence
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         try await self.cancellations.fetch()
@@ -1522,9 +1527,7 @@ private struct NetworkLostFetchStrategy: ProviderFetchStrategy {
     let id = "test.network-lost"
     let kind: ProviderFetchKind = .cli
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         throw URLError(.networkConnectionLost)
@@ -1540,9 +1543,7 @@ private struct CLIParseFailureFetchStrategy: ProviderFetchStrategy {
     let kind: ProviderFetchKind = .cli
     let message: String
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         throw ClaudeStatusProbeError.parseFailed(self.message)
@@ -1557,9 +1558,7 @@ private struct CLIAuthenticationFailureFetchStrategy: ProviderFetchStrategy {
     let id = "test.cli-authentication-failure"
     let kind: ProviderFetchKind = .cli
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         do {
@@ -1583,9 +1582,7 @@ private struct AuthFailureFetchStrategy: ProviderFetchStrategy {
     let kind: ProviderFetchKind = .cli
     let credentialsFileURL: URL
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         try Data("{\"updated\":true}".utf8).write(to: self.credentialsFileURL)
@@ -1603,9 +1600,7 @@ private struct TransientFailureAfterCredentialSwapFetchStrategy: ProviderFetchSt
     let kind: ProviderFetchKind = .cli
     let credentialsFileURL: URL
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         try Data("{\"updated\":true}".utf8).write(to: self.credentialsFileURL)
@@ -1622,9 +1617,7 @@ private struct SuccessfulCredentialSwapFetchStrategy: ProviderFetchStrategy {
     let kind: ProviderFetchKind = .cli
     let credentialsFileURL: URL
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         try Data("{\"updated\":true}".utf8).write(to: self.credentialsFileURL)
@@ -1650,9 +1643,7 @@ private struct SuccessfulFetchStrategy: ProviderFetchStrategy {
     let id = "test.successful"
     let kind: ProviderFetchKind = .cli
 
-    func isAvailable(_: ProviderFetchContext) async -> Bool {
-        true
-    }
+    func isAvailable(_: ProviderFetchContext) async -> Bool { true }
 
     func fetch(_: ProviderFetchContext) async throws -> ProviderFetchResult {
         self.makeResult(

@@ -1298,7 +1298,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let providerURL = directoryURL.appendingPathComponent("codex.json")
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
@@ -1324,7 +1324,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let providerURL = directoryURL.appendingPathComponent("codex.json")
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
@@ -1382,7 +1382,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
         var buckets = PlanUtilizationHistoryBuckets(
@@ -1415,7 +1415,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
         var buckets = PlanUtilizationHistoryBuckets()
@@ -1431,7 +1431,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let providerURL = directoryURL.appendingPathComponent("codex.json")
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
@@ -1454,7 +1454,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let codexURL = directoryURL.appendingPathComponent("codex.json")
         let claudeURL = directoryURL.appendingPathComponent("claude.json")
@@ -1486,7 +1486,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let providerURL = directoryURL.appendingPathComponent("codex.json")
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)
@@ -1504,7 +1504,7 @@ struct UsageStorePlanUtilizationTests {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let directoryURL = root
-            .appendingPathComponent("com.steipete.codexbar", isDirectory: true)
+            .appendingPathComponent("io.github.kakapoo233.codexbar-cockpit", isDirectory: true)
             .appendingPathComponent("history", isDirectory: true)
         let providerURL = directoryURL.appendingPathComponent("codex.json")
         let store = PlanUtilizationHistoryStore(directoryURL: directoryURL)

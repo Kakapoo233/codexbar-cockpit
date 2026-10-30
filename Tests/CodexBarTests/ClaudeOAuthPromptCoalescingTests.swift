@@ -204,7 +204,7 @@ struct ClaudeOAuthPromptCoalescingTests {
         operation: (_ loadRecord: @Sendable () throws -> ClaudeOAuthCredentialRecord) async throws -> T) async throws
         -> T
     {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         let missingCredentialsURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let beforePromptLock: @Sendable () -> Void = { state.enterPromptPath() }
         return try await KeychainCacheStore.withServiceOverrideForTesting(service) {

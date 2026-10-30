@@ -60,7 +60,8 @@ const section = (text, lines) => {
   assert(text.includes(start) && text.includes(end), "Missing generated provider section");
   return text.slice(0, text.indexOf(start)) + generated + text.slice(text.indexOf(end) + end.length);
 };
-update("README.md", (text) =>
+// The fork overview is hand-written; the retained provider directory keeps the upstream generated section.
+update("README.upstream.md", (text) =>
   section(
     text.replace(/\d+ providers\."/u, `${count} providers."`),
     entries.map((entry) => `- [${entry.name}](docs/${entry.file}) — ${entry.source}`),

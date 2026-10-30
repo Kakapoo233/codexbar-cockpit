@@ -87,7 +87,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `successful codexbar refresh is re-owned when matching Claude CLI storage appears`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -220,7 +220,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
     @Test(arguments: ["", "+&=%2B /東京"])
     func `rotated refresh token preserves history owner through cache restart`(suffix: String) async throws {
         let refreshToken = "refresh-before-rotation\(suffix)"
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -331,7 +331,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `load record treats codexbar cache as claude CLI owned when credentials file exists`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -386,7 +386,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `load with auto refresh delegates expired codexbar cache when credentials file exists`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -444,7 +444,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `load with auto refresh keeps codexbar cache ownership without Claude CLI storage`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try await self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -503,7 +503,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `mismatched global Claude keychain item proves CLI storage ownership`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try self.withDeterministicCacheService(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -571,7 +571,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `load record ignores codexbar cache in never prompt mode`() throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         try KeychainCacheStore.withServiceOverrideForTesting(service) {
             KeychainCacheStore.setTestStoreForTesting(true)
             defer { KeychainCacheStore.setTestStoreForTesting(false) }
@@ -632,7 +632,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `expired claude CLI owner blocks background mcp O auth but lets user action delegate`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         let mcpOAuthOnly = Data("""
         {
           "mcpOAuth": {
@@ -719,7 +719,7 @@ struct ClaudeOAuthCredentialsStoreCLIStorageOwnershipTests {
 
     @Test
     func `selected profile file ignores unrelated global mcp O auth state`() async throws {
-        let service = "com.steipete.codexbar.cache.tests.\(UUID().uuidString)"
+        let service = "io.github.kakapoo233.codexbar-cockpit.cache.tests.\(UUID().uuidString)"
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let profile = root.appendingPathComponent("selected-profile", isDirectory: true)

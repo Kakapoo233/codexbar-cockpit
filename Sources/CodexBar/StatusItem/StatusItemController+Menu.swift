@@ -811,6 +811,7 @@ extension StatusItemController {
         switcherSelection: ProviderSwitcherSelection,
         captureMenu: NSMenu? = nil)
     {
+        self.addCockpitMenuItems(to: menu, provider: context.currentProvider)
         if case let .provider(instanceID) = switcherSelection,
            UserProviderPluginRegistry.plugin(for: instanceID) != nil
         {

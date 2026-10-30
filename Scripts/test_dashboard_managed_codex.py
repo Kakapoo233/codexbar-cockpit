@@ -53,7 +53,7 @@ def verify(binary, root):
         "HOME": str(root),
         "CFFIXED_USER_HOME": str(root),
         "CODEX_HOME": str(root / ".codex"),
-        "CODEXBAR_CONFIG": str(config),
+        "CODEXBAR_COCKPIT_CONFIG": str(config),
         "PATH": "/usr/bin:/bin",
         "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS": "1",
         "CODEXBAR_DISABLE_KEYCHAIN_ACCESS": "1",

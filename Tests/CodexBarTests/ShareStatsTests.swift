@@ -405,7 +405,8 @@ struct ShareStatsTests {
     @Test @MainActor
     func `image exporter writes PNG and TIFF to an isolated pasteboard`() throws {
         let payload = try #require(ShareStatsBuilder.make(model: Self.dashboard))
-        let pasteboard = NSPasteboard(name: .init("com.steipete.codexbar.tests.share-stats.\(UUID().uuidString)"))
+        let pasteboard =
+            NSPasteboard(name: .init("io.github.kakapoo233.codexbar-cockpit.tests.share-stats.\(UUID().uuidString)"))
         defer { pasteboard.clearContents() }
 
         #expect(ShareStatsExporter.copyImage(payload, pasteboard: pasteboard))
