@@ -484,16 +484,22 @@ struct CockpitCalendarStatusEditor: View {
             guard self.canRecord else { return }
             self.onSelect(feeling)
         } label: {
-            Label(feeling.calendarTitle, systemImage: selected ? "checkmark.circle.fill" : feeling.cockpitSymbol)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, self.compact ? 6 : 10)
-                .background(
-                    selected ? Color.accentColor.opacity(0.16) : Color.primary.opacity(0.04),
-                    in: RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(selected ? Color.accentColor : Color.clear, lineWidth: 1.5)
+            HStack(spacing: 6) {
+                Text(feeling.cockpitEmoji).accessibilityHidden(true)
+                Text(feeling.calendarTitle)
+                if selected {
+                    Image(systemName: "checkmark.circle.fill").accessibilityHidden(true)
                 }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, self.compact ? 6 : 10)
+            .background(
+                selected ? Color.accentColor.opacity(0.16) : Color.primary.opacity(0.04),
+                in: RoundedRectangle(cornerRadius: 8))
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(selected ? Color.accentColor : Color.clear, lineWidth: 1.5)
+            }
         }
         .buttonStyle(.plain)
         .accessibilityValue(L(selected ? "cockpit_ui_calendar_selected" : "cockpit_ui_calendar_unselected"))
