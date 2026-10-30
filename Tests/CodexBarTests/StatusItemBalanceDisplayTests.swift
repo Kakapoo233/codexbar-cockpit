@@ -848,11 +848,11 @@ struct StatusItemBalanceDisplayTests {
 
     @Test
     func `debug bundle identity updates status item accessibility`() {
-        #expect(StatusItemController.isDebugApp(bundleIdentifier: "com.steipete.codexbar.debug"))
-        #expect(!StatusItemController.isDebugApp(bundleIdentifier: "com.steipete.codexbar"))
+        #expect(StatusItemController.isDebugApp(bundleIdentifier: "io.github.kakapoo233.codexbar-cockpit.debug"))
+        #expect(!StatusItemController.isDebugApp(bundleIdentifier: "io.github.kakapoo233.codexbar-cockpit"))
         #expect(!StatusItemController.isDebugApp(bundleIdentifier: nil))
-        #expect(StatusItemController.statusItemAccessibilityTitle(isDebugApp: true) == "CodexBar Debug")
-        #expect(StatusItemController.statusItemAccessibilityTitle(isDebugApp: false) == "CodexBar")
+        #expect(StatusItemController.statusItemAccessibilityTitle(isDebugApp: true) == "CodexBar Cockpit Debug")
+        #expect(StatusItemController.statusItemAccessibilityTitle(isDebugApp: false) == "CodexBar Cockpit")
     }
 
     func makeSettings(suiteName: String, provider: UsageProvider) -> SettingsStore {

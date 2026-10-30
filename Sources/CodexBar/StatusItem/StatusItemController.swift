@@ -45,8 +45,8 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     private static let defaultMenuRefreshEnabled = !SettingsStore.isRunningTests
     private(set) static var menuRefreshEnabled = !SettingsStore.isRunningTests
     static let quotaWarningFlashDuration: TimeInterval = 60
-    private nonisolated static let statusItemAccessibilityTitle = "CodexBar"
-    private nonisolated static let debugStatusItemAccessibilityTitle = "CodexBar Debug"
+    private nonisolated static let statusItemAccessibilityTitle = "CodexBar Cockpit"
+    private nonisolated static let debugStatusItemAccessibilityTitle = "CodexBar Cockpit Debug"
     private nonisolated static let statusItemAccessibilityIdentifierPrefix = "CodexBar.StatusItem"
     private nonisolated static let mergedLegacyDefaultItemIndex = 0
 
@@ -122,6 +122,8 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
 
     let store: UsageStore
     let settings: SettingsStore
+    lazy var cockpitPlanStore = CockpitPlanStore()
+    var cockpitWindowController: CockpitWindowController?
     var cloudSyncState: CloudSyncState {
         didSet {
             guard oldValue !== self.cloudSyncState else { return }
@@ -502,6 +504,9 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     }
 
     private func wireBindings() {
+        if !SettingsStore.isRunningTests {
+            self.cockpitPlanStore.ingest(self.store)
+        }
         self.observeStoreChanges()
         self.observeStoreIconChanges()
         self.observeIconPerfRefreshCycleChanges()
@@ -525,6 +530,9 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
 
     func handleObservedStoreMenuChange() {
         self.observeStoreChanges()
+        if !SettingsStore.isRunningTests {
+            self.cockpitPlanStore.ingest(self.store)
+        }
         self.updatePersistentRefreshItemsEnabled()
         let rootOpenHandledReadiness = self.consumeRootOpenHandledMenuObservationIfNeeded()
         // `refreshOpenMenus` is only consulted when a menu is currently open.
@@ -917,19 +925,6 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
             || self.fallbackProvider == provider
     }
 
-    func switchAccountSubtitle(for target: UsageProvider) -> String? {
-        guard self.loginTask != nil, let provider = self.activeLoginProvider, provider == target
-        else { return nil }
-        let base: String
-        switch self.loginPhase {
-        case .idle: return nil
-        case .requesting: base = L("Requesting login…")
-        case .waitingBrowser: base = L("Waiting in browser…")
-        }
-        let prefix = ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName
-        return "\(prefix): \(base)"
-    }
-
     deinit {
         let animationDriver = self.animationDriver
         Task { @MainActor in
@@ -1012,6 +1007,19 @@ extension StatusItemController {
 #endif
 
 extension StatusItemController {
+    func switchAccountSubtitle(for target: UsageProvider) -> String? {
+        guard self.loginTask != nil, let provider = self.activeLoginProvider, provider == target
+        else { return nil }
+        let base: String
+        switch self.loginPhase {
+        case .idle: return nil
+        case .requesting: base = L("Requesting login…")
+        case .waitingBrowser: base = L("Waiting in browser…")
+        }
+        let prefix = ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName
+        return "\(prefix): \(base)"
+    }
+
     /// Fleet eligibility can create or remove provider items even when local refresh availability never changes.
     func refreshForCloudSyncChange() {
         self.lastAppliedMergedIconRenderSignature = nil
