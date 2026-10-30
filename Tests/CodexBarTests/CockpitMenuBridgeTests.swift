@@ -161,7 +161,27 @@ struct CockpitMenuBridgeTests {
         #expect(size.width == 676)
         #expect(size.height == 460)
         #expect(CockpitMenuPanelController.contentSize(available: NSSize(width: 1920, height: 1080)) ==
-            NSSize(width: 760, height: 650))
+            NSSize(width: 960, height: 700))
+        let tiny = CockpitMenuPanelController.contentSize(available: NSSize(width: 300, height: 260))
+        #expect(tiny.width <= 276)
+        #expect(tiny.height <= 220)
+    }
+
+    @Test
+    func `wide and compact columns leave room for the hosted submenu control`() {
+        for width in [CGFloat(676), 800, 960] {
+            let layout = CockpitPanelLayout(width: width)
+            #expect(layout.menuCardWidth > 0)
+            #expect(layout.menuCardWidth + 24 <= layout.mainColumnWidth)
+            #expect(layout.mainColumnWidth + 2 * CockpitPanelLayout.contentInset <= width)
+            if layout.usesSidebar {
+                #expect(layout.mainColumnWidth >= 440)
+                #expect(layout.mainColumnWidth + CockpitPanelLayout.sidebarWidth
+                    + CockpitPanelLayout.columnSpacing + 2 * CockpitPanelLayout.contentInset <= width)
+            }
+        }
+        #expect(!CockpitPanelLayout(width: 676).usesSidebar)
+        #expect(CockpitPanelLayout(width: 960).usesSidebar)
     }
 
     private static func submenuItem(_ identifier: String, title: String) -> NSMenuItem {

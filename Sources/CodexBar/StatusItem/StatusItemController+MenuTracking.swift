@@ -295,6 +295,10 @@ extension StatusItemController {
     }
 
     func renderedMenuWidth(for menu: NSMenu) -> CGFloat {
+        // Untracked backing menus can measure wider than their SwiftUI column because of long action titles.
+        if let panel = self.cockpitMenuPanelController, panel.bridge.owns(menu) {
+            return panel.bridge.width
+        }
         let menuKey = ObjectIdentifier(menu)
         let trackedWindowWidth: CGFloat? = if self.openMenus[menuKey] != nil {
             menu.items.lazy.compactMap { item -> CGFloat? in

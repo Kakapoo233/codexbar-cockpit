@@ -17,6 +17,7 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 
 - [x] Implement the initial menu-bar entry and native detail views (0.1.x).
 - [x] Replace the intermediate Cockpit window with one menu-bar panel (0.2.0).
+- [x] Adapt the expanded Usage page to wide columns and compact single-column layouts (0.2.2).
 - [x] Retain existing provider and Usage & Spend capabilities.
 - [x] Implement monthly calendar driven by the same daily ledger.
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
@@ -24,7 +25,8 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Implement subjective feedback records and Token experience chart.
 - [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.
 - [x] Implement PNG preview, save, and clipboard export; render Chinese and missing-cost fixtures.
-- [ ] Manually verify same-panel navigation, settings, PNG save/clipboard, and migration with the user.
+- [x] Confirm same-panel navigation and visible calendar state controls with the user (0.2.0).
+- [ ] Complete settings, PNG save/clipboard, migration, and updated-layout desktop acceptance.
 
 ## Verification and release
 

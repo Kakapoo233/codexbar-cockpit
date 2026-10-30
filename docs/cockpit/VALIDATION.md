@@ -100,3 +100,29 @@ isolated startup check with network access blocked and the build checkout unread
 
 These tests use fake save panels and temporary files. They do not claim that the native nested save
 sheet, a real PNG save, or a clipboard round-trip has passed desktop acceptance.
+
+## Responsive wide panel (0.2.2)
+
+The default panel is 960 by 700 points, bounded by the current screen's visible area. Usage splits
+into independently scrolling provider and daily-advice columns at widths of 800 points or more;
+smaller widths keep a single scrolling column. A shared layout value sizes both SwiftUI columns
+and the original AppKit-hosted cards, with space reserved for their submenu indicators.
+
+The final focused run passed 22 tests across five suites. Native synthetic screenshots were checked
+at 960 by 700 and 676 by 460 in Chinese and English; the additional English render run also passed.
+The screenshots exercise the actual native card bridge and verify card bounds after submenu return.
+No real accounts or usage logs are used in these fixtures.
+
+A long native menu title exposed a separate details-width path: the regression failed eight width
+assertions before the fix. Panel-owned root and descendant menus now use the same card width for
+hosted detail hydration and refresh. Synthetic status-component cards pass both paths, and menus
+outside the panel retain native width calculation.
+
+The final `make check` passed with zero SwiftLint violations across 3,176 Swift files. Independent
+review checked the six Chinese/English renders and the detail-width regression. The 0.2.2 package
+passed signature/resource verification and the six-second isolated startup check.
+
+After the Mac was unlocked, 0.2.2 (build 5) was installed and its running executable path verified.
+The previous development bundle was backed up, and the original CodexBar remained running.
+Live pointer/scroll acceptance of the updated panel remains pending; the desktop accessibility
+connection still timed out after startup.
