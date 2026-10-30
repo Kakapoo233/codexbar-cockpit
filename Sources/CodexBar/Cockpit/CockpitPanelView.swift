@@ -47,6 +47,7 @@ struct CockpitPanelView: View {
     @Bindable var store: UsageStore
     @Bindable var planStore: CockpitPlanStore
     @Bindable var navigation: CockpitPanelNavigation
+    var resetStore: CockpitResetHistoryStore?
     let usageContent: AnyView
     let onSettings: () -> Void
     let onRefresh: () -> Void
@@ -120,8 +121,9 @@ struct CockpitPanelView: View {
             }
             .help(L("Refresh"))
             .accessibilityLabel(L("Refresh"))
-            .disabled(self.navigation
-                .page != .usage && (!self.settings.costUsageEnabled || self.controller.isRefreshing))
+            .disabled(self.navigation.page == .calendar
+                ? self.resetStore?.isRefreshing == true
+                : self.navigation.page != .usage && (!self.settings.costUsageEnabled || self.controller.isRefreshing))
             Button(action: self.onSettings) {
                 Image(systemName: "gearshape")
             }
@@ -140,7 +142,11 @@ struct CockpitPanelView: View {
         case .statistics:
             SpendDashboardPane(settings: self.settings, store: self.store)
         case .calendar:
-            CockpitCalendarView(controller: self.controller, planStore: self.planStore, todayTokens: self.todayTokens)
+            CockpitCalendarView(
+                controller: self.controller,
+                planStore: self.planStore,
+                resetStore: self.resetStore,
+                todayTokens: self.todayTokens)
         case .receipt:
             CockpitReceiptBrowserView(controller: self.controller, hidePersonalInfo: self.settings.hidePersonalInfo)
         }

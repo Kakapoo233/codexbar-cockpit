@@ -67,6 +67,7 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
                 store: owner.store,
                 planStore: owner.cockpitPlanStore,
                 navigation: self.navigation,
+                resetStore: owner.cockpitResetHistoryStore,
                 usageContent: AnyView(CockpitMenuBridgeView(bridge: self.bridge)),
                 onSettings: { [weak owner] in owner?.showSettingsGeneral() },
                 onRefresh: { [weak self] in self?.refresh() }).codexBarLocalized())
@@ -162,6 +163,9 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
 
     private func refresh() {
         guard let owner = self.owner else { return }
+        if self.navigation.page == .calendar {
+            Task { await owner.cockpitResetHistoryStore.refresh() }
+        }
         if self.navigation.page == .usage {
             owner.refreshMenuProviderNow(in: self.backingMenu)
         } else {

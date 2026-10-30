@@ -6,11 +6,13 @@ import Foundation
 final class AppNotifications: NSObject, UNUserNotificationCenterDelegate {
     static let shared = AppNotifications()
     nonisolated static let updateCategoryIdentifier = "codexbar-update-available"
+    nonisolated static let cockpitResetForecastCategoryIdentifier = "cockpit-reset-forecast"
 
     private let centerProvider: @Sendable () -> UNUserNotificationCenter
     private let logger = CodexBarLog.logger(LogCategories.notifications)
     private var authorizationTask: Task<Bool, Never>?
     private var openUpdateSettings: (@MainActor () -> Void)?
+    private var openResetCalendar: (@MainActor () -> Void)?
 
     init(centerProvider: @escaping @Sendable () -> UNUserNotificationCenter = { UNUserNotificationCenter.current() }) {
         self.centerProvider = centerProvider
@@ -24,13 +26,23 @@ final class AppNotifications: NSObject, UNUserNotificationCenterDelegate {
     }
 
     func handleResponse(categoryIdentifier: String, actionIdentifier: String) {
-        guard categoryIdentifier == Self.updateCategoryIdentifier,
-              actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
-        self.openUpdateSettings?()
+        guard actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
+        switch categoryIdentifier {
+        case Self.updateCategoryIdentifier: self.openUpdateSettings?()
+        case Self.cockpitResetForecastCategoryIdentifier: self.openResetCalendar?()
+        default: break
+        }
+    }
+
+    func configureResetCalendarAction(_ openCalendar: @escaping @MainActor () -> Void) {
+        self.openResetCalendar = openCalendar
+        guard !Self.isRunningUnderTests else { return }
+        self.centerProvider().delegate = self
     }
 
     nonisolated static func presentationOptions(categoryIdentifier: String) -> UNNotificationPresentationOptions {
-        categoryIdentifier == self.updateCategoryIdentifier ? [.banner, .list] : []
+        [self.updateCategoryIdentifier, self.cockpitResetForecastCategoryIdentifier].contains(categoryIdentifier)
+            ? [.banner, .list] : []
     }
 
     nonisolated func userNotificationCenter(

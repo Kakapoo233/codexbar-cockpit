@@ -59,6 +59,7 @@ enum CockpitCalendarProjection {
 struct CockpitCalendarView: View {
     @State private var usage: CockpitUsageProjection
     @Bindable var planStore: CockpitPlanStore
+    private let resetStore: CockpitResetHistoryStore?
     @State private var month: Date
     @State private var selectedDay: Date
     @State private var feelingProvider = UsageProvider.codex
@@ -67,11 +68,13 @@ struct CockpitCalendarView: View {
     init(
         controller: SpendDashboardController,
         planStore: CockpitPlanStore,
+        resetStore: CockpitResetHistoryStore? = nil,
         todayTokens: @escaping @MainActor (UsageProvider, Calendar) -> Int? = { _, _ in nil })
     {
         let now = Date()
         self._usage = State(initialValue: CockpitUsageProjection(controller: controller))
         self.planStore = planStore
+        self.resetStore = resetStore
         self._month = State(initialValue: now)
         self._selectedDay = State(initialValue: now)
         self.todayTokens = todayTokens
@@ -107,6 +110,12 @@ struct CockpitCalendarView: View {
                 }
                 Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
                     .font(.caption).foregroundStyle(.secondary)
+                if let resetStore {
+                    CockpitResetSummaryView(store: resetStore, calendar: self.calendar) { date in
+                        self.month = date
+                        self.selectedDay = date
+                    }
+                }
                 HStack {
                     Text(spendDashboardLedgerDateText(
                         self.selectedDay,
@@ -133,6 +142,14 @@ struct CockpitCalendarView: View {
                 Text(L("cockpit_ui_calendar_subjective_note"))
                     .font(.caption).foregroundStyle(.secondary)
                 Divider()
+                if let resetStore {
+                    CockpitResetDayDetails(
+                        events: self.resetEventsByDay[self.calendar.startOfDay(for: self.selectedDay)] ?? [],
+                        forecast: resetStore.calendarLocalForecast,
+                        selectedDay: self.selectedDay,
+                        calendar: self.calendar,
+                        scheduled: resetStore.pendingCalendarReset)
+                }
                 self.dayDetails
                 Text(L("cockpit_ui_local_experience_note"))
                     .font(.caption).foregroundStyle(.secondary)
@@ -149,10 +166,25 @@ struct CockpitCalendarView: View {
     }
 
     private var calendarDays: [Date: CockpitCalendarDay] {
-        Dictionary(uniqueKeysWithValues: CockpitCalendarProjection.cells(month: self.month, calendar: self.calendar)
+        let eventsByDay = self.resetEventsByDay
+        let forecast = self.resetStore?.calendarLocalForecast
+        let scheduled = self.resetStore?.pendingCalendarReset?.scheduledFor
+        return Dictionary(uniqueKeysWithValues: CockpitCalendarProjection.cells(
+            month: self.month,
+            calendar: self.calendar)
             .compactMap(\.self).map { day in
-                (day, CockpitCalendarDay(day: day, tokens: self.tokens(on: day), feeling: self.feeling(on: day)))
+                (day, CockpitCalendarDay(
+                    day: day,
+                    tokens: self.tokens(on: day),
+                    feeling: self.feeling(on: day),
+                    resetKinds: (eventsByDay[day] ?? []).map(\.kind),
+                    hasResetForecast: forecast.map { self.calendar.isDate($0.estimatedAt, inSameDayAs: day) } ?? false,
+                    hasScheduledReset: scheduled.map { self.calendar.isDate($0, inSameDayAs: day) } ?? false))
             })
+    }
+
+    private var resetEventsByDay: [Date: [CockpitResetEvent]] {
+        CockpitResetCalendar.eventsByDay(self.resetStore?.history?.events ?? [], calendar: self.calendar)
     }
 
     private func moveMonth(_ offset: Int) {

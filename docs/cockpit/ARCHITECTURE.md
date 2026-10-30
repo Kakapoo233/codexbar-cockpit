@@ -29,6 +29,15 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   and Receipt navigation never writes the statistics page's reporting period or selected day.
 - Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a
   fresh, complete ambient Token sample; editing history preserves the original measurement.
+- `CockpitResetHistoryClient` reads the public Codex Resets history and status API without credentials.
+  Its typed records preserve announcement times and distinguish regular resets, banked resets,
+  scheduled announcements, and expiring website forecasts. No public event becomes a quota observation.
+- `CockpitResetHistoryStore` is owned by the status controller for the application lifetime, independent
+  of popover visibility. History and status refresh independently, retain their last successful caches,
+  and publish early notices with durable deduplication. Disabling notices invalidates in-flight delivery.
+- Local reset estimates use the median of up to ten recent regular-reset intervals within 180 days.
+  They remain explicitly approximate; an overdue estimate is not rolled forward as a new prediction.
+  Scheduled times are grouped using the calendar reporting zone; unknown times stay undated.
 - Settings remain in the canonical preferences window, including explicit import from CodexBar.
 - Receipt PNG saves use an asynchronous sheet owned by the receipt preview's actual window.
   Saving blocks only that preview; detaching the preview cancels its pending save without writing.

@@ -6,6 +6,9 @@ struct CockpitCalendarDay: Identifiable, Equatable {
     let day: Date
     let tokens: Int?
     let feeling: CockpitFeeling?
+    var resetKinds: [CockpitResetKind] = []
+    var hasResetForecast = false
+    var hasScheduledReset = false
     var id: Date {
         self.day
     }
@@ -65,6 +68,34 @@ struct CockpitMonthGridView: View {
                 if !self.compact, let feeling = self.days[day]?.feeling {
                     Text(feeling.calendarTitle).font(.caption2).foregroundStyle(.tint)
                 }
+                if let model = self.days[day],
+                   !model.resetKinds.isEmpty || model.hasResetForecast || model.hasScheduledReset
+                {
+                    HStack(spacing: 4) {
+                        if model.resetKinds.contains(.regular) {
+                            Image(systemName: "arrow.counterclockwise.circle.fill").foregroundStyle(.blue)
+                        }
+                        if model.resetKinds.contains(.banked) {
+                            Image(systemName: "archivebox.fill").foregroundStyle(.purple)
+                        }
+                        if model.resetKinds.contains(where: {
+                            if case .unknown = $0 {
+                                true
+                            } else {
+                                false
+                            }
+                        }) {
+                            Image(systemName: "questionmark.circle").foregroundStyle(.secondary)
+                        }
+                        if model.hasResetForecast {
+                            Image(systemName: "clock.badge.questionmark").foregroundStyle(.orange)
+                        }
+                        if model.hasScheduledReset {
+                            Image(systemName: "calendar.badge.clock").foregroundStyle(.teal)
+                        }
+                    }
+                    .font(.caption2)
+                }
             }
             .padding(self.compact ? 6 : 9)
             .frame(maxWidth: .infinity, minHeight: self.compact ? 50 : 86, alignment: .topLeading)
@@ -81,6 +112,16 @@ struct CockpitMonthGridView: View {
 
     private func dayLabel(_ day: Date, tokens: Int?) -> String {
         let date = spendDashboardLedgerDateText(day, timeZone: self.calendar.timeZone, accessibility: true)
-        return L("cockpit_ui_day_tokens", date, tokens.map(UsageFormatter.tokenCountString) ?? L("cockpit_ui_unknown"))
+        var parts = [L(
+            "cockpit_ui_day_tokens",
+            date,
+            tokens.map(UsageFormatter.tokenCountString)
+                ?? L("cockpit_ui_unknown"))]
+        if let model = self.days[day] {
+            parts += model.resetKinds.map(\.cockpitTitle)
+            if model.hasResetForecast { parts.append(L("cockpit_reset_estimate")) }
+            if model.hasScheduledReset { parts.append(L("cockpit_reset_scheduled")) }
+        }
+        return parts.joined(separator: ", ")
     }
 }

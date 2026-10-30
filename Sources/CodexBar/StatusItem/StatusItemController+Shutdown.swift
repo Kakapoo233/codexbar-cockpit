@@ -4,6 +4,7 @@ extension StatusItemController {
     func prepareForAppShutdown() {
         guard !self.hasPreparedForAppShutdown else { return }
         self.hasPreparedForAppShutdown = true
+        if !SettingsStore.isRunningTests { self.cockpitResetHistoryStore.stop() }
         self.cockpitMenuPanelController?.shutdown()
         self.cockpitMenuPanelController = nil
         #if DEBUG

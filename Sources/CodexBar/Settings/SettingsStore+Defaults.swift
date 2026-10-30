@@ -190,6 +190,16 @@ extension SettingsStore {
         set { self.setDefault(\.limitResetNotificationsEnabled, newValue, key: "limitResetNotificationsEnabled") }
     }
 
+    var cockpitResetForecastNotificationsEnabled: Bool {
+        get { self.defaultsState.cockpitResetForecastNotificationsEnabled }
+        set {
+            self.setDefault(
+                \.cockpitResetForecastNotificationsEnabled,
+                newValue,
+                key: "cockpitResetForecastNotificationsEnabled")
+        }
+    }
+
     var quotaWarningThresholds: [Int] {
         get { QuotaWarningThresholds.sanitized(self.defaultsState.quotaWarningThresholdsRaw) }
         set {

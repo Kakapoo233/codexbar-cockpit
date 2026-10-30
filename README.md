@@ -14,6 +14,7 @@ provider support with local planning and task workflows inspired by
 - 点击菜单栏图标，在同一面板切换用量、统计、日历和小票；每日建议直接出现在用量页。
 - 宽屏用量页采用双栏：左侧保留完整提供商卡片和操作，右侧显示每日建议与个人上限；小屏自动切回单栏。
 - 复用现有统计账本，提供用量图表、月历、模型和项目统计。
+- 日历同步 [Codex Resets](https://codex-resets.com/zh-CN) 的常规与备用重置公告；区分已公告的待执行重置、网站预测和本机历史估算，发现新预告时尽早提醒。
 - 以本地自然日保存预算和体感记录；额度、Token 和估算金额各有明确口径。
 - 勾选任务生成 PNG 小票；父子 Agent 合并时避免重复计算。
 - 开发版使用独立设置与缓存，在“设置 → 通用”主动导入原 CodexBar 的主要显示设置。
@@ -55,6 +56,13 @@ App-owned files live in `~/.config/codexbar-cockpit` and
 `~/Library/Application Support/CodexBar Cockpit`. Provider logs and login sessions remain local inputs.
 Missing values stay unknown; prices are estimates and quota observations can have incomplete coverage.
 Budget plans apply to supported fixed weekly quota windows and never infer official quota from dollar costs.
+
+The reset calendar reads the public, key-free [Codex Resets API](https://codex-resets.com/api/docs).
+Only public announcements are downloaded; no account, usage, or personal-state data is sent.
+Status is checked once per minute while the app runs, with complete history refreshed every 15 minutes
+or when a new reset appears. Cached history remains available offline. Forecast notifications can be
+disabled in Settings → Notifications without hiding calendar history. Website forecasts and local
+historical estimates are not OpenAI commitments or confirmation of your account’s quota.
 
 Cloud sharing from Cockpit is outside the initial scope. Existing upstream capabilities are preserved;
 using them requires their own configuration. Public repositories contain source and synthetic fixtures,

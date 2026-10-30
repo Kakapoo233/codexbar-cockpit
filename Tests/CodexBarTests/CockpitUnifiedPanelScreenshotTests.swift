@@ -77,6 +77,10 @@ struct CockpitUnifiedPanelScreenshotTests {
             plan.recordLocalComfort(.comfortable, for: .codex, totalTokens: nil)
             #expect(plan.availableProviders == [.claude])
             #expect(plan.status(for: .claude).effectiveCapPercent == 18)
+            let resetStore = try Self.makeResetStore(in: temporary, now: now)
+            await resetStore.refresh()
+            #expect(resetStore.history?.events.count == 6)
+            #expect(resetStore.forecast != nil)
 
             for size in [CockpitPanelLayout.preferredSize, CGSize(width: 676, height: 460)] {
                 let layout = CockpitPanelLayout(width: size.width)
@@ -93,6 +97,7 @@ struct CockpitUnifiedPanelScreenshotTests {
                     store: store,
                     planStore: plan,
                     navigation: navigation,
+                    resetStore: resetStore,
                     usageContent: AnyView(CockpitMenuBridgeView(bridge: bridge)),
                     onSettings: {},
                     onRefresh: {})
@@ -136,16 +141,36 @@ struct CockpitUnifiedPanelScreenshotTests {
                 #expect(card.window === window)
                 #expect(abs(card.bounds.width - layout.menuCardWidth) < 1)
 
-                if layout.usesSidebar {
-                    navigation.page = .calendar
-                    try await Self.settle(host, controller: controller)
-                    try Self.capture(
-                        host,
-                        size: size,
-                        to: output.appendingPathComponent("cockpit-unified-calendar-synthetic-\(languageSuffix).png"))
-                }
+                navigation.page = .calendar
+                try await Self.settle(host, controller: controller)
+                try Self.capture(
+                    host,
+                    size: size,
+                    to: output
+                        .appendingPathComponent("cockpit-unified-calendar\(suffix)-synthetic-\(languageSuffix).png"))
             }
         }
+    }
+
+    private static func makeResetStore(in directory: URL, now: Date) throws -> CockpitResetHistoryStore {
+        let events = try (0..<6).map { offset in
+            try CockpitResetEvent(
+                id: "synthetic-reset-\(offset)",
+                kind: offset == 2 ? .banked : .regular,
+                announcedAt: now.addingTimeInterval(-Double(offset) * 2 * 86400 - 3600),
+                text: "Synthetic reset announcement for layout validation.",
+                sourceType: "observed",
+                sourceURL: CockpitResetHistoryClient.websiteURL)
+        }
+        let history = CockpitResetHistory(events: events, generatedAt: now)
+        return CockpitResetHistoryStore(
+            cacheURL: directory.appendingPathComponent("resets.json"),
+            receiptsURL: directory.appendingPathComponent("reset-notices.json"),
+            notificationsEnabled: { false },
+            fetch: { history },
+            now: { now },
+            post: { _ in Issue.record("Synthetic renders must not post notifications") },
+            remove: { _ in })
     }
 
     private static func makeSettings(in directory: URL) throws -> SettingsStore {
