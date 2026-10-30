@@ -4,7 +4,7 @@ import Observation
 import SwiftUI
 
 enum CockpitPanelPage: String, CaseIterable, Identifiable {
-    case usage, statistics, calendar, receipt
+    case usage, statistics, calendar, receipt, team
 
     var id: Self {
         self
@@ -16,6 +16,7 @@ enum CockpitPanelPage: String, CaseIterable, Identifiable {
         case .statistics: L("cockpit_ui_statistics")
         case .calendar: L("cockpit_ui_calendar")
         case .receipt: L("cockpit_ui_receipt")
+        case .team: L("Members & Devices")
         }
     }
 
@@ -25,6 +26,7 @@ enum CockpitPanelPage: String, CaseIterable, Identifiable {
         case .statistics: "chart.xyaxis.line"
         case .calendar: "calendar"
         case .receipt: "receipt"
+        case .team: "person.2"
         }
     }
 }
@@ -48,6 +50,8 @@ struct CockpitPanelView: View {
     @Bindable var planStore: CockpitPlanStore
     @Bindable var navigation: CockpitPanelNavigation
     var resetStore: CockpitResetHistoryStore?
+    var teamStore: CockpitTeamStore?
+    var onTeamSettings: (() -> Void)?
     let usageContent: AnyView
     let onSettings: () -> Void
     let onRefresh: () -> Void
@@ -121,7 +125,7 @@ struct CockpitPanelView: View {
             }
             .help(L("Refresh"))
             .accessibilityLabel(L("Refresh"))
-            .disabled(self.navigation.page == .calendar
+            .disabled(self.navigation.page == .team ? self.teamStore?.isBusy == true : self.navigation.page == .calendar
                 ? self.resetStore?.isRefreshing == true
                 : self.navigation.page != .usage && (!self.settings.costUsageEnabled || self.controller.isRefreshing))
             Button(action: self.onSettings) {
@@ -149,6 +153,10 @@ struct CockpitPanelView: View {
                 todayTokens: self.todayTokens)
         case .receipt:
             CockpitReceiptBrowserView(controller: self.controller, hidePersonalInfo: self.settings.hidePersonalInfo)
+        case .team:
+            if let teamStore {
+                CockpitTeamView(teamStore: teamStore, onSettings: self.onTeamSettings ?? self.onSettings)
+            }
         }
     }
 
@@ -162,6 +170,7 @@ struct CockpitPanelView: View {
                 .frame(width: layout.mainColumnWidth)
                 .accessibilityIdentifier("cockpit-usage-main-column")
                 ScrollView {
+                    if let teamStore { CockpitTeamBudgetSummary(teamStore: teamStore) }
                     CockpitDailyAdviceView(
                         planStore: self.planStore,
                         providers: self.navigation.planningProviders,
@@ -177,6 +186,7 @@ struct CockpitPanelView: View {
         } else {
             ScrollView {
                 VStack(spacing: 12) {
+                    if let teamStore { CockpitTeamBudgetSummary(teamStore: teamStore) }
                     CockpitDailyAdviceView(planStore: self.planStore, providers: self.navigation.planningProviders)
                     self.usageContent
                 }

@@ -6,7 +6,8 @@
 | HouSiyuan2001/codex-cockpit | v0.3.4 | cefcbc9efe03071150431645b4ebb51e7faac574 | MIT, Quota Float contributors |
 
 CodexBar is the source base. Cockpit contributes design and algorithmic reference for daily plans,
-subjective usage feedback, task grouping, and receipts. The native implementation preserves these
+subjective usage feedback, task grouping, receipts, and shared daily allocation. The v0.3.4 Cloudflare
+Worker, migrations, and tests are vendored under `cloud/usage-sync-worker/` with their MIT license. The native implementation preserves these
 sources' notices. System fonts and SF Symbols are used; the Cockpit web fonts and Tauri runtime are
 not bundled.
 

@@ -407,6 +407,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var managedCodexAccountCoordinator: ManagedCodexAccountCoordinator?
     private var codexAccountPromotionCoordinator: CodexAccountPromotionCoordinator?
     private var cloudSyncCoordinator: CloudSyncCoordinator?
+    private var cockpitTeamStore: CockpitTeamStore?
     private var settingsWindowController: SettingsWindowController?
     private var pendingUpdateSettingsOpen = false
     private lazy var placeholderSettingsWindowGuard = PlaceholderSettingsWindowGuard(
@@ -440,10 +441,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.managedCodexAccountCoordinator = dependencies.managedCodexAccountCoordinator
         self.codexAccountPromotionCoordinator = dependencies.codexAccountPromotionCoordinator
         self.cloudSyncCoordinator = CloudSyncCoordinator(settings: dependencies.settings, state: self.cloudSyncState)
+        if !SettingsStore.isRunningTests {
+            self.cockpitTeamStore = CockpitTeamStore(usageStore: dependencies.store, settings: dependencies.settings)
+        }
         self.settingsWindowController = SettingsWindowController(
             settings: dependencies.settings,
             store: dependencies.store,
             cloudSyncState: self.cloudSyncState,
+            teamStore: self.cockpitTeamStore,
             updater: self.updaterController,
             selection: dependencies.selection,
             managedCodexAccountCoordinator: dependencies.managedCodexAccountCoordinator,
@@ -492,6 +497,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             missingItemRetriesRemaining: Self.settingsMenuReadinessRetryCount,
             fallbackVerificationRetriesRemaining: Self.settingsMenuFallbackVerificationRetryCount)
         self.cloudSyncCoordinator?.start()
+        if !SettingsStore.isRunningTests { self.cockpitTeamStore?.start() }
         Task { await self.settings?.httpServer.startSaved() }
         Task { @MainActor [weak self] in
             await Task.yield()
@@ -551,6 +557,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         self.cloudSyncCoordinator?.stop()
+        self.cockpitTeamStore?.stop()
         self.memoryPressureMonitor.stop()
         #if DEBUG
         self.removeDebugMemoryPressureObserver()
@@ -563,6 +570,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidBecomeActive(_ notification: Notification) {
         self.cloudSyncCoordinator?.applicationDidBecomeActive()
+        if !SettingsStore.isRunningTests { Task { await self.cockpitTeamStore?.refresh() } }
     }
 
     func runProviderLoginFlow(_ provider: UsageProvider) async {
@@ -762,6 +770,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self.statusController = statusController
             if let concreteStatusController = statusController as? StatusItemController {
                 concreteStatusController.cloudSyncState = self.cloudSyncState
+                concreteStatusController.cockpitTeamStore = self.cockpitTeamStore
                 MenuSwitchFlickerProbe.startIfRequested(controller: concreteStatusController)
             }
             return

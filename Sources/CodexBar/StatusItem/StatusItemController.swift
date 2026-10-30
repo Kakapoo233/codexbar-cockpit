@@ -125,6 +125,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     lazy var cockpitPlanStore = CockpitPlanStore()
     lazy var cockpitResetHistoryStore = CockpitResetHistoryStore(settings: self.settings)
     var cockpitMenuPanelController: CockpitMenuPanelController?
+    var cockpitTeamStore: CockpitTeamStore?
     var cloudSyncState: CloudSyncState {
         didSet {
             guard oldValue !== self.cloudSyncState else { return }

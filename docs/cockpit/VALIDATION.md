@@ -1,5 +1,22 @@
 # Local integration validation
 
+## Members and devices (0.6.0)
+
+On 2026-10-30, 63 tests in seven suites passed: five `CockpitTeam*` suites,
+`CockpitProjectionUITests`, and `PreferencesSelectionTests`. The vendored Worker also passed its
+14 Node tests using in-memory SQLite. Native coverage includes consent boundaries, UTC+8 day handling,
+unknown/partial cost, account changes with unavailable quota, A→B→A isolation, one-person/multiple-device
+budgeting, stale draft/reset-cycle conflicts, offline caches, monotonic replacement uploads, no-secret
+JSON, paused/disconnected operations, and recovery of received enrollment credentials after local save failures.
+
+Synthetic Chinese team renders at 600×760 and 420×760 and the 880×760 connection settings were visually
+inspected. `make check` passed, including all 22 locale catalogs and strict lint of 3,223 Swift files.
+The content scrolls at both menu widths; full-height companion captures cover the remaining
+devices. Images remain private. The 0.6.0/build 14 bundle passed signature verification and isolated
+startup/resource checks with network access blocked. Real cloud deployment and two-device acceptance
+remain pending; no personal usage or provider credentials were uploaded. Desktop interaction remains
+blocked while the Mac is locked.
+
 ## Calendar feeling faces (0.5.1)
 
 On 2026-10-30, 17 existing tests across `CockpitCalendarPeriodScreenshotTests`,

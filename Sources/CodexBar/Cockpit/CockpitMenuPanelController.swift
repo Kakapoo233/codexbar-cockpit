@@ -68,6 +68,8 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
                 planStore: owner.cockpitPlanStore,
                 navigation: self.navigation,
                 resetStore: owner.cockpitResetHistoryStore,
+                teamStore: owner.cockpitTeamStore,
+                onTeamSettings: { [weak owner] in owner?.openCockpitTeamSettings() },
                 usageContent: AnyView(CockpitMenuBridgeView(bridge: self.bridge)),
                 onSettings: { [weak owner] in owner?.showSettingsGeneral() },
                 onRefresh: { [weak self] in self?.refresh() }).codexBarLocalized())
@@ -163,6 +165,10 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
 
     private func refresh() {
         guard let owner = self.owner else { return }
+        if self.navigation.page == .team {
+            Task { await owner.cockpitTeamStore?.refresh() }
+            return
+        }
         if self.navigation.page == .calendar {
             Task { await owner.cockpitResetHistoryStore.refresh() }
         }
@@ -171,7 +177,8 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
         } else {
             guard owner.settings.costUsageEnabled else { return }
             owner.store.refreshSpendDashboard(accounts: SpendDashboardSource.codexRequests(
-                settings: owner.settings, store: owner.store))
+                settings: owner.settings,
+                store: owner.store))
         }
     }
 
