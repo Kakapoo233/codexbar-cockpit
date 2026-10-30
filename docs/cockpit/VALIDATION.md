@@ -172,3 +172,20 @@ constitute native-speaker linguistic review of every translation or live languag
 The 0.3.1 build 7 package passed signing/resource checks and isolated six-second startup, then replaced
 the independent developer bundle after backing up 0.3.0. Desktop accessibility still timed out when
 attaching to the accessory app; real panel clicks and language-picker operation remain unverified.
+
+## Independent English status text (0.3.2)
+
+On 2026-10-30, 204 focused tests in six suites passed. Coverage includes default-off persistence,
+app/CLI preference transfer, observation invalidation, language-scope restoration after errors,
+cache separation, and actual independent/merged AppKit status-item redraws in both directions.
+The expanded panel's language is checked after each English render. Existing renderer, portable
+preferences, icon-signature, and language-catalog regressions also passed.
+
+All 23 language catalogs include the option's title and scope description. `make check` passed
+with zero violations across 3,191 Swift files; later test-only fixes passed targeted format/lint.
+An independent source review found no remaining scope, refresh, or persistence issue. Test fixtures
+remain synthetic; desktop clicking of the installed settings toggle is not claimed as verified.
+
+The 0.3.2 build 8 package passed signing/resource checks and isolated startup. It was installed over
+the independent developer app with a backup; the original CodexBar remains separate. Accessibility
+attachment still times out after launch, so on-device toggle clicks require manual acceptance.

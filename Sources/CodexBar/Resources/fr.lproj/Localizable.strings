@@ -2921,3 +2921,7 @@
 "cockpit_ui_import_too_large" = "Le fichier de réglages d’origine est trop volumineux pour être importé.";
 "cockpit_ui_plan_read_error" = "Impossible de lire les plans existants ; le fichier d’origine a été conservé : %@";
 "cockpit_ui_plan_save_error" = "Les plans n’ont pas pu être enregistrés : %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Utiliser l’anglais dans la barre des menus";
+"menu_bar_english_text_subtitle" = "Concerne uniquement le texte de la barre des menus en haut de l’écran. Le panneau déployé et les réglages conservent la langue de l’application.";

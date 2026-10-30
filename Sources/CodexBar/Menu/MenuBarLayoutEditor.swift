@@ -939,6 +939,12 @@ struct MenuBarLayoutPreview: View {
     private let renderer = MenuBarLayoutRenderer()
 
     var body: some View {
+        MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+            self.localizedPreview
+        }
+    }
+
+    private var localizedPreview: some View {
         let provider = self.provider ?? .codex
         let snapshot = self.store.snapshot(for: provider.instanceID)
         let data = snapshot.map { self.liveData(provider: provider, snapshot: $0) }
@@ -964,7 +970,7 @@ struct MenuBarLayoutPreview: View {
                 colorByProvider: self.settings.menuBarColorByProvider,
                 monospacedDigits: self.settings.menuBarLayoutMonospacedDigits,
                 showWindowLabels: self.settings.menuBarLayoutShowWindowLabels))
-        MenuBarLayoutPreviewText(rendered: rendered)
+        return MenuBarLayoutPreviewText(rendered: rendered)
     }
 
     func liveData(provider: UsageProvider, snapshot: UsageSnapshot) -> MenuBarLayoutRenderData {

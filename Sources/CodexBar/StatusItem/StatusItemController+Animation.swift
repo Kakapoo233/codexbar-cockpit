@@ -245,6 +245,17 @@ extension StatusItemController {
         phase: Double?,
         bypassMergedMenuTrackingDeferral: Bool = false) -> Bool
     {
+        MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+            self.applyIconInCurrentLanguage(
+                phase: phase,
+                bypassMergedMenuTrackingDeferral: bypassMergedMenuTrackingDeferral)
+        }
+    }
+
+    private func applyIconInCurrentLanguage(
+        phase: Double?,
+        bypassMergedMenuTrackingDeferral: Bool) -> Bool
+    {
         guard let button = self.statusItem.button else { return false }
         if !bypassMergedMenuTrackingDeferral,
            self.deferMergedIconRenderDuringMenuTrackingIfNeeded()
@@ -337,7 +348,9 @@ extension StatusItemController {
     @discardableResult
     func applyIcon(for provider: UsageProvider, phase: Double?) -> Bool {
         guard let statusItem = self.statusItems[provider.instanceID] else { return false }
-        return self.applyIcon(for: provider, phase: phase, statusItem: statusItem, merged: false)
+        return MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+            self.applyIcon(for: provider, phase: phase, statusItem: statusItem, merged: false)
+        }
     }
 
     // swiftlint:disable:next function_body_length
@@ -753,6 +766,16 @@ extension StatusItemController {
         for provider: UsageProvider,
         snapshot: UsageSnapshot?,
         now: Date = .init()) -> String?
+    {
+        MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+            self.menuBarDisplayTextInCurrentLanguage(for: provider, snapshot: snapshot, now: now)
+        }
+    }
+
+    private func menuBarDisplayTextInCurrentLanguage(
+        for provider: UsageProvider,
+        snapshot: UsageSnapshot?,
+        now: Date) -> String?
     {
         let mode = self.settings.menuBarDisplayMode
         let preference = self.settings.menuBarMetricPreference(for: provider, snapshot: snapshot)

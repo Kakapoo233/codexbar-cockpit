@@ -2923,3 +2923,7 @@
 "cockpit_ui_import_too_large" = "O ficheiro de axustes orixinal é demasiado grande para importalo.";
 "cockpit_ui_plan_read_error" = "Non se poden ler os rexistros do plan; conservouse o ficheiro orixinal: %@";
 "cockpit_ui_plan_save_error" = "Non se puideron gardar os rexistros do plan: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Usar inglés na barra de menús";
+"menu_bar_english_text_subtitle" = "Só afecta ao texto da barra de menús superior. O panel despregado e a configuración manteñen o idioma da aplicación.";

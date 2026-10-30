@@ -2927,3 +2927,7 @@
 "cockpit_ui_plan_read_error" = "Không thể đọc các bản ghi kế hoạch hiện có; tệp gốc đã được giữ nguyên: %@";
 
 "cockpit_ui_plan_save_error" = "Không thể lưu bản ghi kế hoạch: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Dùng tiếng Anh trên thanh menu";
+"menu_bar_english_text_subtitle" = "Chỉ ảnh hưởng đến văn bản trên thanh menu ở đầu màn hình. Bảng mở rộng và phần cài đặt vẫn dùng ngôn ngữ của ứng dụng.";

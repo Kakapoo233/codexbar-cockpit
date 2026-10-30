@@ -38,6 +38,7 @@ extension StatusItemController {
             "focus=\(self.frontmostProviderMonitor?.currentProvider?.rawValue ?? "nil")",
             "iconStyle=\(self.store.iconStyle.rawValue)",
             "showUsed=\(self.settings.usageBarsShowUsed ? "1" : "0")",
+            "textLanguage=\(self.settings.menuBarEnglishText ? "en" : codexBarLocalizationSignature())",
             "brandPercent=\(showBrandPercent ? "1" : "0")",
             "hideCritters=\(self.settings.menuBarHidesCritters ? "1" : "0")",
             "needsAnimation=\(self.needsMenuBarIconAnimation() ? "1" : "0")",

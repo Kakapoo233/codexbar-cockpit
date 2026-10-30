@@ -60,6 +60,39 @@ struct StatusItemIconObservationSignatureTests {
         return (settings, store, controller)
     }
 
+    @Test(arguments: [false, true])
+    func `English status text redraws and restores without changing expanded panel language`(merged: Bool) throws {
+        try CodexBarLocalizationOverride.$appLanguage.withValue("zh-Hans") {
+            let (settings, _, controller) = self.makeController(
+                suiteName: #function,
+                menuBarLayout: MenuBarLayout(lines: [[.percent(window: .weekly)]]))
+            defer { controller.releaseStatusItemsForTesting() }
+            let button = try #require(merged ? controller.statusItem.button : controller.statusItems[.codex]?.button)
+            @MainActor func redraw() {
+                if merged {
+                    controller.applyIcon(phase: nil)
+                } else {
+                    controller.applyIcon(for: .codex, phase: nil)
+                }
+            }
+            let panelTitle = L("cockpit_ui_calendar")
+            redraw()
+            let original = button.accessibilityTitle()
+            let signature = controller.storeIconObservationSignature()
+            settings.menuBarEnglishText = true
+            redraw()
+            let english = button.accessibilityTitle()
+            #expect(english != original)
+            #expect(english?.contains("Weekly") == true)
+            #expect(controller.storeIconObservationSignature() != signature)
+            #expect(L("cockpit_ui_calendar") == panelTitle)
+            settings.menuBarEnglishText = false
+            redraw()
+            #expect(button.accessibilityTitle() == original)
+            #expect(controller.storeIconObservationSignature() == signature)
+        }
+    }
+
     @Test
     func `store icon observation signature ignores refresh and status metadata churn`() {
         let (_, store, controller) = self.makeController(

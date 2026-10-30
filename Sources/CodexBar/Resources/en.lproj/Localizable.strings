@@ -2929,3 +2929,7 @@
 "cockpit_ui_plan_save_error" = "Plan records could not be saved: %@";
 "cockpit_ui_import_missing" = "No CodexBar settings were found to import.";
 "cockpit_ui_import_too_large" = "The original settings file is too large to import.";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Use English in menu bar";
+"menu_bar_english_text_subtitle" = "Only affects text in the top menu bar. The expanded panel and settings keep the app language.";

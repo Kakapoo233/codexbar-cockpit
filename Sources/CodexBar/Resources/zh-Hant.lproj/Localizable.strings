@@ -2904,3 +2904,7 @@
 "cockpit_ui_plan_read_error" = "無法讀取既有計畫紀錄，已保留原始檔案：%@";
 
 "cockpit_ui_plan_save_error" = "無法儲存計畫紀錄：%@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "選單列文字使用英文";
+"menu_bar_english_text_subtitle" = "僅影響螢幕頂端選單列的文字，展開面板與設定仍使用應用程式語言。";

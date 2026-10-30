@@ -198,6 +198,7 @@ struct MenuBarLayoutRenderOptions: Hashable {
 }
 
 struct MenuBarLayoutRenderKey: Hashable {
+    let localizationSignature: String
     let layout: MenuBarLayout
     let data: MenuBarLayoutRenderData
     let size: MenuBarLayoutSize
@@ -346,6 +347,7 @@ final class MenuBarLayoutRenderer {
             uniquingKeysWith: { first, _ in first })
         let accentColor = options.colorByProvider ? ProviderAccentPalette.color(for: data.provider).hexString : nil
         let key = MenuBarLayoutRenderKey(
+            localizationSignature: codexBarLocalizationSignature(),
             layout: layout,
             data: data,
             size: options.size,

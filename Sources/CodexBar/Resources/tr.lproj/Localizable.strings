@@ -2927,3 +2927,7 @@
 "cockpit_ui_import_too_large" = "Özgün ayar dosyası içe aktarmak için çok büyük.";
 "cockpit_ui_plan_read_error" = "Mevcut plan kayıtları okunamadı; özgün dosya korundu: %@";
 "cockpit_ui_plan_save_error" = "Plan kayıtları kaydedilemedi: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "Menü çubuğunda İngilizce kullan";
+"menu_bar_english_text_subtitle" = "Yalnızca ekranın üst kısmındaki menü çubuğu metnini etkiler. Açılan panel ve ayarlar uygulama dilini kullanmaya devam eder.";

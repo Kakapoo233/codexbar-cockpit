@@ -2928,3 +2928,7 @@
 "cockpit_ui_import_too_large" = "فایل اصلی تنظیمات برای وارد کردن بیش از حد بزرگ است.";
 "cockpit_ui_plan_read_error" = "رکوردهای برنامه خوانده نشد؛ فایل اصلی حفظ شد: %@";
 "cockpit_ui_plan_save_error" = "رکوردهای برنامه ذخیره نشد: %@";
+
+/* Menu bar text language. */
+"menu_bar_english_text_title" = "استفاده از انگلیسی در نوار منو";
+"menu_bar_english_text_subtitle" = "فقط بر متن نوار منوی بالای صفحه اثر می‌گذارد. پنل بازشده و تنظیمات همچنان از زبان برنامه استفاده می‌کنند.";
