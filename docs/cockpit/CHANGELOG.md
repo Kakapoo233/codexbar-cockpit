@@ -1,5 +1,18 @@
 # Cockpit changes
 
+## 0.6.0 — Members, devices, and shared plans
+
+- Add a native Members & Devices peer page and canonical connection settings, plus the current member budget on Usage.
+- Restore v2 Cloudflare spaces, single-use invitations, member/device assignment, revocation and shared daily plans.
+  Budget revisions and reset-cycle checks prevent stale drafts from overwriting another device’s edits.
+- Keep team credentials in a separate local Keychain item. Aggregate sharing is opt-in, scoped to explicitly confirmed
+  native Codex history from the next complete Shanghai day; identity changes revoke that confirmation.
+- Preserve offline data, show partial usage, pause owner connections without losing their only credential, and recover
+  received enrollment credentials after local save failures. No provider credentials, tasks or feelings are uploaded.
+- Vendor the MIT upstream Worker with migrations, tests and deployment instructions. Real deployment and two-device
+  acceptance require a chosen team service; the app does not include a public hosted endpoint.
+- Provide English and both Chinese translations for the new team controls; other locales use explicit English fallback.
+
 ## 0.5.1 — Feeling icons in the calendar
 
 - Replace weather symbols with feeling faces: relaxed, comfortable, and overwhelmed.

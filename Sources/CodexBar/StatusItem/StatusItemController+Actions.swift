@@ -588,6 +588,10 @@ extension StatusItemController: StatusItemMenuPersistentActionDelegate {
         self.openSettings(pane: nil)
     }
 
+    func openCockpitTeamSettings() {
+        self.openSettings(pane: .team)
+    }
+
     @objc func showProviderSettings(_ sender: NSMenuItem) {
         guard let rawProvider = sender.representedObject as? String,
               let provider = UsageProvider(rawValue: rawProvider)

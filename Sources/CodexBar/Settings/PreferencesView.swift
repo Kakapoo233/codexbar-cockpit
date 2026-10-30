@@ -6,6 +6,7 @@ import SwiftUI
 enum SettingsPane: Hashable {
     case general
     case iCloudSync
+    case team
     case usageSpend
     case notifications
     case menuBar
@@ -31,6 +32,7 @@ enum SettingsPane: Hashable {
         switch self {
         case .general: L("tab_general")
         case .iCloudSync: L("iCloud Sync")
+        case .team: L("Members & Devices")
         case .usageSpend: L("tab_usage_spend")
         case .notifications: L("tab_notifications")
         case .menuBar: L("tab_menu_bar")
@@ -53,6 +55,7 @@ struct PreferencesView: View {
     @Bindable var settings: SettingsStore
     @Bindable var store: UsageStore
     @Bindable var cloudSyncState: CloudSyncState
+    var teamStore: CockpitTeamStore?
     let updater: UpdaterProviding
     @Bindable var selection: PreferencesSelection
     let managedCodexAccountCoordinator: ManagedCodexAccountCoordinator
@@ -75,6 +78,7 @@ struct PreferencesView: View {
         settings: SettingsStore,
         store: UsageStore,
         cloudSyncState: CloudSyncState = CloudSyncState(),
+        teamStore: CockpitTeamStore? = nil,
         updater: UpdaterProviding,
         selection: PreferencesSelection,
         managedCodexAccountCoordinator: ManagedCodexAccountCoordinator = ManagedCodexAccountCoordinator(),
@@ -84,6 +88,7 @@ struct PreferencesView: View {
         self.settings = settings
         self.store = store
         self.cloudSyncState = cloudSyncState
+        self.teamStore = teamStore
         self.updater = updater
         self.selection = selection
         self.managedCodexAccountCoordinator = managedCodexAccountCoordinator
@@ -245,6 +250,8 @@ struct PreferencesView: View {
             GeneralPane(settings: self.settings)
         case .iCloudSync:
             ICloudSyncPane(settings: self.settings, state: self.cloudSyncState)
+        case .team:
+            if let teamStore { PreferencesTeamPane(teamStore: teamStore) }
         case .usageSpend:
             SpendDashboardPane(settings: self.settings, store: self.store, showsTimeZoneControls: true)
         case .notifications:

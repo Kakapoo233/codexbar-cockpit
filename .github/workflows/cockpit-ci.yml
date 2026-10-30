@@ -10,6 +10,17 @@ concurrency:
   group: cockpit-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  cloud:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Cloud protocol and isolation tests
+        working-directory: cloud/usage-sync-worker
+        run: npm test
   macos:
     runs-on: macos-latest
     timeout-minutes: 40

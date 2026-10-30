@@ -45,3 +45,10 @@ docs/.astro/
 # Swift Package Manager metadata (leave sources tracked)
 # Packages/
 # Package.resolved
+
+# Self-hosted team synchronization (local credentials and Cloudflare state)
+cloud/usage-sync-worker/node_modules/
+cloud/usage-sync-worker/.wrangler/
+cloud/usage-sync-worker/wrangler.local.toml
+cloud/usage-sync-worker/.dev.vars
+cloud/usage-sync-worker/.dev.vars.*

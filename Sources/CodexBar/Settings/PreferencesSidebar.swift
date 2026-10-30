@@ -66,6 +66,7 @@ struct SettingsSidebarView: View {
         Section {
             SettingsSidebarPaneRow(pane: .general, systemImage: "gearshape.fill", color: .gray)
             SettingsSidebarPaneRow(pane: .iCloudSync, systemImage: "icloud.fill", color: .blue)
+            SettingsSidebarPaneRow(pane: .team, systemImage: "person.2.fill", color: .teal)
             SettingsSidebarPaneRow(pane: .usageSpend, systemImage: "chart.bar.fill", color: .green)
             SettingsSidebarPaneRow(pane: .notifications, systemImage: "bell.badge.fill", color: .red)
             SettingsSidebarPaneRow(pane: .menuBar, systemImage: "menubar.rectangle", color: .blue)
@@ -89,7 +90,9 @@ struct SettingsSidebarView: View {
             .onMove { fromOffsets, toOffset in
                 guard self.canReorderProviders else { return }
                 if self.settings.moveVisibleProviders(
-                    visibleProviders.map(\.instanceID), fromOffsets: fromOffsets, toOffset: toOffset)
+                    visibleProviders.map(\.instanceID),
+                    fromOffsets: fromOffsets,
+                    toOffset: toOffset)
                 {
                     self.settings.registerProviderOrderUndo(in: self.undoManager)
                 }

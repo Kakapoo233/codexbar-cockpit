@@ -169,11 +169,20 @@ enum CostUsagePricing {
         // separately after Standard pricing resolves from models.dev or this bundled fallback.
         // Sol was repriced from $5/$30 to $4/$20 on 2026-08-21.
         "gpt-5.6-sol": Self.longContextPricing(
-            input: 4e-6, cached: 4e-7, write: 5e-6, output: (2e-5, 3e-5)),
+            input: 4e-6,
+            cached: 4e-7,
+            write: 5e-6,
+            output: (2e-5, 3e-5)),
         "gpt-5.6-terra": Self.longContextPricing(
-            input: 2e-6, cached: 2e-7, write: 2.5e-6, output: (1.2e-5, 1.8e-5)),
+            input: 2e-6,
+            cached: 2e-7,
+            write: 2.5e-6,
+            output: (1.2e-5, 1.8e-5)),
         "gpt-5.6-luna": Self.longContextPricing(
-            input: 2e-7, cached: 2e-8, write: 2.5e-7, output: (1.2e-6, 1.8e-6)),
+            input: 2e-7,
+            cached: 2e-8,
+            write: 2.5e-7,
+            output: (1.2e-6, 1.8e-6)),
         // Daybreak Cyber models (OpenAI pricing page). No long-context tier is published, and
         // gpt-5.5-cyber lists no cache-write rate.
         "gpt-5.6-cyber": CodexPricing(
@@ -401,11 +410,20 @@ enum CostUsagePricing {
     private static let codexSolPricingCutoff = Date(timeIntervalSince1970: 1_787_270_400)
     private static let codexHistoricalPricing: [String: (cutoff: Date, pricing: CodexPricing)] = [
         "gpt-5.6-sol": (Self.codexSolPricingCutoff, Self.longContextPricing(
-            input: 5e-6, cached: 5e-7, write: 6.25e-6, output: (3e-5, 4.5e-5))),
+            input: 5e-6,
+            cached: 5e-7,
+            write: 6.25e-6,
+            output: (3e-5, 4.5e-5))),
         "gpt-5.6-terra": (Self.codexGPT56PricingCutoff, Self.longContextPricing(
-            input: 2.5e-6, cached: 2.5e-7, write: 3.125e-6, output: (1.5e-5, 2.25e-5))),
+            input: 2.5e-6,
+            cached: 2.5e-7,
+            write: 3.125e-6,
+            output: (1.5e-5, 2.25e-5))),
         "gpt-5.6-luna": (Self.codexGPT56PricingCutoff, Self.longContextPricing(
-            input: 1e-6, cached: 1e-7, write: 1.25e-6, output: (6e-6, 9e-6))),
+            input: 1e-6,
+            cached: 1e-7,
+            write: 1.25e-6,
+            output: (6e-6, 9e-6))),
     ]
 
     private static let claudeFullContextStandardPricingCutoff = Date(timeIntervalSince1970: 1_773_360_000)
@@ -856,6 +874,18 @@ enum CostUsagePricing {
 }
 
 extension CostUsagePricing {
+    /// v2 can exchange base rates only; tiered/context pricing remains owned by the native estimator.
+    static var cockpitTeamBundledPricing: [String: CockpitTeamPrice] {
+        self.codex.mapValues { rate in
+            CockpitTeamPrice(
+                input: rate.inputCostPerToken * 1_000_000,
+                output: rate.outputCostPerToken * 1_000_000,
+                cacheRead: (rate.cacheReadInputCostPerToken ?? rate.inputCostPerToken) * 1_000_000)
+        }
+    }
+}
+
+extension CostUsagePricing {
     /// One synchronous Claude scan owns the catalog snapshot and exact-input model memos.
     final class ClaudeResolver {
         static let memoEntryLimit = 1024
@@ -914,7 +944,9 @@ extension CostUsagePricing {
                 return result.value
             }
             let value = CostUsagePricing.claudeModelsDevLookup(
-                model: model, catalog: self.prepareCatalog(), cacheRoot: nil)
+                model: model,
+                catalog: self.prepareCatalog(),
+                cacheRoot: nil)
             #if DEBUG
             CostUsageScanner.recordClaudeScanWork(.catalogModelLookup(found: value != nil))
             #endif

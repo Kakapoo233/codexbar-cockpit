@@ -16,7 +16,7 @@ and the existing CodexBar collectors; it does not embed a second Tauri applicati
 | Task receipt | Searchable task selection, parent/subagent union, PNG preview/save/copy | Totals cover scanned task sessions and disclose partial cost |
 | Display/settings | CodexBar preferences, existing 23 languages, top-menu English override, layout hover help | Explicit CodexBar settings import; no silent import of unrelated Cockpit state |
 | Floating/always-on-top shell | Replaced by one anchored menu-bar panel with peer pages | Intentional product choice; no floating window |
-| Team/member/device allocation and Cloudflare sync | Not implemented | Separate extension requiring a server/account/data-sharing design |
+| Team/member/device allocation and Cloudflare sync | Native peer page, member/device assignment, shared daily budgets, invitation/revocation, self-hosted v2 Worker | One Codex shared-account space; UTC+8; explicit aggregate-only sharing; real cloud deployment and two-device acceptance pending |
 | Tokei/local source configuration | Existing CodexBar source settings and parsers | No import of Cockpit-specific team/source settings |
 
 The comparison records functionality, not a claim of identical algorithms. Current local additions

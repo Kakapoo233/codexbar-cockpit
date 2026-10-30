@@ -3,7 +3,7 @@
 ## Product contract
 
 CodexBar remains the native menu-bar shell and provider collector. One transient popover anchored
-to the status item hosts Usage, Statistics, Calendar, and Receipts as peer pages. Daily advice and
+to the status item hosts Usage, Statistics, Calendar, Receipts, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
 ## Modules and interfaces
@@ -57,6 +57,38 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Saving blocks only that preview; detaching the preview cancels its pending save without writing.
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.
   `CockpitSettingsImport` exposes only a whitelist of presentation and provider selection settings.
+
+## Team synchronization
+
+`CockpitTeamStore` is owned by the app delegate and shared by the menu panel and canonical settings.
+Its polling and account-identity observation continue while the popover is closed. It is separate from
+CodexBar's personal iCloud sync: no provider credentials or its account snapshot payloads are reused.
+`CockpitTeamClient` uses a typed allowlist compatible with the original v2 Cloudflare Worker, strict
+HTTPS origins, no redirects/cookies/HTTP authentication, bounded responses, and no automatic mutation retry.
+Team credentials use a fork-owned, non-synchronizing, ThisDeviceOnly Keychain entry with no-UI reads.
+Only connection metadata and typed caches are persisted to `team-sync.json`; invitations stay in memory.
+A received enrollment token is retained in memory until Keychain and connection metadata saves succeed.
+Owner disconnection is intentionally a pause because v2 cannot restore or transfer ownership.
+
+One v2 space is one Codex shared-account planning pool. A person can own several devices but receives
+one default share. People, device assignments, and per-person daily caps use server revisions; stale
+budget drafts must also match the day and reset cycle. The team's risk-tolerance formula and independent
+personal overrides follow upstream; they never alter frozen local daily recommendations or provider limits.
+The v2 server's natural day is explicitly Asia/Shanghai. Existing calendar reporting remains independent.
+
+Activity export requires an explicit account binding and an independent-source declaration. It accepts
+only native live-system Codex data already published by the existing collector, in USD with compatible
+provenance and Shanghai day buckets. Remote account meters, enrichment/mixed sources, other providers,
+paths, identities, titles, prompts, credentials and subjective feedback are excluded. Day aggregates
+start at the next Shanghai midnight after confirmation, with current-day/partial coverage preserved.
+Known account identity changes permanently invalidate the binding, including changes without quota data.
+Shared snapshots replace older versions per random device ID with monotonic timestamps; they are never
+summed with this Mac's local ledger. Copied logs require only one publishing device; summaries cannot
+prove cross-device deduplication. Account quota observations are one plan basis, never additive device use.
+
+The MIT upstream Worker, schema migrations and tests live in `cloud/usage-sync-worker/`. Deployment is
+self-hosted and is a separate acceptance step; local cloud configuration, bootstrap secrets and runtime
+state are ignored by Git. See [team setup](TEAM_SYNC.md) and the Worker's protocol reference.
 
 ## Accounting invariants
 

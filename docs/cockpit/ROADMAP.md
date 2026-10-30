@@ -35,6 +35,15 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Confirm same-panel navigation and visible calendar state controls with the user (0.2.0).
 - [ ] Complete settings, PNG save/clipboard, migration, and updated-layout desktop acceptance.
 
+## Team extension (0.6.0)
+
+- [x] Add native member/device navigation and connection settings.
+- [x] Restore upstream v2 member assignment, invitations, revocation and daily allocation.
+- [x] Separate team data from personal iCloud settings and provider credentials.
+- [x] Include the self-hosted Worker, migrations and synthetic protocol tests.
+- [ ] Select and deploy the owner's cloud service; connect a second device and verify real synchronization.
+- [ ] Complete desktop acceptance of the new team page and settings.
+
 ## Verification and release
 
 - [x] Focused accounting, persistence, identity, and receipt tests pass (176 tests, 16 suites).

@@ -8,6 +8,7 @@ extension SettingsPane {
         switch self {
         case .general: "general"
         case .iCloudSync: "iCloudSync"
+        case .team: "team"
         case .usageSpend: "usageSpend"
         case .notifications: "notifications"
         case .menuBar: "menuBar"
@@ -25,6 +26,7 @@ extension SettingsPane {
         switch persistenceToken {
         case "general": self = .general
         case "iCloudSync": self = .iCloudSync
+        case "team": self = .team
         case "usageSpend": self = .usageSpend
         case "notifications": self = .notifications
         case "menuBar": self = .menuBar
