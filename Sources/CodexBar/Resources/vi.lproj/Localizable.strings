@@ -2931,3 +2931,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Dùng tiếng Anh trên thanh menu";
 "menu_bar_english_text_subtitle" = "Chỉ ảnh hưởng đến văn bản trên thanh menu ở đầu màn hình. Bảng mở rộng và phần cài đặt vẫn dùng ngôn ngữ của ứng dụng.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Hiển thị biểu tượng của nhà cung cấp.";
+"menu_bar_help_provider" = "Hiển thị tên nhà cung cấp bên cạnh mức sử dụng.";
+"menu_bar_help_account" = "Hiển thị nhãn tài khoản hiện tại nếu có. Cài đặt quyền riêng tư có thể ẩn nhãn này.";
+"menu_bar_help_percent" = "Hiển thị phần trăm hạn mức đã dùng hoặc còn lại của kỳ đã chọn, theo cài đặt hiển thị mức sử dụng. ~ đánh dấu giá trị ước tính.";
+"menu_bar_help_scoped_weekly" = "Hiển thị hạn mức tuần riêng cho mô hình nếu nhà cung cấp có cung cấp, tách biệt với hạn mức tuần tổng thể.";
+"menu_bar_help_automatic" = "Dùng chỉ số sử dụng tự động của nhà cung cấp. Một số nhà cung cấp hiển thị số dư hoặc văn bản thay vì phần trăm.";
+"menu_bar_help_pace" = "So sánh mức dùng hạn mức thực tế với mức dự kiến tại thời điểm này trong kỳ. Dấu hiển thị tuân theo cài đặt dấu nhịp độ.";
+"menu_bar_help_usage_bar" = "Hiển thị hạn mức tự động bằng thước văn bản gọn gồm ba ô, theo cài đặt đã dùng hoặc còn lại.";
+"menu_bar_help_progress" = "Hiển thị kỳ hạn mức đã chọn bằng thanh đồ họa, theo cài đặt đã dùng hoặc còn lại.";
+"menu_bar_help_reset_countdown" = "Hiển thị thời gian còn lại trước khi kỳ hạn mức này đặt lại, nếu có thời điểm đặt lại.";
+"menu_bar_help_reset_absolute" = "Hiển thị ngày hoặc giờ đặt lại của kỳ hạn mức này, nếu có.";
+"menu_bar_help_runs_out" = "Ước tính khi nào hạn mức cạn theo nhịp độ hiện tại, hoặc có đủ đến lần đặt lại hay không. Đây là ước tính, không phải thời điểm đặt lại.";
+"menu_bar_help_runs_out_compact" = "Hiển thị cùng thời gian ước tính đến khi hết hạn mức bằng văn bản ngắn hơn.";
+"menu_bar_help_balance" = "Hiển thị số dư hoặc số liệu chi tiêu của nhà cung cấp. Ý nghĩa và đơn vị tùy thuộc vào nhà cung cấp.";
+"menu_bar_help_cost_today" = "Hiển thị chi phí sử dụng được ghi nhận hoặc ước tính hôm nay. Ước tính có thể khác hóa đơn của nhà cung cấp.";
+"menu_bar_help_cost_window" = "Hiển thị chi phí trong kỳ lịch sử chi phí đã cấu hình. Kỳ này tuân theo cài đặt lịch sử chi phí.";
+"menu_bar_help_spend_amount" = "Hiển thị số tiền đã dùng trong giới hạn chi tiêu của nhà cung cấp, bằng loại tiền hiển thị ưu tiên.";
+"menu_bar_help_spend_budget" = "Hiển thị số tiền đã chi và giới hạn bằng loại tiền hiển thị ưu tiên. Giới hạn phi tiền tệ không khả dụng.";
+"menu_bar_help_separator" = "Thêm dấu chấm phân cách giữa các mục trên thanh menu.";
+"menu_bar_help_space" = "Thêm khoảng trắng giữa các mục trên thanh menu.";
+"menu_bar_help_hidden" = "Không hiển thị gì cho nhánh điều kiện này.";
+"menu_bar_help_conditional" = "Chọn nội dung hiển thị theo quy tắc đã lưu. Dữ liệu không khả dụng không thỏa mãn điều kiện.";
+"menu_bar_help_use_all" = "Xóa bố cục riêng của nhà cung cấp này để dùng lại bố cục chung Tất cả nhà cung cấp.";
+"menu_bar_help_preview" = "Dùng dữ liệu trực tiếp nếu có; nếu không có ảnh chụp dữ liệu thì hiển thị dữ liệu mẫu. Trường bị thiếu có thể được hiển thị là không khả dụng.";
+"menu_bar_help_remove_line_break" = "Gộp hai dòng bố cục thành một dòng.";
+"menu_bar_help_remove" = "Thả một mục vào đây để xóa mục đó khỏi bố cục này.";
+"menu_bar_help_line_break" = "Bắt đầu dòng thứ hai trên thanh menu. Bố cục hỗ trợ tối đa hai dòng.";
+"menu_bar_help_conditional_name" = "Đặt tên cho quy tắc có thể tái sử dụng để dễ tìm trong bảng mục.";
+"menu_bar_help_conditional_add" = "Tạo quy tắc có thể tái sử dụng để chọn mục theo mức sử dụng, thời gian hoặc chi phí.";
+"menu_bar_help_conditional_combinator" = "Kết hợp các điều kiện từ trái sang phải. AND yêu cầu cả hai kết quả đúng; OR chỉ cần một kết quả đúng.";
+"menu_bar_help_conditional_direction" = "Chọn quy tắc so sánh giá trị đã dùng hay giá trị còn lại.";
+"menu_bar_help_conditional_comparison" = "Chọn cách so sánh chỉ số với ngưỡng, chẳng hạn lớn hơn hoặc nhỏ hơn.";
+"menu_bar_help_conditional_threshold" = "Đặt ngưỡng so sánh theo đơn vị %@. Giá trị không khả dụng sẽ không khớp.";
+"menu_bar_help_conditional_remove" = "Xóa quy tắc này và các mục tham chiếu đến nó khỏi bố cục đã lưu.";
+"menu_bar_help_conditional_duplicate" = "Tạo bản sao riêng của quy tắc này để chỉnh sửa độc lập.";
+"menu_bar_help_conditional_save" = "Lưu quy tắc này để dùng trong bố cục thanh menu.";
+"menu_bar_help_conditional_cancel" = "Đóng trình sửa quy tắc mà không lưu các thay đổi này.";
+"menu_bar_help_conditional_then" = "Chọn mục hiển thị khi điều kiện kết hợp là đúng. Chọn Ẩn để không hiển thị gì.";
+"menu_bar_help_conditional_else" = "Chọn mục hiển thị khi điều kiện kết hợp là sai. Chọn Ẩn để không hiển thị gì.";
+"menu_bar_help_conditional_remove_clause" = "Xóa điều kiện này khỏi quy tắc.";
+"menu_bar_help_conditional_add_clause" = "Thêm điều kiện khác. Một quy tắc hỗ trợ tối đa bốn điều kiện.";
+"menu_bar_help_conditional_pace" = "So sánh mức dùng thực tế trừ mức dự kiến, theo điểm phần trăm. Dương nghĩa là tiêu thụ nhanh hơn; âm nghĩa là có phần dự trữ. Cài đặt hiển thị dấu nhịp độ không thay đổi phép so sánh này.";
+"menu_bar_help_conditional_currency" = "Ngưỡng tiền luôn được so sánh bằng USD, bất kể tiền tệ hiển thị ưu tiên.";
+"menu_bar_help_conditional_hours" = "Phép so sánh dùng đơn vị giờ, bao gồm giờ thập phân.";
+"menu_bar_help_size" = "Thay đổi cỡ chữ và các mục bố cục trên thanh menu.";
+"menu_bar_help_gap" = "Thay đổi khoảng cách giữa các mục bố cục liền nhau.";
+"menu_bar_help_vertical" = "Di chuyển bố cục lên hoặc xuống trong thanh menu để tinh chỉnh căn chỉnh.";
+"menu_bar_help_monospaced" = "Dùng các chữ số có cùng độ rộng để giảm xê dịch khi số thay đổi.";
+"menu_bar_help_window_labels" = "Thêm nhãn ngắn để phân biệt các kỳ hạn mức, như phiên và tuần.";
+"menu_bar_help_preset" = "Thay bố cục này bằng cách sắp xếp có sẵn. Bạn vẫn có thể tùy chỉnh sau đó.";
+"menu_bar_help_preset_custom" = "Bố cục này đã được tùy chỉnh và không khớp với mẫu có sẵn.";
+"menu_bar_help_style" = "Chọn kiểu biểu tượng thanh menu. Dùng Biểu tượng và phần trăm để sửa bố cục bên dưới.";
+"menu_bar_help_pace_sign" = "Chọn phía nào của nhịp độ được hiển thị bằng dấu cộng. Chỉ ảnh hưởng hiển thị, không đổi phép so sánh điều kiện.";
+"menu_bar_help_provider_color" = "Dùng màu nhận diện của nhà cung cấp cho nội dung trên thanh menu.";
+"menu_bar_help_switcher_rows" = "Chọn hiển thị biểu tượng hay tiến độ sử dụng trong bộ chuyển nhà cung cấp hợp nhất.";
+"menu_bar_help_stacked_provider" = "Chọn nhà cung cấp hiển thị trên dòng này của biểu tượng hợp nhất. Tự động tuân theo thứ tự nhà cung cấp đủ điều kiện.";
+"menu_bar_help_overview" = "Chọn các nhà cung cấp đã bật sẽ xuất hiện trong Tổng quan, tối đa giới hạn hiển thị. Thứ tự tuân theo danh sách nhà cung cấp.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Thang thời gian lịch";
+"cockpit_calendar_day" = "Ngày";
+"cockpit_calendar_week" = "Tuần";
+"cockpit_calendar_month" = "Tháng";
+"cockpit_calendar_quarter" = "Quý";
+"cockpit_calendar_year" = "Năm";
+"cockpit_calendar_metric" = "Chỉ số trên lịch";
+"cockpit_calendar_now" = "Hôm nay";
+"cockpit_calendar_previous" = "Kỳ trước";
+"cockpit_calendar_next" = "Kỳ sau";
+"cockpit_calendar_period_total" = "Mức sử dụng đã ghi nhận trong kỳ này";
+"cockpit_calendar_partial" = "Lịch sử có thể chưa đầy đủ: ≥ là cận dưới đã ghi nhận; — là không khả dụng. Ngày trong tương lai không được tính vào tổng.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · Quý %@";
+"cockpit_calendar_select_day" = "Chọn một ngày để xem chi tiết nhà cung cấp, trạng thái cá nhân và sự kiện đặt lại.";
+"cockpit_calendar_currency_note" = "Các loại tiền được hiển thị riêng. Tổng Token gộp các nguồn cục bộ được đưa vào.";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "Tham khảo mức sử dụng đã quan sát";
+"cockpit_ui_personal_collecting" = "Đang xây dựng quy luật sử dụng theo thứ: cần 21 ngày có kế hoạch đạt yêu cầu, 12 ngày hoạt động, dữ liệu ngày thường/cuối tuần và 7 ngày xác thực liên tiếp.";
+"cockpit_ui_personal_coverage" = "%@ ngày đạt yêu cầu / %@ ngày có kế hoạch · %@ ngày hoạt động";
+"cockpit_ui_personal_stale" = "Thiếu lịch sử đạt yêu cầu gần đây; tham khảo đã tạm dừng.";
+"cockpit_ui_personal_drift" = "Quy luật sử dụng gần đây thay đổi quá nhiều nên chưa thể xác thực tham khảo này.";
+"cockpit_ui_personal_no_gain" = "Mô hình theo thứ không cải thiện so với đường cơ sở kế hoạch đã cố định trong tuần xác thực.";
+"cockpit_ui_personal_ready" = "Quy luật sử dụng cá nhân theo thứ đã tăng độ chính xác dự đoán mức dùng đã quan sát trong kỳ xác thực độc lập 7 ngày.";
+"cockpit_ui_personal_holdout" = "Sai số trung bình 7 ngày: cơ sở %@ → cá nhân %@ điểm phần trăm";
+"cockpit_ui_personal_note" = "Chỉ tham khảo các khoảng đã quan sát, không ước tính cả ngày. Ngày đạt yêu cầu cần có 6 giờ quan sát tin cậy và không có khoảng cách giữa các lần quan sát quá 90 phút. Khoảng bị thiếu không được điền bằng không; đề xuất đã cố định và giới hạn cá nhân vẫn được áp dụng.";
+"cockpit_ui_comfort_weighted" = "Mẫu đầy đủ có trọng số theo độ gần đây: %@";
+"cockpit_ui_comfort_recency" = "Các điểm xu hướng ưu tiên trải nghiệm gần đây hơn, với chu kỳ bán rã trọng số 14 ngày. Sửa ngày cũ không thay đổi tuổi dữ liệu. Đây là trải nghiệm dùng Token, không phải hạn mức chính thức.";
+
+"menu_bar_help_conditional_runout" = "So sánh số giờ ước tính đến khi hết hạn mức. Nếu không có ước tính cạn hạn mức, điều kiện là sai.";

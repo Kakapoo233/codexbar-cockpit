@@ -62,6 +62,8 @@ struct CockpitCalendarView: View {
     private let resetStore: CockpitResetHistoryStore?
     @State private var month: Date
     @State private var selectedDay: Date
+    @State private var scale = CockpitCalendarScale.month
+    @State private var metric = CockpitCalendarMetric.tokens
     @State private var feelingProvider = UsageProvider.codex
     private let todayTokens: @MainActor (UsageProvider, Calendar) -> Int?
 
@@ -84,29 +86,62 @@ struct CockpitCalendarView: View {
         self.usage.calendar
     }
 
-    private var monthTitle: String {
-        var style = Date.FormatStyle.dateTime.year().month(.wide)
-        style.timeZone = self.calendar.timeZone
-        style.locale = codexBarLocalizedLocale()
-        return self.month.formatted(style)
+    private var period: CockpitCalendarPeriod {
+        CockpitCalendarPeriod(containing: self.month, scale: self.scale, calendar: self.calendar)
+    }
+
+    private var ledger: CockpitCalendarLedger {
+        CockpitCalendarLedger(model: self.usage.calendarModel, calendar: self.calendar, now: Date())
+    }
+
+    private var periodTitle: String {
+        self.period.title(calendar: self.calendar)
     }
 
     var body: some View {
+        let ledger = self.ledger
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Text(self.monthTitle)
+                    Text(self.periodTitle)
                         .font(.title2.weight(.semibold))
                     Spacer()
-                    Button { self.moveMonth(-1) } label: { Image(systemName: "chevron.left") }
-                        .accessibilityLabel(L("cockpit_ui_previous_month"))
-                    Button(L("cockpit_ui_current_month")) {
+                    Button { self.movePeriod(-1) } label: { Image(systemName: "chevron.left") }
+                        .accessibilityLabel(L("cockpit_calendar_previous"))
+                    Button(L("cockpit_calendar_now")) {
                         let now = Date()
                         self.month = now
                         self.selectedDay = now
                     }
-                    Button { self.moveMonth(1) } label: { Image(systemName: "chevron.right") }
-                        .accessibilityLabel(L("cockpit_ui_next_month"))
+                    Button { self.movePeriod(1) } label: { Image(systemName: "chevron.right") }
+                        .accessibilityLabel(L("cockpit_calendar_next"))
+                }
+                HStack {
+                    Picker(L("cockpit_calendar_scale"), selection: self.$scale) {
+                        ForEach(CockpitCalendarScale.allCases) { scale in
+                            Text(scale.cockpitTitle).tag(scale)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    Picker(L("cockpit_calendar_metric"), selection: self.$metric) {
+                        ForEach(CockpitCalendarMetric.allCases) { metric in
+                            Text(metric.title).tag(metric)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 170)
+                }
+                CockpitCalendarPeriodSummaryView(
+                    ledger: ledger,
+                    period: self.period,
+                    metric: self.metric)
+                if self.scale != .month {
+                    CockpitCalendarPeriodView(
+                        ledger: ledger,
+                        period: self.period,
+                        metric: self.metric,
+                        selectedDay: self.selectedDay,
+                        select: { self.selectedDay = $0 })
                 }
                 Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
                     .font(.caption).foregroundStyle(.secondary)
@@ -132,13 +167,23 @@ struct CockpitCalendarView: View {
                     .frame(width: 200)
                 }
                 self.personalStatus
-                CockpitMonthGridView(
-                    calendar: self.calendar,
-                    month: self.month,
-                    selectedDay: self.selectedDay,
-                    days: self.calendarDays,
-                    select: { self.selectedDay = $0 },
-                    compact: true)
+                if [.month, .quarter, .year].contains(self.scale) {
+                    if self.scale != .month {
+                        Text(CockpitCalendarPeriod(
+                            containing: self.selectedDay,
+                            scale: .month,
+                            calendar: self.calendar).title(calendar: self.calendar))
+                            .font(.headline)
+                    }
+                    CockpitMonthGridView(
+                        calendar: self.calendar,
+                        month: self.displayedMonth,
+                        selectedDay: self.selectedDay,
+                        days: self.calendarDays(ledger: ledger),
+                        select: { self.selectedDay = $0 },
+                        compact: true,
+                        metricText: { ledger.text(on: $0, metric: self.metric) })
+                }
                 Text(L("cockpit_ui_calendar_subjective_note"))
                     .font(.caption).foregroundStyle(.secondary)
                 Divider()
@@ -163,19 +208,26 @@ struct CockpitCalendarView: View {
             }
             .padding(16)
         }
+        .onChange(of: self.scale) { _, _ in
+            self.month = self.selectedDay
+        }
     }
 
-    private var calendarDays: [Date: CockpitCalendarDay] {
+    private var displayedMonth: Date {
+        self.scale == .month ? self.month : self.selectedDay
+    }
+
+    private func calendarDays(ledger: CockpitCalendarLedger) -> [Date: CockpitCalendarDay] {
         let eventsByDay = self.resetEventsByDay
         let forecast = self.resetStore?.calendarLocalForecast
         let scheduled = self.resetStore?.pendingCalendarReset?.scheduledFor
         return Dictionary(uniqueKeysWithValues: CockpitCalendarProjection.cells(
-            month: self.month,
+            month: self.displayedMonth,
             calendar: self.calendar)
             .compactMap(\.self).map { day in
                 (day, CockpitCalendarDay(
                     day: day,
-                    tokens: self.tokens(on: day),
+                    tokens: ledger.tokens(on: day).total,
                     feeling: self.feeling(on: day),
                     resetKinds: (eventsByDay[day] ?? []).map(\.kind),
                     hasResetForecast: forecast.map { self.calendar.isDate($0.estimatedAt, inSameDayAs: day) } ?? false,
@@ -187,25 +239,10 @@ struct CockpitCalendarView: View {
         CockpitResetCalendar.eventsByDay(self.resetStore?.history?.events ?? [], calendar: self.calendar)
     }
 
-    private func moveMonth(_ offset: Int) {
-        if let month = self.calendar.date(byAdding: .month, value: offset, to: self.month) {
-            self.month = month
-        }
-    }
-
-    private func tokens(on day: Date) -> Int? {
-        let summaries = self.usage.calendarModel.groups.compactMap { group in
-            group.dailySummaries.first { self.calendar.isDate($0.day, inSameDayAs: day) }
-        }
-        if summaries.isEmpty {
-            return self.usage.calendarModel.tokenActivity.first {
-                self.calendar.isDate($0.day, inSameDayAs: day)
-            }?.totalTokens
-        }
-        guard summaries.count == self.usage.calendarModel.groups.count,
-              summaries.allSatisfy({ $0.totalTokens != nil && !$0.hasPartialCounts })
-        else { return nil }
-        return CheckedSum.integers(summaries.compactMap(\.totalTokens))
+    private func movePeriod(_ offset: Int) {
+        let next = self.period.shifted(by: offset, calendar: self.calendar)
+        self.month = next.start
+        self.selectedDay = next.start
     }
 
     private func feeling(on day: Date) -> CockpitFeeling? {

@@ -2925,3 +2925,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Använd engelska i menyraden";
 "menu_bar_english_text_subtitle" = "Påverkar endast text i menyraden högst upp. Den utfällda panelen och inställningarna behåller appens språk.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Visar leverantörens ikon.";
+"menu_bar_help_provider" = "Visar leverantörens namn bredvid användningen.";
+"menu_bar_help_account" = "Visar etiketten för det aktuella kontot när den är tillgänglig. Integritetsinställningarna kan dölja den.";
+"menu_bar_help_percent" = "Visar använd eller återstående procent för den valda kvotperioden enligt inställningen för användningsvisning. ~ markerar en uppskattning.";
+"menu_bar_help_scoped_weekly" = "Visar en modellspecifik veckokvot, om leverantören tillhandahåller en, separat från den totala veckokvoten.";
+"menu_bar_help_automatic" = "Använder leverantörens automatiska användningsmått. Vissa leverantörer visar ett saldo eller text i stället för en procentsats.";
+"menu_bar_help_pace" = "Jämför den faktiska kvotanvändningen med den förväntade vid denna tidpunkt i perioden. Tecknet följer inställningen för tempots tecken.";
+"menu_bar_help_usage_bar" = "Visar den automatiska kvoten som en kompakt textmätare med tre rutor enligt inställningen för använt eller återstående.";
+"menu_bar_help_progress" = "Visar den valda kvotperioden som en grafisk stapel enligt inställningen för använt eller återstående.";
+"menu_bar_help_reset_countdown" = "Visar tiden kvar tills denna kvotperiod återställs, när en återställningstid finns.";
+"menu_bar_help_reset_absolute" = "Visar datumet eller klockslaget då denna kvotperiod återställs, när det är tillgängligt.";
+"menu_bar_help_runs_out" = "Uppskattar när kvoten tar slut i nuvarande tempo eller om den räcker till återställningen. Detta är en uppskattning, inte en återställningstid.";
+"menu_bar_help_runs_out_compact" = "Visar samma uppskattade tid tills kvoten tar slut med kortare text.";
+"menu_bar_help_balance" = "Visar leverantörens saldo eller utgiftsvärde. Betydelsen och enheten beror på leverantören.";
+"menu_bar_help_cost_today" = "Visar dagens registrerade eller uppskattade användningskostnad. Uppskattningar kan skilja sig från leverantörens faktura.";
+"menu_bar_help_cost_window" = "Visar kostnaden för den inställda kostnadshistorikperioden. Perioden följer inställningarna för kostnadshistorik.";
+"menu_bar_help_spend_amount" = "Visar de använda penningutgifterna av leverantörens gräns i din önskade visningsvaluta.";
+"menu_bar_help_spend_budget" = "Visar använda penningutgifter och deras gräns i din önskade visningsvaluta. Icke-monetära gränser är otillgängliga.";
+"menu_bar_help_separator" = "Lägger till en synlig punkt mellan objekt i menyraden.";
+"menu_bar_help_space" = "Lägger till ett tomt mellanrum mellan objekt i menyraden.";
+"menu_bar_help_hidden" = "Visar ingenting för denna villkorsgren.";
+"menu_bar_help_conditional" = "Väljer vad som visas utifrån en sparad regel. Otillgängliga data uppfyller inte ett villkor.";
+"menu_bar_help_use_all" = "Tar bort den anpassade layouten för denna leverantör så att den åter använder den gemensamma layouten för alla leverantörer.";
+"menu_bar_help_preview" = "Använder livedata när sådana finns; utan en ögonblicksbild visas exempeldata. Saknade fält kan visas som otillgängliga.";
+"menu_bar_help_remove_line_break" = "Slår ihop layoutens två rader till en.";
+"menu_bar_help_remove" = "Släpp ett objekt här för att ta bort det från denna layout.";
+"menu_bar_help_line_break" = "Börjar en andra rad i menyraden. Layouter stöder högst två rader.";
+"menu_bar_help_conditional_name" = "Ger denna återanvändbara regel ett namn så att den går att hitta i objektpaletten.";
+"menu_bar_help_conditional_add" = "Skapar en återanvändbar regel som väljer ett objekt utifrån användning, tid eller kostnad.";
+"menu_bar_help_conditional_combinator" = "Kombinerar villkor från vänster till höger. AND kräver båda resultaten; OR kräver något av dem.";
+"menu_bar_help_conditional_direction" = "Väljer om regeln jämför det använda eller det återstående värdet.";
+"menu_bar_help_conditional_comparison" = "Väljer hur måttet jämförs med tröskeln, till exempel större än eller mindre än.";
+"menu_bar_help_conditional_threshold" = "Anger jämförelsetröskeln i %@. Otillgängliga värden matchar inte.";
+"menu_bar_help_conditional_remove" = "Tar bort denna återanvändbara regel och dess objekt från sparade layouter.";
+"menu_bar_help_conditional_duplicate" = "Skapar en separat kopia av denna regel som kan redigeras oberoende.";
+"menu_bar_help_conditional_save" = "Sparar denna regel för användning i menyradslayouter.";
+"menu_bar_help_conditional_cancel" = "Stänger regelredigeraren utan att spara dessa ändringar.";
+"menu_bar_help_conditional_then" = "Väljer objektet som visas när det kombinerade villkoret är sant. Välj Dölj för att inte visa något.";
+"menu_bar_help_conditional_else" = "Väljer objektet som visas när det kombinerade villkoret är falskt. Välj Dölj för att inte visa något.";
+"menu_bar_help_conditional_remove_clause" = "Tar bort detta villkor från regeln.";
+"menu_bar_help_conditional_add_clause" = "Lägger till ett villkor. En regel stöder högst fyra villkor.";
+"menu_bar_help_conditional_pace" = "Jämför faktisk användning minus förväntad användning i procentenheter. Positivt betyder snabbare förbrukning; negativt betyder reserv. Inställningen för tempots tecken ändrar inte denna jämförelse.";
+"menu_bar_help_conditional_currency" = "Beloppströsklar jämförs i USD, oavsett önskad visningsvaluta.";
+"menu_bar_help_conditional_hours" = "Jämförelsen använder timmar, även delar av timmar.";
+"menu_bar_help_size" = "Ändrar storleken på text och layoutobjekt i menyraden.";
+"menu_bar_help_gap" = "Ändrar avståndet mellan intilliggande layoutobjekt.";
+"menu_bar_help_vertical" = "Flyttar layouten vertikalt i menyraden för att finjustera justeringen.";
+"menu_bar_help_monospaced" = "Ger siffrorna samma bredd så att ändrade tal rör sig mindre.";
+"menu_bar_help_window_labels" = "Lägger till korta etiketter för att skilja kvotperioder åt, till exempel session och vecka.";
+"menu_bar_help_preset" = "Ersätter denna layout med ett färdigt arrangemang. Du kan anpassa det efteråt.";
+"menu_bar_help_preset_custom" = "Denna layout har anpassats och matchar ingen förinställning.";
+"menu_bar_help_style" = "Väljer menyradens ikonstil. Använd Ikon och procent för att redigera layouten nedan.";
+"menu_bar_help_pace_sign" = "Väljer vilken sida av tempot som visas med ett plustecken. Det påverkar bara visningen, inte villkorsjämförelserna.";
+"menu_bar_help_provider_color" = "Använder leverantörens identifierande färg i menyraden.";
+"menu_bar_help_switcher_rows" = "Väljer om den kombinerade leverantörsväljaren visar ikoner eller användningsförlopp.";
+"menu_bar_help_stacked_provider" = "Väljer leverantören som visas på denna rad i den kombinerade ikonen. Automatiskt följer ordningen för tillgängliga leverantörer.";
+"menu_bar_help_overview" = "Väljer vilka aktiverade leverantörer som visas i Översikt, upp till den angivna gränsen. Ordningen följer leverantörslistan.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Kalenderskala";
+"cockpit_calendar_day" = "Dag";
+"cockpit_calendar_week" = "Vecka";
+"cockpit_calendar_month" = "Månad";
+"cockpit_calendar_quarter" = "Kvartal";
+"cockpit_calendar_year" = "År";
+"cockpit_calendar_metric" = "Kalendermått";
+"cockpit_calendar_now" = "I dag";
+"cockpit_calendar_previous" = "Föregående period";
+"cockpit_calendar_next" = "Nästa period";
+"cockpit_calendar_period_total" = "Registrerad användning för denna period";
+"cockpit_calendar_partial" = "Ofullständig historik: ≥ markerar registrerade nedre gränser; — betyder otillgängligt. Framtida datum ingår inte i summorna.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · K%@";
+"cockpit_calendar_select_day" = "Välj en dag för att visa leverantörsdetaljer, personlig status och återställningshändelser.";
+"cockpit_calendar_currency_note" = "Valutor visas separat. Tokensummorna omfattar de lokala källor som ingår.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Referens för registrerad användning";
+"cockpit_ui_personal_collecting" = "Ditt veckodagsmönster byggs upp: kräver 21 godkända planerade dagar, 12 aktiva dagar, täckning av vardagar och helger samt 7 sammanhängande valideringsdagar.";
+"cockpit_ui_personal_coverage" = "%@ godkända / %@ planerade dagar · %@ aktiva dagar";
+"cockpit_ui_personal_stale" = "Aktuell historik som uppfyller kraven saknas; referensen är pausad.";
+"cockpit_ui_personal_drift" = "De senaste användningsmönstren har ändrats för mycket för att validera denna referens.";
+"cockpit_ui_personal_no_gain" = "Veckodagsmodellen förbättrade inte baslinjen för den låsta planen under valideringsveckan.";
+"cockpit_ui_personal_ready" = "Ditt veckodagsmönster förbättrade förutsägelsen av registrerad användning under en separat valideringsperiod på 7 dagar.";
+"cockpit_ui_personal_holdout" = "Medelfel över 7 dagar: baslinje %@ → personligt %@ procentenheter";
+"cockpit_ui_personal_note" = "Endast registrerade perioder, ingen uppskattning för hela dagen. Godkända dagar kräver 6 timmars tillförlitliga observationer utan uppehåll över 90 minuter. Saknade perioder fylls aldrig med noll; ditt låsta förslag och din personliga gräns gäller fortsatt.";
+"cockpit_ui_comfort_weighted" = "Fullständiga observationer viktade efter aktualitet: %@";
+"cockpit_ui_comfort_recency" = "Trendpunkter ger större vikt åt färska erfarenheter, med en halveringstid på 14 dagar. När en äldre dag redigeras behåller den sin ålder. Detta beskriver erfarenheten av tokenanvändning, inte den officiella kvoten.";
+
+"menu_bar_help_conditional_runout" = "Jämför det uppskattade antalet timmar tills kvoten tar slut. Om ingen sådan uppskattning finns är villkoret falskt.";

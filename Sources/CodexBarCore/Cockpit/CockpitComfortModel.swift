@@ -35,7 +35,10 @@ public struct CockpitComfortModel: Equatable, Sendable {
     public let observations: [CockpitComfortObservation]
     public let points: [CockpitComfortPoint]
     public let completeSampleCount: Int
+    public let recencyWeightedSampleCount: Double
     public let status: Status
+
+    public static let recencyHalfLifeDays = 14.0
 
     public static func build(
         records: [CockpitComfortRecord],
@@ -67,15 +70,23 @@ public struct CockpitComfortModel: Equatable, Sendable {
         let complete = observations.filter { $0.coverage == .complete }
         let distinct = Set(complete.map(\.totalTokens))
         let spread = (distinct.max() ?? 0) - (distinct.min() ?? 0)
-        let ready = complete.count >= 7 && distinct.count >= 3 && spread >= 100_000
+        let weights = Dictionary(uniqueKeysWithValues: complete.map {
+            ($0.id, Self.recencyWeight(dateKey: $0.localDateKey, now: now, calendar: calendar))
+        })
+        let weightedSampleCount = weights.values.reduce(0, +)
+        let ready = complete.count >= 7 && distinct.count >= 3 && spread >= 100_000 && weightedSampleCount >= 3
         return Self(
             observations: observations,
-            points: ready ? Self.binnedPoints(complete) : [],
+            points: ready ? Self.binnedPoints(complete, weights: weights) : [],
             completeSampleCount: complete.count,
+            recencyWeightedSampleCount: weightedSampleCount,
             status: ready ? .ready : .insufficientData)
     }
 
-    private static func binnedPoints(_ observations: [CockpitComfortObservation]) -> [CockpitComfortPoint] {
+    private static func binnedPoints(
+        _ observations: [CockpitComfortObservation],
+        weights: [String: Double]) -> [CockpitComfortPoint]
+    {
         let groups = Dictionary(grouping: observations, by: \.totalTokens)
         let tokens = groups.keys.sorted()
         let bins = min(5, tokens.count, max(3, Int(Double(observations.count).squareRoot())))
@@ -84,11 +95,23 @@ public struct CockpitComfortModel: Equatable, Sendable {
             let end = (index + 1) * tokens.count / bins
             let members = tokens[start..<end].flatMap { groups[$0] ?? [] }
             guard !members.isEmpty else { return nil }
+            let totalWeight = members.reduce(0) { $0 + (weights[$1.id] ?? 0) }
+            guard totalWeight > 0 else { return nil }
             return CockpitComfortPoint(
-                totalTokens: members.reduce(0) { $0 + Double($1.totalTokens) } / Double(members.count),
-                score: members.reduce(0) { $0 + $1.score } / Double(members.count),
+                totalTokens: members.reduce(0) { $0 + Double($1.totalTokens) * (weights[$1.id] ?? 0) } / totalWeight,
+                score: members.reduce(0) { $0 + $1.score * (weights[$1.id] ?? 0) } / totalWeight,
                 sampleCount: members.count)
         }
+    }
+
+    /// Ages the experience's calendar day, so editing an old rating does not make it a fresh sample.
+    private static func recencyWeight(dateKey: String, now: Date, calendar: Calendar) -> Double {
+        let values = dateKey.split(separator: "-").compactMap { Int($0) }
+        guard values.count == 3,
+              let date = calendar.date(from: DateComponents(year: values[0], month: values[1], day: values[2])),
+              let age = calendar.dateComponents([.day], from: date, to: calendar.startOfDay(for: now)).day,
+              age >= 0 else { return 0 }
+        return pow(2, -Double(age) / Self.recencyHalfLifeDays)
     }
 
     private static func validDateKey(_ key: String, calendar: Calendar) -> Bool {

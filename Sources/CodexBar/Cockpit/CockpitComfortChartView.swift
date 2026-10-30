@@ -51,6 +51,13 @@ struct CockpitComfortChartView: View {
                     Text(L("cockpit_ui_chart_insufficient"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
+                Text(L(
+                    "cockpit_ui_comfort_weighted",
+                    self.model.recencyWeightedSampleCount.formatted(
+                        .number.precision(.fractionLength(1)).locale(codexBarLocalizedLocale()))))
+                    .font(.caption).foregroundStyle(.secondary)
+                Text(L("cockpit_ui_comfort_recency"))
+                    .font(.caption2).foregroundStyle(.secondary)
                 ForEach(self.records.prefix(7)) { record in
                     HStack {
                         Text(record.localDateKey).monospacedDigit()

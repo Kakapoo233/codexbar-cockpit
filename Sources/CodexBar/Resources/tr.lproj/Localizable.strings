@@ -2931,3 +2931,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Menü çubuğunda İngilizce kullan";
 "menu_bar_english_text_subtitle" = "Yalnızca ekranın üst kısmındaki menü çubuğu metnini etkiler. Açılan panel ve ayarlar uygulama dilini kullanmaya devam eder.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Sağlayıcının simgesini gösterir.";
+"menu_bar_help_provider" = "Kullanımınızın yanında sağlayıcının adını gösterir.";
+"menu_bar_help_account" = "Varsa geçerli hesap etiketini gösterir. Gizlilik ayarları bunu gizleyebilir.";
+"menu_bar_help_percent" = "Kullanım görüntüleme ayarına göre seçilen kota döneminin kullanılan veya kalan yüzdesini gösterir. ~ işareti tahmini belirtir.";
+"menu_bar_help_scoped_weekly" = "Sağlayıcı sunuyorsa, genel haftalık kotadan ayrı olarak modele özgü haftalık kotayı gösterir.";
+"menu_bar_help_automatic" = "Sağlayıcının otomatik kullanım ölçütünü kullanır. Bazı sağlayıcılar yüzde yerine bakiye veya metin gösterir.";
+"menu_bar_help_pace" = "Dönemin bu noktasındaki gerçek kota tüketimini beklenen tüketimle karşılaştırır. Görünen işaret, tempo işareti ayarına uyar.";
+"menu_bar_help_usage_bar" = "Kullanılan veya kalan ayarına göre otomatik kotayı üç hücreli kompakt bir metin göstergesiyle gösterir.";
+"menu_bar_help_progress" = "Kullanılan veya kalan ayarına göre seçilen kota dönemini grafik çubuk olarak gösterir.";
+"menu_bar_help_reset_countdown" = "Sıfırlanma zamanı biliniyorsa bu kota döneminin sıfırlanmasına kalan süreyi gösterir.";
+"menu_bar_help_reset_absolute" = "Varsa bu kota döneminin sıfırlanacağı tarihi veya saati gösterir.";
+"menu_bar_help_runs_out" = "Geçerli tempoyla kotanın ne zaman tükeneceğini veya sıfırlanmaya kadar yetip yetmeyeceğini tahmin eder. Bu bir tahmindir, sıfırlanma zamanı değildir.";
+"menu_bar_help_runs_out_compact" = "Kota tükenmesine ilişkin aynı tahmini süreyi daha kısa metinle gösterir.";
+"menu_bar_help_balance" = "Sağlayıcının bakiye veya harcama değerini gösterir. Anlamı ve birimi sağlayıcıya bağlıdır.";
+"menu_bar_help_cost_today" = "Bugünün kaydedilen veya tahmini kullanım maliyetini gösterir. Tahminler sağlayıcının faturasından farklı olabilir.";
+"menu_bar_help_cost_window" = "Yapılandırılan maliyet geçmişi döneminin maliyetini gösterir. Dönem, maliyet geçmişi ayarlarınıza uyar.";
+"menu_bar_help_spend_amount" = "Sağlayıcının sınırından kullanılan parasal harcamayı tercih ettiğiniz görüntüleme para biriminde gösterir.";
+"menu_bar_help_spend_budget" = "Parasal harcamayı ve sınırını tercih ettiğiniz görüntüleme para biriminde gösterir. Parasal olmayan sınırlar kullanılamaz.";
+"menu_bar_help_separator" = "Menü çubuğu öğeleri arasına görünür bir nokta ekler.";
+"menu_bar_help_space" = "Menü çubuğu öğeleri arasına boşluk ekler.";
+"menu_bar_help_hidden" = "Bu koşul dalı için hiçbir şey göstermez.";
+"menu_bar_help_conditional" = "Kaydedilmiş kurala göre ne gösterileceğini seçer. Kullanılamayan veriler koşulu sağlamaz.";
+"menu_bar_help_use_all" = "Bu sağlayıcının özel düzenini kaldırarak yeniden paylaşılan Tüm sağlayıcılar düzenini kullanmasını sağlar.";
+"menu_bar_help_preview" = "Varsa canlı verileri kullanır; anlık görüntü yoksa örnek verileri gösterir. Eksik alanlar kullanılamıyor olarak görünebilir.";
+"menu_bar_help_remove_line_break" = "İki düzen satırını tek satırda birleştirir.";
+"menu_bar_help_remove" = "Bir öğeyi bu düzenden kaldırmak için buraya bırakın.";
+"menu_bar_help_line_break" = "İkinci bir menü çubuğu satırı başlatır. Düzenler en fazla iki satır destekler.";
+"menu_bar_help_conditional_name" = "Yeniden kullanılabilir kurala, öğe paletinde kolayca bulabilmeniz için ad verir.";
+"menu_bar_help_conditional_add" = "Kullanım, zaman veya maliyete göre öğe seçen yeniden kullanılabilir bir kural oluşturur.";
+"menu_bar_help_conditional_combinator" = "Koşulları soldan sağa birleştirir. AND her iki sonucun da doğru olmasını, OR ise herhangi birinin doğru olmasını gerektirir.";
+"menu_bar_help_conditional_direction" = "Kuralın kullanılan değeri mi yoksa kalan değeri mi karşılaştıracağını seçer.";
+"menu_bar_help_conditional_comparison" = "Ölçütün eşikle nasıl karşılaştırılacağını seçer; örneğin büyüktür veya küçüktür.";
+"menu_bar_help_conditional_threshold" = "Karşılaştırma eşiğini %@ biriminde ayarlar. Kullanılamayan değerler eşleşmez.";
+"menu_bar_help_conditional_remove" = "Bu yeniden kullanılabilir kuralı siler ve kayıtlı düzenlerdeki ilgili öğeleri kaldırır.";
+"menu_bar_help_conditional_duplicate" = "Bu kuralın bağımsız olarak düzenleyebileceğiniz ayrı bir kopyasını oluşturur.";
+"menu_bar_help_conditional_save" = "Bu kuralı menü çubuğu düzenlerinde kullanılmak üzere kaydeder.";
+"menu_bar_help_conditional_cancel" = "Bu değişiklikleri kaydetmeden kural düzenleyicisini kapatır.";
+"menu_bar_help_conditional_then" = "Birleşik koşul doğru olduğunda gösterilecek öğeyi seçer. Hiçbir şey göstermemek için Gizle’yi seçin.";
+"menu_bar_help_conditional_else" = "Birleşik koşul yanlış olduğunda gösterilecek öğeyi seçer. Hiçbir şey göstermemek için Gizle’yi seçin.";
+"menu_bar_help_conditional_remove_clause" = "Bu koşulu kuraldan kaldırır.";
+"menu_bar_help_conditional_add_clause" = "Başka bir koşul ekler. Bir kural en fazla dört koşul destekler.";
+"menu_bar_help_conditional_pace" = "Gerçek tüketimden beklenen tüketimi çıkararak yüzde puan cinsinden karşılaştırır. Pozitif değer daha hızlı tüketim, negatif değer rezerv demektir. Tempo işareti görüntüleme ayarı bu karşılaştırmayı değiştirmez.";
+"menu_bar_help_conditional_currency" = "Parasal eşikler, tercih edilen görüntüleme para biriminden bağımsız olarak USD cinsinden karşılaştırılır.";
+"menu_bar_help_conditional_hours" = "Karşılaştırma, kesirli saatler dahil saat birimini kullanır.";
+"menu_bar_help_size" = "Menü çubuğu metninin ve düzen öğelerinin boyutunu değiştirir.";
+"menu_bar_help_gap" = "Bitişik düzen öğeleri arasındaki boşluğu değiştirir.";
+"menu_bar_help_vertical" = "Hizalamayı ince ayarlamak için düzeni menü çubuğu içinde dikey olarak kaydırır.";
+"menu_bar_help_monospaced" = "Sayılar değiştiğinde daha az kayma olması için rakamları eşit genişlikte gösterir.";
+"menu_bar_help_window_labels" = "Oturum ve haftalık gibi kota dönemlerini ayırt eden kısa etiketler ekler.";
+"menu_bar_help_preset" = "Bu düzeni hazır bir yerleşimle değiştirir. Daha sonra özelleştirebilirsiniz.";
+"menu_bar_help_preset_custom" = "Bu düzen özelleştirilmiştir ve bir ön ayarla eşleşmez.";
+"menu_bar_help_style" = "Menü çubuğu simge stilini seçer. Aşağıdaki düzeni düzenlemek için Simge ve yüzde’yi kullanın.";
+"menu_bar_help_pace_sign" = "Temponun hangi tarafının artı işaretiyle gösterileceğini seçer. Yalnızca görünümü etkiler; koşul karşılaştırmalarını etkilemez.";
+"menu_bar_help_provider_color" = "Menü çubuğu görünümünde sağlayıcının tanıtıcı rengini kullanır.";
+"menu_bar_help_switcher_rows" = "Birleşik sağlayıcı değiştiricide simgelerin mi yoksa kullanım ilerlemesinin mi gösterileceğini seçer.";
+"menu_bar_help_stacked_provider" = "Birleşik simgenin bu satırında gösterilecek sağlayıcıyı seçer. Otomatik, uygun sağlayıcı sırasını izler.";
+"menu_bar_help_overview" = "Genel Bakış’ta gösterilecek etkin sağlayıcıları belirtilen sınıra kadar seçer. Sıra, sağlayıcı listesini izler.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Takvim ölçeği";
+"cockpit_calendar_day" = "Gün";
+"cockpit_calendar_week" = "Hafta";
+"cockpit_calendar_month" = "Ay";
+"cockpit_calendar_quarter" = "Çeyrek";
+"cockpit_calendar_year" = "Yıl";
+"cockpit_calendar_metric" = "Takvim ölçütü";
+"cockpit_calendar_now" = "Bugün";
+"cockpit_calendar_previous" = "Önceki dönem";
+"cockpit_calendar_next" = "Sonraki dönem";
+"cockpit_calendar_period_total" = "Bu dönem için kaydedilen kullanım";
+"cockpit_calendar_partial" = "Geçmiş eksik olabilir: ≥ kaydedilmiş alt sınırı, — ise kullanılamayan veriyi belirtir. Gelecek tarihler toplamlara dahil edilmez.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · %@. çeyrek";
+"cockpit_calendar_select_day" = "Sağlayıcı ayrıntılarını, kişisel durumu ve sıfırlanma olaylarını görmek için bir gün seçin.";
+"cockpit_calendar_currency_note" = "Para birimleri ayrı gösterilir. Token toplamları dahil edilen yerel kaynakları birleştirir.";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "Gözlemlenen kullanım referansı";
+"cockpit_ui_personal_collecting" = "Haftanın günlerine göre kullanım düzeniniz oluşturuluyor: koşulları karşılayan 21 planlı gün, 12 etkin gün, hafta içi/sonu kapsamı ve art arda 7 doğrulama günü gerekir.";
+"cockpit_ui_personal_coverage" = "%@ uygun / %@ planlı gün · %@ etkin gün";
+"cockpit_ui_personal_stale" = "Yakın zamana ait uygun geçmiş eksik; referans duraklatıldı.";
+"cockpit_ui_personal_drift" = "Son kullanım düzeni bu referansın doğrulanamayacağı kadar değişti.";
+"cockpit_ui_personal_no_gain" = "Haftanın günü modeli, doğrulama haftasında sabit plan temelinden daha iyi sonuç vermedi.";
+"cockpit_ui_personal_ready" = "Kişisel gün düzeniniz, ayrı bir 7 günlük doğrulama döneminde kaydedilen kullanımın tahmin doğruluğunu artırdı.";
+"cockpit_ui_personal_holdout" = "7 günlük ortalama hata: temel %@ → kişisel %@ yüzde puan";
+"cockpit_ui_personal_note" = "Yalnızca gözlemlenen dönemler içindir; tam günlük bir tahmin değildir. Uygun günler, 90 dakikayı aşan boşluklar olmadan 6 saat güvenilir gözlem gerektirir. Eksik dönemler sıfırla doldurulmaz; sabit öneriniz ve kişisel sınırınız geçerliliğini korur.";
+"cockpit_ui_comfort_weighted" = "Güncelliğe göre ağırlıklandırılmış tam örnekler: %@";
+"cockpit_ui_comfort_recency" = "Eğilim noktaları, 14 günlük ağırlık yarı ömrüyle yakın tarihli deneyimlere daha fazla önem verir. Eski bir günü düzenlemek yaşını değiştirmez. Bu, resmi kotayı değil Token kullanım deneyimini açıklar.";
+
+"menu_bar_help_conditional_runout" = "Kotanın tükenmesine kadar tahmin edilen saat sayısını karşılaştırır. Tükenme tahmini yoksa koşul yanlış olur.";

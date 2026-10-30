@@ -424,6 +424,7 @@ struct MenuBarLayoutEditor: View {
                 Button(L("menu_bar_layout_scope_all")) {
                     self.scope = .all
                 }
+                .help(L("menu_bar_layout_scope_help"))
                 if !self.providers.isEmpty {
                     Divider()
                 }
@@ -431,6 +432,7 @@ struct MenuBarLayoutEditor: View {
                     Button(L(self.store.metadata(for: provider).displayName)) {
                         self.scope = .provider(provider)
                     }
+                    .help(L("menu_bar_layout_scope_help"))
                 }
             } label: {
                 Label(self.scopeLabel, systemImage: "scope")
@@ -452,6 +454,7 @@ struct MenuBarLayoutEditor: View {
                         self.applyPreset(preset)
                     }
                     .disabled(preset == .custom)
+                    .help(preset.editorHelp(provider: self.persistenceProvider))
                 }
             } label: {
                 HStack(spacing: 5) {
@@ -462,6 +465,7 @@ struct MenuBarLayoutEditor: View {
             }
             .menuStyle(.button)
             .accessibilityLabel(L("menu_bar_layout_preset"))
+            .help(L("menu_bar_help_preset"))
         }
     }
 
@@ -499,6 +503,7 @@ struct MenuBarLayoutEditor: View {
             self.selectedPosition = nil
         }
         .buttonStyle(.link)
+        .help(L("menu_bar_help_use_all"))
         .accessibilityLabel(L(
             "menu_bar_layout_use_all_accessibility",
             L(self.store.metadata(for: provider).displayName)))
@@ -521,6 +526,7 @@ struct MenuBarLayoutEditor: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 7, style: .continuous)
                         .stroke(.separator.opacity(0.65), lineWidth: 1))
+                .help(L("menu_bar_help_preview"))
         }
     }
 
@@ -536,6 +542,7 @@ struct MenuBarLayoutEditor: View {
                         self.write(MenuBarLayoutEditorMutations.removeLineBreak(from: self.layout))
                     }
                     .buttonStyle(.link)
+                    .help(L("menu_bar_help_remove_line_break"))
                 }
             }
 
@@ -559,6 +566,7 @@ struct MenuBarLayoutEditor: View {
                         isSelected: self.selectedPosition == position,
                         accessibilityLabel: self.chipAccessibilityLabel(for: token),
                         accessibilityHint: L("menu_bar_layout_chip_hint"),
+                        helpText: self.chipHelp(for: token),
                         dragItem: .placed(token, at: position, in: self.layout),
                         activate: { self.selectedPosition = position },
                         removeActionTitle: L("Remove"),
@@ -576,6 +584,7 @@ struct MenuBarLayoutEditor: View {
                                         mode: .edit(id),
                                         conditional: conditional)
                                 }
+                                .help(L("menu_bar_help_conditional"))
                             }
                         }
                 }
@@ -638,6 +647,7 @@ struct MenuBarLayoutEditor: View {
         .accessibilityElement()
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel(L("menu_bar_layout_drag_remove"))
+        .help(L("menu_bar_help_remove"))
         .accessibilityAction {
             self.removeSelectedToken()
         }
@@ -659,14 +669,13 @@ struct MenuBarLayoutEditor: View {
                             provider: self.persistenceProvider,
                             snapshot: self.persistenceSnapshot),
                         accessibilityHint: L("menu_bar_layout_palette_hint"),
+                        helpText: token.editorHelp(
+                            provider: self.persistenceProvider,
+                            snapshot: self.persistenceSnapshot),
                         dragItem: .palette(token),
                         activate: {
                             self.write(MenuBarLayoutEditorMutations.append(token, to: self.layout))
                         })
-                        .help(token == .tokensPerMinute
-                            ? L("Latest tokens per minute (OpenAI Admin API)")
-                            : token == .tokensSparkline
-                            ? L("Last hour of tokens per minute (OpenAI Admin API)") : "")
                 }
                 if group.includesLineBreak {
                     MenuBarLayoutEditorChip(
@@ -675,6 +684,7 @@ struct MenuBarLayoutEditor: View {
                         isDisabled: self.layout.lines.count == 2,
                         accessibilityLabel: L("menu_bar_layout_token_line_break"),
                         accessibilityHint: L("menu_bar_layout_palette_hint"),
+                        helpText: L("menu_bar_help_line_break"),
                         dragItem: .lineBreak,
                         activate: {
                             self.write(MenuBarLayoutEditorMutations.addLineBreak(to: self.layout))
@@ -700,7 +710,7 @@ struct MenuBarLayoutEditor: View {
                     Image(systemName: "plus.circle")
                 }
                 .buttonStyle(.plain)
-                .help(L("menu_bar_layout_conditional_add"))
+                .help(L("menu_bar_help_conditional_add"))
                 .accessibilityLabel(L("menu_bar_layout_conditional_add"))
             }
 
@@ -727,6 +737,7 @@ struct MenuBarLayoutEditor: View {
             title: conditional.displayName,
             systemImage: "switch.2",
             accessibilityLabel: conditional.displayName,
+            helpText: self.chipHelp(for: .conditional(id: conditional.id)),
             dragItem: .palette(.conditional(id: conditional.id)),
             activate: {
                 self.write(MenuBarLayoutEditorMutations.append(.conditional(id: conditional.id), to: self.layout))
@@ -737,12 +748,15 @@ struct MenuBarLayoutEditor: View {
                         mode: .edit(conditional.id),
                         conditional: conditional)
                 }
+                .help(L("menu_bar_help_conditional"))
                 Button(L("menu_bar_layout_conditional_duplicate")) {
                     self.duplicateConditional(conditional)
                 }
+                .help(L("menu_bar_help_conditional_duplicate"))
                 Button(L("menu_bar_layout_conditional_remove"), role: .destructive) {
                     self.settings.removeMenuBarLayoutConditional(id: conditional.id)
                 }
+                .help(L("menu_bar_help_conditional_remove"))
             }
     }
 
@@ -813,6 +827,15 @@ struct MenuBarLayoutEditor: View {
                 ?? L("menu_bar_layout_token_conditional")
         }
         return token.editorLabel(provider: self.persistenceProvider, snapshot: self.persistenceSnapshot)
+    }
+
+    private func chipHelp(for token: MenuBarLayoutToken) -> String {
+        if case let .conditional(id) = token,
+           let conditional = self.settings.menuBarLayoutConditionals.first(where: { $0.id == id })
+        {
+            return L("menu_bar_help_conditional") + "\n" + conditional.editorSummary(provider: self.persistenceProvider)
+        }
+        return token.editorHelp(provider: self.persistenceProvider, snapshot: self.persistenceSnapshot)
     }
 
     private func chipAccessibilityLabel(for token: MenuBarLayoutToken) -> String {
@@ -1303,12 +1326,13 @@ struct MenuBarLayoutDisplayOptions: View {
 
                     Picker(L("menu_bar_layout_size"), selection: self.$size) {
                         ForEach(MenuBarLayoutSize.allCases) { size in
-                            Text(size.label).tag(size)
+                            Text(size.label).tag(size).help(L("menu_bar_help_size"))
                         }
                     }
                     .labelsHidden()
                     .pickerStyle(.menu)
                     .fixedSize()
+                    .help(L("menu_bar_help_size"))
                 }
 
                 HStack(spacing: 8) {
@@ -1318,12 +1342,13 @@ struct MenuBarLayoutDisplayOptions: View {
 
                     Picker(L("menu_bar_layout_gap"), selection: self.$gap) {
                         ForEach(MenuBarLayoutGap.allCases) { gap in
-                            Text(gap.label).tag(gap)
+                            Text(gap.label).tag(gap).help(L("menu_bar_help_gap"))
                         }
                     }
                     .labelsHidden()
                     .pickerStyle(.menu)
                     .fixedSize()
+                    .help(L("menu_bar_help_gap"))
                 }
 
                 HStack(spacing: 8) {
@@ -1340,19 +1365,23 @@ struct MenuBarLayoutDisplayOptions: View {
                         .multilineTextAlignment(.trailing)
                         .monospacedDigit()
                         .frame(width: 44)
+                        .help(L("menu_bar_help_vertical"))
 
                     Stepper(value: self.$verticalAdjustment, in: -20...20, step: 1) {
                         EmptyView()
                     }
                     .labelsHidden()
+                    .help(L("menu_bar_help_vertical"))
                 }
 
                 Spacer()
             }
             Toggle(L("menu_bar_layout_monospaced_digits"), isOn: self.$monospacedDigits)
                 .toggleStyle(.checkbox)
+                .help(L("menu_bar_help_monospaced"))
             Toggle(L("menu_bar_layout_show_window_labels"), isOn: self.$showWindowLabels)
                 .toggleStyle(.checkbox)
+                .help(L("menu_bar_help_window_labels"))
         }
     }
 }

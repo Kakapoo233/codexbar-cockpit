@@ -2924,3 +2924,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Englisch in der Menüleiste verwenden";
 "menu_bar_english_text_subtitle" = "Betrifft nur den Text in der oberen Menüleiste. Das aufgeklappte Panel und die Einstellungen behalten die App-Sprache bei.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Zeigt das Symbol des Anbieters.";
+"menu_bar_help_provider" = "Zeigt den Namen des Anbieters neben der Nutzung.";
+"menu_bar_help_account" = "Zeigt die aktuelle Kontobezeichnung, sofern verfügbar. Datenschutzeinstellungen können sie ausblenden.";
+"menu_bar_help_percent" = "Zeigt den verbrauchten oder verbleibenden Anteil des gewählten Kontingentzeitraums gemäß der Nutzungseinstellung. ~ kennzeichnet eine Schätzung.";
+"menu_bar_help_scoped_weekly" = "Zeigt ein modellspezifisches Wochenkontingent, sofern der Anbieter eines bereitstellt, getrennt vom gesamten Wochenkontingent.";
+"menu_bar_help_automatic" = "Verwendet die automatische Nutzungskennzahl des Anbieters. Manche Anbieter zeigen ein Guthaben oder Text statt eines Prozentsatzes.";
+"menu_bar_help_pace" = "Vergleicht den tatsächlichen Verbrauch mit dem zu diesem Zeitpunkt erwarteten Verbrauch. Das Vorzeichen folgt der Einstellung für das Tempo-Vorzeichen.";
+"menu_bar_help_usage_bar" = "Zeigt das automatische Kontingent als kompakte Textanzeige mit drei Feldern gemäß der Einstellung für verbraucht oder verbleibend.";
+"menu_bar_help_progress" = "Zeigt den gewählten Kontingentzeitraum als grafischen Balken gemäß der Einstellung für verbraucht oder verbleibend.";
+"menu_bar_help_reset_countdown" = "Zeigt die verbleibende Zeit bis zur Zurücksetzung dieses Kontingentzeitraums, sofern ein Zeitpunkt verfügbar ist.";
+"menu_bar_help_reset_absolute" = "Zeigt das Datum oder die Uhrzeit der Zurücksetzung dieses Kontingentzeitraums, sofern verfügbar.";
+"menu_bar_help_runs_out" = "Schätzt, wann das Kontingent beim aktuellen Tempo aufgebraucht ist oder ob es bis zur Zurücksetzung reicht. Dies ist eine Schätzung, kein Zurücksetzungszeitpunkt.";
+"menu_bar_help_runs_out_compact" = "Zeigt dieselbe geschätzte Zeit bis zum Aufbrauchen des Kontingents in kürzerer Form.";
+"menu_bar_help_balance" = "Zeigt das Guthaben oder den Ausgabenwert des Anbieters. Bedeutung und Einheit hängen vom Anbieter ab.";
+"menu_bar_help_cost_today" = "Zeigt die heute erfassten oder geschätzten Nutzungskosten. Schätzungen können von der Rechnung des Anbieters abweichen.";
+"menu_bar_help_cost_window" = "Zeigt die Kosten für den eingestellten Kostenverlaufszeitraum. Der Zeitraum folgt den Einstellungen für den Kostenverlauf.";
+"menu_bar_help_spend_amount" = "Zeigt die verbrauchten Geldausgaben des Anbieterlimits in deiner bevorzugten Anzeigewährung.";
+"menu_bar_help_spend_budget" = "Zeigt die verbrauchten Geldausgaben und ihr Limit in deiner bevorzugten Anzeigewährung. Nicht monetäre Limits sind nicht verfügbar.";
+"menu_bar_help_separator" = "Fügt einen sichtbaren Punkt zwischen Menüleistenelementen ein.";
+"menu_bar_help_space" = "Fügt einen Leerraum zwischen Menüleistenelementen ein.";
+"menu_bar_help_hidden" = "Zeigt für diesen Bedingungszweig nichts an.";
+"menu_bar_help_conditional" = "Wählt den angezeigten Inhalt anhand einer gespeicherten Regel. Nicht verfügbare Daten erfüllen eine Bedingung nicht.";
+"menu_bar_help_use_all" = "Entfernt das eigene Layout dieses Anbieters, damit er wieder dem gemeinsamen Layout für alle Anbieter folgt.";
+"menu_bar_help_preview" = "Verwendet verfügbare Live-Daten; ohne Datenmomentaufnahme werden Beispieldaten angezeigt. Fehlende Felder können als nicht verfügbar erscheinen.";
+"menu_bar_help_remove_line_break" = "Führt die beiden Layoutzeilen zu einer zusammen.";
+"menu_bar_help_remove" = "Hier ein Element ablegen, um es aus diesem Layout zu entfernen.";
+"menu_bar_help_line_break" = "Beginnt eine zweite Menüleistenzeile. Layouts unterstützen höchstens zwei Zeilen.";
+"menu_bar_help_conditional_name" = "Benennt diese wiederverwendbare Regel, damit sie in der Elementauswahl zu finden ist.";
+"menu_bar_help_conditional_add" = "Erstellt eine wiederverwendbare Regel, die anhand von Nutzung, Zeit oder Kosten ein Element auswählt.";
+"menu_bar_help_conditional_combinator" = "Verknüpft Bedingungen von links nach rechts. AND erfordert beide Ergebnisse; OR erfordert eines der Ergebnisse.";
+"menu_bar_help_conditional_direction" = "Legt fest, ob die Regel den verbrauchten oder den verbleibenden Wert vergleicht.";
+"menu_bar_help_conditional_comparison" = "Legt fest, wie die Kennzahl mit dem Schwellenwert verglichen wird, etwa größer als oder kleiner als.";
+"menu_bar_help_conditional_threshold" = "Legt den Vergleichsschwellenwert in %@ fest. Nicht verfügbare Werte ergeben keinen Treffer.";
+"menu_bar_help_conditional_remove" = "Löscht diese wiederverwendbare Regel und entfernt ihre Elemente aus gespeicherten Layouts.";
+"menu_bar_help_conditional_duplicate" = "Erstellt eine unabhängige Kopie dieser Regel, die separat bearbeitet werden kann.";
+"menu_bar_help_conditional_save" = "Speichert diese Regel zur Verwendung in Menüleistenlayouts.";
+"menu_bar_help_conditional_cancel" = "Schließt den Regeleditor, ohne diese Änderungen zu speichern.";
+"menu_bar_help_conditional_then" = "Wählt das Element, das bei erfüllter Gesamtbedingung angezeigt wird. Mit Ausblenden wird nichts angezeigt.";
+"menu_bar_help_conditional_else" = "Wählt das Element, das bei nicht erfüllter Gesamtbedingung angezeigt wird. Mit Ausblenden wird nichts angezeigt.";
+"menu_bar_help_conditional_remove_clause" = "Entfernt diese Bedingung aus der Regel.";
+"menu_bar_help_conditional_add_clause" = "Fügt eine weitere Bedingung hinzu. Eine Regel unterstützt höchstens vier Bedingungen.";
+"menu_bar_help_conditional_pace" = "Vergleicht tatsächlichen minus erwarteten Verbrauch in Prozentpunkten. Positiv bedeutet schnelleren Verbrauch, negativ eine Reserve. Die Vorzeicheneinstellung für die Tempoanzeige ändert diesen Vergleich nicht.";
+"menu_bar_help_conditional_currency" = "Geldschwellenwerte werden unabhängig von der bevorzugten Anzeigewährung in USD verglichen.";
+"menu_bar_help_conditional_hours" = "Der Vergleich erfolgt in Stunden, auch mit Nachkommastellen.";
+"menu_bar_help_size" = "Ändert die Größe von Text und Layoutelementen in der Menüleiste.";
+"menu_bar_help_gap" = "Ändert den Abstand zwischen benachbarten Layoutelementen.";
+"menu_bar_help_vertical" = "Verschiebt das Layout innerhalb der Menüleiste vertikal zur Feinabstimmung der Ausrichtung.";
+"menu_bar_help_monospaced" = "Gibt Ziffern die gleiche Breite, damit sich wechselnde Zahlen weniger verschieben.";
+"menu_bar_help_window_labels" = "Fügt kurze Bezeichnungen zur Unterscheidung von Kontingentzeiträumen wie Sitzung und Woche hinzu.";
+"menu_bar_help_preset" = "Ersetzt dieses Layout durch eine vorgefertigte Anordnung. Sie kann anschließend angepasst werden.";
+"menu_bar_help_preset_custom" = "Dieses Layout wurde angepasst und entspricht keiner Vorlage.";
+"menu_bar_help_style" = "Wählt den Symbolstil der Menüleiste. Zum Bearbeiten des Layouts unten Symbol und Prozent wählen.";
+"menu_bar_help_pace_sign" = "Legt fest, welche Seite des Tempos ein Pluszeichen erhält. Dies betrifft nur die Anzeige, nicht die Bedingungsvergleiche.";
+"menu_bar_help_provider_color" = "Verwendet die Erkennungsfarbe des Anbieters für seine Menüleistenanzeige.";
+"menu_bar_help_switcher_rows" = "Legt fest, ob der kombinierte Anbieterumschalter Symbole oder Nutzungsfortschritt zeigt.";
+"menu_bar_help_stacked_provider" = "Wählt den Anbieter für diese Zeile des kombinierten Symbols. Automatisch folgt der Reihenfolge geeigneter Anbieter.";
+"menu_bar_help_overview" = "Wählt die aktivierten Anbieter für die Übersicht bis zur angezeigten Höchstzahl. Die Reihenfolge folgt der Anbieterliste.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Kalenderansicht";
+"cockpit_calendar_day" = "Tag";
+"cockpit_calendar_week" = "Woche";
+"cockpit_calendar_month" = "Monat";
+"cockpit_calendar_quarter" = "Quartal";
+"cockpit_calendar_year" = "Jahr";
+"cockpit_calendar_metric" = "Kalenderkennzahl";
+"cockpit_calendar_now" = "Heute";
+"cockpit_calendar_previous" = "Vorheriger Zeitraum";
+"cockpit_calendar_next" = "Nächster Zeitraum";
+"cockpit_calendar_period_total" = "Erfasste Nutzung in diesem Zeitraum";
+"cockpit_calendar_partial" = "Unvollständiger Verlauf: ≥ kennzeichnet erfasste Untergrenzen; — bedeutet nicht verfügbar. Zukünftige Daten werden nicht in Summen einbezogen.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · Q%@";
+"cockpit_calendar_select_day" = "Einen Tag auswählen, um Anbieterdetails, persönlichen Status und Zurücksetzungsereignisse anzuzeigen.";
+"cockpit_calendar_currency_note" = "Währungen werden getrennt angezeigt. Token-Summen umfassen die einbezogenen lokalen Quellen.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Referenz für erfasste Nutzung";
+"cockpit_ui_personal_collecting" = "Dein Nutzungsmuster nach Wochentag wird ermittelt: erforderlich sind 21 auswertbare Planungstage, 12 aktive Tage, Daten für Werktage und Wochenenden sowie 7 aufeinanderfolgende Validierungstage.";
+"cockpit_ui_personal_coverage" = "%@ auswertbare / %@ geplante Tage · %@ aktive Tage";
+"cockpit_ui_personal_stale" = "Aktuelle auswertbare Verlaufsdaten fehlen; die Referenz ist pausiert.";
+"cockpit_ui_personal_drift" = "Die jüngsten Nutzungsmuster haben sich zu stark verändert, um diese Referenz zu validieren.";
+"cockpit_ui_personal_no_gain" = "Das Wochentagsmodell war in der Validierungswoche nicht besser als die Basis des eingefrorenen Plans.";
+"cockpit_ui_personal_ready" = "Dein Wochentagsmuster verbesserte die Vorhersage der erfassten Nutzung in einem separaten 7-tägigen Validierungszeitraum.";
+"cockpit_ui_personal_holdout" = "Mittlerer Fehler über 7 Tage: Basis %@ → persönlich %@ Prozentpunkte";
+"cockpit_ui_personal_note" = "Nur erfasste Zeiträume, keine Schätzung für den ganzen Tag. Auswertbare Tage benötigen 6 Stunden zuverlässige Beobachtungen ohne Lücken von mehr als 90 Minuten. Fehlende Zeiträume werden niemals mit Null aufgefüllt; deine eingefrorene Empfehlung und dein persönliches Limit bleiben maßgeblich.";
+"cockpit_ui_comfort_weighted" = "Nach Aktualität gewichtete vollständige Stichproben: %@";
+"cockpit_ui_comfort_recency" = "Trendpunkte gewichten aktuelle Erfahrungen stärker, mit einer Halbwertszeit von 14 Tagen. Das Bearbeiten eines älteren Tages erhält dessen Alter. Dies beschreibt die Token-Erfahrung, nicht das offizielle Kontingent.";
+
+"menu_bar_help_conditional_runout" = "Vergleicht die geschätzten Stunden bis zum Aufbrauchen des Kontingents. Ist keine Schätzung verfügbar, ist die Bedingung nicht erfüllt.";

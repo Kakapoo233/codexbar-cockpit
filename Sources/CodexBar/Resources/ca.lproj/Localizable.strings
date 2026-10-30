@@ -2930,3 +2930,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Utilitza l’anglès a la barra de menús";
 "menu_bar_english_text_subtitle" = "Només afecta el text de la barra de menús superior. El tauler desplegat i la configuració mantenen l’idioma de l’aplicació.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Mostra la icona del proveïdor.";
+"menu_bar_help_provider" = "Mostra el nom del proveïdor al costat de l’ús.";
+"menu_bar_help_account" = "Mostra l’etiqueta del compte actual quan està disponible. La configuració de privadesa la pot amagar.";
+"menu_bar_help_percent" = "Mostra el percentatge utilitzat o restant del període de quota seleccionat, segons la configuració de visualització de l’ús. ~ indica una estimació.";
+"menu_bar_help_scoped_weekly" = "Mostra la quota setmanal d’un model concret, si el proveïdor l’ofereix, separada de la quota setmanal global.";
+"menu_bar_help_automatic" = "Utilitza la mètrica automàtica del proveïdor. Alguns proveïdors mostren un saldo o text en lloc d’un percentatge.";
+"menu_bar_help_pace" = "Compara l’ús real de la quota amb l’esperat en aquest punt del període. El signe mostrat segueix la configuració del signe del ritme.";
+"menu_bar_help_usage_bar" = "Mostra la quota automàtica com un indicador de text compacte de tres cel·les, segons la configuració d’utilitzat o restant.";
+"menu_bar_help_progress" = "Mostra el període de quota seleccionat com una barra gràfica, segons la configuració d’utilitzat o restant.";
+"menu_bar_help_reset_countdown" = "Mostra el temps restant fins al restabliment d’aquest període de quota, quan se’n coneix l’hora.";
+"menu_bar_help_reset_absolute" = "Mostra la data o l’hora de restabliment d’aquest període de quota, quan està disponible.";
+"menu_bar_help_runs_out" = "Estima quan s’esgotarà la quota al ritme actual o si durarà fins al restabliment. És una estimació, no l’hora del restabliment.";
+"menu_bar_help_runs_out_compact" = "Mostra la mateixa estimació del temps fins a esgotar la quota amb un text més breu.";
+"menu_bar_help_balance" = "Mostra el saldo o la xifra de despesa del proveïdor. El significat i la unitat depenen del proveïdor.";
+"menu_bar_help_cost_today" = "Mostra el cost d’ús registrat o estimat d’avui. Les estimacions poden diferir de la factura del proveïdor.";
+"menu_bar_help_cost_window" = "Mostra el cost del període configurat a l’historial de costos. El període segueix la configuració d’aquest historial.";
+"menu_bar_help_spend_amount" = "Mostra la despesa monetària utilitzada del límit del proveïdor, en la moneda de visualització preferida.";
+"menu_bar_help_spend_budget" = "Mostra la despesa monetària utilitzada i el seu límit en la moneda de visualització preferida. Els límits no monetaris no estan disponibles.";
+"menu_bar_help_separator" = "Afegeix un punt visible entre els elements de la barra de menús.";
+"menu_bar_help_space" = "Afegeix un espai en blanc entre els elements de la barra de menús.";
+"menu_bar_help_hidden" = "No mostra res per a aquesta branca de la condició.";
+"menu_bar_help_conditional" = "Tria què es mostra segons una regla desada. Les dades no disponibles no compleixen cap condició.";
+"menu_bar_help_use_all" = "Elimina la disposició personalitzada d’aquest proveïdor perquè torni a utilitzar la disposició compartida de Tots els proveïdors.";
+"menu_bar_help_preview" = "Utilitza dades en temps real quan estan disponibles; sense una instantània, mostra dades d’exemple. Els camps que falten poden aparèixer com a no disponibles.";
+"menu_bar_help_remove_line_break" = "Uneix les dues línies de la disposició en una de sola.";
+"menu_bar_help_remove" = "Deixa anar un element aquí per eliminar-lo d’aquesta disposició.";
+"menu_bar_help_line_break" = "Inicia una segona línia de la barra de menús. Les disposicions admeten fins a dues línies.";
+"menu_bar_help_conditional_name" = "Dona un nom a aquesta regla reutilitzable per trobar-la a la paleta d’elements.";
+"menu_bar_help_conditional_add" = "Crea una regla reutilitzable que selecciona un element segons l’ús, el temps o el cost.";
+"menu_bar_help_conditional_combinator" = "Combina les condicions d’esquerra a dreta. AND requereix tots dos resultats; OR en requereix qualsevol dels dos.";
+"menu_bar_help_conditional_direction" = "Tria si la regla compara el valor utilitzat o el restant.";
+"menu_bar_help_conditional_comparison" = "Tria com es compara la mètrica amb el llindar, per exemple, més gran o més petit.";
+"menu_bar_help_conditional_threshold" = "Estableix el llindar de comparació en %@. Els valors no disponibles no coincideixen.";
+"menu_bar_help_conditional_remove" = "Elimina aquesta regla reutilitzable i treu els seus elements de les disposicions desades.";
+"menu_bar_help_conditional_duplicate" = "Crea una còpia separada d’aquesta regla que pots editar de manera independent.";
+"menu_bar_help_conditional_save" = "Desa aquesta regla per utilitzar-la a les disposicions de la barra de menús.";
+"menu_bar_help_conditional_cancel" = "Tanca l’editor de regles sense desar aquests canvis.";
+"menu_bar_help_conditional_then" = "Selecciona l’element que es mostra quan la condició combinada és certa. Tria Amaga per no mostrar res.";
+"menu_bar_help_conditional_else" = "Selecciona l’element que es mostra quan la condició combinada és falsa. Tria Amaga per no mostrar res.";
+"menu_bar_help_conditional_remove_clause" = "Elimina aquesta condició de la regla.";
+"menu_bar_help_conditional_add_clause" = "Afegeix una altra condició. Una regla admet fins a quatre condicions.";
+"menu_bar_help_conditional_pace" = "Compara l’ús real menys l’esperat en punts percentuals. Un valor positiu indica un consum més ràpid; un de negatiu, reserva. La configuració del signe del ritme no canvia aquesta comparació.";
+"menu_bar_help_conditional_currency" = "Els llindars monetaris es comparen en USD, independentment de la moneda de visualització preferida.";
+"menu_bar_help_conditional_hours" = "La comparació utilitza hores, incloses les fraccions d’hora.";
+"menu_bar_help_size" = "Canvia la mida del text i dels elements de la disposició a la barra de menús.";
+"menu_bar_help_gap" = "Canvia l’espai entre els elements adjacents de la disposició.";
+"menu_bar_help_vertical" = "Mou la disposició verticalment dins de la barra de menús per ajustar l’alineació.";
+"menu_bar_help_monospaced" = "Dona la mateixa amplada als dígits per reduir els desplaçaments quan canvien els nombres.";
+"menu_bar_help_window_labels" = "Afegeix etiquetes breus per distingir els períodes de quota, com ara sessió i setmana.";
+"menu_bar_help_preset" = "Substitueix aquesta disposició per una de predefinida. La pots personalitzar després.";
+"menu_bar_help_preset_custom" = "Aquesta disposició està personalitzada i no coincideix amb cap predefinició.";
+"menu_bar_help_style" = "Tria l’estil de la icona de la barra de menús. Utilitza Icona i percentatge per editar la disposició de sota.";
+"menu_bar_help_pace_sign" = "Tria quin costat del ritme es mostra amb un signe positiu. Només afecta la visualització, no les comparacions de les condicions.";
+"menu_bar_help_provider_color" = "Utilitza el color identificatiu del proveïdor a la barra de menús.";
+"menu_bar_help_switcher_rows" = "Tria si el selector combinat de proveïdors mostra icones o el progrés de l’ús.";
+"menu_bar_help_stacked_provider" = "Tria el proveïdor que apareix en aquesta línia de la icona combinada. Automàtic segueix l’ordre dels proveïdors aptes.";
+"menu_bar_help_overview" = "Tria quins proveïdors activats apareixen a la visió general, fins al límit mostrat. L’ordre segueix la llista de proveïdors.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Escala del calendari";
+"cockpit_calendar_day" = "Dia";
+"cockpit_calendar_week" = "Setmana";
+"cockpit_calendar_month" = "Mes";
+"cockpit_calendar_quarter" = "Trimestre";
+"cockpit_calendar_year" = "Any";
+"cockpit_calendar_metric" = "Mètrica del calendari";
+"cockpit_calendar_now" = "Avui";
+"cockpit_calendar_previous" = "Període anterior";
+"cockpit_calendar_next" = "Període següent";
+"cockpit_calendar_period_total" = "Ús registrat en aquest període";
+"cockpit_calendar_partial" = "Historial parcial: ≥ indica els límits inferiors registrats; — vol dir no disponible. Les dates futures s’exclouen dels totals.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · T%@";
+"cockpit_calendar_select_day" = "Selecciona un dia per veure els detalls dels proveïdors, l’estat personal i els esdeveniments de restabliment.";
+"cockpit_calendar_currency_note" = "Les monedes es mostren per separat. Els totals de tokens combinen les fonts locals incloses.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Referència de l’ús registrat";
+"cockpit_ui_personal_collecting" = "S’està creant el teu patró per dia de la setmana: calen 21 dies planificats vàlids, 12 dies actius, cobertura de dies feiners i caps de setmana, i 7 dies consecutius de validació.";
+"cockpit_ui_personal_coverage" = "%@ dies vàlids / %@ planificats · %@ dies actius";
+"cockpit_ui_personal_stale" = "Falta un historial recent vàlid; la referència està en pausa.";
+"cockpit_ui_personal_drift" = "Els patrons d’ús recents han canviat massa per validar aquesta referència.";
+"cockpit_ui_personal_no_gain" = "El model per dia de la setmana no ha millorat la base del pla congelat durant la setmana de validació.";
+"cockpit_ui_personal_ready" = "El teu patró per dia de la setmana ha millorat la predicció de l’ús registrat en un període independent de validació de 7 dies.";
+"cockpit_ui_personal_holdout" = "Error mitjà de 7 dies: base %@ → personal %@ punts percentuals";
+"cockpit_ui_personal_note" = "Només períodes registrats, no una estimació del dia sencer. Els dies vàlids necessiten 6 hores d’observacions fiables sense intervals de més de 90 minuts. Els períodes absents no s’omplen mai amb zero; el suggeriment congelat i el límit personal continuen vigents.";
+"cockpit_ui_comfort_weighted" = "Mostres completes ponderades per recència: %@";
+"cockpit_ui_comfort_recency" = "Els punts de tendència donen més pes a l’experiència recent, amb una semivida de 14 dies. Editar un dia anterior en conserva l’antiguitat. Això descriu l’experiència d’ús de tokens, no la quota oficial.";
+
+"menu_bar_help_conditional_runout" = "Compara les hores estimades fins a esgotar la quota. Si no hi ha cap estimació d’esgotament disponible, la condició és falsa.";

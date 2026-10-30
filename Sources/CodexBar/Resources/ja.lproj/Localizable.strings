@@ -2930,3 +2930,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "メニューバーのテキストを英語で表示";
 "menu_bar_english_text_subtitle" = "画面上部のメニューバー内のテキストにのみ適用されます。展開したパネルと設定はアプリの言語のままです。";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "プロバイダーのアイコンを表示します。";
+"menu_bar_help_provider" = "使用量の横にプロバイダー名を表示します。";
+"menu_bar_help_account" = "取得できる場合に現在のアカウント名を表示します。プライバシー設定で非表示になる場合があります。";
+"menu_bar_help_percent" = "使用量の表示設定に従い、選択した割り当て期間の使用率または残量率を表示します。~ は推定値です。";
+"menu_bar_help_scoped_weekly" = "提供されている場合、全体の週次割り当てとは別に、モデル固有の週次割り当てを表示します。";
+"menu_bar_help_automatic" = "プロバイダーの自動使用量指標を使います。プロバイダーによっては割合の代わりに残高やテキストを表示します。";
+"menu_bar_help_pace" = "期間内の現時点における実際の消費と想定消費を比較します。表示の正負はペースの符号設定に従います。";
+"menu_bar_help_usage_bar" = "使用済み・残量の設定に従い、自動選択された割り当てを3セルのコンパクトな文字メーターで表示します。";
+"menu_bar_help_progress" = "使用済み・残量の設定に従い、選択した割り当て期間をグラフィカルなバーで表示します。";
+"menu_bar_help_reset_countdown" = "リセット時刻を取得できる場合、この割り当て期間のリセットまでの残り時間を表示します。";
+"menu_bar_help_reset_absolute" = "取得できる場合、この割り当て期間がリセットされる日付または時刻を表示します。";
+"menu_bar_help_runs_out" = "現在の消費ペースから割り当ての枯渇時刻、またはリセットまで持つかを推定します。リセット時刻そのものではありません。";
+"menu_bar_help_runs_out_compact" = "同じ割り当て枯渇までの推定時間を短い表記で表示します。";
+"menu_bar_help_balance" = "プロバイダーの残高または支出額を表示します。意味と単位はプロバイダーによって異なります。";
+"menu_bar_help_cost_today" = "今日の記録済みまたは推定使用料金を表示します。推定値はプロバイダーの請求額と異なる場合があります。";
+"menu_bar_help_cost_window" = "料金履歴の設定に従い、指定された履歴期間の料金を表示します。";
+"menu_bar_help_spend_amount" = "プロバイダーの支出上限に対する使用額を、設定した表示通貨で表示します。";
+"menu_bar_help_spend_budget" = "使用額と上限を、設定した表示通貨で表示します。通貨以外の単位の上限は利用できません。";
+"menu_bar_help_separator" = "メニューバーの項目間に区切りの点を追加します。";
+"menu_bar_help_space" = "メニューバーの項目間に空白を追加します。";
+"menu_bar_help_hidden" = "この条件分岐では何も表示しません。";
+"menu_bar_help_conditional" = "保存したルールに基づいて表示内容を選びます。取得できないデータは条件を満たしません。";
+"menu_bar_help_use_all" = "このプロバイダー専用のレイアウトを削除し、「すべてのプロバイダー」の共通レイアウトに戻します。";
+"menu_bar_help_preview" = "ライブデータがあれば使用し、スナップショットがない場合はサンプルデータを表示します。欠損フィールドは取得不可と表示される場合があります。";
+"menu_bar_help_remove_line_break" = "2行のレイアウトを1行に結合します。";
+"menu_bar_help_remove" = "項目をここにドロップすると、このレイアウトから削除できます。";
+"menu_bar_help_line_break" = "メニューバーの2行目を開始します。レイアウトは最大2行です。";
+"menu_bar_help_conditional_name" = "再利用可能なルールに名前を付け、項目パレットで見つけやすくします。";
+"menu_bar_help_conditional_add" = "使用量、時間、料金に応じて項目を選ぶ、再利用可能なルールを作成します。";
+"menu_bar_help_conditional_combinator" = "条件を左から右に結合します。AND は両方、OR はどちらか一方の結果が真であることを求めます。";
+"menu_bar_help_conditional_direction" = "ルールで使用済みの値と残りの値のどちらを比較するか選びます。";
+"menu_bar_help_conditional_comparison" = "より大きい・より小さいなど、指標としきい値の比較方法を選びます。";
+"menu_bar_help_conditional_threshold" = "単位 %@ で比較のしきい値を設定します。取得できない値は条件に一致しません。";
+"menu_bar_help_conditional_remove" = "この再利用可能なルールを削除し、保存済みレイアウト内の参照項目も削除します。";
+"menu_bar_help_conditional_duplicate" = "このルールを独立して編集できる別のコピーを作成します。";
+"menu_bar_help_conditional_save" = "メニューバーのレイアウトで使うため、このルールを保存します。";
+"menu_bar_help_conditional_cancel" = "変更を保存せずにルールエディタを閉じます。";
+"menu_bar_help_conditional_then" = "組み合わせた条件が真のときに表示する項目を選びます。「非表示」で何も表示しません。";
+"menu_bar_help_conditional_else" = "組み合わせた条件が偽のときに表示する項目を選びます。「非表示」で何も表示しません。";
+"menu_bar_help_conditional_remove_clause" = "ルールからこの条件を削除します。";
+"menu_bar_help_conditional_add_clause" = "条件を追加します。1つのルールには最大4つの条件を設定できます。";
+"menu_bar_help_conditional_pace" = "実際の消費から想定消費を引いた値をパーセントポイントで比較します。正は消費が速く、負は余裕があることを意味します。ペースの符号の表示設定はこの比較に影響しません。";
+"menu_bar_help_conditional_currency" = "金額のしきい値は、表示通貨の設定に関係なく USD で比較します。";
+"menu_bar_help_conditional_hours" = "時間単位で比較します。小数の時間も使用できます。";
+"menu_bar_help_size" = "メニューバーの文字とレイアウト項目のサイズを変更します。";
+"menu_bar_help_gap" = "隣り合うレイアウト項目の間隔を変更します。";
+"menu_bar_help_vertical" = "メニューバー内でレイアウトを上下に動かし、位置を微調整します。";
+"menu_bar_help_monospaced" = "数字を等幅にし、値が変わったときの表示のずれを抑えます。";
+"menu_bar_help_window_labels" = "セッションや週次など、割り当て期間を区別する短いラベルを追加します。";
+"menu_bar_help_preset" = "現在のレイアウトを用意済みの配置で置き換えます。後からカスタマイズできます。";
+"menu_bar_help_preset_custom" = "現在のレイアウトはカスタマイズされており、プリセットと一致しません。";
+"menu_bar_help_style" = "メニューバーのアイコンスタイルを選びます。「アイコンと割合」を選ぶと下のレイアウトを編集できます。";
+"menu_bar_help_pace_sign" = "ペースのどちら側をプラス記号で表示するか選びます。表示のみに影響し、条件の比較には影響しません。";
+"menu_bar_help_provider_color" = "メニューバーの表示にプロバイダーの識別色を使います。";
+"menu_bar_help_switcher_rows" = "統合プロバイダー切り替えにアイコンと使用量の進捗のどちらを表示するか選びます。";
+"menu_bar_help_stacked_provider" = "統合アイコンのこの行に表示するプロバイダーを選びます。自動では利用可能なプロバイダーの順序に従います。";
+"menu_bar_help_overview" = "概要に表示する有効なプロバイダーを、表示された上限まで選びます。順序はプロバイダー一覧に従います。";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "カレンダーの表示単位";
+"cockpit_calendar_day" = "日";
+"cockpit_calendar_week" = "週";
+"cockpit_calendar_month" = "月";
+"cockpit_calendar_quarter" = "四半期";
+"cockpit_calendar_year" = "年";
+"cockpit_calendar_metric" = "カレンダーの指標";
+"cockpit_calendar_now" = "今日";
+"cockpit_calendar_previous" = "前の期間";
+"cockpit_calendar_next" = "次の期間";
+"cockpit_calendar_period_total" = "この期間の記録済み使用量";
+"cockpit_calendar_partial" = "履歴が不完全な場合があります。≥ は記録された下限、— は取得不可を示します。将来の日付は合計に含めません。";
+"cockpit_calendar_range" = "%@ ～ %@";
+"cockpit_calendar_quarter_title" = "%@年 · 第%@四半期";
+"cockpit_calendar_select_day" = "日付を選ぶと、プロバイダー別の詳細、個人の状態、リセットイベントを確認できます。";
+"cockpit_calendar_currency_note" = "通貨は別々に表示します。Token の合計には対象のローカルソースが含まれます。";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "記録済み使用量の参考";
+"cockpit_ui_personal_collecting" = "曜日別の使用傾向を収集中です。条件を満たす計画日21日、利用日12日、平日と週末の記録、連続7日間の検証データが必要です。";
+"cockpit_ui_personal_coverage" = "条件適合 %@日 / 計画 %@日 · 利用 %@日";
+"cockpit_ui_personal_stale" = "最近の条件を満たす履歴がないため、参考値の表示を一時停止しています。";
+"cockpit_ui_personal_drift" = "最近の使用傾向の変化が大きく、この参考モデルは検証を通過していません。";
+"cockpit_ui_personal_no_gain" = "検証週では、曜日別モデルは固定済み計画の基準を上回りませんでした。";
+"cockpit_ui_personal_ready" = "個人の曜日別傾向により、独立した7日間の検証期間で記録済み使用量の予測精度が向上しました。";
+"cockpit_ui_personal_holdout" = "7日間の平均誤差：基準 %@ → 個人 %@ パーセントポイント";
+"cockpit_ui_personal_note" = "観測した時間帯のみの参考で、1日全体の推定ではありません。適合日には信頼できる観測が6時間必要で、観測間隔は90分以内でなければなりません。欠損時間帯はゼロで補いません。固定済みの提案と個人上限が引き続き適用されます。";
+"cockpit_ui_comfort_weighted" = "新しさで重み付けした完全サンプル数：%@";
+"cockpit_ui_comfort_recency" = "傾向の各点は最近の体験を重視し、重みの半減期は14日です。過去の日付を編集しても経過日数は変わりません。これは Token の使用体験を示すもので、公式の割り当てではありません。";
+
+"menu_bar_help_conditional_runout" = "割り当ての枯渇までの推定時間を時間単位で比較します。枯渇時刻を推定できない場合、条件は偽になります。";

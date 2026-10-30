@@ -21,6 +21,7 @@ struct CockpitMonthGridView: View {
     let days: [Date: CockpitCalendarDay]
     let select: (Date) -> Void
     var compact = false
+    var metricText: ((Date) -> String)?
 
     private var weekdaySymbols: [String] {
         var labelsCalendar = self.calendar
@@ -58,7 +59,8 @@ struct CockpitMonthGridView: View {
                     }
                 }
                 HStack {
-                    Text(tokens.map(UsageFormatter.tokenCountString) ?? "—")
+                    Text(self.metricText?(day) ?? tokens.map(UsageFormatter.tokenCountString) ?? "—")
+                        .lineLimit(2)
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
                     if self.compact, let feeling = self.days[day]?.feeling {
@@ -108,16 +110,20 @@ struct CockpitMonthGridView: View {
             }
         }
         .buttonStyle(.plain)
+        .help(self.dayLabel(day, tokens: tokens))
         .accessibilityLabel(self.dayLabel(day, tokens: tokens))
     }
 
     private func dayLabel(_ day: Date, tokens: Int?) -> String {
         let date = spendDashboardLedgerDateText(day, timeZone: self.calendar.timeZone, accessibility: true)
-        var parts = [L(
-            "cockpit_ui_day_tokens",
-            date,
-            tokens.map(UsageFormatter.tokenCountString)
-                ?? L("cockpit_ui_unknown"))]
+        var parts: [String] = if let metricText {
+            [date, metricText(day)]
+        } else {
+            [L(
+                "cockpit_ui_day_tokens",
+                date,
+                tokens.map(UsageFormatter.tokenCountString) ?? L("cockpit_ui_unknown"))]
+        }
         if let model = self.days[day] {
             parts += model.resetKinds.map(\.cockpitTitle)
             if model.hasResetForecast { parts.append(L("cockpit_reset_estimate")) }

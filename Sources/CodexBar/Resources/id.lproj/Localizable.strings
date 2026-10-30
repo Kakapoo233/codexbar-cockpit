@@ -2932,3 +2932,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Gunakan bahasa Inggris di bar menu";
 "menu_bar_english_text_subtitle" = "Hanya memengaruhi teks pada bar menu di bagian atas layar. Panel yang dibuka dan pengaturan tetap menggunakan bahasa aplikasi.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Menampilkan ikon penyedia.";
+"menu_bar_help_provider" = "Menampilkan nama penyedia di samping penggunaan Anda.";
+"menu_bar_help_account" = "Menampilkan label akun saat ini jika tersedia. Pengaturan privasi dapat menyembunyikannya.";
+"menu_bar_help_percent" = "Menampilkan persentase kuota terpakai atau tersisa untuk periode yang dipilih, mengikuti pengaturan tampilan penggunaan. ~ menandai perkiraan.";
+"menu_bar_help_scoped_weekly" = "Menampilkan kuota mingguan khusus model jika disediakan, terpisah dari kuota mingguan keseluruhan.";
+"menu_bar_help_automatic" = "Menggunakan metrik penggunaan otomatis penyedia. Beberapa penyedia menampilkan saldo atau teks, bukan persentase.";
+"menu_bar_help_pace" = "Membandingkan penggunaan kuota aktual dengan penggunaan yang diharapkan pada saat ini dalam periode. Tanda yang ditampilkan mengikuti pengaturan tanda laju.";
+"menu_bar_help_usage_bar" = "Menampilkan kuota otomatis sebagai meter teks tiga sel yang ringkas, mengikuti pengaturan terpakai atau tersisa.";
+"menu_bar_help_progress" = "Menampilkan periode kuota yang dipilih sebagai bilah grafis, mengikuti pengaturan terpakai atau tersisa.";
+"menu_bar_help_reset_countdown" = "Menampilkan waktu tersisa hingga periode kuota ini direset, jika waktu reset tersedia.";
+"menu_bar_help_reset_absolute" = "Menampilkan tanggal atau jam reset periode kuota ini, jika tersedia.";
+"menu_bar_help_runs_out" = "Memperkirakan kapan kuota habis pada laju saat ini, atau apakah cukup hingga reset. Ini perkiraan, bukan waktu reset.";
+"menu_bar_help_runs_out_compact" = "Menampilkan perkiraan waktu hingga kuota habis yang sama dalam teks lebih singkat.";
+"menu_bar_help_balance" = "Menampilkan saldo atau angka pengeluaran penyedia. Makna dan satuannya bergantung pada penyedia.";
+"menu_bar_help_cost_today" = "Menampilkan biaya penggunaan hari ini yang tercatat atau diperkirakan. Perkiraan dapat berbeda dari tagihan penyedia.";
+"menu_bar_help_cost_window" = "Menampilkan biaya untuk periode riwayat biaya yang dikonfigurasi, mengikuti pengaturan riwayat biaya Anda.";
+"menu_bar_help_spend_amount" = "Menampilkan uang yang telah dibelanjakan dari batas pengeluaran penyedia, dalam mata uang tampilan pilihan Anda.";
+"menu_bar_help_spend_budget" = "Menampilkan pengeluaran uang dan batasnya dalam mata uang tampilan pilihan Anda. Batas nonmoneter tidak tersedia.";
+"menu_bar_help_separator" = "Menambahkan titik pemisah yang terlihat di antara item bar menu.";
+"menu_bar_help_space" = "Menambahkan spasi kosong di antara item bar menu.";
+"menu_bar_help_hidden" = "Tidak menampilkan apa pun untuk cabang kondisi ini.";
+"menu_bar_help_conditional" = "Memilih tampilan berdasarkan aturan tersimpan. Data yang tidak tersedia tidak memenuhi kondisi.";
+"menu_bar_help_use_all" = "Menghapus tata letak khusus penyedia ini agar kembali mengikuti tata letak bersama Semua penyedia.";
+"menu_bar_help_preview" = "Menggunakan data langsung jika tersedia; tanpa snapshot, data contoh ditampilkan. Bidang yang hilang mungkin ditampilkan sebagai tidak tersedia.";
+"menu_bar_help_remove_line_break" = "Menggabungkan dua baris tata letak menjadi satu.";
+"menu_bar_help_remove" = "Letakkan item di sini untuk menghapusnya dari tata letak ini.";
+"menu_bar_help_line_break" = "Memulai baris kedua bar menu. Tata letak mendukung hingga dua baris.";
+"menu_bar_help_conditional_name" = "Menamai aturan yang dapat digunakan ulang agar mudah ditemukan di palet item.";
+"menu_bar_help_conditional_add" = "Membuat aturan yang dapat digunakan ulang untuk memilih item berdasarkan penggunaan, waktu, atau biaya.";
+"menu_bar_help_conditional_combinator" = "Menggabungkan kondisi dari kiri ke kanan. AND memerlukan kedua hasil benar; OR memerlukan salah satunya.";
+"menu_bar_help_conditional_direction" = "Memilih apakah aturan membandingkan nilai terpakai atau nilai tersisa.";
+"menu_bar_help_conditional_comparison" = "Memilih cara membandingkan metrik dengan ambang, misalnya lebih besar atau lebih kecil.";
+"menu_bar_help_conditional_threshold" = "Menetapkan ambang perbandingan dalam %@. Nilai yang tidak tersedia tidak cocok.";
+"menu_bar_help_conditional_remove" = "Menghapus aturan ini dan item yang merujuknya dari tata letak tersimpan.";
+"menu_bar_help_conditional_duplicate" = "Membuat salinan aturan ini yang dapat diedit secara terpisah.";
+"menu_bar_help_conditional_save" = "Menyimpan aturan ini untuk digunakan dalam tata letak bar menu.";
+"menu_bar_help_conditional_cancel" = "Menutup editor aturan tanpa menyimpan perubahan ini.";
+"menu_bar_help_conditional_then" = "Memilih item yang ditampilkan saat kondisi gabungan benar. Pilih Sembunyikan agar tidak ada yang ditampilkan.";
+"menu_bar_help_conditional_else" = "Memilih item yang ditampilkan saat kondisi gabungan salah. Pilih Sembunyikan agar tidak ada yang ditampilkan.";
+"menu_bar_help_conditional_remove_clause" = "Menghapus kondisi ini dari aturan.";
+"menu_bar_help_conditional_add_clause" = "Menambahkan kondisi lain. Satu aturan mendukung hingga empat kondisi.";
+"menu_bar_help_conditional_pace" = "Membandingkan penggunaan aktual dikurangi penggunaan yang diharapkan dalam poin persentase. Positif berarti konsumsi lebih cepat; negatif berarti cadangan. Pengaturan tampilan tanda laju tidak mengubah perbandingan ini.";
+"menu_bar_help_conditional_currency" = "Ambang uang dibandingkan dalam USD, terlepas dari mata uang tampilan pilihan.";
+"menu_bar_help_conditional_hours" = "Perbandingan menggunakan jam, termasuk pecahan jam.";
+"menu_bar_help_size" = "Mengubah ukuran teks dan item tata letak bar menu.";
+"menu_bar_help_gap" = "Mengubah jarak antara item tata letak yang berdekatan.";
+"menu_bar_help_vertical" = "Menggeser tata letak secara vertikal dalam bar menu untuk menyempurnakan perataan.";
+"menu_bar_help_monospaced" = "Memberikan lebar yang sama pada digit agar perubahan angka tidak banyak menggeser tampilan.";
+"menu_bar_help_window_labels" = "Menambahkan label singkat untuk membedakan periode kuota, seperti sesi dan mingguan.";
+"menu_bar_help_preset" = "Mengganti tata letak ini dengan susunan siap pakai. Anda dapat menyesuaikannya sesudahnya.";
+"menu_bar_help_preset_custom" = "Tata letak ini telah disesuaikan dan tidak cocok dengan preset.";
+"menu_bar_help_style" = "Memilih gaya ikon bar menu. Gunakan Ikon dan persentase untuk mengedit tata letak di bawah.";
+"menu_bar_help_pace_sign" = "Memilih sisi laju yang ditampilkan dengan tanda tambah. Hanya memengaruhi tampilan, bukan perbandingan kondisi.";
+"menu_bar_help_provider_color" = "Menggunakan warna pengenal penyedia untuk tampilan bar menunya.";
+"menu_bar_help_switcher_rows" = "Memilih apakah pengalih penyedia gabungan menampilkan ikon atau progres penggunaan.";
+"menu_bar_help_stacked_provider" = "Memilih penyedia pada baris ikon gabungan ini. Otomatis mengikuti urutan penyedia yang memenuhi syarat.";
+"menu_bar_help_overview" = "Memilih penyedia aktif yang ditampilkan di Ringkasan, hingga batas yang ditampilkan. Urutannya mengikuti daftar penyedia.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Skala kalender";
+"cockpit_calendar_day" = "Hari";
+"cockpit_calendar_week" = "Minggu";
+"cockpit_calendar_month" = "Bulan";
+"cockpit_calendar_quarter" = "Kuartal";
+"cockpit_calendar_year" = "Tahun";
+"cockpit_calendar_metric" = "Metrik kalender";
+"cockpit_calendar_now" = "Hari ini";
+"cockpit_calendar_previous" = "Periode sebelumnya";
+"cockpit_calendar_next" = "Periode berikutnya";
+"cockpit_calendar_period_total" = "Penggunaan tercatat untuk periode ini";
+"cockpit_calendar_partial" = "Riwayat mungkin tidak lengkap: ≥ menandai batas bawah tercatat; — berarti tidak tersedia. Tanggal mendatang tidak dihitung dalam total.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · Kuartal %@";
+"cockpit_calendar_select_day" = "Pilih hari untuk melihat rincian penyedia, status pribadi, dan peristiwa reset.";
+"cockpit_calendar_currency_note" = "Mata uang ditampilkan terpisah. Total Token menggabungkan sumber lokal yang disertakan.";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "Referensi penggunaan tercatat";
+"cockpit_ui_personal_collecting" = "Membangun pola penggunaan per hari: perlu 21 hari rencana yang memenuhi syarat, 12 hari aktif, cakupan hari kerja/akhir pekan, dan 7 hari validasi berturut-turut.";
+"cockpit_ui_personal_coverage" = "%@ hari memenuhi syarat / %@ hari rencana · %@ hari aktif";
+"cockpit_ui_personal_stale" = "Riwayat terbaru yang memenuhi syarat tidak tersedia; referensi dijeda.";
+"cockpit_ui_personal_drift" = "Pola penggunaan terbaru berubah terlalu besar untuk memvalidasi referensi ini.";
+"cockpit_ui_personal_no_gain" = "Model pola harian tidak lebih baik dari acuan rencana tetap pada minggu validasi.";
+"cockpit_ui_personal_ready" = "Pola harian pribadi meningkatkan akurasi prediksi penggunaan tercatat pada periode validasi terpisah selama 7 hari.";
+"cockpit_ui_personal_holdout" = "Galat rata-rata 7 hari: acuan %@ → pribadi %@ poin persentase";
+"cockpit_ui_personal_note" = "Hanya untuk periode yang diamati, bukan perkiraan sehari penuh. Hari yang memenuhi syarat memerlukan 6 jam pengamatan andal tanpa jeda lebih dari 90 menit. Periode yang hilang tidak diisi nol; saran tetap dan batas pribadi tetap berlaku.";
+"cockpit_ui_comfort_weighted" = "Sampel lengkap berbobot kebaruan: %@";
+"cockpit_ui_comfort_recency" = "Titik tren lebih membobotkan pengalaman terbaru, dengan waktu paruh 14 hari. Mengedit hari lama tidak mengubah usianya. Ini menggambarkan pengalaman Token, bukan kuota resmi.";
+
+"menu_bar_help_conditional_runout" = "Membandingkan perkiraan jam hingga kuota habis. Jika perkiraan kehabisan tidak tersedia, kondisi bernilai salah.";

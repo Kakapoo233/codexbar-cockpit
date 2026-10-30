@@ -2923,3 +2923,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "Engels gebruiken in de menubalk";
 "menu_bar_english_text_subtitle" = "Geldt alleen voor tekst in de bovenste menubalk. Het uitgeklapte paneel en de instellingen behouden de taal van de app.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "Toont het pictogram van de aanbieder.";
+"menu_bar_help_provider" = "Toont de naam van de aanbieder naast het gebruik.";
+"menu_bar_help_account" = "Toont het huidige accountlabel als dit beschikbaar is. Privacyinstellingen kunnen het verbergen.";
+"menu_bar_help_percent" = "Toont het gebruikte of resterende percentage van de gekozen quotaperiode volgens de weergave-instelling voor gebruik. ~ geeft een schatting aan.";
+"menu_bar_help_scoped_weekly" = "Toont een modelspecifiek weekquotum als de aanbieder dat levert, los van het totale weekquotum.";
+"menu_bar_help_automatic" = "Gebruikt de automatische gebruiksmeting van de aanbieder. Sommige aanbieders tonen een saldo of tekst in plaats van een percentage.";
+"menu_bar_help_pace" = "Vergelijkt het werkelijke quotagebruik met het verwachte gebruik op dit moment in de periode. Het getoonde teken volgt de instelling voor het tempoteken.";
+"menu_bar_help_usage_bar" = "Toont het automatische quotum als een compacte tekstmeter met drie vakjes, volgens de instelling gebruikt of resterend.";
+"menu_bar_help_progress" = "Toont de gekozen quotaperiode als een grafische balk, volgens de instelling gebruikt of resterend.";
+"menu_bar_help_reset_countdown" = "Toont de resterende tijd tot deze quotaperiode wordt gereset, als het resettijdstip beschikbaar is.";
+"menu_bar_help_reset_absolute" = "Toont de datum of tijd waarop deze quotaperiode wordt gereset, indien beschikbaar.";
+"menu_bar_help_runs_out" = "Schat wanneer het quotum bij het huidige tempo opraakt of of het tot de reset meegaat. Dit is een schatting, geen resettijdstip.";
+"menu_bar_help_runs_out_compact" = "Toont dezelfde geschatte tijd tot het quotum opraakt in kortere tekst.";
+"menu_bar_help_balance" = "Toont het saldo of bestedingsbedrag van de aanbieder. De betekenis en eenheid hangen af van de aanbieder.";
+"menu_bar_help_cost_today" = "Toont de geregistreerde of geschatte gebruikskosten van vandaag. Schattingen kunnen afwijken van de factuur van de aanbieder.";
+"menu_bar_help_cost_window" = "Toont de kosten voor de ingestelde kostenhistorieperiode. De periode volgt de instellingen voor de kostenhistorie.";
+"menu_bar_help_spend_amount" = "Toont de gebruikte gelduitgaven van de aanbiederslimiet in je gewenste weergavevaluta.";
+"menu_bar_help_spend_budget" = "Toont de gebruikte gelduitgaven en de limiet in je gewenste weergavevaluta. Niet-geldelijke limieten zijn niet beschikbaar.";
+"menu_bar_help_separator" = "Voegt een zichtbare punt toe tussen menubalkelementen.";
+"menu_bar_help_space" = "Voegt witruimte toe tussen menubalkelementen.";
+"menu_bar_help_hidden" = "Toont niets voor deze voorwaardetak.";
+"menu_bar_help_conditional" = "Kiest wat wordt getoond op basis van een opgeslagen regel. Niet-beschikbare gegevens voldoen niet aan een voorwaarde.";
+"menu_bar_help_use_all" = "Verwijdert de aangepaste indeling van deze aanbieder, zodat deze weer de gedeelde indeling voor alle aanbieders gebruikt.";
+"menu_bar_help_preview" = "Gebruikt livegegevens wanneer die beschikbaar zijn; zonder momentopname worden voorbeeldgegevens getoond. Ontbrekende velden kunnen als niet beschikbaar verschijnen.";
+"menu_bar_help_remove_line_break" = "Voegt de twee indelingsregels samen tot één regel.";
+"menu_bar_help_remove" = "Zet hier een element neer om het uit deze indeling te verwijderen.";
+"menu_bar_help_line_break" = "Begint een tweede menubalkregel. Indelingen ondersteunen maximaal twee regels.";
+"menu_bar_help_conditional_name" = "Geeft deze herbruikbare regel een naam, zodat je hem in het elementenpalet kunt vinden.";
+"menu_bar_help_conditional_add" = "Maakt een herbruikbare regel die een element kiest op basis van gebruik, tijd of kosten.";
+"menu_bar_help_conditional_combinator" = "Combineert voorwaarden van links naar rechts. AND vereist beide resultaten; OR vereist een van beide.";
+"menu_bar_help_conditional_direction" = "Kiest of de regel de gebruikte of de resterende waarde vergelijkt.";
+"menu_bar_help_conditional_comparison" = "Kiest hoe de meting met de drempel wordt vergeleken, bijvoorbeeld groter of kleiner dan.";
+"menu_bar_help_conditional_threshold" = "Stelt de vergelijkingsdrempel in %@ in. Niet-beschikbare waarden komen niet overeen.";
+"menu_bar_help_conditional_remove" = "Verwijdert deze herbruikbare regel en haalt de bijbehorende elementen uit opgeslagen indelingen.";
+"menu_bar_help_conditional_duplicate" = "Maakt een aparte kopie van deze regel die je onafhankelijk kunt bewerken.";
+"menu_bar_help_conditional_save" = "Slaat deze regel op voor gebruik in menubalkindelingen.";
+"menu_bar_help_conditional_cancel" = "Sluit de regeleditor zonder deze wijzigingen op te slaan.";
+"menu_bar_help_conditional_then" = "Kiest het element dat wordt getoond als de gecombineerde voorwaarde waar is. Kies Verbergen om niets te tonen.";
+"menu_bar_help_conditional_else" = "Kiest het element dat wordt getoond als de gecombineerde voorwaarde onwaar is. Kies Verbergen om niets te tonen.";
+"menu_bar_help_conditional_remove_clause" = "Verwijdert deze voorwaarde uit de regel.";
+"menu_bar_help_conditional_add_clause" = "Voegt nog een voorwaarde toe. Een regel ondersteunt maximaal vier voorwaarden.";
+"menu_bar_help_conditional_pace" = "Vergelijkt werkelijk gebruik min verwacht gebruik in procentpunten. Positief betekent sneller verbruik; negatief betekent reserve. De instelling voor het getoonde tempoteken verandert deze vergelijking niet.";
+"menu_bar_help_conditional_currency" = "Gelddrempels worden vergeleken in USD, ongeacht de gewenste weergavevaluta.";
+"menu_bar_help_conditional_hours" = "De vergelijking gebruikt uren, ook delen van uren.";
+"menu_bar_help_size" = "Wijzigt de grootte van tekst en indelingselementen in de menubalk.";
+"menu_bar_help_gap" = "Wijzigt de afstand tussen aangrenzende indelingselementen.";
+"menu_bar_help_vertical" = "Verplaatst de indeling verticaal binnen de menubalk om de uitlijning nauwkeurig aan te passen.";
+"menu_bar_help_monospaced" = "Geeft cijfers dezelfde breedte, zodat veranderende getallen minder verschuiven.";
+"menu_bar_help_window_labels" = "Voegt korte labels toe om quotaperiodes te onderscheiden, zoals sessie en week.";
+"menu_bar_help_preset" = "Vervangt deze indeling door een vooraf ingestelde opstelling. Je kunt die daarna aanpassen.";
+"menu_bar_help_preset_custom" = "Deze indeling is aangepast en komt niet overeen met een voorinstelling.";
+"menu_bar_help_style" = "Kiest de pictogramstijl van de menubalk. Gebruik Pictogram en percentage om de indeling hieronder te bewerken.";
+"menu_bar_help_pace_sign" = "Kiest welke kant van het tempo een plusteken krijgt. Dit beïnvloedt alleen de weergave, niet de voorwaardevergelijkingen.";
+"menu_bar_help_provider_color" = "Gebruikt de herkenningskleur van de aanbieder voor de menubalkweergave.";
+"menu_bar_help_switcher_rows" = "Kiest of de gecombineerde aanbiederkiezer pictogrammen of gebruiksvoortgang toont.";
+"menu_bar_help_stacked_provider" = "Kiest de aanbieder op deze regel van het gecombineerde pictogram. Automatisch volgt de volgorde van geschikte aanbieders.";
+"menu_bar_help_overview" = "Kiest welke ingeschakelde aanbieders in Overzicht verschijnen, tot de getoonde limiet. De volgorde volgt de aanbiederslijst.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "Kalenderschaal";
+"cockpit_calendar_day" = "Dag";
+"cockpit_calendar_week" = "Week";
+"cockpit_calendar_month" = "Maand";
+"cockpit_calendar_quarter" = "Kwartaal";
+"cockpit_calendar_year" = "Jaar";
+"cockpit_calendar_metric" = "Kalendermeting";
+"cockpit_calendar_now" = "Vandaag";
+"cockpit_calendar_previous" = "Vorige periode";
+"cockpit_calendar_next" = "Volgende periode";
+"cockpit_calendar_period_total" = "Geregistreerd gebruik in deze periode";
+"cockpit_calendar_partial" = "Onvolledige historie: ≥ markeert geregistreerde ondergrenzen; — betekent niet beschikbaar. Toekomstige datums worden niet in totalen opgenomen.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@ · K%@";
+"cockpit_calendar_select_day" = "Selecteer een dag om aanbiedergegevens, persoonlijke status en resetgebeurtenissen te bekijken.";
+"cockpit_calendar_currency_note" = "Valuta’s worden afzonderlijk getoond. Tokentotalen combineren de opgenomen lokale bronnen.";
+
+/* Cockpit historical calibration. */
+"cockpit_ui_personal_title" = "Referentie voor geregistreerd gebruik";
+"cockpit_ui_personal_collecting" = "Je patroon per weekdag wordt opgebouwd: vereist zijn 21 geplande dagen die aan de voorwaarden voldoen, 12 actieve dagen, gegevens voor werkdagen en weekenden en 7 opeenvolgende validatiedagen.";
+"cockpit_ui_personal_coverage" = "%@ geschikte / %@ geplande dagen · %@ actieve dagen";
+"cockpit_ui_personal_stale" = "Recente historie die aan de voorwaarden voldoet ontbreekt; de referentie is gepauzeerd.";
+"cockpit_ui_personal_drift" = "Recente gebruikspatronen zijn te sterk veranderd om deze referentie te valideren.";
+"cockpit_ui_personal_no_gain" = "Het weekdagmodel presteerde in de validatieweek niet beter dan de basis van het vastgezette plan.";
+"cockpit_ui_personal_ready" = "Je weekdagpatroon verbeterde de voorspelling van geregistreerd gebruik in een afzonderlijke validatieperiode van 7 dagen.";
+"cockpit_ui_personal_holdout" = "Gemiddelde fout over 7 dagen: basis %@ → persoonlijk %@ procentpunten";
+"cockpit_ui_personal_note" = "Alleen geregistreerde perioden, geen schatting voor de hele dag. Geschikte dagen vereisen 6 uur betrouwbare waarnemingen zonder onderbrekingen van meer dan 90 minuten. Ontbrekende perioden worden nooit met nul ingevuld; je vastgezette advies en persoonlijke limiet blijven bepalend.";
+"cockpit_ui_comfort_weighted" = "Volledige waarnemingen gewogen naar recentheid: %@";
+"cockpit_ui_comfort_recency" = "Trendpunten wegen recente ervaringen zwaarder, met een halfwaardetijd van 14 dagen. Het bewerken van een oudere dag verandert de leeftijd ervan niet. Dit beschrijft de ervaring met tokens, niet het officiële quotum.";
+
+"menu_bar_help_conditional_runout" = "Vergelijkt het geschatte aantal uren totdat het quotum opraakt. Als er geen schatting beschikbaar is, is de voorwaarde onwaar.";

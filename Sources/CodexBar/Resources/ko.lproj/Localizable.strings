@@ -2898,3 +2898,95 @@
 /* Menu bar text language. */
 "menu_bar_english_text_title" = "메뉴 막대 텍스트를 영어로 표시";
 "menu_bar_english_text_subtitle" = "화면 상단 메뉴 막대의 텍스트에만 적용됩니다. 펼친 패널과 설정은 앱 언어를 그대로 사용합니다.";
+
+/* Menu bar editor help. */
+"menu_bar_help_icon" = "제공업체 아이콘을 표시합니다.";
+"menu_bar_help_provider" = "사용량 옆에 제공업체 이름을 표시합니다.";
+"menu_bar_help_account" = "사용 가능한 경우 현재 계정 이름을 표시합니다. 개인정보 보호 설정에 따라 숨겨질 수 있습니다.";
+"menu_bar_help_percent" = "사용량 표시 설정에 따라 선택한 할당량 기간의 사용 또는 잔여 비율을 표시합니다. ~는 추정값입니다.";
+"menu_bar_help_scoped_weekly" = "제공업체에서 제공하는 경우 전체 주간 할당량과 별도로 모델별 주간 할당량을 표시합니다.";
+"menu_bar_help_automatic" = "제공업체의 자동 사용량 지표를 사용합니다. 일부 제공업체는 백분율 대신 잔액이나 텍스트를 표시합니다.";
+"menu_bar_help_pace" = "이 기간의 현재 시점에서 실제 할당량 소비와 예상 소비를 비교합니다. 표시 부호는 속도 부호 설정을 따릅니다.";
+"menu_bar_help_usage_bar" = "사용 또는 잔여 설정에 따라 자동 할당량을 세 칸짜리 간단한 문자 막대로 표시합니다.";
+"menu_bar_help_progress" = "사용 또는 잔여 설정에 따라 선택한 할당량 기간을 그래픽 막대로 표시합니다.";
+"menu_bar_help_reset_countdown" = "재설정 시간을 알 수 있으면 이 할당량 기간이 재설정될 때까지 남은 시간을 표시합니다.";
+"menu_bar_help_reset_absolute" = "알 수 있는 경우 이 할당량 기간이 재설정되는 날짜 또는 시각을 표시합니다.";
+"menu_bar_help_runs_out" = "현재 소비 속도로 할당량이 언제 소진되는지 또는 재설정까지 유지되는지 추정합니다. 재설정 시간이 아닌 추정치입니다.";
+"menu_bar_help_runs_out_compact" = "동일한 할당량 소진 예상 시간을 더 짧은 텍스트로 표시합니다.";
+"menu_bar_help_balance" = "제공업체의 잔액 또는 지출 수치를 표시합니다. 의미와 단위는 제공업체에 따라 다릅니다.";
+"menu_bar_help_cost_today" = "오늘 기록되거나 추정된 사용 비용을 표시합니다. 추정치는 제공업체 청구액과 다를 수 있습니다.";
+"menu_bar_help_cost_window" = "비용 내역 설정에 지정된 기간의 비용을 표시합니다.";
+"menu_bar_help_spend_amount" = "제공업체의 지출 한도에서 사용한 금액을 선호하는 표시 통화로 보여 줍니다.";
+"menu_bar_help_spend_budget" = "사용한 지출 금액과 한도를 선호하는 표시 통화로 함께 보여 줍니다. 비금전적 한도는 사용할 수 없습니다.";
+"menu_bar_help_separator" = "메뉴 막대 항목 사이에 구분점 하나를 추가합니다.";
+"menu_bar_help_space" = "메뉴 막대 항목 사이에 빈 간격을 추가합니다.";
+"menu_bar_help_hidden" = "이 조건 분기에서는 아무것도 표시하지 않습니다.";
+"menu_bar_help_conditional" = "저장된 규칙에 따라 표시할 내용을 선택합니다. 사용할 수 없는 데이터는 조건을 충족하지 않습니다.";
+"menu_bar_help_use_all" = "이 제공업체의 개별 레이아웃을 제거하고 공유된 모든 제공업체 레이아웃을 다시 사용합니다.";
+"menu_bar_help_preview" = "실시간 데이터가 있으면 사용하며, 스냅샷이 없으면 예시 데이터를 표시합니다. 누락된 필드는 사용 불가로 표시될 수 있습니다.";
+"menu_bar_help_remove_line_break" = "두 줄의 레이아웃을 한 줄로 합칩니다.";
+"menu_bar_help_remove" = "항목을 여기에 놓으면 이 레이아웃에서 제거됩니다.";
+"menu_bar_help_line_break" = "메뉴 막대의 두 번째 줄을 시작합니다. 레이아웃은 최대 두 줄을 지원합니다.";
+"menu_bar_help_conditional_name" = "재사용 가능한 규칙에 이름을 붙여 항목 팔레트에서 쉽게 찾을 수 있게 합니다.";
+"menu_bar_help_conditional_add" = "사용량, 시간 또는 비용에 따라 항목을 선택하는 재사용 가능한 규칙을 만듭니다.";
+"menu_bar_help_conditional_combinator" = "조건을 왼쪽부터 오른쪽으로 결합합니다. AND는 두 결과가 모두 참이어야 하며, OR는 둘 중 하나가 참이면 됩니다.";
+"menu_bar_help_conditional_direction" = "규칙에서 사용한 값과 남은 값 중 무엇을 비교할지 선택합니다.";
+"menu_bar_help_conditional_comparison" = "보다 큼 또는 보다 작음 등 지표와 임계값의 비교 방식을 선택합니다.";
+"menu_bar_help_conditional_threshold" = "%@ 단위로 비교 임계값을 설정합니다. 사용할 수 없는 값은 일치하지 않습니다.";
+"menu_bar_help_conditional_remove" = "이 재사용 규칙을 삭제하고 저장된 레이아웃에서 이를 참조하는 항목을 제거합니다.";
+"menu_bar_help_conditional_duplicate" = "이 규칙의 별도 사본을 만들어 독립적으로 편집할 수 있게 합니다.";
+"menu_bar_help_conditional_save" = "메뉴 막대 레이아웃에서 사용할 규칙을 저장합니다.";
+"menu_bar_help_conditional_cancel" = "변경 사항을 저장하지 않고 규칙 편집기를 닫습니다.";
+"menu_bar_help_conditional_then" = "결합된 조건이 참일 때 표시할 항목을 선택합니다. 숨기기를 선택하면 아무것도 표시하지 않습니다.";
+"menu_bar_help_conditional_else" = "결합된 조건이 거짓일 때 표시할 항목을 선택합니다. 숨기기를 선택하면 아무것도 표시하지 않습니다.";
+"menu_bar_help_conditional_remove_clause" = "규칙에서 이 조건을 제거합니다.";
+"menu_bar_help_conditional_add_clause" = "조건을 하나 더 추가합니다. 규칙 하나에 최대 네 개의 조건을 사용할 수 있습니다.";
+"menu_bar_help_conditional_pace" = "실제 소비에서 예상 소비를 뺀 값을 퍼센트포인트로 비교합니다. 양수는 빠른 소비, 음수는 여유를 뜻합니다. 속도 부호 표시 설정은 이 비교를 바꾸지 않습니다.";
+"menu_bar_help_conditional_currency" = "금액 임계값은 표시 통화 설정과 관계없이 USD로 비교합니다.";
+"menu_bar_help_conditional_hours" = "소수 시간을 포함해 시간 단위로 비교합니다.";
+"menu_bar_help_size" = "메뉴 막대 텍스트와 레이아웃 항목의 크기를 바꿉니다.";
+"menu_bar_help_gap" = "인접한 레이아웃 항목 사이의 간격을 바꿉니다.";
+"menu_bar_help_vertical" = "메뉴 막대 안에서 레이아웃을 위아래로 이동해 정렬을 미세 조정합니다.";
+"menu_bar_help_monospaced" = "숫자를 같은 너비로 표시하여 값이 바뀔 때 위치가 덜 움직이게 합니다.";
+"menu_bar_help_window_labels" = "세션 및 주간 등 할당량 기간을 구분하는 짧은 레이블을 추가합니다.";
+"menu_bar_help_preset" = "현재 레이아웃을 미리 만들어진 배치로 바꿉니다. 이후에도 사용자화할 수 있습니다.";
+"menu_bar_help_preset_custom" = "현재 레이아웃은 사용자화되어 프리셋과 일치하지 않습니다.";
+"menu_bar_help_style" = "메뉴 막대 아이콘 스타일을 선택합니다. 아이콘과 백분율을 선택하면 아래 레이아웃을 편집할 수 있습니다.";
+"menu_bar_help_pace_sign" = "속도의 어느 쪽을 더하기 부호로 표시할지 선택합니다. 표시만 바꾸며 조건 비교에는 영향을 주지 않습니다.";
+"menu_bar_help_provider_color" = "메뉴 막대 표시에 제공업체의 식별 색상을 사용합니다.";
+"menu_bar_help_switcher_rows" = "통합 제공업체 전환기에 아이콘과 사용량 진행 중 무엇을 표시할지 선택합니다.";
+"menu_bar_help_stacked_provider" = "통합 아이콘의 이 줄에 표시할 제공업체를 선택합니다. 자동은 사용 가능한 제공업체 순서를 따릅니다.";
+"menu_bar_help_overview" = "개요에 표시할 활성 제공업체를 표시된 최대 개수까지 선택합니다. 순서는 제공업체 목록을 따릅니다.";
+
+/* Cockpit calendar periods. */
+"cockpit_calendar_scale" = "달력 단위";
+"cockpit_calendar_day" = "일";
+"cockpit_calendar_week" = "주";
+"cockpit_calendar_month" = "월";
+"cockpit_calendar_quarter" = "분기";
+"cockpit_calendar_year" = "년";
+"cockpit_calendar_metric" = "달력 지표";
+"cockpit_calendar_now" = "오늘";
+"cockpit_calendar_previous" = "이전 기간";
+"cockpit_calendar_next" = "다음 기간";
+"cockpit_calendar_period_total" = "이 기간에 기록된 사용량";
+"cockpit_calendar_partial" = "일부 내역이 누락될 수 있습니다. ≥는 기록된 최소값, —는 사용 불가를 뜻합니다. 미래 날짜는 합계에서 제외됩니다.";
+"cockpit_calendar_range" = "%@ – %@";
+"cockpit_calendar_quarter_title" = "%@년 · %@분기";
+"cockpit_calendar_select_day" = "날짜를 선택하면 제공업체 세부 정보, 개인 상태 및 재설정 이벤트를 볼 수 있습니다.";
+"cockpit_calendar_currency_note" = "통화는 별도로 표시됩니다. Token 합계에는 포함 대상으로 지정된 로컬 소스가 반영됩니다.";
+
+/* Cockpit personal insights. */
+"cockpit_ui_personal_title" = "관측된 사용량 참고";
+"cockpit_ui_personal_collecting" = "요일별 사용 패턴을 수집 중입니다. 요건을 충족하는 계획일 21일, 사용일 12일, 평일과 주말 기록 및 연속 7일의 검증 데이터가 필요합니다.";
+"cockpit_ui_personal_coverage" = "요건 충족 %@일 / 계획 %@일 · 사용 %@일";
+"cockpit_ui_personal_stale" = "최근 요건을 충족하는 내역이 없어 사용량 참고값이 일시 중지되었습니다.";
+"cockpit_ui_personal_drift" = "최근 사용 패턴이 크게 변해 이 참고 모델을 검증하지 못했습니다.";
+"cockpit_ui_personal_no_gain" = "검증 주간에서 요일 모델이 고정된 계획 기준보다 나아지지 않았습니다.";
+"cockpit_ui_personal_ready" = "개인 요일 패턴이 별도의 7일 검증 기간에서 관측된 사용량의 예측 정확도를 높였습니다.";
+"cockpit_ui_personal_holdout" = "7일 평균 오차: 기준 %@ → 개인 %@ 퍼센트포인트";
+"cockpit_ui_personal_note" = "관측한 시간대만 참고하며 하루 전체 사용량을 추정하지 않습니다. 요건을 충족하려면 신뢰할 수 있는 관측이 6시간 필요하고 관측 간격은 90분을 넘지 않아야 합니다. 누락된 시간대는 0으로 채우지 않습니다. 고정된 제안과 개인 상한은 계속 적용됩니다.";
+"cockpit_ui_comfort_weighted" = "최근성 가중치를 적용한 완전 표본: %@";
+"cockpit_ui_comfort_recency" = "추세점은 최근 경험에 더 큰 비중을 두며 가중치 반감기는 14일입니다. 과거 날짜를 수정해도 경과 기간은 바뀌지 않습니다. 이는 Token 사용 경험을 설명하며 공식 할당량을 뜻하지 않습니다.";
+
+"menu_bar_help_conditional_runout" = "할당량이 소진될 때까지의 예상 시간을 시간 단위로 비교합니다. 소진 예상치를 구할 수 없으면 조건은 거짓입니다.";
