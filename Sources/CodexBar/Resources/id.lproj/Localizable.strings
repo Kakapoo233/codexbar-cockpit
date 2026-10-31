@@ -2767,7 +2767,7 @@
 "cockpit_ui_all" = "Semua";
 "cockpit_ui_all_history" = "Semua riwayat yang tersedia";
 "cockpit_ui_attribution_note" = "Hanya pengalaman Anda yang dicatat. Kepemilikan token lokal belum dapat diverifikasi, sehingga tidak dikaitkan dengan akun kuota aktif.";
-"cockpit_ui_automatic_cap" = "Menggunakan saran harian yang ditetapkan saat pengamatan pertama.";
+"cockpit_ui_automatic_cap" = "Menggunakan saran harian otomatis saat ini.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Kalender";
@@ -2836,7 +2836,7 @@
 "cockpit_ui_preview_title" = "Pratinjau rincian";
 "cockpit_ui_previous_month" = "Bulan sebelumnya";
 "cockpit_ui_provider" = "Penyedia";
-"cockpit_ui_receipt" = "Rincian tugas";
+"cockpit_ui_receipt" = "Rincian pemakaian";
 "cockpit_ui_receipt_grouping" = "Subagen digabungkan ke tugas induknya, dan setiap sesi dihitung sekali. Biaya adalah perkiraan harga katalog; total dipisahkan per mata uang.";
 "cockpit_ui_receipt_scope_note" = "Setiap tugas mencakup seluruh pemakaian yang dipindai, termasuk yang mungkin di luar filter aktivitas.";
 "cockpit_ui_receipt_task_count" = "Rincian pemakaian lokal · %d tugas";
@@ -3019,7 +3019,7 @@
 "cockpit_ui_personal_no_gain" = "Model pola harian tidak lebih baik dari acuan rencana tetap pada minggu validasi.";
 "cockpit_ui_personal_ready" = "Pola harian pribadi meningkatkan akurasi prediksi penggunaan tercatat pada periode validasi terpisah selama 7 hari.";
 "cockpit_ui_personal_holdout" = "Galat rata-rata 7 hari: acuan %@ → pribadi %@ poin persentase";
-"cockpit_ui_personal_note" = "Hanya untuk periode yang diamati, bukan perkiraan sehari penuh. Hari yang memenuhi syarat memerlukan 6 jam pengamatan andal tanpa jeda lebih dari 90 menit. Periode yang hilang tidak diisi nol; saran tetap dan batas pribadi tetap berlaku.";
+"cockpit_ui_personal_note" = "Hanya untuk periode yang diamati, bukan perkiraan sehari penuh. Hari yang memenuhi syarat memerlukan 6 jam pengamatan andal tanpa jeda lebih dari 90 menit. Periode yang hilang tidak diisi nol; saran otomatis dan batas pribadi tetap berlaku.";
 "cockpit_ui_comfort_weighted" = "Sampel lengkap berbobot kebaruan: %@";
 "cockpit_ui_comfort_recency" = "Titik tren lebih membobotkan pengalaman terbaru, dengan waktu paruh 14 hari. Mengedit hari lama tidak mengubah usianya. Ini menggambarkan pengalaman Token, bukan kuota resmi.";
 
@@ -3183,3 +3183,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

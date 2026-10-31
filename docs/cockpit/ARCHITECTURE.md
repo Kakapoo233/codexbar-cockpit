@@ -3,7 +3,7 @@
 ## Product contract
 
 CodexBar remains the native menu-bar shell and provider collector. One transient popover anchored
-to the status item hosts Usage, Statistics, Calendar, Receipts, and Members & Devices as peer pages. Daily advice and
+to the status item hosts Usage, Statistics, Calendar, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
 ## Modules and interfaces
@@ -11,13 +11,15 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `UsageStore` and `SpendDashboardController` remain the authoritative provider and cost interfaces.
   Cockpit consumes their published snapshots rather than starting a second collector.
 - `CockpitPlanState` is a serializable Foundation module. It receives official quota observations and
-  produces frozen daily recommendations, manual caps, observed use, and completeness.
+  produces live daily recommendations, manual caps, observed use, and completeness.
+  Advice uses the latest same-account balance and remaining time to an account reset or an earlier
+  valid announced/estimated reset. Predictions only change the planning horizon; they never create quota.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.
-  This reference does not rewrite frozen recommendations or personal caps.
+  This reference does not rewrite automatic recommendations or personal caps.
 - `CockpitCalendarPeriod` and `CockpitCalendarLedger` provide page-local period browsing over loaded
   history, with calendar-aware boundaries and separate currency totals.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
@@ -28,7 +30,7 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Its samples use observed account quota changes, including labeled partial coverage and archived daily
   observations. Calendar quota feedback is scoped by provider/account/day/time zone; corrections preserve
   captured measurements. Token feedback is a separate calendar mode and is never converted into quota.
-  Missing samples show the 25% baseline curve; fitted output never rewrites frozen plans or personal caps.
+  Missing samples show the 25% baseline curve; fitted output never rewrites automatic recommendations or personal caps.
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.
@@ -37,8 +39,9 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitPanelLayout` shares screen, column, and native-card widths between the controller and view.
   Wide Usage pages keep the complete provider menu beside an independently scrolling advice column;
   narrow pages use one scrolling column. Native cards are built for the main column before mounting.
-- `CockpitUsageProjection` reads the shared statistics publication with page-local filters. Calendar
-  and Receipt navigation never writes the statistics page's reporting period or selected day.
+- `CockpitUsageProjection` reads the shared statistics publication for the Calendar without changing
+  the statistics page's reporting period or selected day. Receipts are an action on the selected historical
+  session in `SessionUsageBrowser`, using that browser's reporting range, currency and privacy settings.
 - Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a
   fresh, complete ambient Token sample; editing history preserves the original measurement.
 - `CockpitResetHistoryClient` reads the public Codex Resets history and status API without credentials.
@@ -73,7 +76,7 @@ Owner disconnection is intentionally a pause because v2 cannot restore or transf
 One v2 space is one Codex shared-account planning pool. A person can own several devices but receives
 one default share. People, device assignments, and per-person daily caps use server revisions; stale
 budget drafts must also match the day and reset cycle. The team's risk-tolerance formula and independent
-personal overrides follow upstream; they never alter frozen local daily recommendations or provider limits.
+personal overrides follow upstream; they never alter local automatic recommendations or provider limits.
 The v2 server's natural day is explicitly Asia/Shanghai. Existing calendar reporting remains independent.
 
 Activity export requires an explicit account binding and an independent-source declaration. It accepts
@@ -95,13 +98,13 @@ state are ignored by Git. See [team setup](TEAM_SYNC.md) and the Worker's protoc
 Use the configured local natural day consistently, including DST. Do not re-label legacy Shanghai
 aggregates as local-day data; derive new daily totals from source events. Distinguish missing/partial
 coverage from measured zero, and keep currencies separate. Official percentage changes are observations,
-not a complete bill; gaps and resets retain uncertainty. The first daily recommendation is frozen;
-manual changes affect the personal cap only. Account changes must not reuse another account's plan.
+not a complete bill; gaps and resets retain uncertainty. Automatic advice recomputes from observations
+and valid reset horizons, including minute-by-minute time changes. Manual changes affect the personal cap only. Account changes must not reuse another account's plan.
 
-Receipts use stable session identifiers and union selected membership before summing. Parent and
-child selection must not double count; unknown cost remains unknown or explicitly partial.
-The selected period filters active tasks; totals cover their complete scanned sessions and can include
-usage outside that period. Both the selection UI and exported receipt disclose this distinction.
+The receipt action snapshots exactly one selected session in the displayed reporting period. It does not
+expand task descendants or reload all history. Unknown cost remains unknown; source lower bounds remain
+partial. Hidden account labels and session titles are excluded from the preview and PNG. The existing
+task-grouping helpers retain stable source/session identities and union membership before summing.
 
 ## Delivery
 

@@ -16,9 +16,11 @@ final class CockpitPlanStore {
     private(set) var availableProviders: [UsageProvider] = []
     private var accounts: [UsageProvider: String] = [:]
     @ObservationIgnored private let fileURL: URL
+    @ObservationIgnored private let resetHistoryStore: CockpitResetHistoryStore?
     @ObservationIgnored private var canSave = true
 
-    init(fileURL: URL? = nil) {
+    init(fileURL: URL? = nil, resetHistoryStore: CockpitResetHistoryStore? = nil) {
+        self.resetHistoryStore = resetHistoryStore
         self.fileURL = fileURL ?? CockpitAppIdentity
             .applicationSupportDirectory(home: FileManager.default.homeDirectoryForCurrentUser)
             .appendingPathComponent("cockpit-plan.json")
@@ -38,7 +40,16 @@ final class CockpitPlanStore {
     }
 
     func status(for provider: UsageProvider, on date: Date = Date()) -> CockpitDayStatus {
-        self.state.status(providerID: provider.rawValue, accountID: self.accountID(for: provider), on: date)
+        let status = self.state.status(
+            providerID: provider.rawValue, accountID: self.accountID(for: provider), on: date)
+        guard provider == .codex, let reset = status.resetsAt,
+              let window = self.resetHistoryStore?.planningWindow(accountResetAt: reset, on: date),
+              window.source != .account else { return status }
+        return self.state.status(
+            providerID: provider.rawValue,
+            accountID: self.accountID(for: provider),
+            on: date,
+            planningResetWindow: window)
     }
 
     func ingest(_ store: UsageStore) {

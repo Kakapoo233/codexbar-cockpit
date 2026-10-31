@@ -2767,7 +2767,7 @@
 "cockpit_ui_all" = "ทั้งหมด";
 "cockpit_ui_all_history" = "ประวัติทั้งหมดที่มี";
 "cockpit_ui_attribution_note" = "บันทึกเฉพาะความรู้สึกต่อการใช้งานของคุณ ยังยืนยันไม่ได้ว่าโทเคนในเครื่องเป็นของบัญชีใด จึงไม่ผูกกับบัญชีโควตาที่ใช้อยู่";
-"cockpit_ui_automatic_cap" = "ใช้คำแนะนำรายวันที่กำหนดคงที่จากการสังเกตครั้งแรก";
+"cockpit_ui_automatic_cap" = "ใช้คำแนะนำรายวันที่คำนวณโดยอัตโนมัติในขณะนี้";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "ปฏิทิน";
@@ -2836,7 +2836,7 @@
 "cockpit_ui_preview_title" = "ตัวอย่างใบสรุป";
 "cockpit_ui_previous_month" = "เดือนก่อนหน้า";
 "cockpit_ui_provider" = "ผู้ให้บริการ";
-"cockpit_ui_receipt" = "ใบสรุปงาน";
+"cockpit_ui_receipt" = "ใบสรุปการใช้งาน";
 "cockpit_ui_receipt_grouping" = "รวมเอเจนต์ย่อยเข้ากับงานหลัก โดยนับแต่ละเซสชันเพียงครั้งเดียว ค่าใช้จ่ายเป็นประมาณการตามราคาปกติและรวมแยกตามสกุลเงิน";
 "cockpit_ui_receipt_scope_note" = "แต่ละงานรวมการใช้งานทั้งหมดที่สแกนแล้ว ซึ่งอาจอยู่นอกช่วงตัวกรองกิจกรรม";
 "cockpit_ui_receipt_task_count" = "ใบสรุปการใช้งานในเครื่อง · %d งาน";
@@ -3019,7 +3019,7 @@
 "cockpit_ui_personal_no_gain" = "ในสัปดาห์ตรวจสอบ โมเดลตามวันในสัปดาห์ไม่ได้ดีกว่าเกณฑ์แผนที่ตรึงไว้";
 "cockpit_ui_personal_ready" = "รูปแบบส่วนตัวตามวันในสัปดาห์ช่วยเพิ่มความแม่นยำในการพยากรณ์การใช้งานที่สังเกตได้ในช่วงตรวจสอบแยก 7 วัน";
 "cockpit_ui_personal_holdout" = "ความคลาดเคลื่อนเฉลี่ย 7 วัน: เกณฑ์เดิม %@ → ส่วนตัว %@ จุดเปอร์เซ็นต์";
-"cockpit_ui_personal_note" = "อ้างอิงเฉพาะช่วงที่สังเกตได้ ไม่ใช่ค่าประมาณทั้งวัน วันที่ผ่านเกณฑ์ต้องมีการสังเกตที่เชื่อถือได้ 6 ชั่วโมง และไม่มีช่วงห่างเกิน 90 นาที ช่วงที่ขาดจะไม่ถูกเติมเป็นศูนย์ คำแนะนำที่ตรึงไว้และขีดจำกัดส่วนตัวยังคงมีผล";
+"cockpit_ui_personal_note" = "อ้างอิงเฉพาะช่วงที่สังเกตได้ ไม่ใช่ค่าประมาณทั้งวัน วันที่ผ่านเกณฑ์ต้องมีการสังเกตที่เชื่อถือได้ 6 ชั่วโมง และไม่มีช่วงห่างเกิน 90 นาที ช่วงที่ขาดจะไม่ถูกเติมเป็นศูนย์ คำแนะนำอัตโนมัติและขีดจำกัดส่วนตัวยังคงมีผล";
 "cockpit_ui_comfort_weighted" = "ตัวอย่างที่ครบถ้วนหลังถ่วงน้ำหนักตามความใหม่: %@";
 "cockpit_ui_comfort_recency" = "จุดแนวโน้มให้น้ำหนักกับประสบการณ์ล่าสุดมากกว่า โดยมีครึ่งชีวิตของน้ำหนัก 14 วัน การแก้ไขวันเก่าไม่เปลี่ยนอายุของข้อมูล นี่อธิบายประสบการณ์ใช้ Token ไม่ใช่โควตาทางการ";
 
@@ -3183,3 +3183,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

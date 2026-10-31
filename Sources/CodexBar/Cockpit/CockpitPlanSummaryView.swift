@@ -17,6 +17,14 @@ struct CockpitPlanSummaryView: View {
                     self.status.usedPercent,
                     partial: self.status.coverage != .complete))
             }
+            if let window = self.status.planningResetWindow {
+                Text(CockpitDailyAdviceProjection.resetWindowText(window))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Text(L("cockpit_advice_live_note")).font(.caption).foregroundStyle(.secondary)
+            if self.status.suggestionIsPartial {
+                Text(L("cockpit_advice_partial_note")).font(.caption).foregroundStyle(.secondary)
+            }
             Text(L("cockpit_ui_observation_note"))
                 .font(.caption).foregroundStyle(.secondary)
         }

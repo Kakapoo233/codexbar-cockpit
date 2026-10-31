@@ -4,7 +4,7 @@ import Observation
 import SwiftUI
 
 enum CockpitPanelPage: String, CaseIterable, Identifiable {
-    case usage, statistics, calendar, receipt, team
+    case usage, statistics, calendar, team
 
     var id: Self {
         self
@@ -15,7 +15,6 @@ enum CockpitPanelPage: String, CaseIterable, Identifiable {
         case .usage: L("Usage")
         case .statistics: L("cockpit_ui_statistics")
         case .calendar: L("cockpit_ui_calendar")
-        case .receipt: L("cockpit_ui_receipt")
         case .team: L("Members & Devices")
         }
     }
@@ -25,7 +24,6 @@ enum CockpitPanelPage: String, CaseIterable, Identifiable {
         case .usage: "gauge.with.dots.needle.50percent"
         case .statistics: "chart.xyaxis.line"
         case .calendar: "calendar"
-        case .receipt: "receipt"
         case .team: "person.2"
         }
     }
@@ -151,8 +149,6 @@ struct CockpitPanelView: View {
                 planStore: self.planStore,
                 resetStore: self.resetStore,
                 todayTokens: self.todayTokens)
-        case .receipt:
-            CockpitReceiptBrowserView(controller: self.controller, hidePersonalInfo: self.settings.hidePersonalInfo)
         case .team:
             if let teamStore {
                 CockpitTeamView(teamStore: teamStore, onSettings: self.onTeamSettings ?? self.onSettings)

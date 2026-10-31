@@ -2757,7 +2757,7 @@
 "cockpit_ui_all" = "全部";
 "cockpit_ui_all_history" = "全部可用历史";
 "cockpit_ui_attribution_note" = "仅记录主观体验。本机 Tokens 的账户归属尚无法严格确认，因此不会关联到当前额度账号。";
-"cockpit_ui_automatic_cap" = "使用首次观察时确定的今日建议。";
+"cockpit_ui_automatic_cap" = "使用当前自动计算的每日建议。";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "月历";
@@ -2826,7 +2826,7 @@
 "cockpit_ui_preview_title" = "小票预览";
 "cockpit_ui_previous_month" = "上个月";
 "cockpit_ui_provider" = "提供商";
-"cockpit_ui_receipt" = "任务小票";
+"cockpit_ui_receipt" = "用量小票";
 "cockpit_ui_receipt_grouping" = "子 Agent 汇入所属任务，同一会话只计一次。金额为参考价格估算，不同币种独立合计。";
 "cockpit_ui_receipt_scope_note" = "各任务包含全部已扫描用量，可能含筛选范围外的使用。";
 "cockpit_ui_receipt_task_count" = "本机用量小票 · %d 个任务";
@@ -3007,7 +3007,7 @@
 "cockpit_ui_personal_no_gain" = "在验证周中，星期规律模型未优于已冻结计划的基线。";
 "cockpit_ui_personal_ready" = "个人星期规律在独立的 7 日验证期中提高了已观测用量的预测准确度。";
 "cockpit_ui_personal_holdout" = "7 日平均误差：基线 %@ → 个人 %@ 个百分点";
-"cockpit_ui_personal_note" = "仅参考已观测时段，不估算全天用量。合格日需有 6 小时可靠观测，且相邻间隔不超过 90 分钟；缺失时段不补零。已冻结建议与个人上限继续生效。";
+"cockpit_ui_personal_note" = "仅参考已观测时段，不估算全天用量。合格日需有 6 小时可靠观测，且相邻间隔不超过 90 分钟；缺失时段不补零。自动建议与个人上限继续生效。";
 "cockpit_ui_comfort_weighted" = "按近期权重折算的完整样本：%@";
 "cockpit_ui_comfort_recency" = "趋势点更重视近期体验，权重半衰期为 14 天；修改历史日期不会改变其年龄。这描述 Token 使用体验，不代表官方额度。";
 
@@ -3173,3 +3173,14 @@
 "Use my Cloudflare" = "使用我的 Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "使用团队管理员提供的服务地址和邀请码。";
 "Where do I get these settings?" = "如何获取这些配置？";
+
+/* Session usage receipt */
+"cockpit_ui_session_receipt_scope" = "仅包含当前会话在所示统计时间范围内已记录的用量。";
+"cockpit_ui_receipt_session_count" = "本地用量小票 · %d 个会话";
+
+/* Live daily advice */
+"cockpit_advice_reset_account" = "规划窗口：账号重置 %@";
+"cockpit_advice_reset_announced" = "规划窗口：已公告重置 %@；账号是否重置仍需确认。";
+"cockpit_advice_reset_estimated" = "规划窗口：预计重置 %@，并非官方承诺。";
+"cockpit_advice_live_note" = "根据最新观测余额和剩余时间动态计算，手动上限保持不变。";
+"cockpit_advice_partial_note" = "今日用量记录不完整，建议额度为暂估值。";

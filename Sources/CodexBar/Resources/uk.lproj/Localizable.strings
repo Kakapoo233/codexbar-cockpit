@@ -2766,7 +2766,7 @@
 "cockpit_ui_all" = "Усі";
 "cockpit_ui_all_history" = "Уся доступна історія";
 "cockpit_ui_attribution_note" = "Зберігається лише ваше враження. Належність локальних токенів поки не підтверджено, тому їх не прив’язано до активного облікового запису квоти.";
-"cockpit_ui_automatic_cap" = "Використовується рекомендація, зафіксована під час першого спостереження за день.";
+"cockpit_ui_automatic_cap" = "Використовується поточна автоматична рекомендація на день.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Календар";
@@ -2835,7 +2835,7 @@
 "cockpit_ui_preview_title" = "Перегляд квитанції";
 "cockpit_ui_previous_month" = "Попередній місяць";
 "cockpit_ui_provider" = "Провайдер";
-"cockpit_ui_receipt" = "Квитанція завдання";
+"cockpit_ui_receipt" = "Квитанція використання";
 "cockpit_ui_receipt_grouping" = "Субагенти належать до батьківського завдання; кожен сеанс рахується один раз. Вартість оцінено за прейскурантом, валюти підсумовуються окремо.";
 "cockpit_ui_receipt_scope_note" = "Завдання містить усе знайдене використання, зокрема за межами фільтра активності.";
 "cockpit_ui_receipt_task_count" = "Квитанція локального використання · Завдань: %d";
@@ -3016,7 +3016,7 @@
 "cockpit_ui_personal_no_gain" = "У перевірочний тиждень модель днів тижня не покращила результат порівняно з фіксованим планом.";
 "cockpit_ui_personal_ready" = "Особистий шаблон днів тижня підвищив точність прогнозу записаного використання на окремому перевірочному періоді із 7 днів.";
 "cockpit_ui_personal_holdout" = "Середня похибка за 7 днів: базова %@ → особиста %@ відсоткових пункта";
-"cockpit_ui_personal_note" = "Лише для спостережених періодів, без оцінки за повний день. Відповідний день потребує 6 годин надійних спостережень з інтервалами не більш як 90 хвилин. Пропущені періоди не заповнюються нулями; фіксована рекомендація та особистий ліміт залишаються чинними.";
+"cockpit_ui_personal_note" = "Лише для спостережених періодів, без оцінки за повний день. Відповідний день потребує 6 годин надійних спостережень з інтервалами не більш як 90 хвилин. Пропущені періоди не заповнюються нулями; автоматична рекомендація та особистий ліміт залишаються чинними.";
 "cockpit_ui_comfort_weighted" = "Повні зразки з урахуванням давності: %@";
 "cockpit_ui_comfort_recency" = "Точки тенденції надають більшої ваги недавньому досвіду, з періодом напіврозпаду ваги 14 днів. Редагування старого дня не змінює його вік. Це опис досвіду використання Token, а не офіційна квота.";
 
@@ -3180,3 +3180,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

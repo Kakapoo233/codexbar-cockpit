@@ -2764,7 +2764,7 @@
 "cockpit_ui_all" = "Alla";
 "cockpit_ui_all_history" = "All tillgänglig historik";
 "cockpit_ui_attribution_note" = "Endast din upplevelse registreras. Det går ännu inte att verifiera vem lokala token tillhör, så de kopplas inte till det aktiva kvotkontot.";
-"cockpit_ui_automatic_cap" = "Använder det dagliga förslag som fastställdes vid den första observationen.";
+"cockpit_ui_automatic_cap" = "Använder det aktuella automatiska dagsförslaget.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Kalender";
@@ -2833,7 +2833,7 @@
 "cockpit_ui_preview_title" = "Förhandsvisning av kvitto";
 "cockpit_ui_previous_month" = "Föregående månad";
 "cockpit_ui_provider" = "Leverantör";
-"cockpit_ui_receipt" = "Uppgiftskvitto";
+"cockpit_ui_receipt" = "Användningskvitto";
 "cockpit_ui_receipt_grouping" = "Underagenter grupperas med sin överordnade uppgift och varje session räknas en gång. Kostnader uppskattas enligt listpris; valutor summeras separat.";
 "cockpit_ui_receipt_scope_note" = "Varje uppgift innehåller all skannad användning, som kan sträcka sig utanför aktivitetsfiltret.";
 "cockpit_ui_receipt_task_count" = "Kvitto för lokal användning · %d uppgifter";
@@ -3012,7 +3012,7 @@
 "cockpit_ui_personal_no_gain" = "Veckodagsmodellen förbättrade inte baslinjen för den låsta planen under valideringsveckan.";
 "cockpit_ui_personal_ready" = "Ditt veckodagsmönster förbättrade förutsägelsen av registrerad användning under en separat valideringsperiod på 7 dagar.";
 "cockpit_ui_personal_holdout" = "Medelfel över 7 dagar: baslinje %@ → personligt %@ procentenheter";
-"cockpit_ui_personal_note" = "Endast registrerade perioder, ingen uppskattning för hela dagen. Godkända dagar kräver 6 timmars tillförlitliga observationer utan uppehåll över 90 minuter. Saknade perioder fylls aldrig med noll; ditt låsta förslag och din personliga gräns gäller fortsatt.";
+"cockpit_ui_personal_note" = "Endast registrerade perioder, ingen uppskattning för hela dagen. Godkända dagar kräver 6 timmars tillförlitliga observationer utan uppehåll över 90 minuter. Saknade perioder fylls aldrig med noll; ditt automatiska förslag och din personliga gräns gäller fortsatt.";
 "cockpit_ui_comfort_weighted" = "Fullständiga observationer viktade efter aktualitet: %@";
 "cockpit_ui_comfort_recency" = "Trendpunkter ger större vikt åt färska erfarenheter, med en halveringstid på 14 dagar. När en äldre dag redigeras behåller den sin ålder. Detta beskriver erfarenheten av tokenanvändning, inte den officiella kvoten.";
 
@@ -3176,3 +3176,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

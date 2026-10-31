@@ -6,14 +6,14 @@ and the existing CodexBar collectors; it does not embed a second Tauri applicati
 
 | Upstream capability | Native integration | Remaining distinction |
 | --- | --- | --- |
-| Quota status and daily advice | Usage page alongside the original provider cards; frozen daily suggestion, manual cap, cross-reset observations | Upstream reset-risk/fatigue-knee optimization is not used to rewrite frozen plans |
+| Quota status and daily advice | Usage page alongside the original provider cards; live daily suggestion, manual cap, cross-reset observations | Earlier valid reset announcements/estimates adjust the planning horizon without creating quota |
 | Local statistics | Existing Usage & Spend dashboard, provider/project/session breakdown and reporting periods | Retained history depends on the selected data sources and scan settings |
 | Personal weekday calibration | Optional local reference with history readiness, separate seven-day validation, stale/drift/no-gain fallbacks | Adapted to observed native quota history; not a new official quota |
 | Subjective Token experience | Calendar feelings, correctable history, recent-experience weighted trend | Descriptive native trend; not the upstream fitted comfort-curve parameter or a productivity forecast |
 | Quota comfort curve | Original smooth-knee function, 0.1–100% knee fit, fixed subjective scores, 14-day decay, partial-data weighting, default/fitted chart and hover details | Direct current-account observations; no team cost-share allocation or reset-risk heatmap |
 | Usage calendar | Day/week/month/quarter/year browsing, Token/cost selection, daily details | Uses loaded local history; unscanned days remain unknown |
 | Reset history | Public history, scheduled previews, local estimates, and early notices | Public reset events never change account quotas or personal plans |
-| Task receipt | Searchable task selection, parent/subagent union, PNG preview/save/copy | Totals cover scanned task sessions and disclose partial cost |
+| Usage receipt | One button in the selected historical session; PNG preview/save/copy | Uses the displayed session reporting period; preserves privacy, currency and partial data |
 | Display/settings | CodexBar preferences, existing 23 languages, top-menu English override, layout hover help | Explicit CodexBar settings import; no silent import of unrelated Cockpit state |
 | Floating/always-on-top shell | Replaced by one anchored menu-bar panel with peer pages | Intentional product choice; no floating window |
 | Team/member/device allocation and Cloudflare sync | Native peer page, member/device assignment, shared daily budgets, invitation/revocation, self-hosted v2 Worker | One Codex shared-account space; UTC+8; explicit aggregate-only sharing; real cloud deployment and two-device acceptance pending |
@@ -21,4 +21,4 @@ and the existing CodexBar collectors; it does not embed a second Tauri applicati
 
 The comparison records functionality, not a claim of identical algorithms. Current local additions
 preserve provider/account/time-zone isolation, unknown versus measured-zero data, currency separation,
-and the user's frozen recommendation and manually chosen cap.
+and the live automatic recommendation and manually chosen cap.

@@ -122,7 +122,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
 
     let store: UsageStore
     let settings: SettingsStore
-    lazy var cockpitPlanStore = CockpitPlanStore()
+    lazy var cockpitPlanStore = CockpitPlanStore(resetHistoryStore: self.cockpitResetHistoryStore)
     lazy var cockpitResetHistoryStore = CockpitResetHistoryStore(settings: self.settings)
     var cockpitMenuPanelController: CockpitMenuPanelController?
     var cockpitTeamStore: CockpitTeamStore?

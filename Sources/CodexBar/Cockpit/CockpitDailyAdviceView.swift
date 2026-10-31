@@ -7,6 +7,17 @@ enum CockpitDailyAdviceProjection {
         var seen = Set<UsageProvider>()
         return scope.filter { available.contains($0) && seen.insert($0).inserted }
     }
+
+    static func resetWindowText(_ window: CockpitPlanningResetWindow) -> String {
+        let date = window.resetsAt.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened)
+            .locale(codexBarLocalizedLocale()))
+        let key = switch window.source {
+        case .account: "cockpit_advice_reset_account"
+        case .announced: "cockpit_advice_reset_announced"
+        case .estimated: "cockpit_advice_reset_estimated"
+        }
+        return L(key, date)
+    }
 }
 
 enum CockpitDailyAdviceLayout {
@@ -20,6 +31,12 @@ struct CockpitDailyAdviceView: View {
     var layout: CockpitDailyAdviceLayout = .inline
 
     var body: some View {
+        TimelineView(.periodic(from: .now, by: 60)) { _ in
+            self.content(on: Date())
+        }
+    }
+
+    private func content(on date: Date) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Label(L("cockpit_ui_daily_advice"), systemImage: "sparkles")
                 .font(.headline)
@@ -31,15 +48,16 @@ struct CockpitDailyAdviceView: View {
                 ForEach(self.scopedProviders, id: \.self) { provider in
                     CockpitDailyAdviceRow(
                         provider: provider,
-                        status: self.planStore.status(for: provider),
+                        status: self.planStore.status(for: provider, on: date),
                         setCap: { self.planStore.setPersonalCap($0, for: provider) },
                         layout: self.layout)
                     CockpitPersonalInsightsView(
                         model: CockpitPersonalUsageModel.build(
                             state: self.planStore.state,
                             providerID: provider.rawValue,
-                            accountID: self.planStore.accountID(for: provider)),
-                        status: self.planStore.status(for: provider))
+                            accountID: self.planStore.accountID(for: provider),
+                            now: date),
+                        status: self.planStore.status(for: provider, on: date))
                 }
             }
             if let error = self.planStore.errorMessage {
@@ -72,6 +90,20 @@ struct CockpitDailyAdviceRow: View {
                     self.inlineContent
                     self.sidebarContent
                 }
+            }
+            if let window = self.status.planningResetWindow {
+                Text(CockpitDailyAdviceProjection.resetWindowText(window))
+                    .font(.caption2)
+                    .foregroundStyle(window.source == .estimated ? Color.orange : Color.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Text(L("cockpit_advice_live_note"))
+                .font(.caption2).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if self.status.suggestionIsPartial {
+                Text(L("cockpit_advice_partial_note"))
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Text(self.status.isStale ? L("cockpit_ui_stale") : L("cockpit_ui_observation_note"))
                 .font(.caption2)
@@ -174,6 +206,6 @@ struct CockpitDailyAdviceRow: View {
     }
 
     private var capBinding: Binding<Double> {
-        Binding(get: { self.status.effectiveCapPercent ?? 0 }, set: { self.setCap($0) })
+        Binding(get: { min(100, max(0, self.status.effectiveCapPercent ?? 0)) }, set: { self.setCap($0) })
     }
 }

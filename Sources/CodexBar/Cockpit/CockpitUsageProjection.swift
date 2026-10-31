@@ -6,7 +6,6 @@ import Observation
 @MainActor
 @Observable
 final class CockpitUsageProjection {
-    var receiptPeriod = CostReportingPeriod.rolling(days: 30)
     @ObservationIgnored private let controller: SpendDashboardController
     @ObservationIgnored private let nowProvider: @MainActor () -> Date
     @ObservationIgnored private var cacheKey: CacheKey?
@@ -30,10 +29,6 @@ final class CockpitUsageProjection {
 
     var calendarModel: SpendDashboardModel {
         self.model(for: .allTime)
-    }
-
-    var receiptModel: SpendDashboardModel {
-        self.model(for: self.receiptPeriod)
     }
 
     private func model(for period: CostReportingPeriod) -> SpendDashboardModel {

@@ -1180,7 +1180,13 @@ struct SpendSessionRows: View {
             currencyCode: self.group.currencyCode,
             costMultiplier: first.costMultiplier,
             timeZone: self.group.timeZone,
-            activityRange: range)
+            activityRange: range,
+            sourceID: id,
+            provider: first.provider,
+            tokensArePartial: self.group.providers.first { $0.id == id }?.tokensAreLowerBound ?? true,
+            costIsPartial: self.group.providers.first { $0.id == id }.map {
+                $0.costIsLowerBound || $0.incompleteRequestCount > 0
+            } ?? true)
     }
 }
 

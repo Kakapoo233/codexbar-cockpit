@@ -11,6 +11,10 @@ struct SessionUsageBrowserContext: Sendable {
     let costMultiplier: Double
     let timeZone: TimeZone
     var activityRange: Range<Date>?
+    var sourceID: String?
+    var provider: UsageProvider?
+    var tokensArePartial = false
+    var costIsPartial = false
 }
 
 /// Menu navigation carries the exact account snapshot into the existing Usage & Spend pane.
@@ -40,6 +44,7 @@ struct SessionUsageBrowser: View {
     @State private var requestDetails: (key: DetailKey, turns: [CostUsageSessionTurn])?
     @State private var loadingDetails = false
     @State private var detailError: CostUsageSessionDetailError?
+    @State private var receipt: CockpitReceiptModel?
 
     private struct DetailKey: Hashable {
         let source: CostUsageSessionDetailSource?
@@ -111,6 +116,15 @@ struct SessionUsageBrowser: View {
         }
         .onChange(of: self.hidePersonalInfo) { _, _ in
             self.query = ""
+            self.receipt = nil
+        }
+        .sheet(isPresented: Binding(
+            get: { self.receipt != nil },
+            set: { if !$0 { self.receipt = nil } }))
+        {
+            if let receipt = self.receipt {
+                CockpitReceiptPreview(receipt: receipt)
+            }
         }
         .environment(\.timeZone, self.context.timeZone)
     }
@@ -237,6 +251,18 @@ struct SessionUsageBrowser: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+
+                Button {
+                    self.receipt = CockpitReceiptModel.session(
+                        context: self.context,
+                        session: session,
+                        hidePersonalInfo: self.hidePersonalInfo)
+                } label: {
+                    Label(L("cockpit_ui_receipt"), systemImage: "receipt")
+                }
+                .buttonStyle(.bordered)
+                .help(L("cockpit_ui_session_receipt_scope"))
+                .accessibilityIdentifier("session-usage-receipt")
 
                 Grid(alignment: .leading, horizontalSpacing: 32, verticalSpacing: 18) {
                     GridRow {

@@ -2733,7 +2733,7 @@
 "cockpit_ui_all" = "전체";
 "cockpit_ui_all_history" = "사용 가능한 모든 기록";
 "cockpit_ui_attribution_note" = "사용 경험만 기록합니다. 로컬 토큰의 귀속을 아직 확인할 수 없어 현재 할당량 계정에 연결하지 않습니다.";
-"cockpit_ui_automatic_cap" = "첫 관측 시 고정된 일일 권장량을 사용합니다.";
+"cockpit_ui_automatic_cap" = "현재 자동으로 계산된 일일 권장량을 사용합니다.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "캘린더";
@@ -2802,7 +2802,7 @@
 "cockpit_ui_preview_title" = "명세서 미리 보기";
 "cockpit_ui_previous_month" = "이전 달";
 "cockpit_ui_provider" = "제공업체";
-"cockpit_ui_receipt" = "작업 명세서";
+"cockpit_ui_receipt" = "사용량 명세서";
 "cockpit_ui_receipt_grouping" = "하위 에이전트는 상위 작업에 합치며 각 세션은 한 번만 계산합니다. 비용은 정가 기준 추정치이며 통화별로 합산합니다.";
 "cockpit_ui_receipt_scope_note" = "각 작업에는 스캔한 모든 사용량이 포함되므로 활동 기간 필터의 범위를 벗어날 수 있습니다.";
 "cockpit_ui_receipt_task_count" = "로컬 사용량 명세서 · 작업 %d개";
@@ -2985,7 +2985,7 @@
 "cockpit_ui_personal_no_gain" = "검증 주간에서 요일 모델이 고정된 계획 기준보다 나아지지 않았습니다.";
 "cockpit_ui_personal_ready" = "개인 요일 패턴이 별도의 7일 검증 기간에서 관측된 사용량의 예측 정확도를 높였습니다.";
 "cockpit_ui_personal_holdout" = "7일 평균 오차: 기준 %@ → 개인 %@ 퍼센트포인트";
-"cockpit_ui_personal_note" = "관측한 시간대만 참고하며 하루 전체 사용량을 추정하지 않습니다. 요건을 충족하려면 신뢰할 수 있는 관측이 6시간 필요하고 관측 간격은 90분을 넘지 않아야 합니다. 누락된 시간대는 0으로 채우지 않습니다. 고정된 제안과 개인 상한은 계속 적용됩니다.";
+"cockpit_ui_personal_note" = "관측한 시간대만 참고하며 하루 전체 사용량을 추정하지 않습니다. 요건을 충족하려면 신뢰할 수 있는 관측이 6시간 필요하고 관측 간격은 90분을 넘지 않아야 합니다. 누락된 시간대는 0으로 채우지 않습니다. 자동 제안과 개인 상한은 계속 적용됩니다.";
 "cockpit_ui_comfort_weighted" = "최근성 가중치를 적용한 완전 표본: %@";
 "cockpit_ui_comfort_recency" = "추세점은 최근 경험에 더 큰 비중을 두며 가중치 반감기는 14일입니다. 과거 날짜를 수정해도 경과 기간은 바뀌지 않습니다. 이는 Token 사용 경험을 설명하며 공식 할당량을 뜻하지 않습니다.";
 
@@ -3149,3 +3149,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

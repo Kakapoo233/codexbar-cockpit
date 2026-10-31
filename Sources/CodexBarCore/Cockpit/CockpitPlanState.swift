@@ -1,7 +1,7 @@
 import Foundation
 
 /// Local-first planning state. This module has no file, credential, network, or UI access.
-/// The daily anchor is intentionally frozen; changing the manual cap never rewrites the suggestion.
+/// Historical anchors are retained for calibration; current advice follows the latest balance and reset horizon.
 public struct CockpitPlanState: Codable, Equatable, Sendable {
     public private(set) var snapshots: [CockpitQuotaSnapshot]
     public private(set) var plans: [CockpitDailyPlan]
@@ -310,21 +310,37 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         providerID: String,
         accountID: String = "default",
         on date: Date = Date(),
-        calendar: Calendar = .current) -> CockpitDayStatus
+        calendar: Calendar = .current,
+        planningResetWindow: CockpitPlanningResetWindow? = nil) -> CockpitDayStatus
     {
         let day = CockpitCalendar.dateKey(for: date, calendar: calendar)
         let zone = calendar.timeZone.identifier
         let usage = self.dailyUsage(providerID: providerID, accountID: accountID, on: date, calendar: calendar)
-        let plan = self.plans.first {
-            $0.providerID == providerID && $0.accountID == accountID
-                && $0.localDateKey == day && $0.timeZoneIdentifier == zone && $0.anchorAt <= date
-        }
         let cap = self.personalCaps.last {
             $0.providerID == providerID && $0.accountID == accountID
                 && $0.localDateKey == day && $0.timeZoneIdentifier == zone
         }
         let latest = self.samples(providerID: providerID, accountID: accountID, through: date).last
         let usable = latest.flatMap { $0.resetsAt > date ? $0 : nil }
+        let horizon = usable.map { snapshot in
+            if providerID == "codex", let proposed = planningResetWindow,
+               proposed.resetsAt.timeIntervalSince1970.isFinite,
+               proposed.resetsAt > date, proposed.resetsAt < snapshot.resetsAt
+            {
+                return proposed
+            }
+            return CockpitPlanningResetWindow(resetsAt: snapshot.resetsAt, source: .account)
+        }
+        let suggested: Double?
+        if let usable, let horizon, let interval = calendar.dateInterval(of: .day, for: date) {
+            let untilReset = horizon.resetsAt.timeIntervalSince(date)
+            let dayRemaining = interval.end.timeIntervalSince(date)
+            let additional = usable.remainingPercent * min(1, dayRemaining / untilReset)
+            suggested = Self.round((usage.usedPercent ?? 0) + additional)
+        } else {
+            // Passing a deadline is not evidence of a renewed balance.
+            suggested = nil
+        }
         let feeling = self.comfortRecords.last {
             $0.providerID == providerID && $0.accountID == accountID
                 && $0.localDateKey == day && $0.timeZoneIdentifier == zone
@@ -332,14 +348,16 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         let stale = usable.map { date.timeIntervalSince($0.capturedAt) > 1800 } ?? true
         return CockpitDayStatus(
             localDateKey: day,
-            suggestedPercent: plan?.suggestedPercent,
+            suggestedPercent: suggested,
             manualCapPercent: cap?.percent,
             usedPercent: usage.usedPercent,
             coverage: usage.coverage,
             remainingPercent: usable?.remainingPercent,
             resetsAt: usable?.resetsAt,
             feeling: feeling,
-            isStale: stale)
+            isStale: stale,
+            planningResetWindow: horizon,
+            suggestionIsPartial: suggested != nil && (usage.usedPercent == nil || usage.coverage != .complete))
     }
 
     public func dailyUsage(

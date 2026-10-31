@@ -1,5 +1,21 @@
 # Local integration validation
 
+## Live reset-aware advice (0.7.0)
+
+On 2026-10-31, 100 tests across 11 focused suites passed. Coverage includes account/public reset horizon
+precedence, prediction expiry without quota rollover, same-account balance updates, manual-cap independence,
+partial daily observations, fresh versus stale public data, notification-independent planning, and reactive
+public-store updates. Existing plan persistence, calibration, projection, receipt, save and navigation tests
+remain green. Historical calendar data and persisted calibration anchors are preserved.
+
+## Session receipt action (0.6.3)
+
+On 2026-10-31, 47 tests in six suites passed, plus the existing Usage & Spend screenshot render.
+Coverage includes single-session selection, currency conversion, unknown versus zero values, partial
+coverage, stale private account labels, PNG export and save-sheet ownership. The synthetic Sessions
+preview shows the Usage Receipt button beneath the selected session header. `make check` passed with
+3,224 Swift files and 22 locale catalogs. No screenshots or personal session data were published.
+
 ## Taller session history (0.6.2)
 
 On 2026-10-31, 25 existing tests in `SpendDashboardSessionRowTests` and `SessionUsagePresentationTests`
