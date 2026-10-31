@@ -148,7 +148,7 @@ struct SpendDashboardPane: View {
                         hidePersonalInfo: self.settings.hidePersonalInfo,
                         selectedSessionID: request.sessionID)
                         .id(request.id)
-                        .frame(height: 600)
+                        .frame(height: SessionUsageBrowser.preferredHeight)
                 } else {
                     self.header
                     if self.showsTimeZoneControls {
@@ -1128,7 +1128,7 @@ struct SpendSessionRows: View {
             if let id = self.sourceID, let context = self.context(for: id) {
                 SessionUsageBrowser(context: context, hidePersonalInfo: self.hidePersonalInfo)
                     .id(id)
-                    .frame(height: 600)
+                    .frame(height: SessionUsageBrowser.preferredHeight)
             } else {
                 Text(L("No data available")).foregroundStyle(.secondary)
             }

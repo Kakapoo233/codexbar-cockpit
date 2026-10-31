@@ -1,5 +1,13 @@
 # Local integration validation
 
+## Taller session history (0.6.2)
+
+On 2026-10-31, 25 existing tests in `SpendDashboardSessionRowTests` and `SessionUsagePresentationTests`
+passed, together with the opt-in `SpendDashboardScreenshotRenderTests.test_renderUsageSpendRangeScreenshots`
+render. The synthetic wide Sessions preview was visually inspected. `make check` passed with 3,224 Swift
+files and all 22 locale catalogs. Both session entry points share a 760-point height; compact lists use
+up to 320 points and retain the existing separate list, detail, and outer-page scrolling.
+
 ## User-owned Cloudflare setup (0.6.1)
 
 On 2026-10-30, 28 tests across `CockpitTeamClientTests`, `CockpitTeamStoreTests`, and

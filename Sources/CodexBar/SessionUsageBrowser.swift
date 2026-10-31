@@ -29,6 +29,8 @@ final class SessionUsageNavigation {
 
 @MainActor
 struct SessionUsageBrowser: View {
+    static let preferredHeight: CGFloat = 760
+
     let context: SessionUsageBrowserContext
     let hidePersonalInfo: Bool
     @State private var query = ""
@@ -90,7 +92,7 @@ struct SessionUsageBrowser: View {
         GeometryReader { geometry in
             if geometry.size.width < 600 {
                 VStack(spacing: 0) {
-                    self.sessionList.frame(height: 190)
+                    self.sessionList.frame(height: min(320, geometry.size.height * 0.45))
                     Divider()
                     self.detailPane
                 }
