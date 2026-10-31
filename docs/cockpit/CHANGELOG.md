@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.6.2 — Taller session history
+
+- Increase the Usage & Spend session browser from 600 to 760 points in both the Sessions tab and direct navigation.
+- Give the compact history list up to 320 points instead of 190, while retaining at least 55% of the available
+  height for session details. Keep the outer page and both inner panes scrollable on smaller windows.
+
 ## 0.6.1 — Self-service Cloudflare configuration
 
 - Put self-hosted setup and invitation joining in a guided Settings form with Worker URL, device name,
