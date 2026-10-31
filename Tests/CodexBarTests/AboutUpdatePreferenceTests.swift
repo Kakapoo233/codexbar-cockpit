@@ -13,7 +13,10 @@ final class AboutUpdatePreferenceTests: XCTestCase {
         let hosting = NSHostingView(rootView: AboutPane(updater: updater, selection: selection)
             .defaultAppStorage(defaults)
             .frame(width: 700, height: 680))
-        _ = try XCTUnwrap(MenuLayoutScreenshotRenderTests.pngDataWithWindow(hosting: hosting))
+        let png = try XCTUnwrap(MenuLayoutScreenshotRenderTests.pngDataWithWindow(hosting: hosting))
+        if let path = ProcessInfo.processInfo.environment["COCKPIT_ABOUT_PROOF_PATH"] {
+            try png.write(to: URL(fileURLWithPath: path))
+        }
         XCTAssertTrue(updater.automaticallyChecksForUpdates)
         XCTAssertFalse(updater.automaticallyDownloadsUpdates)
         XCTAssertEqual(updater.installWrites, 0, "Opening Settings must not write Sparkle's install preference")

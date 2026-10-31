@@ -3184,3 +3184,13 @@
 "cockpit_advice_reset_estimated" = "规划窗口：预计重置 %@，并非官方承诺。";
 "cockpit_advice_live_note" = "根据最新观测余额和剩余时间动态计算，手动上限保持不变。";
 "cockpit_advice_partial_note" = "今日用量记录不完整，建议额度为暂估值。";
+
+/* About CodexBar Cockpit */
+"cockpit_about_tagline" = "菜单栏中的 AI 用量、每日规划与会话小票。";
+"cockpit_about_project" = "项目与支持";
+"cockpit_about_issues" = "反馈问题";
+"cockpit_about_changelog" = "更新记录";
+"cockpit_about_upstream" = "开源来源";
+"cockpit_about_license" = "MIT 许可证 · © 2026 Peter Steinberger、Quota Float 与 CodexBar Cockpit 贡献者。";
+
+"Automatic updates are not configured for CodexBar Cockpit." = "CodexBar Cockpit 尚未配置自动更新，可在项目更新记录中查看进展。";

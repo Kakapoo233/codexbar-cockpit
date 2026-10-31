@@ -3172,3 +3172,13 @@
 "cockpit_advice_reset_estimated" = "規劃視窗：預計重置 %@，並非官方承諾。";
 "cockpit_advice_live_note" = "根據最新觀測餘額和剩餘時間動態計算，手動上限保持不變。";
 "cockpit_advice_partial_note" = "今日用量紀錄不完整，建議額度為暫估值。";
+
+/* About CodexBar Cockpit */
+"cockpit_about_tagline" = "選單列中的 AI 用量、每日規劃與工作階段收據。";
+"cockpit_about_project" = "專案與支援";
+"cockpit_about_issues" = "回報問題";
+"cockpit_about_changelog" = "更新紀錄";
+"cockpit_about_upstream" = "開源來源";
+"cockpit_about_license" = "MIT 授權條款 · © 2026 Peter Steinberger、Quota Float 與 CodexBar Cockpit 貢獻者。";
+
+"Automatic updates are not configured for CodexBar Cockpit." = "CodexBar Cockpit 尚未設定自動更新，可在專案更新記錄中查看進展。";

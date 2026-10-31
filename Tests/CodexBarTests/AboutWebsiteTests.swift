@@ -6,12 +6,15 @@ import Testing
 @MainActor
 struct AboutWebsiteTests {
     @Test
-    func `website link matches the published project domain`() throws {
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-            .deletingLastPathComponent().deletingLastPathComponent()
-        let domain = try String(contentsOf: root.appendingPathComponent("docs/CNAME"), encoding: .utf8)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        #expect(try Self.websiteURL() == "https://\(domain)")
+    func `about links lead to the fork project and its support resources`() throws {
+        let source = try Self.aboutSource()
+        #expect(try Self.websiteURL() == "https://github.com/Kakapoo233/codexbar-cockpit")
+        #expect(source.contains("https://github.com/Kakapoo233/codexbar-cockpit/issues"))
+        #expect(source.contains("https://github.com/Kakapoo233/codexbar-cockpit/blob/main/docs/cockpit/CHANGELOG.md"))
+        #expect(source.contains("https://github.com/steipete/CodexBar"))
+        #expect(source.contains("https://github.com/HouSiyuan2001/codex-cockpit"))
+        #expect(!source.contains("mailto:peter@steipete.me"))
+        #expect(!source.contains("https://twitter.com/steipete"))
     }
 
     @Test
@@ -20,7 +23,7 @@ struct AboutWebsiteTests {
         try CodexBarLocalizationOverride.$appLanguage.withValue("en") {
             let url = try Self.websiteURL()
             let renderer = ImageRenderer(content: VStack(alignment: .leading, spacing: 16) {
-                AboutLinkRow(icon: "globe", title: L("link_website"), url: url)
+                AboutLinkRow(icon: "globe", title: L("link_github"), url: url)
                 Divider()
                 Text("Configured destination (proof annotation)").font(.caption)
                 Text(url).font(.system(.body, design: .monospaced))
@@ -38,13 +41,17 @@ struct AboutWebsiteTests {
         }
     }
 
-    private static func websiteURL() throws -> String {
+    private static func aboutSource() throws -> String {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
-        let source = try String(
+        return try String(
             contentsOf: root.appendingPathComponent("Sources/CodexBar/Settings/PreferencesAboutPane.swift"),
             encoding: .utf8)
-        let pattern = #"title:\s*L\("link_website"\),\s*url:\s*"([^"]+)""#
+    }
+
+    private static func websiteURL() throws -> String {
+        let source = try Self.aboutSource()
+        let pattern = #"title:\s*L\("link_github"\),\s*url:\s*"([^"]+)""#
         let regex = try NSRegularExpression(pattern: pattern)
         let match = try #require(regex.firstMatch(in: source, range: NSRange(source.startIndex..., in: source)))
         let range = try #require(Range(match.range(at: 1), in: source))

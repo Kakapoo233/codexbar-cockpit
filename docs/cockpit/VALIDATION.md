@@ -314,3 +314,13 @@ for remaining upstream algorithm and team/cloud differences.
 - `make check` passed with zero SwiftLint violations. Debug packaging and signing checks passed.
 - Packaged offline startup passed. Version 0.4.1 build 10 was installed with the previous developer
   bundle backed up; desktop acceptance remains pending while the Mac is locked.
+
+## Fork About page (0.7.1)
+
+- Focused About and preferences checks passed: 4 XCTest cases and 15 Swift Testing cases.
+- `make check` passed with zero SwiftLint violations across 3,226 files.
+- Debug packaging, signature verification, and isolated packaged startup passed.
+- The developer app was updated to 0.7.1 build 19 with a previous-version backup.
+- The local render probe passed, but its exported image did not provide legible full-page visual
+  evidence. Desktop accessibility attachment timed out; interactive layout acceptance remains pending.
+- No screenshots or local account data were published.
