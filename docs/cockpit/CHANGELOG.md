@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.7.1 — Fork About page
+
+- Show CodexBar Cockpit identity and project description with current version and localized build date.
+- Link support and changelog to this repository; list both upstream projects and preserve MIT attribution.
+- Localize the development-build update notice while preserving updater preferences and acknowledgements.
+
 ## 0.7.0 — Live reset-aware daily advice
 
 - Recalculate automatic daily advice from the latest account balance and remaining planning time.

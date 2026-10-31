@@ -1,4 +1,5 @@
 import AppKit
+import CodexBarCore
 import SwiftUI
 
 @MainActor
@@ -21,7 +22,7 @@ struct AboutPane: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        formatter.locale = .current
+        formatter.locale = codexBarLocalizedLocale()
         return formatter.string(from: date)
     }
 
@@ -47,10 +48,28 @@ struct AboutPane: View {
                 AboutLinkRow(
                     icon: "chevron.left.slash.chevron.right",
                     title: L("link_github"),
+                    url: "https://github.com/Kakapoo233/codexbar-cockpit")
+                AboutLinkRow(
+                    icon: "bubble.left.and.bubble.right",
+                    title: L("cockpit_about_issues"),
+                    url: "https://github.com/Kakapoo233/codexbar-cockpit/issues")
+                AboutLinkRow(
+                    icon: "clock.arrow.circlepath",
+                    title: L("cockpit_about_changelog"),
+                    url: "https://github.com/Kakapoo233/codexbar-cockpit/blob/main/docs/cockpit/CHANGELOG.md")
+            } header: {
+                Text(L("cockpit_about_project"))
+            }
+
+            Section {
+                AboutLinkRow(
+                    icon: "chevron.left.slash.chevron.right",
+                    title: "CodexBar",
                     url: "https://github.com/steipete/CodexBar")
-                AboutLinkRow(icon: "globe", title: L("link_website"), url: "https://codexbar.app")
-                AboutLinkRow(icon: "bird", title: L("link_twitter"), url: "https://twitter.com/steipete")
-                AboutLinkRow(icon: "envelope", title: L("link_email"), url: "mailto:peter@steipete.me")
+                AboutLinkRow(
+                    icon: "chevron.left.slash.chevron.right",
+                    title: "Codex Cockpit",
+                    url: "https://github.com/HouSiyuan2001/codex-cockpit")
                 Button {
                     self.selection.showAcknowledgements()
                 } label: {
@@ -69,9 +88,9 @@ struct AboutPane: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(L("link_acknowledgements"))
             } header: {
-                Text(L("section_links"))
+                Text(L("cockpit_about_upstream"))
             } footer: {
-                Text(L("copyright"))
+                Text(L("cockpit_about_license"))
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
             }
@@ -131,7 +150,7 @@ struct AboutPane: View {
                 AboutHomebrewUpdateStatusView(updater: homebrewUpdater)
             } else if !self.updater.isAvailable {
                 AboutUpdatesUnavailableView(
-                    reason: self.updater.unavailableReason ?? L("updates_unavailable"))
+                    reason: self.updater.unavailableReason.map { L($0) } ?? L("updates_unavailable"))
             }
         } header: {
             Text(L("section_updates"))
@@ -159,7 +178,7 @@ struct AboutPane: View {
             }
 
             VStack(spacing: 2) {
-                Text("CodexBar")
+                Text(verbatim: CockpitAppIdentity.displayName)
                     .font(.title3).bold()
                 Text(String(format: L("version_format"), AppVersion.displayString))
                     .foregroundStyle(.secondary)
@@ -168,7 +187,7 @@ struct AboutPane: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-                Text(L("about_tagline"))
+                Text(L("cockpit_about_tagline"))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -190,7 +209,7 @@ struct AboutPane: View {
     }
 
     private func openProjectHome() {
-        guard let url = URL(string: "https://github.com/steipete/CodexBar") else { return }
+        guard let url = URL(string: "https://github.com/Kakapoo233/codexbar-cockpit") else { return }
         NSWorkspace.shared.open(url)
     }
 }

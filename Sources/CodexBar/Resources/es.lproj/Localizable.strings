@@ -3186,3 +3186,13 @@
 "cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
 "cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
 "cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";
+
+/* About CodexBar Cockpit (English fallback) */
+"cockpit_about_tagline" = "AI usage, daily planning, and session receipts in your menu bar.";
+"cockpit_about_project" = "Project & Support";
+"cockpit_about_issues" = "Report an issue";
+"cockpit_about_changelog" = "Changelog";
+"cockpit_about_upstream" = "Open-source origins";
+"cockpit_about_license" = "MIT License · © 2026 Peter Steinberger, Quota Float contributors, and CodexBar Cockpit contributors.";
+
+"Automatic updates are not configured for CodexBar Cockpit." = "Automatic updates are not configured for CodexBar Cockpit.";
