@@ -27,23 +27,23 @@ struct CockpitPlanCoreTests {
     }
 
     @Test
-    func `daily suggestion is frozen while a manual cap can be restored`() {
+    func `daily suggestion follows current balance while a manual cap can be restored`() {
         var state = CockpitPlanState()
         state.record(self.snapshot("2026-07-06T04:00:00Z", remaining: 70), calendar: self.calendar)
         let noon = self.date("2026-07-06T16:00:00Z")
         state.record(self.snapshot("2026-07-06T16:00:00Z", remaining: 50), calendar: self.calendar)
         var status = state.status(providerID: "codex", on: noon, calendar: self.calendar)
-        #expect(status.suggestedPercent == 10)
+        #expect(status.suggestedPercent == 23.85)
         #expect(status.usedPercent == 20)
-        #expect(status.remainingSuggestedPercent == 0)
+        #expect(abs((status.remainingSuggestedPercent ?? 0) - 3.85) < 0.001)
         state.setPersonalCap(30, providerID: "codex", on: noon, calendar: self.calendar)
         status = state.status(providerID: "codex", on: noon, calendar: self.calendar)
         #expect(status.manualCapPercent == 30)
         #expect(status.effectiveCapPercent == 30)
-        #expect(status.suggestedPercent == 10)
+        #expect(status.suggestedPercent == 23.85)
         #expect(status.remainingSuggestedPercent == 10)
         state.setPersonalCap(nil, providerID: "codex", on: noon, calendar: self.calendar)
-        #expect(state.status(providerID: "codex", on: noon, calendar: self.calendar).effectiveCapPercent == 10)
+        #expect(state.status(providerID: "codex", on: noon, calendar: self.calendar).effectiveCapPercent == 23.85)
     }
 
     @Test
@@ -62,13 +62,12 @@ struct CockpitPlanCoreTests {
     }
 
     @Test
-    func `same day reset consumption accumulates beyond one hundred without changing the plan`() {
+    func `same day reset consumption accumulates beyond one hundred and live advice includes it`() {
         var state = CockpitPlanState()
         state.record(self.snapshot(
             "2026-07-06T04:00:00Z",
             remaining: 100,
             reset: "2026-07-06T16:00:00Z"), calendar: self.calendar)
-        let original = state.plans.first?.suggestedPercent
         state.record(self.snapshot(
             "2026-07-06T15:50:00Z",
             remaining: 5,
@@ -82,7 +81,7 @@ struct CockpitPlanCoreTests {
             on: self.date("2026-07-06T16:10:00Z"),
             calendar: self.calendar)
         #expect(status.usedPercent == 155)
-        #expect(status.suggestedPercent == original)
+        #expect(status.suggestedPercent == 157.82)
         #expect(status.coverage == .partial)
     }
 
@@ -226,7 +225,7 @@ struct CockpitPlanCoreTests {
         #expect(status.remainingPercent == nil)
         #expect(status.resetsAt == nil)
         #expect(status.isStale)
-        #expect(status.suggestedPercent == 70)
+        #expect(status.suggestedPercent == nil)
     }
 
     @Test

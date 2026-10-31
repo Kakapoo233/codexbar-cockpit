@@ -2770,7 +2770,7 @@
 "cockpit_ui_all" = "All";
 "cockpit_ui_all_history" = "All Available History";
 "cockpit_ui_attribution_note" = "Only your experience is recorded. Local token ownership cannot yet be verified, so it is not attached to the active quota account.";
-"cockpit_ui_automatic_cap" = "Using the daily suggestion fixed at the first observation.";
+"cockpit_ui_automatic_cap" = "Using the current automatic daily suggestion.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Calendar";
@@ -2839,7 +2839,7 @@
 "cockpit_ui_preview_title" = "Receipt Preview";
 "cockpit_ui_previous_month" = "Previous Month";
 "cockpit_ui_provider" = "Provider";
-"cockpit_ui_receipt" = "Task Receipt";
+"cockpit_ui_receipt" = "Usage Receipt";
 "cockpit_ui_receipt_grouping" = "Subagents join their parent task, with each session counted once. Costs are list-price estimates; currencies are totaled separately.";
 "cockpit_ui_receipt_scope_note" = "Each task includes all scanned usage, which may extend outside the activity filter.";
 "cockpit_ui_receipt_task_count" = "Local Usage Receipt · %d tasks";
@@ -3020,7 +3020,7 @@
 "cockpit_ui_personal_no_gain" = "The weekday model did not improve on the frozen-plan baseline in the validation week.";
 "cockpit_ui_personal_ready" = "Your weekday pattern improved prediction of recorded usage on a separate 7-day validation period.";
 "cockpit_ui_personal_holdout" = "7-day mean error: baseline %@ → personal %@ percentage points";
-"cockpit_ui_personal_note" = "Recorded periods only, not a full-day estimate. Qualifying days need 6 hours of reliable observations and no gaps over 90 minutes. Missing periods are never filled with zero; your frozen suggestion and personal cap stay in control.";
+"cockpit_ui_personal_note" = "Recorded periods only, not a full-day estimate. Qualifying days need 6 hours of reliable observations and no gaps over 90 minutes. Missing periods are never filled with zero; your automatic suggestion and personal cap stay in control.";
 "cockpit_ui_comfort_weighted" = "Recency-weighted complete samples: %@";
 "cockpit_ui_comfort_recency" = "Trend points weight recent experience more, with a 14-day half-life. Editing an older day preserves its age. This describes Token experience, not official quota.";
 
@@ -3184,3 +3184,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

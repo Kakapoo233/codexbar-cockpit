@@ -254,6 +254,28 @@ final class CockpitResetHistoryStore {
         }
     }
 
+    /// Uses fresh public metadata only as a planning horizon, independently of notification preferences.
+    /// Text-only website watch windows cannot be converted into a precise reset deadline.
+    func planningWindow(accountResetAt: Date, on date: Date = Date()) -> CockpitPlanningResetWindow? {
+        let freshStatus = self.status.flatMap { status in
+            (-300...15 * 60).contains(date.timeIntervalSince(status.generatedAt)) ? status : nil
+        }
+        let freshForecast = self.history.flatMap { history -> CockpitResetForecast? in
+            guard (-300...24 * 3600).contains(date.timeIntervalSince(history.generatedAt)),
+                  let synced = self.historySyncedAt,
+                  (-300...Self.historyRefreshInterval * 2).contains(date.timeIntervalSince(synced)) else { return nil }
+            return self.forecast
+        }
+        let hasStalePendingAnnouncement = freshStatus == nil
+            && self.status?.scheduledReset?.isPending(at: date) == true
+        return CockpitPlanningResetWindow.resolve(
+            accountResetAt: accountResetAt,
+            scheduled: freshStatus?.scheduledReset,
+            forecast: hasStalePendingAnnouncement ? nil : freshForecast,
+            latestPublicReset: self.status?.latestReset,
+            now: date)
+    }
+
     private func observeNotificationPreference() {
         let observationID = self.preferenceObservationID
         withObservationTracking {

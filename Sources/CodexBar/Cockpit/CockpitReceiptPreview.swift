@@ -132,7 +132,7 @@ struct CockpitReceiptCardView: View {
                 Image(systemName: "receipt").font(.title2)
                 Text(L("cockpit_ui_brand_receipt")).font(.system(size: 20, weight: .bold, design: .monospaced))
             }
-            Text(L("cockpit_ui_receipt_task_count", self.receipt.items.count))
+            Text(L("cockpit_ui_receipt_session_count", self.receipt.items.reduce(0) { $0 + $1.sessionCount }))
             Text(self.receipt.scopeLabel).font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             Text(Self.dateText(self.receipt.createdAt))

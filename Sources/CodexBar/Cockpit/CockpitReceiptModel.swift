@@ -69,6 +69,43 @@ struct CockpitReceiptModel: Equatable, Sendable {
         }
     }
 
+    /// Export the exact period-scoped summary shown by the session browser, without task expansion.
+    static func session(
+        context: SessionUsageBrowserContext,
+        session: CostUsageSessionBreakdown,
+        hidePersonalInfo: Bool,
+        createdAt: Date = Date()) -> CockpitReceiptModel
+    {
+        let identity = CostHistoryIdentity(
+            sessionID: session.sessionID,
+            title: session.title,
+            hidePersonalInfo: hidePersonalInfo)
+        let tokens = SpendDashboardModel.nonnegative(session.totalTokens)
+        let cost = SessionUsagePresentation.convertedCost(session.costUSD, multiplier: context.costMultiplier)
+        let sourceID = context.sourceID ?? context.provider?.rawValue ?? context.providerName
+        let providerName = hidePersonalInfo
+            ? context.provider
+            .map { ProviderDescriptorRegistry.descriptor(for: $0).metadata.displayName } ?? L("Provider")
+            : context.providerName
+        let line = CockpitReceiptLine(
+            id: "session:\(context.provider?.rawValue ?? ""):\(sourceID.utf8.count):\(sourceID):\(session.sessionID)",
+            title: identity.name,
+            providerName: providerName,
+            currencyCode: context.currencyCode,
+            tokens: tokens,
+            estimatedCost: cost,
+            tokensArePartial: context.tokensArePartial || tokens == nil,
+            costIsPartial: context.costIsPartial || cost == nil)
+        return CockpitReceiptModel(
+            items: [line],
+            createdAt: createdAt,
+            scopeLabel: [
+                context.windowLabel,
+                L("cockpit_ui_session_receipt_scope"),
+                context.timeZone.identifier,
+            ].joined(separator: "\n"))
+    }
+
     static func scopeLabel(for period: CostReportingPeriod, timeZone: TimeZone) -> String {
         let activity: String = switch period {
         case let .rolling(days): L("cockpit_ui_active_last_days", days)

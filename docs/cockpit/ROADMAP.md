@@ -1,7 +1,7 @@
 # Delivery and acceptance
 
 User-approved scope: all CodexBar providers; complete local statistics, calendar, planning, subjective
-feedback, and task receipts; one menu-bar panel with peer pages; eventual replacement
+feedback, and session receipts; one menu-bar panel with peer pages; eventual replacement
 of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, intended public repository
 `Kakapoo233/codexbar-cockpit`.
 
@@ -27,10 +27,11 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Add validated local weekday reference and recency-weighted experience trends (0.4.0).
 - [x] Add an independent English text option for the top menu bar while preserving the expanded panel language (0.3.2).
 - [x] Select, correct, and clear personal state directly on a calendar date (0.1.1).
-- [x] Implement daily frozen recommendation, personal cap, and cross-reset observation accounting.
+- [x] Implement live daily recommendation from observed balance and valid reset windows, personal cap, and cross-reset observation accounting (0.7.0).
 - [x] Implement subjective feedback records and Token experience chart.
 - [x] Restore the upstream quota comfort curve with account-scoped feedback and native chart (0.5.0).
 - [x] Implement parent/subagent task grouping and deduplicated selected-task receipt.
+- [x] Move receipt creation into a single action on the selected historical session, removing its separate page (0.6.3).
 - [x] Implement PNG preview, save, and clipboard export; render Chinese and missing-cost fixtures.
 - [x] Confirm same-panel navigation and visible calendar state controls with the user (0.2.0).
 - [ ] Complete settings, PNG save/clipboard, migration, and updated-layout desktop acceptance.

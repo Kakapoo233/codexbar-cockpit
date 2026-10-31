@@ -2743,7 +2743,7 @@
 "cockpit_ui_all" = "全部";
 "cockpit_ui_all_history" = "所有可用歷史紀錄";
 "cockpit_ui_attribution_note" = "僅記錄你的使用感受。目前無法驗證本機 Token 的帳號歸屬，因此不會將其附加至目前的配額帳號。";
-"cockpit_ui_automatic_cap" = "採用首次觀察時固定的每日建議。";
+"cockpit_ui_automatic_cap" = "使用目前自動計算的每日建議。";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "月曆";
@@ -2812,7 +2812,7 @@
 "cockpit_ui_preview_title" = "小票預覽";
 "cockpit_ui_previous_month" = "上個月";
 "cockpit_ui_provider" = "供應商";
-"cockpit_ui_receipt" = "任務小票";
+"cockpit_ui_receipt" = "用量收據";
 "cockpit_ui_receipt_grouping" = "子代理併入其父任務，每個工作階段僅計算一次。費用依定價估算，各幣別分別加總。";
 "cockpit_ui_receipt_scope_note" = "每個任務包含所有已掃描用量，可能超出活動篩選期間。";
 "cockpit_ui_receipt_task_count" = "本機用量小票 · %d 個任務";
@@ -2995,7 +2995,7 @@
 "cockpit_ui_personal_no_gain" = "在驗證週中，週間規律模型未優於已凍結計畫的基準。";
 "cockpit_ui_personal_ready" = "個人週間規律在獨立的 7 日驗證期中提高了已觀測用量的預測準確度。";
 "cockpit_ui_personal_holdout" = "7 日平均誤差：基準 %@ → 個人 %@ 個百分點";
-"cockpit_ui_personal_note" = "僅參考已觀測時段，不估算全天用量。合格日需有 6 小時可靠觀測，且相鄰間隔不超過 90 分鐘；缺少的時段不補零。已凍結建議與個人上限繼續生效。";
+"cockpit_ui_personal_note" = "僅參考已觀測時段，不估算全天用量。合格日需有 6 小時可靠觀測，且相鄰間隔不超過 90 分鐘；缺少的時段不補零。自動建議與個人上限繼續生效。";
 "cockpit_ui_comfort_weighted" = "依近期權重折算的完整樣本：%@";
 "cockpit_ui_comfort_recency" = "趨勢點更重視近期體驗，權重半衰期為 14 天；修改歷史日期不會改變其年齡。這描述 Token 使用體驗，不代表官方額度。";
 
@@ -3161,3 +3161,14 @@
 "Use my Cloudflare" = "使用我的 Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "使用團隊管理員提供的服務位址和邀請碼。";
 "Where do I get these settings?" = "如何取得這些設定？";
+
+/* Session usage receipt */
+"cockpit_ui_session_receipt_scope" = "僅包含目前工作階段在所示統計時間範圍內已記錄的用量。";
+"cockpit_ui_receipt_session_count" = "本機用量收據 · %d 個工作階段";
+
+/* Live daily advice */
+"cockpit_advice_reset_account" = "規劃視窗：帳號重置 %@";
+"cockpit_advice_reset_announced" = "規劃視窗：已公告重置 %@；帳號是否重置仍需確認。";
+"cockpit_advice_reset_estimated" = "規劃視窗：預計重置 %@，並非官方承諾。";
+"cockpit_advice_live_note" = "根據最新觀測餘額和剩餘時間動態計算，手動上限保持不變。";
+"cockpit_advice_partial_note" = "今日用量紀錄不完整，建議額度為暫估值。";

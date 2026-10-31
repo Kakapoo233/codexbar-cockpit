@@ -462,7 +462,14 @@ extension StatusItemController {
                     costMultiplier: displayConversion.multiplier,
                     timeZone: self.settings.costUsageBucketCalendar.timeZone,
                     activityRange: SessionUsagePresentation.toolActivityRange(
-                        snapshot: tokenSnapshot, calendar: self.settings.costUsageBucketCalendar))
+                        snapshot: tokenSnapshot, calendar: self.settings.costUsageBucketCalendar),
+                    sourceID: provider.rawValue,
+                    provider: provider,
+                    tokensArePartial: tokenSnapshot.historyScanIsPartial,
+                    costIsPartial: tokenSnapshot.historyScanIsPartial
+                        || tokenSnapshot.daily.contains {
+                            ($0.unpricedRequestCount ?? 0) > 0 || ($0.incompleteRequestCount ?? 0) > 0
+                        })
                 performAfterClosingSessionMenu(submenu) {
                     SessionUsageNavigation.shared.request = .init(context: context, sessionID: sessionID)
                     self.showCockpitStatistics()

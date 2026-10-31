@@ -2768,7 +2768,7 @@
 "cockpit_ui_all" = "Tümü";
 "cockpit_ui_all_history" = "Kullanılabilir Tüm Geçmiş";
 "cockpit_ui_attribution_note" = "Yalnızca deneyiminiz kaydedilir. Yerel token sahipliği henüz doğrulanamadığından etkin kota hesabına bağlanmaz.";
-"cockpit_ui_automatic_cap" = "İlk gözlemde sabitlenen günlük öneri kullanılıyor.";
+"cockpit_ui_automatic_cap" = "Güncel otomatik günlük öneri kullanılıyor.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Takvim";
@@ -2837,7 +2837,7 @@
 "cockpit_ui_preview_title" = "Fiş Önizlemesi";
 "cockpit_ui_previous_month" = "Önceki Ay";
 "cockpit_ui_provider" = "Sağlayıcı";
-"cockpit_ui_receipt" = "Görev Fişi";
+"cockpit_ui_receipt" = "Kullanım Fişi";
 "cockpit_ui_receipt_grouping" = "Alt ajanlar üst göreve katılır; her oturum bir kez sayılır. Maliyetler liste fiyatı tahminidir; para birimleri ayrı toplanır.";
 "cockpit_ui_receipt_scope_note" = "Her görev, etkinlik filtresi dışına taşabilecek tüm taranan kullanımı içerir.";
 "cockpit_ui_receipt_task_count" = "Yerel Kullanım Fişi · %d görev";
@@ -3018,7 +3018,7 @@
 "cockpit_ui_personal_no_gain" = "Haftanın günü modeli, doğrulama haftasında sabit plan temelinden daha iyi sonuç vermedi.";
 "cockpit_ui_personal_ready" = "Kişisel gün düzeniniz, ayrı bir 7 günlük doğrulama döneminde kaydedilen kullanımın tahmin doğruluğunu artırdı.";
 "cockpit_ui_personal_holdout" = "7 günlük ortalama hata: temel %@ → kişisel %@ yüzde puan";
-"cockpit_ui_personal_note" = "Yalnızca gözlemlenen dönemler içindir; tam günlük bir tahmin değildir. Uygun günler, 90 dakikayı aşan boşluklar olmadan 6 saat güvenilir gözlem gerektirir. Eksik dönemler sıfırla doldurulmaz; sabit öneriniz ve kişisel sınırınız geçerliliğini korur.";
+"cockpit_ui_personal_note" = "Yalnızca gözlemlenen dönemler içindir; tam günlük bir tahmin değildir. Uygun günler, 90 dakikayı aşan boşluklar olmadan 6 saat güvenilir gözlem gerektirir. Eksik dönemler sıfırla doldurulmaz; otomatik öneriniz ve kişisel sınırınız geçerliliğini korur.";
 "cockpit_ui_comfort_weighted" = "Güncelliğe göre ağırlıklandırılmış tam örnekler: %@";
 "cockpit_ui_comfort_recency" = "Eğilim noktaları, 14 günlük ağırlık yarı ömrüyle yakın tarihli deneyimlere daha fazla önem verir. Eski bir günü düzenlemek yaşını değiştirmez. Bu, resmi kotayı değil Token kullanım deneyimini açıklar.";
 
@@ -3182,3 +3182,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

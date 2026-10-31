@@ -2766,7 +2766,7 @@
 "cockpit_ui_all" = "Tất cả";
 "cockpit_ui_all_history" = "Toàn bộ lịch sử hiện có";
 "cockpit_ui_attribution_note" = "Chỉ ghi nhận trải nghiệm của bạn. Chưa thể xác minh token cục bộ thuộc tài khoản nào nên không gắn chúng với tài khoản hạn mức đang dùng.";
-"cockpit_ui_automatic_cap" = "Đang dùng gợi ý hằng ngày được cố định từ lần quan sát đầu tiên.";
+"cockpit_ui_automatic_cap" = "Đang dùng gợi ý hằng ngày được tính tự động hiện tại.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Lịch";
@@ -2835,7 +2835,7 @@
 "cockpit_ui_preview_title" = "Xem trước phiếu";
 "cockpit_ui_previous_month" = "Tháng trước";
 "cockpit_ui_provider" = "Nhà cung cấp";
-"cockpit_ui_receipt" = "Phiếu tác vụ";
+"cockpit_ui_receipt" = "Phiếu sử dụng";
 "cockpit_ui_receipt_grouping" = "Tác tử con được gộp vào tác vụ cha, mỗi phiên chỉ được tính một lần. Chi phí được ước tính theo giá niêm yết và cộng riêng từng loại tiền.";
 "cockpit_ui_receipt_scope_note" = "Mỗi tác vụ gồm toàn bộ mức sử dụng đã quét, có thể nằm ngoài khoảng lọc hoạt động.";
 "cockpit_ui_receipt_task_count" = "Phiếu sử dụng cục bộ · %d tác vụ";
@@ -3018,7 +3018,7 @@
 "cockpit_ui_personal_no_gain" = "Mô hình theo thứ không cải thiện so với đường cơ sở kế hoạch đã cố định trong tuần xác thực.";
 "cockpit_ui_personal_ready" = "Quy luật sử dụng cá nhân theo thứ đã tăng độ chính xác dự đoán mức dùng đã quan sát trong kỳ xác thực độc lập 7 ngày.";
 "cockpit_ui_personal_holdout" = "Sai số trung bình 7 ngày: cơ sở %@ → cá nhân %@ điểm phần trăm";
-"cockpit_ui_personal_note" = "Chỉ tham khảo các khoảng đã quan sát, không ước tính cả ngày. Ngày đạt yêu cầu cần có 6 giờ quan sát tin cậy và không có khoảng cách giữa các lần quan sát quá 90 phút. Khoảng bị thiếu không được điền bằng không; đề xuất đã cố định và giới hạn cá nhân vẫn được áp dụng.";
+"cockpit_ui_personal_note" = "Chỉ tham khảo các khoảng đã quan sát, không ước tính cả ngày. Ngày đạt yêu cầu cần có 6 giờ quan sát tin cậy và không có khoảng cách giữa các lần quan sát quá 90 phút. Khoảng bị thiếu không được điền bằng không; đề xuất tự động và giới hạn cá nhân vẫn được áp dụng.";
 "cockpit_ui_comfort_weighted" = "Mẫu đầy đủ có trọng số theo độ gần đây: %@";
 "cockpit_ui_comfort_recency" = "Các điểm xu hướng ưu tiên trải nghiệm gần đây hơn, với chu kỳ bán rã trọng số 14 ngày. Sửa ngày cũ không thay đổi tuổi dữ liệu. Đây là trải nghiệm dùng Token, không phải hạn mức chính thức.";
 
@@ -3182,3 +3182,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

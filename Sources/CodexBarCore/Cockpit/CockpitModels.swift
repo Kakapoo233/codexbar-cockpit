@@ -68,7 +68,7 @@ public struct CockpitDailyPlan: Codable, Equatable, Sendable {
     public let timeZoneIdentifier: String
     public let anchorAt: Date
     public let resetsAt: Date
-    /// Total observed use plus an even share of the balance available at the first daily observation.
+    /// Historical anchor retained for calibration. Live advice is computed from the latest observations.
     public let suggestedPercent: Double
 }
 
@@ -139,6 +139,9 @@ public struct CockpitDayStatus: Equatable, Sendable {
     public let resetsAt: Date?
     public let feeling: CockpitFeeling?
     public let isStale: Bool
+    /// The selected planning horizon; public horizons never replace the observed account reset metadata.
+    public var planningResetWindow: CockpitPlanningResetWindow?
+    public var suggestionIsPartial = false
 
     public var effectiveCapPercent: Double? {
         self.manualCapPercent ?? self.suggestedPercent

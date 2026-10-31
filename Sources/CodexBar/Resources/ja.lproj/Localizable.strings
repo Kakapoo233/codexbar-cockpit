@@ -2765,7 +2765,7 @@
 "cockpit_ui_all" = "すべて";
 "cockpit_ui_all_history" = "利用可能なすべての履歴";
 "cockpit_ui_attribution_note" = "使用感のみを記録します。ローカルのトークンの帰属先をまだ検証できないため、現在のクォータアカウントには関連付けません。";
-"cockpit_ui_automatic_cap" = "最初の観測時に固定した1日の推奨値を使用しています。";
+"cockpit_ui_automatic_cap" = "現在の自動計算による1日の推奨値を使用しています。";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "カレンダー";
@@ -2834,7 +2834,7 @@
 "cockpit_ui_preview_title" = "明細プレビュー";
 "cockpit_ui_previous_month" = "前月";
 "cockpit_ui_provider" = "プロバイダ";
-"cockpit_ui_receipt" = "タスク明細";
+"cockpit_ui_receipt" = "使用量明細";
 "cockpit_ui_receipt_grouping" = "サブエージェントは親タスクにまとめ、各セッションは1回だけ計上します。費用は定価による推定で、通貨別に集計します。";
 "cockpit_ui_receipt_scope_note" = "各タスクにはスキャン済みの全使用量が含まれ、活動期間フィルタの範囲外になる場合があります。";
 "cockpit_ui_receipt_task_count" = "ローカル使用量明細 · %dタスク";
@@ -3017,7 +3017,7 @@
 "cockpit_ui_personal_no_gain" = "検証週では、曜日別モデルは固定済み計画の基準を上回りませんでした。";
 "cockpit_ui_personal_ready" = "個人の曜日別傾向により、独立した7日間の検証期間で記録済み使用量の予測精度が向上しました。";
 "cockpit_ui_personal_holdout" = "7日間の平均誤差：基準 %@ → 個人 %@ パーセントポイント";
-"cockpit_ui_personal_note" = "観測した時間帯のみの参考で、1日全体の推定ではありません。適合日には信頼できる観測が6時間必要で、観測間隔は90分以内でなければなりません。欠損時間帯はゼロで補いません。固定済みの提案と個人上限が引き続き適用されます。";
+"cockpit_ui_personal_note" = "観測した時間帯のみの参考で、1日全体の推定ではありません。適合日には信頼できる観測が6時間必要で、観測間隔は90分以内でなければなりません。欠損時間帯はゼロで補いません。自動提案と個人上限が引き続き適用されます。";
 "cockpit_ui_comfort_weighted" = "新しさで重み付けした完全サンプル数：%@";
 "cockpit_ui_comfort_recency" = "傾向の各点は最近の体験を重視し、重みの半減期は14日です。過去の日付を編集しても経過日数は変わりません。これは Token の使用体験を示すもので、公式の割り当てではありません。";
 
@@ -3181,3 +3181,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";

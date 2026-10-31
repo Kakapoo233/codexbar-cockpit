@@ -1,5 +1,18 @@
 # Cockpit changes
 
+## 0.7.0 — Live reset-aware daily advice
+
+- Recalculate automatic daily advice from the latest account balance and remaining planning time.
+- Use earlier valid announced or estimated reset windows, label their source, and discard expired predictions.
+  Predictions never reset the observed quota; manual daily caps remain user-controlled.
+
+## 0.6.3 — Receipts in session history
+
+- Replace the standalone receipt page with a Usage Receipt button in the selected historical session's details.
+  Keep the existing PNG preview, copy and save actions.
+- Capture only that session's displayed reporting period, currency conversion and partial-data status.
+  Respect privacy settings and label the session scope on the exported receipt.
+
 ## 0.6.2 — Taller session history
 
 - Increase the Usage & Spend session browser from 600 to 760 points in both the Sessions tab and direct navigation.

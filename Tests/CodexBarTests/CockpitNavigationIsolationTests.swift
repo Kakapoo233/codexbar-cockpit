@@ -26,42 +26,16 @@ struct CockpitNavigationIsolationTests {
     }
 
     @Test
-    func `receipt navigation and local range edits cannot rewrite statistics filters`() async throws {
-        let fixture = try await Self.fixture()
-        defer { fixture.controller.stop() }
-        let receipt = CockpitUsageProjection(controller: fixture.controller, nowProvider: { Self.now })
-        let calendar = CockpitUsageProjection(controller: fixture.controller, nowProvider: { Self.now })
-        let saved = fixture.defaults.string(forKey: "settingsSpendDashboardPeriod")
-
-        receipt.receiptPeriod = .rolling(days: 7)
-        #expect(receipt.receiptModel.groups.first?.totalCost == 2)
-        receipt.receiptPeriod = .rolling(days: 90)
-        #expect(receipt.receiptModel.selectedDay == nil)
-        #expect(receipt.receiptModel.groups.first?.totalCost == 3)
-        _ = calendar.calendarModel
-        #expect(calendar.receiptPeriod == .rolling(days: 30))
-        #expect(fixture.controller.selectedPeriod == .rolling(days: 7))
-        #expect(fixture.controller.selectedDay == Self.selectedDay)
-        #expect(fixture.defaults.string(forKey: "settingsSpendDashboardPeriod") == saved)
-        #expect(await fixture.loads.count == 1)
-    }
-
-    @Test
-    func `a shared publication refresh reaches both projections without changing any filters`() async throws {
+    func `a shared publication refresh reaches the calendar without changing statistics filters`() async throws {
         let fixture = try await Self.fixture()
         defer { fixture.controller.stop() }
         let calendar = CockpitUsageProjection(controller: fixture.controller, nowProvider: { Self.now })
-        let receipt = CockpitUsageProjection(controller: fixture.controller, nowProvider: { Self.now })
-        receipt.receiptPeriod = .monthToDate
         #expect(calendar.calendarModel.groups.first?.totalCost == 3)
-        #expect(receipt.receiptModel.groups.first?.totalCost == 3)
 
         fixture.controller.refresh()
         try await Self.waitUntilIdle(fixture.controller)
 
         #expect(calendar.calendarModel.groups.first?.totalCost == 6)
-        #expect(receipt.receiptModel.groups.first?.totalCost == 6)
-        #expect(receipt.receiptPeriod == .monthToDate)
         #expect(fixture.controller.selectedPeriod == .rolling(days: 7))
         #expect(fixture.controller.selectedDay == Self.selectedDay)
         #expect(await fixture.loads.count == 2)

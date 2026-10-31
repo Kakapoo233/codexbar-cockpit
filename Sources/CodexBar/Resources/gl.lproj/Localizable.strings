@@ -2764,7 +2764,7 @@
 "cockpit_ui_all" = "Todo";
 "cockpit_ui_all_history" = "Todo o historial dispoñible";
 "cockpit_ui_attribution_note" = "Só se rexistra a túa experiencia. Aínda non se pode verificar a pertenza dos tokens locais, polo que non se asignan á conta de cota activa.";
-"cockpit_ui_automatic_cap" = "Úsase a suxestión diaria fixada na primeira observación.";
+"cockpit_ui_automatic_cap" = "Úsase a suxestión diaria automática actual.";
 "cockpit_ui_brand" = "CodexBar Cockpit";
 "cockpit_ui_brand_receipt" = "CODEXBAR COCKPIT";
 "cockpit_ui_calendar" = "Calendario";
@@ -2833,7 +2833,7 @@
 "cockpit_ui_preview_title" = "Previsualización do recibo";
 "cockpit_ui_previous_month" = "Mes anterior";
 "cockpit_ui_provider" = "Provedor";
-"cockpit_ui_receipt" = "Recibo da tarefa";
+"cockpit_ui_receipt" = "Recibo de uso";
 "cockpit_ui_receipt_grouping" = "Os subaxentes únense á tarefa principal e cada sesión cóntase unha vez. Os custos son estimacións a prezo de catálogo; as moedas súmanse por separado.";
 "cockpit_ui_receipt_scope_note" = "Cada tarefa inclúe todo o uso examinado, que pode quedar fóra do filtro de actividade.";
 "cockpit_ui_receipt_task_count" = "Recibo de uso local · %d tarefas";
@@ -3014,7 +3014,7 @@
 "cockpit_ui_personal_no_gain" = "O modelo por día da semana non mellorou a base do plan conxelado durante a semana de validación.";
 "cockpit_ui_personal_ready" = "O teu patrón por día da semana mellorou a predición do uso rexistrado nun período independente de validación de 7 días.";
 "cockpit_ui_personal_holdout" = "Erro medio de 7 días: base %@ → persoal %@ puntos porcentuais";
-"cockpit_ui_personal_note" = "Só períodos rexistrados, non unha estimación do día completo. Os días válidos precisan 6 horas de observacións fiables sen intervalos de máis de 90 minutos. Os períodos ausentes nunca se enchen con cero; a suxestión conxelada e o límite persoal seguen vixentes.";
+"cockpit_ui_personal_note" = "Só períodos rexistrados, non unha estimación do día completo. Os días válidos precisan 6 horas de observacións fiables sen intervalos de máis de 90 minutos. Os períodos ausentes nunca se enchen con cero; a suxestión automática e o límite persoal seguen vixentes.";
 "cockpit_ui_comfort_weighted" = "Mostras completas ponderadas pola súa proximidade no tempo: %@";
 "cockpit_ui_comfort_recency" = "Os puntos de tendencia dan máis peso á experiencia recente, cunha semivida de 14 días. Editar un día anterior conserva a súa antigüidade. Isto describe a experiencia de uso de tokens, non a cota oficial.";
 
@@ -3178,3 +3178,14 @@
 "Use my Cloudflare" = "Use my Cloudflare";
 "Use the service address and invitation supplied by your team administrator." = "Use the service address and invitation supplied by your team administrator.";
 "Where do I get these settings?" = "Where do I get these settings?";
+
+/* Session usage receipt (English fallback) */
+"cockpit_ui_session_receipt_scope" = "Only this session’s recorded usage in the displayed reporting period is included.";
+"cockpit_ui_receipt_session_count" = "Local Usage Receipt · %d sessions";
+
+/* Live daily advice (English fallback) */
+"cockpit_advice_reset_account" = "Planning window: account reset %@";
+"cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
+"cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
+"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";
