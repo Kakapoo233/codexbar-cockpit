@@ -230,6 +230,7 @@ export interface ResetForecast {
 
 
 export interface WidgetPreferences {
+  displayMode?: "tray" | "floating";
   enabledProviders?: ProviderId[];
   trayMode?: "percent" | "bar" | "circle";
   trayEnglish?: boolean;

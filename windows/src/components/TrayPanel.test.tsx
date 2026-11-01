@@ -46,6 +46,18 @@ it("saves tray presentation and English text choices through canonical preferenc
   fireEvent.click(screen.getByLabelText("Tray text in English"));
   expect(fixture.onPreferences).toHaveBeenCalledWith(expect.objectContaining({ trayEnglish: true, language: "en" }));
   expect(screen.getByText("Cloud settings")).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("Display mode"), { target: { value: "floating" } });
+  expect(fixture.onPreferences).toHaveBeenCalledWith(expect.objectContaining({ displayMode: "floating" }));
+  fireEvent.click(screen.getByLabelText("Keep floating window on top"));
+  expect(fixture.onPreferences).toHaveBeenCalledWith(expect.objectContaining({ alwaysOnTop: false }));
+});
+it("handles a settings request received before mount and repeated requests after local navigation", () => {
+  const fixture = props();
+  const { rerender } = render(<TrayPanel {...fixture} pageRequest={{ page: "settings", id: 1 }} />);
+  expect(screen.getByRole("main", { name: "Settings page" })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Calendar" }));
+  rerender(<TrayPanel {...fixture} pageRequest={{ page: "settings", id: 2 }} />);
+  expect(screen.getByRole("main", { name: "Settings page" })).toBeInTheDocument();
 });
 it("starts a newly selected page at the top without resetting the active page on refresh", () => {
   const fixture = props();

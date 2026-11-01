@@ -18,6 +18,7 @@ import "./TrayPanel.css";
 type Page = "usage" | "statistics" | "calendar" | "members" | "settings";
 type Range = "7d" | "30d" | "90d" | "month" | "all";
 interface Props {
+  pageRequest?: { page: "usage" | "settings"; id: number };
   preferences: WidgetPreferences; onPreferences: (value: WidgetPreferences) => void;
   snapshots: ProviderSnapshot[]; plan: CockpitDailyPlanStatus; history: CockpitQuotaObservation[];
   forecast: ResetForecast | null; now: Date; usage: TokeiUsage | null; usageError: boolean;
@@ -89,7 +90,7 @@ function QuotaHistory({ history, range, zh }: { history: CockpitQuotaObservation
 export function TrayPanel(props: Props) {
   const { preferences, onPreferences, plan, now, forecast } = props;
   const zh = preferences.language !== "en";
-  const [page, setPage] = useState<Page>("usage");
+  const [page, setPage] = useState<Page>(props.pageRequest?.page ?? "usage");
   const [range, setRange] = useState<Range>("7d");
   const contentRef = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
@@ -101,19 +102,13 @@ export function TrayPanel(props: Props) {
   const partial = plan.coverage !== "complete";
   const qualifier = `${plan.isStale ? "≈" : ""}${partial ? "≤" : ""}`;
   const patch = (value: Partial<WidgetPreferences>) => onPreferences({ ...preferences, ...value });
-  useEffect(() => {
-    if (!isTauri()) return;
-    let active = true;
-    let cleanup: (() => void) | undefined;
-    void import("@tauri-apps/api/event").then(({ listen }) => listen("open-settings", () => setPage("settings"))).then(value => { if (active) cleanup = value; else value(); });
-    return () => { active = false; cleanup?.(); };
-  }, []);
+  useEffect(() => { if (props.pageRequest) setPage(props.pageRequest.page); }, [props.pageRequest]);
   return <div className="tray-panel" onKeyDown={event => { if (event.key === "Escape" && !(event.target instanceof HTMLSelectElement)) props.onHide(); }}>
     <header className="tray-panel-header">
       <div><strong>CodexBar Cockpit</strong><small>{isTauri() ? "Windows" : zh ? "合成数据预览" : "Synthetic preview"}</small></div>
       <div className="tray-header-actions"><button type="button" disabled={props.refreshing || !props.startupReady} onClick={props.onRefresh} title={zh ? "刷新额度与本机用量" : "Refresh quota and local usage"} aria-label={zh ? "刷新" : "Refresh"}><ArrowClockwise /></button>
         <button type="button" onClick={() => setPage("settings")} title={zh ? "设置" : "Settings"} aria-label={zh ? "设置" : "Settings"}><GearSix /></button>
-        <button type="button" onClick={props.onHide} title={zh ? "收起到系统托盘" : "Hide in system tray"} aria-label={zh ? "收起" : "Hide"}><X /></button></div>
+        <button type="button" onClick={props.onHide} title={preferences.displayMode === "floating" ? (zh ? "返回悬浮窗" : "Back to floating summary") : (zh ? "收起到系统托盘" : "Hide in system tray")} aria-label={zh ? "收起" : "Hide"}><X /></button></div>
     </header>
     <nav className="tray-page-tabs" aria-label={zh ? "页面" : "Pages"}>
       {(["usage", "statistics", "calendar", "members"] as const).map(value => <button key={value} type="button" aria-pressed={page === value} onClick={() => setPage(value)}>{({ usage: zh ? "用量" : "Usage", statistics: zh ? "用量统计" : "Statistics", calendar: zh ? "日历" : "Calendar", members: zh ? "组员与设备" : "Members & devices" })[value]}</button>)}
@@ -147,6 +142,8 @@ export function TrayPanel(props: Props) {
         {page === "settings" && <div className="tray-settings">
           <fieldset disabled={!props.settingsWritable}>
             <section className="tray-card"><h2>{zh ? "托盘与界面" : "Tray & appearance"}</h2>
+              <label className="tray-setting-row"><span>{zh ? "显示方式" : "Display mode"}</span><select value={preferences.displayMode ?? "tray"} onChange={event => patch({ displayMode: event.target.value as WidgetPreferences["displayMode"] })}><option value="tray">{zh ? "托盘面板" : "Tray panel"}</option><option value="floating">{zh ? "简洁悬浮窗" : "Compact floating window"}</option></select></label>
+              <label className="tray-setting-row tray-toggle-row"><span>{zh ? "悬浮窗置顶" : "Keep floating window on top"}</span><input type="checkbox" checked={preferences.alwaysOnTop} onChange={event => patch({ alwaysOnTop: event.target.checked })} /></label>
               <label className="tray-setting-row"><span>{zh ? "今日还能用显示形式" : "Available today display"}</span><select value={preferences.trayMode ?? "circle"} onChange={event => patch({ trayMode: event.target.value as WidgetPreferences["trayMode"] })} title={zh ? "按今日分配额度计算，支持数字、用量条和从下往上填充的圆形。" : "Remaining daily allocation shown as percentage, bar, or bottom-up filled circle."}><option value="percent">{zh ? "数字百分比" : "Percentage"}</option><option value="bar">{zh ? "用量条" : "Bar"}</option><option value="circle">{zh ? "圆形填充" : "Filled circle"}</option></select></label>
               <label className="tray-setting-row tray-toggle-row"><span>{zh ? "托盘文字使用英文" : "Tray text in English"}</span><input type="checkbox" checked={preferences.trayEnglish === true} onChange={event => patch({ trayEnglish: event.target.checked })} title={zh ? "仅托盘提示使用英文，展开面板保持当前语言。" : "Use English only for the tray tooltip; the panel keeps its selected language."} /></label>
               <label className="tray-setting-row"><span>{zh ? "语言" : "Language"}</span><select value={preferences.language} onChange={event => patch({ language: event.target.value as WidgetPreferences["language"] })}><option value="zh-CN">简体中文</option><option value="en">English</option></select></label>
@@ -158,7 +155,7 @@ export function TrayPanel(props: Props) {
           </fieldset>
           <LocalUsageSourceSettings zh={zh} onSaved={() => { props.onRefresh(); }} />
           <CloudSyncSettings usage={props.usage} zh={zh} onSynced={props.onUsageRefresh} />
-          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? "0.1.0-alpha.3"}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
+          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? "0.1.0-alpha.4"}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
         </div>}
       </main>
     </div>

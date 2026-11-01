@@ -173,9 +173,14 @@ function enqueueRuntimeWrite(operation: () => Promise<void>): Promise<void> {
 // The native --ui-preview builder has no application commands or plugins either.
 export const isSyntheticPreview = () => new URLSearchParams(window.location?.search ?? "").get("synthetic-preview") === "1";
 export const isTauri = () => "__TAURI_INTERNALS__" in window && !isSyntheticPreview();
+const hasUsagePreview = () => isSyntheticPreview()
+  && new URLSearchParams(window.location?.search ?? "").get("sample") === "usage";
 
 export async function fetchSnapshots(force = false): Promise<ProviderSnapshot[]> {
-  if (!isTauri()) return mockSnapshots;
+  if (!isTauri()) return hasUsagePreview() ? mockSnapshots.map(snapshot => snapshot.provider === "codex" ? {
+    ...snapshot, accountScope: "synthetic-codex",
+    shortWindow: { remainingPercent: 86, resetsAt: new Date(Date.now() + 2 * 3_600_000).toISOString(), windowSeconds: 18_000 },
+  } : snapshot) : mockSnapshots;
   const { invoke } = await import("@tauri-apps/api/core");
   return invoke<ProviderSnapshot[]>(force ? "refresh_snapshots" : "get_snapshots");
 }
@@ -259,7 +264,8 @@ export async function reconnectVolcengine(): Promise<VolcengineDiagnostics> {
 }
 
 export async function getPreferences(): Promise<WidgetPreferences> {
-  if (!isTauri()) return defaultPreferences;
+  if (!isTauri()) return new URLSearchParams(window.location?.search ?? "").get("surface") === "compact"
+    ? { ...defaultPreferences, displayMode: "floating" } : defaultPreferences;
   const { invoke } = await import("@tauri-apps/api/core");
   return invoke<WidgetPreferences>("get_preferences");
 }
@@ -285,7 +291,18 @@ export async function setAutostartEnabled(enabled: boolean): Promise<boolean> {
 }
 
 export async function getRuntimeState(): Promise<RuntimeState> {
-  if (!isTauri()) return structuredClone(EMPTY_RUNTIME_STATE);
+  if (!isTauri()) {
+    const state = structuredClone(EMPTY_RUNTIME_STATE);
+    if (hasUsagePreview()) {
+      const snapshot = mockSnapshots[0];
+      state.cockpitQuotaObservations = [
+        { capturedAt: new Date(Date.parse(snapshot.updatedAt) - 2 * 3_600_000).toISOString(), remainingPercent: 86 },
+        { capturedAt: snapshot.updatedAt, remainingPercent: 74 },
+      ].map(value => ({ ...value, providerID: "codex", accountID: "synthetic-codex",
+        resetsAt: snapshot.weeklyWindow!.resetsAt!, windowDurationSeconds: 604_800, coverage: "complete" as const }));
+    }
+    return state;
+  }
   const { invoke } = await import("@tauri-apps/api/core");
   return normalizeRuntimeState(await invoke("get_runtime_state"));
 }

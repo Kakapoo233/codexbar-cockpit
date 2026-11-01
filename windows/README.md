@@ -3,7 +3,7 @@
 Development client, based on MIT Codex Cockpit v0.3.4, commit
 `cefcbc9efe03071150431645b4ebb51e7faac574`. See LICENSE.upstream.
 
-The Windows client is being adapted to a system tray panel. It is separate from the Swift Mac client.
+The Windows client supports a system tray panel and an optional compact floating summary. It is separate from the Swift Mac client.
 This directory is not yet a claim of full provider, language, calendar or synchronization parity.
 Activity export remains blocked until the fork's account binding, source declaration and day boundary
 are implemented. Local history stays local. Cloudflare connection/member reads are separate.
@@ -45,3 +45,23 @@ It opens a visible resizable window titled `CodexBar Cockpit - Synthetic UI Prev
 same frontend with synthetic data in a new temporary profile. It has no plugins, application command
 handlers, provider collectors or cloud clients, and blocks external navigation. Closing the window exits.
 Normal startup and `--smoke-test` remain separate paths.
+
+## Compact floating window (alpha.4)
+
+In Settings → Display mode, select **Compact floating window**. The 340×170 logical-pixel card
+shows Codex short-term and weekly quota, today's remaining daily allocation, and the full-day
+recommendation. Percentage, bar and bottom-up filled circle use the same daily values as the full
+panel. Unknown values remain unknown. English daily labels use T; detailed hover/accessibility text
+retains the weekly equivalent and incomplete-data qualification.
+
+Drag the header to move it. Settings controls always-on-top behavior. The detail button opens the
+complete panel in the same WebView; closing that panel returns to the summary. Clicking elsewhere
+keeps the compact card visible. Hiding it is recoverable from the tray. The display mode and position
+are stored locally; older preferences retain tray mode. Collection and planning stay in the same App
+instance while surfaces change.
+
+For an isolated native preview use `--ui-preview --floating-preview`; for credential-free startup
+verification use `--smoke-test --smoke-floating`. CI verifies both tray and floating startup.
+The browser equivalent is `/?synthetic-preview=1&surface=compact&sample=usage`; its account and
+quota ledger are fictional and no native handlers are invoked. Browser geometry checks do not
+establish Windows drag, focus, tray or physical-DPI acceptance.

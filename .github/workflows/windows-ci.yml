@@ -44,6 +44,17 @@ jobs:
           if (-not $app.WaitForExit(30000)) { $app.Kill(); throw 'Tray startup timed out' }
           if ($app.ExitCode -ne 0 -or -not (Test-Path $marker)) { throw 'Tray startup failed' }
           Get-Content $marker
+      - name: Isolated native floating startup
+        shell: pwsh
+        run: |
+          $marker = Join-Path $env:RUNNER_TEMP 'cockpit-floating-smoke.json'
+          $env:COCKPIT_SMOKE_OUTPUT = $marker
+          $app = Start-Process 'src-tauri/target/release/codexbar-cockpit-windows.exe' -ArgumentList @('--smoke-test', '--smoke-floating') -PassThru
+          if (-not $app.WaitForExit(30000)) { $app.Kill(); throw 'Floating startup timed out' }
+          if ($app.ExitCode -ne 0 -or -not (Test-Path $marker)) { throw 'Floating startup failed' }
+          $result = Get-Content $marker | ConvertFrom-Json
+          if (-not $result.isolated -or -not $result.tray -or -not $result.floating -or $result.presentation.surface -ne 'compact') { throw 'Floating presentation was not established' }
+          Get-Content $marker
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: codexbar-cockpit-windows-x64-alpha

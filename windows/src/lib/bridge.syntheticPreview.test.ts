@@ -32,3 +32,15 @@ it.each(["", "?preview=1", "?synthetic-preview=0", "?synthetic-preview=true", "?
     expect(isTauri()).toBe(true);
   },
 );
+
+it("provides an opt-in synthetic floating quota ledger without native account reads", async () => {
+  vi.stubGlobal("window", { __TAURI_INTERNALS__: {}, location: { search: "?synthetic-preview=1&surface=compact&sample=usage" } });
+  expect((await getPreferences()).displayMode).toBe("floating");
+  const codex = (await fetchSnapshots()).find(snapshot => snapshot.provider === "codex")!;
+  const ledger = (await getRuntimeState()).cockpitQuotaObservations!;
+  expect(codex.accountScope).toBe("synthetic-codex");
+  expect(codex.shortWindow?.remainingPercent).toBe(86);
+  expect(ledger).toHaveLength(2);
+  expect(ledger.every(row => row.accountID === codex.accountScope && row.resetsAt === codex.weeklyWindow?.resetsAt)).toBe(true);
+  expect(native.invoke).not.toHaveBeenCalled();
+});
