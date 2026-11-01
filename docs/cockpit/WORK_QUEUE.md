@@ -4,6 +4,7 @@ Updated 2026-10-31. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Enlarge calendar text by 50% | Implemented and installed in 0.8.3 | Calendar dates, values, native selectors and details use 1.5× type sizes; date cells and badges expand with the text, and narrow weekly layouts remain scrollable. |
 | Show today's availability relative to the daily allocation, alongside weekly quota percentage | Implemented and installed in 0.8.2 | A 20% weekly daily allocation with 5% weekly consumed displays 75% of today's allocation and 15% of weekly quota. Manual caps select the denominator; partial/unknown values retain their meaning. |
 | Correct full-day advice and show available allowance separately | Implemented and installed in 0.8.1 | 90% remaining / 6 days gives a 15% base allocation at 08:00, before reset-risk boost and comfort cap; observed use is deducted once and allowance is bounded by actual balance. |
 | Use the original Cockpit comfort curve in daily estimates | Implemented and installed in 0.8.1 | Same-account quota feedback fits the curve; baseline/fitted cap and risk sources are explained. Manual caps retain priority. Token feedback never becomes quota percentage. |
@@ -15,6 +16,8 @@ Updated 2026-10-31. These items are one ongoing local developer-app iteration; s
 | Integrate usage receipts into Usage & Spend | Implemented and installed in 0.8.0 | One action on the selected historical session, preview/export in context, no separate receipt navigation page. |
 | Diagnose Usage & Spend not working | Closed by user | User reports the problem is no longer present and requested skipping it; no speculative fix. |
 | Update Settings About | Delivered; live-verified | Correct fork identity, version, project/support/changelog links and upstream attribution. |
+
+0.8.3 validation: 9 focused tests across 4 suites passed, including native picker font size, action-to-binding updates, external selection changes and invalid choices. `make check` passed (3,241 Swift files). Synthetic wide/narrow panels and day/week/month/year layouts were visually checked locally. Packaging, signatures and isolated startup passed; developer app 0.8.3 build 23 is installed and verified running with a 0.8.2 backup. Live panel interaction remains unverified because the UI connection times out.
 
 0.8.2 validation: 93 focused tests across 14 suites passed. `make check` passed (3,238 Swift files; 23 locale catalogs). A GitHub compiler error in the comfort chart was fixed with an explicit distance conversion; targeted format/lint and 11 follow-up tests passed. Wide and narrow synthetic panels show both daily and weekly units. Packaging, signatures and isolated startup passed; developer app 0.8.2 build 22 is installed and running with a 0.8.1 backup. Live panel interaction remains unverified because the UI connection times out.
 

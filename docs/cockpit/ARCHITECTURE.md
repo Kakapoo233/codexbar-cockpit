@@ -32,6 +32,8 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   history, with calendar-aware boundaries and separate currency totals.
 - Day, week and month reuse the same calendar date cells and reset/feedback markers. A compact reset
   announcement and period toolbar remain above the scrolling calendar and selected-day details.
+  Calendar-only typography scales native text styles by 1.5; date badges, cell heights and chart areas
+  accommodate the larger text. Narrow weekly strips retain horizontal scrolling.
 - The Usage homepage displays a countdown only for a fresh, pending public announcement with an exact
   future date. Estimates, undated announcements and expired deadlines never create a homepage banner.
   Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors;

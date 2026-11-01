@@ -45,16 +45,16 @@ struct CockpitCalendarPeriodSummaryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(L("cockpit_calendar_period_total"))
-                .font(.caption.weight(.medium)).foregroundStyle(.secondary)
+                .font(CockpitCalendarTypography.caption.weight(.medium)).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 6) {
                 Text(self.ledger.text(self.ledger.summary(for: self.period), metric: self.metric))
-                    .font(.title3.monospacedDigit().weight(.semibold))
+                    .font(CockpitCalendarTypography.title3.monospacedDigit().weight(.semibold))
                     .textSelection(.enabled)
                 Text(L("cockpit_calendar_partial"))
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 if self.metric == .cost {
                     Text(L("cockpit_calendar_currency_note"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -94,17 +94,17 @@ struct CockpitCalendarPeriodView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if self.period.scale == .day {
-                self.dateStrip(minimumHeight: 160)
+                self.dateStrip(minimumHeight: 240)
             } else if self.period.scale == .week {
                 ViewThatFits(in: .horizontal) {
-                    self.dateStrip(minimumHeight: 176).frame(minWidth: 560)
+                    self.dateStrip(minimumHeight: 264).frame(minWidth: 700)
                     ScrollView(.horizontal) {
-                        self.dateStrip(minimumHeight: 176).frame(width: 560)
+                        self.dateStrip(minimumHeight: 264).frame(width: 700)
                     }
-                    .frame(height: 176)
+                    .frame(height: 264)
                 }
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 0)], spacing: 0) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 225), spacing: 0)], spacing: 0) {
                     ForEach(self.subperiods, id: \.start) { period in
                         self.cell(period)
                     }
@@ -112,7 +112,7 @@ struct CockpitCalendarPeriodView: View {
                 .modifier(CockpitCalendarSurface())
             }
             Text(L("cockpit_calendar_select_day"))
-                .font(.caption).foregroundStyle(.secondary)
+                .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
         }
     }
 
@@ -140,10 +140,10 @@ struct CockpitCalendarPeriodView: View {
         let value = self.ledger.text(self.ledger.summary(for: period), metric: self.metric)
         return Button { self.select(period.start) } label: {
             VStack(alignment: .leading, spacing: 5) {
-                Text(title).font(.caption.weight(.semibold))
-                Text(value).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                Text(title).font(CockpitCalendarTypography.caption.weight(.semibold))
+                Text(value).font(CockpitCalendarTypography.caption.monospacedDigit()).foregroundStyle(.secondary)
             }
-            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
             .padding(9)
             .background(selected ? Color.accentColor.opacity(0.055) : Color.clear)
             .modifier(CockpitCalendarCellBorder())
@@ -165,15 +165,13 @@ struct CockpitCalendarToolbar: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Picker(L("cockpit_calendar_scale"), selection: self.$scale) {
-                ForEach(CockpitCalendarScale.allCases) { scale in
-                    Text(scale.cockpitTitle).tag(scale)
-                }
-            }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-            .frame(maxWidth: 500)
-            .frame(maxWidth: .infinity)
+            CockpitCalendarPicker(
+                selection: self.$scale,
+                choices: CockpitCalendarScale.allCases,
+                title: { $0.cockpitTitle },
+                label: L("cockpit_calendar_scale"))
+                .frame(maxWidth: 750)
+                .frame(maxWidth: .infinity)
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .firstTextBaseline, spacing: 12) {
                     self.periodTitle
@@ -191,12 +189,13 @@ struct CockpitCalendarToolbar: View {
                 }
             }
         }
+        .font(CockpitCalendarTypography.body)
         .accessibilityIdentifier("cockpit-calendar-toolbar")
     }
 
     private var periodTitle: some View {
         Text(self.title)
-            .font(.system(size: 23, weight: .semibold))
+            .font(CockpitCalendarTypography.font(size: 23, weight: .semibold))
             .lineLimit(2)
             .fixedSize(horizontal: false, vertical: true)
     }
@@ -209,19 +208,18 @@ struct CockpitCalendarToolbar: View {
             Button(action: self.next) { Image(systemName: "chevron.right") }
                 .accessibilityLabel(L("cockpit_calendar_next"))
         }
+        .font(CockpitCalendarTypography.smallControl)
         .buttonStyle(.borderless)
         .controlSize(.small)
         .fixedSize()
     }
 
     private var metricPicker: some View {
-        Picker(L("cockpit_calendar_metric"), selection: self.$metric) {
-            ForEach(CockpitCalendarMetric.allCases) { metric in
-                Text(metric.title).tag(metric)
-            }
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .frame(width: 150)
+        CockpitCalendarPicker(
+            selection: self.$metric,
+            choices: CockpitCalendarMetric.allCases,
+            title: { $0.title },
+            label: L("cockpit_calendar_metric"))
+            .frame(width: 225)
     }
 }

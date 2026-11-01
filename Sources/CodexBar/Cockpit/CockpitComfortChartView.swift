@@ -25,7 +25,7 @@ struct CockpitComfortChartView: View {
     let records: [CockpitComfortRecord]
 
     var body: some View {
-        GroupBox(L("cockpit_ui_experience")) {
+        GroupBox {
             VStack(alignment: .leading, spacing: 14) {
                 if !self.model.observations.isEmpty {
                     Chart {
@@ -43,21 +43,49 @@ struct CockpitComfortChartView: View {
                         }
                     }
                     .chartYScale(domain: 0...1.05)
-                    .chartXAxisLabel(L("cockpit_ui_chart_tokens"))
-                    .frame(height: 220)
+                    .chartXAxis {
+                        AxisMarks { value in
+                            AxisGridLine()
+                            AxisTick()
+                            AxisValueLabel {
+                                if let tokens = value.as(Double.self) {
+                                    Text(tokens.formatted(.number.notation(.compactName)
+                                            .locale(codexBarLocalizedLocale())))
+                                        .font(CockpitCalendarTypography.caption)
+                                }
+                            }
+                        }
+                    }
+                    .chartYAxis {
+                        AxisMarks { value in
+                            AxisGridLine()
+                            AxisTick()
+                            AxisValueLabel {
+                                if let score = value.as(Double.self) {
+                                    Text(score.formatted(.number
+                                            .locale(codexBarLocalizedLocale())))
+                                        .font(CockpitCalendarTypography.caption)
+                                }
+                            }
+                        }
+                    }
+                    .chartXAxisLabel {
+                        Text(L("cockpit_ui_chart_tokens")).font(CockpitCalendarTypography.caption)
+                    }
+                    .frame(height: CockpitCalendarTypography.scaled(220))
                     .accessibilityLabel(L("cockpit_ui_chart_accessibility"))
                 }
                 if self.model.status == .insufficientData {
                     Text(L("cockpit_ui_chart_insufficient"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
                 Text(L(
                     "cockpit_ui_comfort_weighted",
                     self.model.recencyWeightedSampleCount.formatted(
                         .number.precision(.fractionLength(1)).locale(codexBarLocalizedLocale()))))
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 Text(L("cockpit_ui_comfort_recency"))
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption2).foregroundStyle(.secondary)
                 ForEach(self.records.prefix(7)) { record in
                     HStack {
                         Text(record.localDateKey).monospacedDigit()
@@ -67,7 +95,7 @@ struct CockpitComfortChartView: View {
                             .map(UsageFormatter.tokenCountString) ?? L("cockpit_ui_incomplete_tokens"))
                             .foregroundStyle(.secondary)
                     }
-                    .font(.caption)
+                    .font(CockpitCalendarTypography.caption)
                 }
                 if self.records.isEmpty {
                     Text(L("cockpit_ui_empty_feelings"))
@@ -75,6 +103,9 @@ struct CockpitComfortChartView: View {
                 }
             }
             .padding(10)
+        } label: {
+            Text(L("cockpit_ui_experience")).font(CockpitCalendarTypography.body)
         }
+        .font(CockpitCalendarTypography.body)
     }
 }

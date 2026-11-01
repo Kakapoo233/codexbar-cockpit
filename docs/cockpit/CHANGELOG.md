@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.8.3 — Larger calendar text
+
+- Increase calendar text by 50%, including dates, values, controls, reset notices and comfort charts.
+- Enlarge date badges and cells, keep narrow weekly views scrollable, and wrap reset details and legends to fit the larger type.
+
 ## 0.8.2 — Daily and weekly percentage bases
 
 - Show today's available allowance primarily as a percentage of today's effective allocation, with its equivalent weekly-quota percentage alongside it.
