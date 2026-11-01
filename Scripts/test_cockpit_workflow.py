@@ -56,7 +56,8 @@ def check_windows_workflow(workflow):
         'run: npm ci', 'run: npm test', 'run: npm run build',
         'run: cargo test --locked --manifest-path src-tauri/Cargo.toml',
         'run: npm run tauri build -- --bundles nsis',
-        "-ArgumentList '--smoke-test'", 'if-no-files-found: error',
+        "-ArgumentList '--smoke-test'", "@('--smoke-test', '--smoke-floating')",
+        "$result.presentation.surface -ne 'compact'", 'if-no-files-found: error',
     ]
     if any(command not in workflow for command in required):
         raise ValueError('Windows CI must test, package, check startup and retain its installer')
@@ -93,7 +94,8 @@ class CockpitWorkflowTests(unittest.TestCase):
         workflow = (WORKFLOW.parent / 'windows-ci.yml').read_text()
         for original in ['run: npm test', 'run: npm run build',
                          'run: cargo test --locked --manifest-path src-tauri/Cargo.toml',
-                         "-ArgumentList '--smoke-test'", 'contents: read']:
+                         "-ArgumentList '--smoke-test'", "@('--smoke-test', '--smoke-floating')",
+                         "$result.presentation.surface -ne 'compact'", 'contents: read']:
             with self.subTest(original=original):
                 with self.assertRaises(ValueError):
                     check_windows_workflow(workflow.replace(original, 'skipped'))

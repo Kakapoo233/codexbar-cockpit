@@ -78,6 +78,8 @@ pub struct WidgetPreferences {
     pub tray_mode: String,
     #[serde(default)]
     pub tray_english: bool,
+    #[serde(default = "default_display_mode")]
+    pub display_mode: String,
     #[serde(default = "default_enabled_providers")]
     pub enabled_providers: Vec<String>,
     #[serde(default)]
@@ -155,6 +157,10 @@ pub struct WidgetPreferences {
 
 fn default_enabled_providers() -> Vec<String> {
     vec!["codex".into()]
+}
+
+fn default_display_mode() -> String {
+    "tray".into()
 }
 
 fn default_tray_mode() -> String {
@@ -236,6 +242,7 @@ impl Default for WidgetPreferences {
             codex_focus_mode: true,
             tray_mode: default_tray_mode(),
             tray_english: false,
+            display_mode: default_display_mode(),
             enabled_providers: default_enabled_providers(),
             daily_budget_account_scope: None,
             daily_budget_percent: default_daily_budget_percent(),
@@ -286,6 +293,9 @@ impl Default for WidgetPreferences {
 
 impl WidgetPreferences {
     pub fn normalized(mut self) -> Self {
+        if !matches!(self.display_mode.as_str(), "tray" | "floating") {
+            self.display_mode = default_display_mode();
+        }
         if !matches!(self.tray_mode.as_str(), "percent" | "bar" | "circle") {
             self.tray_mode = default_tray_mode();
         }
@@ -445,6 +455,7 @@ mod tests {
         .unwrap();
         assert_eq!(legacy.tray_mode, "circle");
         assert!(!legacy.tray_english);
+        assert_eq!(legacy.display_mode, "tray");
         assert_eq!(legacy.enabled_providers, vec!["codex"]);
         assert!(legacy.daily_budget_account_scope.is_none());
         for mode in ["percent", "bar", "circle"] {
@@ -463,6 +474,29 @@ mod tests {
                 restored.daily_budget_account_scope.as_deref(),
                 Some("a".repeat(64).as_str())
             );
+        }
+    }
+
+    #[test]
+    fn floating_display_is_opt_in_and_persists_independently_of_tray_meter_style() {
+        for mode in ["tray", "floating", "invalid"] {
+            let preferences = WidgetPreferences {
+                display_mode: mode.into(),
+                tray_mode: "bar".into(),
+                ..Default::default()
+            }
+            .normalized();
+            let restored: WidgetPreferences =
+                serde_json::from_value(serde_json::to_value(preferences).unwrap()).unwrap();
+            assert_eq!(
+                restored.display_mode,
+                if mode == "floating" {
+                    "floating"
+                } else {
+                    "tray"
+                }
+            );
+            assert_eq!(restored.tray_mode, "bar");
         }
     }
 

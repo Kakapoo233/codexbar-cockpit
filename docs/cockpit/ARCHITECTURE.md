@@ -108,6 +108,18 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.
   `CockpitSettingsImport` exposes only a whitelist of presentation and provider selection settings.
 
+## Windows presentation
+
+The independent Windows client keeps one `widget` WebView and one React App data owner. A local
+display preference selects the existing tray panel or a compact floating Codex summary. Switching
+surfaces reuses quota observations, planning and refreshes. Native presentation events carry the
+target page so a settings request received while compact cannot be lost during mounting.
+The compact surface remains visible on blur; closing or blurring its full panel restores the compact
+surface. Explicit hide is recoverable from the tray. Generation checks invalidate old blur callbacks.
+Compact geometry is scaled with text and monitor DPI, clamped to the work area, and stored in a
+separate local floating-window document. Preview and smoke builders retain their credential-free
+isolation and never start real collectors or cloud synchronization.
+
 ## Personal iCloud Drive synchronization
 
 The fork uses `ICloudDriveSyncCoordinator` and `ICloudDriveReplica` for credential-free personal document synchronization. The old CloudKit engine remains available for its protocol tests but is not activated by this app. Each device owns one versioned JSON file; per-key Lamport revisions and tombstones merge edits without shared-file overwrites. A local journal acknowledges only successfully applied typed projections. First-join defaults cannot overwrite existing cloud values. Undownloaded, corrupt or newer documents stop the exchange rather than becoming empty state.

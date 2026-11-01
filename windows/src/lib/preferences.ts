@@ -11,6 +11,7 @@ const defaultFontScale = defaultFontScaleForPlatform(
 );
 
 export const DEFAULT_WIDGET_PREFERENCES: WidgetPreferences = {
+  displayMode: "tray",
   enabledProviders: ["codex"],
   trayMode: "circle",
   trayEnglish: false,
@@ -130,6 +131,7 @@ export function normalizeWidgetPreferences(value: LegacyWidgetPreferences | null
     ? candidate.accentColor
     : DEFAULT_WIDGET_PREFERENCES.accentColor;
   return {
+    displayMode: candidate.displayMode === "floating" ? "floating" : "tray",
     enabledProviders: Array.isArray(candidate.enabledProviders) ? providerList(candidate.enabledProviders) : ["codex"],
     trayMode: candidate.trayMode === "percent" || candidate.trayMode === "bar" ? candidate.trayMode : "circle",
     trayEnglish: candidate.trayEnglish === true,

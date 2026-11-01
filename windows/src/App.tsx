@@ -7,6 +7,8 @@ import { useComfortUsage } from "./lib/useComfortUsage";
 import { createComfortFeedbackRecord, personalizeComfortCurve } from "./lib/comfortFeedback";
 import { buildCockpitDailyPlan, cockpitResetSignal, localCalendarDay, type CockpitQuotaObservation } from "./lib/cockpitDailyPlan";
 import { TrayPanel } from "./components/TrayPanel";
+import { FloatingSummary } from "./components/FloatingSummary";
+import { applyPreviewDisplayMode, beginFloatingDrag, compactPanel, getPanelPresentation, hidePanel, listenPanelPresentation, openFullPanel, type PanelPage, type PanelPresentation } from "./lib/panelPresentation";
 import type { AppDiagnostics, CodexDailyUsage, ComfortCode, ProviderSnapshot, ResetForecast, RuntimeState, WidgetPreferences } from "./types";
 
 /** Native collection stays in Rust. The React shell receives only typed quota/usage aggregates. */
@@ -23,6 +25,8 @@ export default function App() {
   const [autostart, setAutostart] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const [systemDark, setSystemDark] = useState(systemPrefersDark);
+  const [surface, setSurface] = useState<"compact" | "panel">("panel");
+  const [pageRequest, setPageRequest] = useState<{ page: PanelPage; id: number }>();
   const runtimeRef = useRef(runtime);
   const preferencesRef = useRef(preferences);
   const writable = useRef(false);
@@ -37,6 +41,26 @@ export default function App() {
   const codex = snapshots.find(value => value.provider === "codex");
   const scope = codex?.accountScope ?? null;
   const today = localCalendarDay(now).localDateKey;
+
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    let unsubscribe: (() => void) | undefined;
+    const receive = (value: PanelPresentation) => {
+      if (!active) return;
+      revision += 1;
+      setSurface(value.surface);
+      if (value.targetPage) setPageRequest(previous => ({ page: value.targetPage!, id: (previous?.id ?? 0) + 1 }));
+    };
+    void listenPanelPresentation(receive).then(async stop => {
+      if (!active) { stop(); return; }
+      unsubscribe = stop;
+      const expectedRevision = revision;
+      const current = await getPanelPresentation();
+      if (active && revision === expectedRevision) receive(current);
+    }).catch(() => { if (active) setError("Window presentation is unavailable. Reopen the panel from the tray."); });
+    return () => { active = false; unsubscribe?.(); };
+  }, []);
 
   const commitRuntime = useCallback(async (next: RuntimeState) => {
     if (!writable.current) throw new Error("Saved data is unavailable; writing is paused to preserve it.");
@@ -188,7 +212,9 @@ export default function App() {
     const normalized = normalizeWidgetPreferences(next);
     const sequence = ++preferenceSequence.current;
     preferencesRef.current = normalized; setPreferences(normalized);
-    void updatePreferences(normalized).catch(() => {
+    void updatePreferences(normalized).then(() => {
+      if (sequence === preferenceSequence.current) applyPreviewDisplayMode(normalized.displayMode ?? "tray");
+    }).catch(() => {
       if (sequence !== preferenceSequence.current) return;
       preferencesRef.current = previous; setPreferences(previous);
       setError(zh ? "设置未保存，已恢复原值。" : "Settings were not saved; the previous value was restored.");
@@ -215,13 +241,25 @@ export default function App() {
     catch { setError(zh ? "无法修改登录启动选项。" : "Launch at login could not be changed."); }
   };
 
-  return <TrayPanel preferences={preferences} onPreferences={savePreferences} snapshots={snapshots} plan={plan}
+  const windowAction = (operation: () => Promise<void>) => {
+    void operation().catch(() => setError(zh ? "窗口操作未完成，请从托盘重试。" : "Window action failed. Retry from the tray."));
+  };
+  return <>
+    {surface === "compact" && <FloatingSummary preferences={preferences} snapshots={snapshots} plan={plan}
+    startupReady={ready} refreshing={refreshing} error={error}
+    onOpen={page => windowAction(() => openFullPanel(page))} onHide={() => windowAction(hidePanel)}
+    onDrag={() => windowAction(beginFloatingDrag)} onRefresh={() => { setError(null); void refresh(true); }} />}
+
+    <div hidden={surface !== "panel"} style={{ width: "100%", height: "100%" }}>
+    <TrayPanel preferences={preferences} onPreferences={savePreferences} snapshots={snapshots} plan={plan} pageRequest={pageRequest}
     history={observations.filter(value => value.accountID === scope && value.providerID === "codex")} forecast={forecast} now={now}
     usage={usage} usageError={usageError} onUsageRefresh={refreshUsage} diagnostics={diagnostics} startupReady={ready}
     settingsWritable={preferenceWritable.current} error={error} onDismissError={() => setError(null)} refreshing={refreshing}
     onRefresh={() => { setError(null); void refresh(true); void refreshUsage().catch(() => undefined); }}
-    onHide={() => { if (isTauri()) void import("@tauri-apps/api/core").then(({ invoke }) => invoke("hide_panel")); }}
+    onHide={() => windowAction(preferences.displayMode === "floating" ? compactPanel : hidePanel)}
     onFeedback={(date, value) => void saveFeedback(date, value)} feedback={ownFeedback} dailyUsage={dailyUsage} curve={curve}
     savingFeedback={savingFeedback} canRecordFeedback={Boolean(scope)} autostart={autostart} onAutostart={enabled => void setLaunchAtLogin(enabled)}
-    onPersonalCap={value => savePreferences({ ...preferencesRef.current, dailyBudgetPercent: value ?? 0, dailyBudgetLocalDate: value === null ? null : today, dailyBudgetAccountScope: value === null ? null : scope })} />;
+    onPersonalCap={value => savePreferences({ ...preferencesRef.current, dailyBudgetPercent: value ?? 0, dailyBudgetLocalDate: value === null ? null : today, dailyBudgetAccountScope: value === null ? null : scope })} />
+    </div>
+  </>;
 }

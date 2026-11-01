@@ -3,6 +3,12 @@ import { DEFAULT_WIDGET_PREFERENCES, defaultFontScaleForPlatform, effectiveCompa
 import { UI_FONT_OPTIONS, defaultFontFamilyForPlatform } from "./fonts";
 
 describe("widget preference migration", () => {
+  it("preserves existing tray startup and persists an explicit floating display", () => {
+    expect(normalizeWidgetPreferences({}).displayMode).toBe("tray");
+    expect(normalizeWidgetPreferences({ displayMode: "unknown" as never }).displayMode).toBe("tray");
+    const saved = JSON.parse(JSON.stringify(normalizeWidgetPreferences({ displayMode: "floating", alwaysOnTop: false })));
+    expect(normalizeWidgetPreferences(saved)).toEqual(expect.objectContaining({ displayMode: "floating", alwaysOnTop: false }));
+  });
   it("defaults to stable updates without changing an explicit beta preference", () => {
     expect(DEFAULT_WIDGET_PREFERENCES.updateChannel).toBe("stable");
     expect(normalizeWidgetPreferences({}).updateChannel).toBe("stable");

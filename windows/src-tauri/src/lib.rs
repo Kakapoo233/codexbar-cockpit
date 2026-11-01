@@ -2722,17 +2722,32 @@ fn get_preferences(state: State<'_, AppState>) -> Result<WidgetPreferences, Stri
         .map_err(|_| "settings unavailable".into())
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn set_preferences(
     preferences: WidgetPreferences,
+    app: AppHandle,
     state: State<'_, AppState>,
 ) -> Result<(), String> {
     let preferences = preferences.normalized();
+    let previous = state
+        .preferences
+        .lock()
+        .map_err(|_| "settings unavailable")?
+        .clone();
     persist_preferences(&state.preferences_path, &preferences)?;
     *state
         .preferences
         .lock()
-        .map_err(|_| "settings unavailable".to_string())? = preferences;
+        .map_err(|_| "settings unavailable".to_string())? = preferences.clone();
+    if let Err(error) = tray_panel::apply_display_preferences(&app, &preferences) {
+        *state
+            .preferences
+            .lock()
+            .map_err(|_| "settings unavailable")? = previous.clone();
+        let _ = persist_preferences(&state.preferences_path, &previous);
+        let _ = tray_panel::apply_display_preferences(&app, &previous);
+        return Err(error);
+    }
     Ok(())
 }
 
@@ -2791,7 +2806,7 @@ fn set_widget_locked(
     Ok(next)
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn set_widget_always_on_top(
     always_on_top: bool,
     app: AppHandle,
@@ -2810,6 +2825,12 @@ fn set_widget_always_on_top(
         .ok_or_else(|| "widget window missing".to_string())?;
     if let Err(error) = apply_widget_window_presence(&window, always_on_top) {
         let _ = persist_preferences(&state.preferences_path, &previous);
+        return Err(error);
+    }
+    if let Err(error) = tray_panel::apply_display_preferences(&app, &next) {
+        let _ = persist_preferences(&state.preferences_path, &previous);
+        let _ = apply_widget_window_presence(&window, previous.always_on_top);
+        let _ = tray_panel::apply_display_preferences(&app, &previous);
         return Err(error);
     }
     *state
@@ -2916,7 +2937,10 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
-            let _ = tray_panel::show_panel(app, None);
+            let app = app.clone();
+            tauri::async_runtime::spawn(async move {
+                let _ = tray_panel::show_panel(&app, None);
+            });
         }))
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
@@ -2950,6 +2974,12 @@ pub fn run() {
                 geometry: Mutex::new(None),
                 drag_mode: Mutex::new(None),
             });
+            tray_panel::initialize(
+                app,
+                &preferences,
+                Some(data_dir.join("floating-window.json")),
+            )
+            .map_err(std::io::Error::other)?;
             usage_sync::start(app.handle().clone());
             if setup_tray(app).is_err() {
                 eprintln!("tray setup failed; enabling taskbar fallback");
@@ -2964,6 +2994,10 @@ pub fn run() {
                 // so Tauri keeps the menu-bar utility out of the macOS Dock.
                 #[cfg(target_os = "macos")]
                 app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+                if let Err(error) = tray_panel::restore_on_startup(app.handle()) {
+                    eprintln!("floating summary startup failed: {error}");
+                    let _ = tray_panel::show_panel(app.handle(), None);
+                }
             }
             if preferences.locked {
                 let _ = apply_lock(app.handle(), true);
@@ -2992,12 +3026,16 @@ pub fn run() {
                 }
             }
             let presence_handle = app.handle().clone();
-            let initial_always_on_top = preferences.always_on_top;
             tauri::async_runtime::spawn(async move {
                 tokio::time::sleep(Duration::from_millis(250)).await;
                 if let Some(window) = presence_handle.get_webview_window("widget") {
-                    if let Err(error) = apply_widget_window_presence(&window, initial_always_on_top)
-                    {
+                    let always_on_top = presence_handle
+                        .state::<AppState>()
+                        .preferences
+                        .lock()
+                        .map(|preferences| preferences.always_on_top)
+                        .unwrap_or(true);
+                    if let Err(error) = apply_widget_window_presence(&window, always_on_top) {
                         eprintln!("deferred widget presence policy failed: {error}");
                     }
                 }
@@ -3010,6 +3048,11 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             tray_panel::hide_panel,
+            tray_panel::get_panel_presentation,
+            tray_panel::show_floating_panel,
+            tray_panel::show_full_panel,
+            tray_panel::compact_panel,
+            tray_panel::begin_floating_drag,
             tray_panel::update_tray,
             app_icon::set_app_icon_theme,
             local_usage::get_local_usage_source,
@@ -3068,6 +3111,9 @@ pub fn run() {
         .build(app_context())
         .expect("failed to build Codex 驾驶舱");
     app.run(|app_handle, event| {
+        if matches!(event, tauri::RunEvent::ExitRequested { .. }) {
+            tray_panel::flush_position(app_handle);
+        }
         if matches!(event, tauri::RunEvent::Resumed) {
             let _ = app_handle.emit_to("widget", "refresh-requested", ());
             if let Some(window) = app_handle.get_webview_window("widget") {
