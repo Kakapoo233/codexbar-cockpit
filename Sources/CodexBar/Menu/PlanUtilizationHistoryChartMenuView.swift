@@ -77,7 +77,8 @@ struct PlanUtilizationHistoryChartMenuView: View {
         histories: [PlanUtilizationSeriesHistory],
         snapshot: UsageSnapshot? = nil,
         width: CGFloat,
-        referenceDate: Date = Date())
+        referenceDate: Date = Date(),
+        pointLimit: Int? = 30)
     {
         self.provider = provider
         let visibleSeries = Self.visibleSeries(
@@ -86,7 +87,8 @@ struct PlanUtilizationHistoryChartMenuView: View {
             snapshot: snapshot)
         self.visibleSeries = visibleSeries
         self.modelsBySeriesID = Dictionary(uniqueKeysWithValues: visibleSeries.map {
-            ($0.id, Self.makeModel(history: $0.history, provider: provider, referenceDate: referenceDate))
+            ($0.id, Self.makeModel(
+                history: $0.history, provider: provider, referenceDate: referenceDate, pointLimit: pointLimit))
         })
         self.emptyModel = Self.makeModel(history: nil, provider: provider, referenceDate: referenceDate)
         self.width = width
@@ -296,11 +298,12 @@ struct PlanUtilizationHistoryChartMenuView: View {
     private nonisolated static func makeModel(
         history: PlanUtilizationSeriesHistory?,
         provider: UsageProvider,
-        referenceDate: Date) -> Model
+        referenceDate: Date,
+        pointLimit: Int? = 30) -> Model
     {
         var points = history.map { self.seriesPoints(history: $0, referenceDate: referenceDate) } ?? []
-        if points.count > Layout.maxPoints {
-            points = Array(points.suffix(Layout.maxPoints))
+        if let pointLimit, points.count > max(1, pointLimit) {
+            points = Array(points.suffix(max(1, pointLimit)))
         }
 
         points = points.enumerated().map { offset, point in
@@ -533,7 +536,7 @@ struct PlanUtilizationHistoryChartMenuView: View {
 
     private nonisolated static func xDomain(points: [Point]) -> ClosedRange<Double>? {
         guard !points.isEmpty else { return nil }
-        return -0.5...(Double(Layout.maxPoints) - 0.5)
+        return -0.5...(Double(max(Layout.maxPoints, points.count)) - 0.5)
     }
 
     private nonisolated static func axisIndexes(points: [Point], windowMinutes: Int) -> [Double] {
@@ -590,7 +593,7 @@ struct PlanUtilizationHistoryChartMenuView: View {
             selectedIndexes.removeLast()
         }
 
-        if points.count == Layout.maxPoints,
+        if points.count >= Layout.maxPoints,
            let lastVisibleIndex = points.last?.index,
            !selectedIndexes.contains(lastVisibleIndex)
         {
@@ -684,14 +687,16 @@ struct PlanUtilizationHistoryChartMenuView: View {
         histories: [PlanUtilizationSeriesHistory],
         provider: UsageProvider,
         snapshot: UsageSnapshot? = nil,
-        referenceDate: Date? = nil) -> ModelSnapshot
+        referenceDate: Date? = nil,
+        pointLimit: Int? = 30) -> ModelSnapshot
     {
         let visibleSeries = self.visibleSeries(histories: histories, provider: provider, snapshot: snapshot)
         let selectedSeries = visibleSeries.first(where: { $0.id == selectedSeriesRawValue }) ?? visibleSeries.first
         let model = self.makeModel(
             history: selectedSeries?.history,
             provider: provider,
-            referenceDate: referenceDate ?? histories.flatMap(\.entries).map(\.capturedAt).max() ?? Date())
+            referenceDate: referenceDate ?? histories.flatMap(\.entries).map(\.capturedAt).max() ?? Date(),
+            pointLimit: pointLimit)
         return ModelSnapshot(
             pointCount: model.points.count,
             axisIndexes: model.axisIndexes,
@@ -751,18 +756,19 @@ struct PlanUtilizationHistoryChartMenuView: View {
 
     @ChartContentBuilder
     private func utilizationChartContent(model: Model) -> some ChartContent {
+        let barWidth = Self.barWidth(pointCount: model.points.count, plotWidth: self.width - 32)
         ForEach(model.points) { point in
             BarMark(
                 x: self.xValue(for: point.index),
                 yStart: .value(L("Capacity Start"), 0),
                 yEnd: .value(L("Capacity End"), 100),
-                width: .fixed(Layout.barWidth))
+                width: .fixed(barWidth))
                 .foregroundStyle(model.trackColor)
             BarMark(
                 x: self.xValue(for: point.index),
                 yStart: .value(L("Utilization Start"), 0),
                 yEnd: .value(L("Utilization End"), point.usedPercent),
-                width: .fixed(Layout.barWidth))
+                width: .fixed(barWidth))
                 .foregroundStyle(model.barColor)
         }
         if let selected = self.selectedPoint(model: model) {
@@ -775,6 +781,12 @@ struct PlanUtilizationHistoryChartMenuView: View {
     private func selectedPoint(model: Model) -> Point? {
         guard let selectedPointID else { return nil }
         return model.pointsByID[selectedPointID]
+    }
+
+    nonisolated static func barWidth(pointCount: Int, plotWidth: CGFloat) -> CGFloat {
+        guard pointCount > Layout.maxPoints else { return Layout.barWidth }
+        let usableWidth = max(0, plotWidth - 2 * ChartAxisLabelLayout.dateLabelEdgePadding)
+        return min(Layout.barWidth, usableWidth / CGFloat(pointCount) * 0.65)
     }
 
     private func detailLine(model: Model, windowMinutes: Int) -> String {
@@ -826,7 +838,7 @@ struct PlanUtilizationHistoryChartMenuView: View {
         {
             guard ChartBarHoverSelection.accepts(
                 distanceFromBarCenter: abs(location.x - (plotFrame.origin.x + barX)),
-                barHalfWidth: Layout.barWidth / 2,
+                barHalfWidth: Self.barWidth(pointCount: model.points.count, plotWidth: plotFrame.width) / 2,
                 selectableCount: model.points.count)
             else { return }
         }

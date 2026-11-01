@@ -210,6 +210,9 @@ extension StatusItemController {
             accountLabel: self.menuBarLayoutAccountLabel(provider: provider, snapshot: snapshot),
             costs: self.menuBarLayoutCosts(provider: provider, now: now),
             includeLocalDerivedData: !self.menuBarUsageSource(for: provider).isFleet,
+            includeCockpitRecommendation: self.renderedMenuBarLayoutResolution(for: provider).layout
+                .flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
+                .contains(where: \.readsCockpitPlan),
             now: now)
     }
 
@@ -338,6 +341,7 @@ extension UsageStore {
         accountLabel: String?,
         costs: MenuBarLayoutCostValues,
         includeLocalDerivedData: Bool = true,
+        includeCockpitRecommendation: Bool = false,
         now: Date = .init())
         -> MenuBarLayoutRenderData
     {
@@ -375,6 +379,10 @@ extension UsageStore {
             ? self.menuBarLayoutSpend(provider: provider, snapshot: snapshot, now: now) : .unavailable
         let providerName = L(self.metadata(for: provider).displayName)
         let automatic = MenuBarLayoutRenderWindow(windows.automatic)
+        let plan = includeLocalDerivedData && includeCockpitRecommendation
+            ? self.cockpitMenuBarPlanValues(provider: provider, snapshot: snapshot, now: now)
+            : CockpitMenuBarPlanValues(status: nil)
+        let recommendation = plan.recommendation
 
         return MenuBarLayoutRenderData(
             provider: provider,
@@ -453,7 +461,11 @@ extension UsageStore {
             spendPace: spend.pace,
             spendAmount: spend.amount,
             spendBudget: spend.budget,
-            spendCurrencySymbol: spend.currencySymbol)
+            spendCurrencySymbol: spend.currencySymbol,
+            cockpitDailyRecommendationPercent: recommendation?.percent,
+            cockpitDailyRecommendationIsPartial: recommendation?.isPartial ?? false,
+            cockpitDailyRecommendationIsStale: recommendation?.isStale ?? false,
+            cockpitDailyRemaining: plan.remaining)
     }
 
     func menuBarLayoutWindows(

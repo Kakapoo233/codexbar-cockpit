@@ -33,17 +33,17 @@ struct CockpitPlanCoreTests {
         let noon = self.date("2026-07-06T16:00:00Z")
         state.record(self.snapshot("2026-07-06T16:00:00Z", remaining: 50), calendar: self.calendar)
         var status = state.status(providerID: "codex", on: noon, calendar: self.calendar)
-        #expect(status.suggestedPercent == 23.85)
+        #expect(status.suggestedPercent == 11.36)
         #expect(status.usedPercent == 20)
-        #expect(abs((status.remainingSuggestedPercent ?? 0) - 3.85) < 0.001)
+        #expect(status.remainingSuggestedPercent == 0)
         state.setPersonalCap(30, providerID: "codex", on: noon, calendar: self.calendar)
         status = state.status(providerID: "codex", on: noon, calendar: self.calendar)
         #expect(status.manualCapPercent == 30)
         #expect(status.effectiveCapPercent == 30)
-        #expect(status.suggestedPercent == 23.85)
+        #expect(status.suggestedPercent == 11.36)
         #expect(status.remainingSuggestedPercent == 10)
         state.setPersonalCap(nil, providerID: "codex", on: noon, calendar: self.calendar)
-        #expect(state.status(providerID: "codex", on: noon, calendar: self.calendar).effectiveCapPercent == 23.85)
+        #expect(state.status(providerID: "codex", on: noon, calendar: self.calendar).effectiveCapPercent == 11.36)
     }
 
     @Test
@@ -81,7 +81,7 @@ struct CockpitPlanCoreTests {
             on: self.date("2026-07-06T16:10:00Z"),
             calendar: self.calendar)
         #expect(status.usedPercent == 155)
-        #expect(status.suggestedPercent == 157.82)
+        #expect(status.suggestedPercent == 28.75)
         #expect(status.coverage == .partial)
     }
 

@@ -3025,7 +3025,7 @@
 "cockpit_comfort_curve_x" = "当天已用配额（%）";
 "cockpit_comfort_curve_y" = "主观评分（%）";
 "cockpit_comfort_curve_details" = "%@ 条反馈 · 模型说明";
-"cockpit_comfort_curve_explanation" = "轻松=100%、刚刚好=80%、过载=25%。这些是主观评分，不是实测效率。保留原版固定曲线，仅拟合拐点（0.1–100%），不会修改每日计划。";
+"cockpit_comfort_curve_explanation" = "轻松=100%、刚刚好=80%、过载=25%。这些是主观评分，不是实测效率。保留原版固定曲线，仅拟合拐点（0.1–100%），用于自动建议，手动上限保持不变。";
 "cockpit_comfort_curve_weights" = "近期反馈权重更高，半衰期为14天；不完整用量按75%权重计入。累计用量可超过100%，评分下限为20%。";
 "cockpit_comfort_curve_empty" = "暂无可用配额反馈，显示默认25%拐点；请选择日期并记录体感。";
 "cockpit_comfort_quota_missing" = "此日期没有可用配额观测。体感仍会保存，但不会参与曲线拟合。";
@@ -3182,7 +3182,7 @@
 "cockpit_advice_reset_account" = "规划窗口：账号重置 %@";
 "cockpit_advice_reset_announced" = "规划窗口：已公告重置 %@；账号是否重置仍需确认。";
 "cockpit_advice_reset_estimated" = "规划窗口：预计重置 %@，并非官方承诺。";
-"cockpit_advice_live_note" = "根据最新观测余额和剩余时间动态计算，手动上限保持不变。";
+"cockpit_advice_live_note" = "全天建议参考舒适曲线，不因今天剩余小时减少而打折；今日还能用会扣除已记录用量，手动上限优先。";
 "cockpit_advice_partial_note" = "今日用量记录不完整，建议额度为暂估值。";
 
 /* About CodexBar Cockpit */
@@ -3198,3 +3198,48 @@
 /* Codex reset banner */
 "cockpit_reset_banner_title" = "Codex 重置已公告";
 "cockpit_reset_banner_countdown" = "剩余 %@";
+
+/* Full-day target and remaining daily allowance */
+"cockpit_advice_full_day" = "全天建议（周额度）";
+"cockpit_advice_remaining_today" = "今日还能用（占今日分配）";
+
+/* Comfort-informed daily advice */
+"cockpit_advice_comfort_default" = "舒适上限：%@ · 默认曲线";
+"cockpit_advice_comfort_fitted" = "舒适上限：%@ · 个人拟合";
+"cockpit_advice_risk_default" = "重置概率：%@ · 模型默认值";
+"cockpit_advice_risk_estimated" = "重置概率：%@ · 社区估计";
+"cockpit_advice_risk_announced" = "已公告将在未来 24 小时内重置，本账号是否重置仍需确认。";
+"cockpit_advice_comfort_limited" = "自动建议已按舒适上限调低。";
+"cockpit_advice_comfort_limited_manual" = "曲线限制的是自动建议，手动上限仍优先。";
+"cockpit_advice_manual_priority" = "手动上限优先于自动建议生效。";
+"cockpit_advice_risk_help" = "公开信号和模型假设不能确认此账号已重置。";
+"cockpit_advice_comfort_samples" = "个人曲线依据 %d 条配额体感记录拟合。";
+"cockpit_advice_comfort_default_help" = "暂无个人配额体感数据时使用默认曲线。";
+"cockpit_advice_comfort_ceiling_help" = "此上限会根据重置概率和周末调整，仅用于自动建议，不限制手动上限。";
+
+/* Daily-allocation ratio and weekly equivalent */
+"cockpit_advice_weekly_equivalent" = "相当于周额度 %@";
+"cockpit_advice_daily_ratio_help" = "今日还能用以当日有效分配为 100%，手动上限优先；副值显示相当于周额度的比例。";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "额度历史";
+"cockpit_plan_history_coverage" = "实际记录：%@ – %@（%d 个样本）";
+"cockpit_plan_history_partial" = "仅显示实际采集的记录，缺失日期不表示用量为零。";
+"cockpit_plan_history_empty" = "此时间范围内没有额度记录。";
+"cockpit_plan_cycle_details" = "重置周期详情";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "每日推荐用量";
+"cockpit_menu_daily_recommendation_short" = "建议";
+"cockpit_menu_daily_recommendation_help" = "Cockpit 根据舒适曲线与重置窗口计算的全天建议，表示每周总额度的百分比；不是今日剩余额度。无有效本机账号数据时显示 —，观测不完整时标记为估算。";
+"cockpit_menu_daily_recommendation_accessibility" = "每日推荐用量：%@，占每周总额度";
+"cockpit_menu_daily_recommendation_partial" = "%@（观测不完整，估算）";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "今日";
+"cockpit_menu_remaining_title" = "今日还能用";
+"cockpit_menu_remaining_percent" = "今日还能用：数字";
+"cockpit_menu_remaining_bar" = "今日还能用：用量条";
+"cockpit_menu_remaining_circle" = "今日还能用：圆形填充";
+"cockpit_menu_remaining_accessibility" = "今日还能用：%@，占今日分配额度；相当于每周总额度的 %@";
+"cockpit_menu_remaining_help" = "以今天分配的额度为100%，显示今日还能用的比例。遵守个人上限与实际余额，随舒适曲线和重置窗口更新；≤表示观测不完整时的上界，≈表示数据陈旧，—表示未知。";

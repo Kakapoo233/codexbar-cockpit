@@ -1,5 +1,57 @@
 # Cockpit changes
 
+## 0.8.9 — Today’s available allowance in the menu bar
+
+- Add percentage, continuous bar and bottom-up filled-circle components for today’s available allowance. All three use the effective daily allocation as 100%, respect manual caps and actual balance, and expose the weekly equivalent in accessibility text.
+- Preserve upper bounds for incomplete observations and distinguish stale or unknown values. Reuse the shared planner, account checks, minute refresh, localization and English status-text preference.
+- Store new components in Cockpit V8 while retaining older-readable layout projections. Existing layouts remain unchanged until edited.
+
+## 0.8.8 — Restore original calendar text size
+
+- Restore calendar typography to its size before the 50% enlargement, including date cells, selectors, details and chart labels. Return the associated cell, badge and chart dimensions to their original sizes.
+
+## 0.8.7 — Daily recommendation in the menu bar
+
+- Add a Daily recommendation component to the menu-bar layout editor. It displays Cockpit's full-day automatic recommendation as a percentage of the weekly quota, with a compact localized label and hover help.
+- Share the existing comfort/reset planner with the status item and settings preview. Refresh with quota observations, comfort feedback, public reset changes and the clock, even while the menu is closed.
+- Preserve account boundaries, mark incomplete or stale estimates, and keep remote fleet readings separate from local advice. The English status-text setting applies to the new component.
+- Keep existing layouts unchanged until the component is added. Store the new layout in a fork-specific generation with older-readable projections for rollback.
+
+## 0.8.6 — Persistent statistics date controls
+
+- Move the reporting-range choices into a fixed left sidebar. Statistics scroll independently, keeping 7/30/90-day, month-to-date and all-history choices available at every scroll position.
+- Preserve the selected period and its shared quota/cost filtering, including custom periods already saved in settings.
+
+## 0.8.5 — Date-based quota history
+
+- Give Statistics a quota-history timeline whose date axis follows the selected 7/30/90-day, month-to-date or all-history range, even when every observation falls within the most recent days.
+- Show the dates actually covered by quota observations. Leave unobserved dates empty and separate reset cycles instead of connecting unrelated balances.
+- Preserve the existing current-cycle burndown and cycle-utilization charts under expandable reset-cycle details.
+
+## 0.8.4 — Statistics range synchronization
+
+- Make Plan Usage history follow the Statistics page's 7/30/90-day, month-to-date and all-history selection, using the configured reporting time zone and observation dates.
+- Keep all selected chart points in Statistics while preserving the compact menu chart limit. Exclude future observations without discarding valid samples that have future reset dates.
+
+## 0.8.3 — Larger calendar text
+
+- Increase calendar text by 50%, including dates, values, controls, reset notices and comfort charts.
+- Enlarge date badges and cells, keep narrow weekly views scrollable, and wrap reset details and legends to fit the larger type.
+
+## 0.8.2 — Daily and weekly percentage bases
+
+- Show today's available allowance primarily as a percentage of today's effective allocation, with its equivalent weekly-quota percentage alongside it.
+- Use the manual cap as the daily allocation when present. Retain partial bounds, unknown values and actual-balance limits without changing the comfort calculation.
+- Make the comfort-chart hover distance conversion explicit for the GitHub macOS compiler.
+
+## 0.8.1 — Full-day comfort-aware advice
+
+- Show a full-day quota target separately from the amount still available today, instead of shrinking the target by the hours left until midnight.
+- Deduct observed use once, respect manual caps and the actual remaining balance, and retain uncertainty when usage is incomplete.
+- Continue recalculating against valid account, announced and estimated reset windows without inventing a renewed balance.
+- Use the original Cockpit quota comfort curve to cap automatic advice, with a personal fit from account-scoped quota feedback or the default 25% knee. Keep Token feedback separate.
+- Explain comfort limits and reset-risk sources; apply upstream risk boosts and weekend adjustment while preserving manual overrides.
+
 ## 0.8.0 — Unified calendar and usage navigation
 
 - Give day, week and month calendars a shared date, selection and grid style; preserve daily usage, personal feedback and reset markers.

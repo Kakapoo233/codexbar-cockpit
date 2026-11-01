@@ -44,6 +44,7 @@ extension UsageStore {
     }
 
     var iconObservationToken: Int {
+        _ = self.cockpitPlanStore?.menuBarObservationToken
         _ = self.snapshots
         _ = self.claudeSwapAccountSnapshots
         _ = self.claudeSwapRevision
@@ -121,6 +122,8 @@ extension UsageStore {
 @MainActor
 @Observable
 final class UsageStore {
+    /// Shared with the status controller; previews never open another planner or its persistence file.
+    var cockpitPlanStore: CockpitPlanStore?
     nonisolated static let resetBoundaryRefreshGraceSeconds: TimeInterval = 30
     nonisolated static let resetBoundaryRefreshMinimumDelaySeconds: TimeInterval = 5
 

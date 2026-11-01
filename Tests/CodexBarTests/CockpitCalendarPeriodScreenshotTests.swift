@@ -22,7 +22,12 @@ struct CockpitCalendarPeriodScreenshotTests {
             for scale in CockpitCalendarScale.allCases {
                 for width in [CGFloat(600), 960] {
                     let view = Self.preview(ledger: ledger, calendar: calendar, now: now, scale: scale)
-                    let png = try #require(await Self.pngData(view, size: CGSize(width: width, height: 1050)))
+                    let height: CGFloat = switch scale {
+                    case .day, .week: 1050
+                    case .month: 1400
+                    case .quarter, .year: 1800
+                    }
+                    let png = try #require(await Self.pngData(view, size: CGSize(width: width, height: height)))
                     let name = "cockpit-calendar-\(scale.rawValue)-cost-zh-\(Int(width)).png"
                     try png.write(to: directory.appendingPathComponent(name))
                 }

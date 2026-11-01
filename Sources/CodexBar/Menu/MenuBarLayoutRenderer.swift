@@ -100,6 +100,12 @@ struct MenuBarLayoutRenderData: Hashable {
     var spendAmount: String?
     var spendBudget: String?
     var spendCurrencySymbol = "$"
+    /// Full-day automatic recommendation in weekly-quota percentage points.
+    var cockpitDailyRecommendationPercent: Double?
+    var cockpitDailyRecommendationIsPartial = false
+    var cockpitDailyRecommendationIsStale = false
+    /// Remaining share of today's effective allocation; never complements the used/remaining setting.
+    var cockpitDailyRemaining: CockpitMenuBarDailyRemaining?
 
     func extraTitle(_ id: String) -> String? {
         ProviderDescriptorRegistry.descriptor(for: self.provider).menuBarMetrics.namedExtras[id].map { title in
@@ -820,6 +826,10 @@ final class MenuBarLayoutRenderer {
                 data.balance,
                 unavailableLabel: L("%@ unavailable", L("Balance")),
                 attributes: style.attributes)
+        case .cockpitDailyRecommendation:
+            return self.cockpitDailyRecommendationToken(data: data, attributes: style.attributes)
+        case let .cockpitDailyRemaining(displayStyle):
+            return self.cockpitDailyRemainingToken(displayStyle, data: data, style: style, options: options)
         case .costToday:
             return self.optionalTextToken(
                 data.costToday,
@@ -1204,6 +1214,34 @@ final class MenuBarLayoutRenderer {
         return 0.2126 * linear(color.red) + 0.7152 * linear(color.green) + 0.0722 * linear(color.blue)
     }
 
+    private static func cockpitDailyRecommendationToken(
+        data: MenuBarLayoutRenderData,
+        attributes: [NSAttributedString.Key: Any])
+        -> (value: NSAttributedString, accessibilityText: String?)
+    {
+        let label = L("cockpit_menu_daily_recommendation_short")
+        guard let value = data.cockpitDailyRecommendationPercent, value.isFinite, value >= 0 else {
+            return self.textToken(
+                "\(label) —",
+                accessibilityText: L("%@ unavailable", L("cockpit_menu_daily_recommendation")),
+                attributes: attributes)
+        }
+        let percent = (value / 100).formatted(
+            .percent.precision(.fractionLength(0...1)).locale(codexBarLocalizedResourceLocale()))
+        var accessibility = L("cockpit_menu_daily_recommendation_accessibility", percent)
+        if data.cockpitDailyRecommendationIsPartial {
+            accessibility = L("cockpit_menu_daily_recommendation_partial", accessibility)
+        }
+        if data.cockpitDailyRecommendationIsStale {
+            accessibility += ", " + L("cockpit_ui_stale")
+        }
+        let approximate = data.cockpitDailyRecommendationIsPartial || data.cockpitDailyRecommendationIsStale
+        return self.textToken(
+            "\(label) \(approximate ? "≈" : "")\(percent)",
+            accessibilityText: accessibility,
+            attributes: attributes)
+    }
+
     private static func optionalTextToken(
         _ value: String?,
         unavailableLabel: String,
@@ -1377,6 +1415,59 @@ extension MenuBarLayoutRenderer {
 }
 
 extension MenuBarLayoutRenderer {
+    private static func cockpitDailyRemainingToken(
+        _ displayStyle: CockpitDailyRemainingStyle,
+        data: MenuBarLayoutRenderData,
+        style: TokenStyle,
+        options: MenuBarLayoutRenderOptions)
+        -> (value: NSAttributedString, accessibilityText: String?)
+    {
+        let value = data.cockpitDailyRemaining.flatMap { remaining -> CockpitMenuBarDailyRemaining? in
+            remaining.percent.isFinite && (0...100).contains(remaining.percent)
+                && remaining.weeklyPercent.isFinite && remaining.weeklyPercent >= 0 ? remaining : nil
+        }
+        let stale = value?.isStale == true || options.isStale
+        let qualifiers = (value != nil && stale ? "≈" : "") + (value?.isUpperBound == true ? "≤" : "")
+        let percent = value.map { self.cockpitRemainingPercent($0.percent) } ?? "—"
+        let label = L("cockpit_menu_remaining_short")
+        var accessibility = value.map {
+            L(
+                "cockpit_menu_remaining_accessibility",
+                "\($0.isUpperBound ? "≤" : "")\(self.cockpitRemainingPercent($0.percent))",
+                "\($0.isUpperBound ? "≤" : "")\(self.cockpitRemainingPercent($0.weeklyPercent))")
+        } ?? L("%@ unavailable", L("cockpit_menu_remaining_title"))
+        if stale, value != nil { accessibility += ", " + L("cockpit_ui_stale") }
+        var attributes = style.attributes
+        if options.isHighlighted { attributes[.foregroundColor] = NSColor.selectedMenuItemTextColor }
+        guard displayStyle != .percent else {
+            return self.textToken(
+                "\(label) \(qualifiers)\(percent)",
+                accessibilityText: accessibility,
+                attributes: attributes)
+        }
+        let shape: CockpitDailyRemainingMeter.Shape = displayStyle == .bar ? .bar : .circle
+        let height = max(6, (style.font.capHeight * (shape == .circle ? 1.25 : 0.7)).rounded())
+        let size = NSSize(width: shape == .circle ? height : (style.font.pointSize <= 9 ? 28 : 38), height: height)
+        let attachment = NSTextAttachment()
+        attachment.image = CockpitDailyRemainingMeter.image(
+            shape: shape,
+            percent: value?.percent,
+            size: size,
+            tint: options.isHighlighted ? .selectedMenuItemTextColor : style.foregroundColor)
+        attachment.bounds = NSRect(
+            x: 0,
+            y: self.attachmentYOrigin(height: height, style: style),
+            width: size.width,
+            height: height)
+        let result = NSMutableAttributedString(string: "\(label) \(qualifiers)", attributes: attributes)
+        result.append(self.attachmentText(attachment, style: style))
+        return (result, accessibility)
+    }
+
+    private static func cockpitRemainingPercent(_ value: Double) -> String {
+        (value / 100).formatted(.percent.precision(.fractionLength(0...1)).locale(codexBarLocalizedResourceLocale()))
+    }
+
     /// Graphical progress bar for one semantic window, embedded as an `NSTextAttachment` so the
     /// status-item title keeps surrounding countdown text in the same line. The bar is a pre-tinted
     /// bitmap (AppKit does not template-tint attachments), so it is cached by fill/style like the

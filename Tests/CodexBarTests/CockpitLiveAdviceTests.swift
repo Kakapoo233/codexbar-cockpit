@@ -76,8 +76,8 @@ struct CockpitLiveAdviceTests {
         let estimate = CockpitPlanningResetWindow(resetsAt: noon.addingTimeInterval(6 * 3600), source: .estimated)
         let estimated = state.status(
             providerID: "codex", on: noon, calendar: calendar, planningResetWindow: estimate)
-        #expect(account.suggestedPercent == 23.85)
-        #expect(estimated.suggestedPercent == 70)
+        #expect(account.suggestedPercent == 11.36)
+        #expect(abs((estimated.suggestedPercent ?? -1) - (estimated.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
         #expect(estimated.usedPercent == 20)
         #expect(estimated.manualCapPercent == 30)
         #expect(estimated.effectiveCapPercent == 30)
@@ -109,7 +109,7 @@ struct CockpitLiveAdviceTests {
         let codex = state.status(providerID: "codex", on: self.now, planningResetWindow: estimate)
         #expect(codex.usedPercent == nil)
         #expect(codex.suggestionIsPartial)
-        #expect(codex.suggestedPercent == 50)
+        #expect(abs((codex.suggestedPercent ?? -1) - (codex.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
         #expect(codex.remainingSuggestedPercent == nil)
         let claude = state.status(providerID: "claude", on: self.now, planningResetWindow: estimate)
         #expect(claude.planningResetWindow?.source == .account)
@@ -158,7 +158,7 @@ struct CockpitLiveAdviceTests {
         #expect(invalidated.value)
         let updated = plans.status(for: .codex, on: self.now)
         #expect(updated.planningResetWindow?.source == .announced)
-        #expect(updated.suggestedPercent == 70)
+        #expect(abs((updated.suggestedPercent ?? -1) - (updated.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
         #expect((updated.suggestedPercent ?? 0) > baseline)
         #expect(plans.state.snapshots.count == 1)
         #expect(resets.planningWindow(accountResetAt: accountReset, on: self.now.addingTimeInterval(16 * 60))?

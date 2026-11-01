@@ -13,9 +13,27 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitPlanState` is a serializable Foundation module. It receives official quota observations and
   produces live daily recommendations, manual caps, observed use, and completeness.
   Advice uses the latest same-account balance and remaining time to an account reset or an earlier
-  valid announced/estimated reset. Predictions only change the planning horizon; they never create quota.
+  valid announced/estimated reset. Predictions never create quota.
+  The target is a full local day's share, not a fraction based on hours remaining until midnight.
+  Current-cycle observed use is added back before allocating that share, then deducted once from
+  today's available allowance. Earlier cycles stay consumed; manual caps and the actual remaining
+  balance bound the allowance. Missing/partial observation retains its uncertainty.
+  The UI shows available allowance as a percentage of the effective daily allocation (manual cap when
+  present), together with the equivalent percentage of the weekly quota. For example, 15% of weekly quota
+  remaining from a 20% daily allocation is shown as 75% of today's allocation and 15% of weekly quota.
+  A known zero daily allocation displays 0%; missing measurements remain unknown in both units.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
+  The status controller shares its planner with `UsageStore` for menu-bar layout and preview rendering;
+  previews never instantiate another collector or persistence store. The optional Daily recommendation
+  component reads `suggestedPercent`, the full-day automatic share of the weekly quota, independently
+  of manual caps and the used/remaining presentation switch. Matching provider/account/organization is
+  required; remote fleet sources do not use the local plan. Planner and reset metadata participate in icon
+  observation, and a placed component uses the existing minute refresh scheduler. The three Available today components read `remainingDailyBudgetPercent` and retain
+  `remainingSuggestedPercent` as their weekly equivalent. Incomplete observations remain upper bounds;
+  missing values are never drawn as zero. Bars and bottom-up filled circles represent remaining daily
+  allowance independently of the global used/remaining switch. Cockpit V8 layout keys
+  retain V7-and-earlier projections so rolling back does not invalidate the existing layout.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.
@@ -24,10 +42,18 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   history, with calendar-aware boundaries and separate currency totals.
 - Day, week and month reuse the same calendar date cells and reset/feedback markers. A compact reset
   announcement and period toolbar remain above the scrolling calendar and selected-day details.
+  Calendar typography uses the original native text sizes; date badges, cell heights and chart areas
+  match those sizes. Narrow weekly strips retain horizontal scrolling.
 - The Usage homepage displays a countdown only for a fresh, pending public announcement with an exact
   future date. Estimates, undated announcements and expired deadlines never create a homepage banner.
-  Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors;
-  they are available independently of local cost tracking.
+  Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors.
+  They filter captured observations using the shared statistics period, reporting date and bucket time zone;
+  Statistics charts retain all selected points, while compact menu charts keep their 30-point limit.
+  The primary Statistics quota timeline uses observation timestamps on the complete selected date axis,
+  with actual observation coverage shown separately. Missing dates remain empty and reset cycles are
+  separated. The original current-cycle burndown and cycle-utilization views remain in expandable
+  reset-cycle details; their cycle-based axes are not presented as the global reporting-period timeline.
+  They are available independently of local cost tracking.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to
   the explicit `local-machine` scope, independently of whichever quota account is currently selected.
@@ -36,12 +62,27 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Its samples use observed account quota changes, including labeled partial coverage and archived daily
   observations. Calendar quota feedback is scoped by provider/account/day/time zone; corrections preserve
   captured measurements. Token feedback is a separate calendar mode and is never converted into quota.
-  Missing samples show the 25% baseline curve; fitted output never rewrites automatic recommendations or personal caps.
+  Missing samples use the 25% baseline knee. Automatic advice uses the fitted knee as a comfort cap;
+  it never changes a user's manual cap. The personal planner adapts upstream `planRemainingQuota`,
+  not v0.3.4's shared-account override (which removes the comfort cap).
+  For current-cycle balance plus observed use P, the full-day allocation is A = P × min(1, day duration /
+  remaining horizon). Reset-risk boost is (P − A) × p². Earlier-cycle use is added once before applying
+  the full-day comfort cap K × (1 + 1.5p), multiplied by 0.75 on local weekends. Available allowance then
+  subtracts all observed use once and cannot exceed the actual balance. Partial observations remain bounds.
+  Codex's default p = 0.1 is explicitly a model assumption; fresh numeric community watch estimates may
+  replace it. A fresh dated regular announcement uses p = 1 only within the next 24 hours and before the
+  account reset. More distant announcements still shorten the planning horizon. Other providers use p = 0.
+  A history-derived estimated date is not treated as a probability. Stale public risk metadata falls back
+  to the explicit default, independently of notification settings.
+  Source: [upstream personal planner](https://github.com/HouSiyuan2001/codex-cockpit/blob/cefcbc9efe03071150431645b4ebb51e7faac574/src/lib/dynamicQuota.ts).
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.
 - `CockpitMenuPanelController` owns the menu-bar popover; `CockpitPanelView` owns its peer pages.
   The existing provider menu builders remain the source for provider cards and actions.
+- Statistics keeps its reporting-period choices in a fixed sidebar outside the scrolling content.
+  The sidebar uses the same controller binding as cost and quota history; direct session-detail
+  navigation retains its captured context and restores the sidebar when returning to Statistics.
 - `CockpitPanelLayout` shares screen, column, and native-card widths between the controller and view.
   Wide Usage pages keep the complete provider menu beside an independently scrolling advice column;
   narrow pages use one scrolling column. Native cards are built for the main column before mounting.

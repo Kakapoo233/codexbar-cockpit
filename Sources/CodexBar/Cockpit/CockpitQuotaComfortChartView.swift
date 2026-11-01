@@ -12,7 +12,11 @@ struct CockpitQuotaComfortChartView: View {
         GroupBox {
             VStack(alignment: .leading, spacing: 12) {
                 self.chart
-                HStack(spacing: 16) {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 140), alignment: .leading)],
+                    alignment: .leading,
+                    spacing: 8)
+                {
                     ForEach([CockpitFeeling.light, .comfortable, .overloaded], id: \.self) { feeling in
                         Label {
                             Text(feeling.calendarTitle)
@@ -21,34 +25,36 @@ struct CockpitQuotaComfortChartView: View {
                         }
                     }
                 }
-                .font(.caption)
+                .font(CockpitCalendarTypography.caption)
                 if let sample = self.model.observations.first(where: { $0.id == self.hoveredID }) {
                     Text(L(
                         "cockpit_comfort_curve_sample",
                         sample.localDateKey,
                         cockpitLocalizedPercent(sample.usedPercent),
                         sample.feeling.calendarTitle))
-                        .font(.caption).monospacedDigit()
+                        .font(CockpitCalendarTypography.caption).monospacedDigit()
                     if sample.coverage == .partial {
                         Text(L("cockpit_comfort_quota_partial"))
-                            .font(.caption2).foregroundStyle(.secondary)
+                            .font(CockpitCalendarTypography.caption2).foregroundStyle(.secondary)
                     }
                 }
                 if self.model.status == .baseline {
                     Text(L("cockpit_comfort_curve_empty"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
-                DisclosureGroup(L(
-                    "cockpit_comfort_curve_details",
-                    self.model.sampleCount.formatted(.number.locale(codexBarLocalizedLocale()))))
-                {
+                DisclosureGroup {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L("cockpit_comfort_curve_explanation"))
                         Text(L("cockpit_comfort_curve_weights"))
                     }
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
+                } label: {
+                    Text(L(
+                        "cockpit_comfort_curve_details",
+                        self.model.sampleCount.formatted(.number.locale(codexBarLocalizedLocale()))))
+                        .font(CockpitCalendarTypography.body)
                 }
                 ForEach(self.records.prefix(7)) { record in
                     HStack {
@@ -58,22 +64,22 @@ struct CockpitQuotaComfortChartView: View {
                         Text(record.usedPercent.map(cockpitLocalizedPercent) ?? L("cockpit_ui_unknown"))
                             .monospacedDigit().foregroundStyle(.secondary)
                     }
-                    .font(.caption)
+                    .font(CockpitCalendarTypography.caption)
                     .help(record.coverage == .partial ? L("cockpit_comfort_quota_partial") : "")
                 }
             }
             .padding(10)
         } label: {
-            HStack {
-                Text(L("cockpit_comfort_curve_title"))
-                Spacer()
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L("cockpit_comfort_curve_title")).font(CockpitCalendarTypography.body)
                 Text(L(
                     self.model.status == .fitted
                         ? "cockpit_comfort_curve_knee" : "cockpit_comfort_curve_default",
                     cockpitLocalizedPercent(self.model.kneePercent)))
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
             }
         }
+        .font(CockpitCalendarTypography.body)
     }
 
     private var chart: some View {
@@ -113,7 +119,7 @@ struct CockpitQuotaComfortChartView: View {
                 AxisGridLine().foregroundStyle(.secondary.opacity(0.15))
                 AxisValueLabel {
                     if let percent = value.as(Double.self) {
-                        Text(cockpitLocalizedPercent(percent))
+                        Text(cockpitLocalizedPercent(percent)).font(CockpitCalendarTypography.caption)
                     }
                 }
             }
@@ -123,13 +129,17 @@ struct CockpitQuotaComfortChartView: View {
                 AxisGridLine().foregroundStyle(.secondary.opacity(0.15))
                 AxisValueLabel {
                     if let score = value.as(Double.self) {
-                        Text(cockpitLocalizedPercent(score * 100))
+                        Text(cockpitLocalizedPercent(score * 100)).font(CockpitCalendarTypography.caption)
                     }
                 }
             }
         }
-        .chartXAxisLabel(L("cockpit_comfort_curve_x"))
-        .chartYAxisLabel(L("cockpit_comfort_curve_y"))
+        .chartXAxisLabel {
+            Text(L("cockpit_comfort_curve_x")).font(CockpitCalendarTypography.caption)
+        }
+        .chartYAxisLabel {
+            Text(L("cockpit_comfort_curve_y")).font(CockpitCalendarTypography.caption)
+        }
         .chartOverlay { proxy in
             GeometryReader { geometry in
                 Rectangle().fill(.clear).contentShape(Rectangle())
@@ -143,7 +153,7 @@ struct CockpitQuotaComfortChartView: View {
                     }
             }
         }
-        .frame(height: 230)
+        .frame(height: CockpitCalendarTypography.scaled(230))
         .accessibilityLabel(L("cockpit_comfort_curve_title"))
         .accessibilityValue(L("cockpit_comfort_curve_explanation"))
     }
@@ -156,7 +166,7 @@ struct CockpitQuotaComfortChartView: View {
             guard let x = proxy.position(forX: sample.usedPercent), let y = proxy.position(forY: sample.score)
             else { return nil }
             let distance = hypot(location.x - frame.minX - x, location.y - frame.minY - y)
-            return distance <= 18 ? (sample.id, distance) : nil
+            return distance <= 18 ? (sample.id, Double(distance)) : nil
         }
         return matches.min { $0.1 < $1.1 }?.0
     }

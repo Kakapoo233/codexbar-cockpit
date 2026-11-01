@@ -147,24 +147,23 @@ struct CockpitCalendarView: View {
                     self.calendarContent(ledger: ledger)
                     CockpitCalendarPeriodSummaryView(ledger: ledger, period: self.period, metric: self.metric)
                     Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                     Divider()
                     self.selectedDayHeader
-                    Picker(L("cockpit_comfort_mode"), selection: self.$experienceMode) {
-                        ForEach(CockpitExperienceMode.allCases) { mode in
-                            Text(mode.title).tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    CockpitCalendarPicker(
+                        selection: self.$experienceMode,
+                        choices: CockpitExperienceMode.allCases,
+                        title: { $0.title },
+                        label: L("cockpit_comfort_mode"))
                     Text(L(self.experienceMode == .quota
                             ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                     self.personalStatus
                     if self.experienceMode == .quota {
                         self.quotaFeedbackNotice
                     }
                     Text(L("cockpit_ui_calendar_subjective_note"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                     if let resetStore {
                         CockpitResetDayDetails(
                             events: self.resetEventsByDay[self.calendar.startOfDay(for: self.selectedDay)] ?? [],
@@ -195,6 +194,7 @@ struct CockpitCalendarView: View {
                 .padding(16)
             }
         }
+        .font(CockpitCalendarTypography.body)
         .onChange(of: self.scale) { _, _ in
             self.month = self.selectedDay
         }
@@ -206,13 +206,16 @@ struct CockpitCalendarView: View {
                 self.selectedDay,
                 timeZone: self.calendar.timeZone,
                 accessibility: true))
-                .font(.headline)
+                .font(CockpitCalendarTypography.headline)
             Spacer()
-            Picker(L("cockpit_ui_feeling_records"), selection: self.$feelingProvider) {
-                ForEach([UsageProvider.codex, .claude], id: \.self) { provider in
-                    Text(ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName)
-                        .tag(provider)
-                }
+            HStack(spacing: 8) {
+                Text(L("cockpit_ui_feeling_records")).font(CockpitCalendarTypography.body)
+                CockpitCalendarPicker(
+                    selection: self.$feelingProvider,
+                    choices: [UsageProvider.codex, .claude],
+                    title: { ProviderDescriptorRegistry.descriptor(for: $0).metadata.displayName },
+                    label: L("cockpit_ui_feeling_records"),
+                    style: .popUp)
             }
             .frame(width: 200)
         }
@@ -235,7 +238,7 @@ struct CockpitCalendarView: View {
                     containing: self.selectedDay,
                     scale: .month,
                     calendar: self.calendar).title(calendar: self.calendar))
-                    .font(.headline)
+                    .font(CockpitCalendarTypography.headline)
             }
             CockpitMonthGridView(
                 calendar: self.calendar,
@@ -299,7 +302,7 @@ struct CockpitCalendarView: View {
                 if let summary = group.dailySummaries.first(where: {
                     self.calendar.isDate($0.day, inSameDayAs: self.selectedDay)
                 }) {
-                    GroupBox(group.currencyCode) {
+                    GroupBox {
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(summary.providers) { provider in
                                 HStack {
@@ -317,10 +320,12 @@ struct CockpitCalendarView: View {
                             }
                         }
                         .padding(6)
+                    } label: {
+                        Text(group.currencyCode).font(CockpitCalendarTypography.body)
                     }
                 } else {
                     Text(L("cockpit_ui_currency_no_day", group.currencyCode))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
             }
         }
@@ -374,14 +379,14 @@ struct CockpitCalendarView: View {
             let coverage = captured ? record?.coverage : usage.coverage
             if let used {
                 Text("\(L("cockpit_comfort_curve_x")) · \(cockpitLocalizedPercent(used))")
-                    .font(.caption).monospacedDigit()
+                    .font(CockpitCalendarTypography.caption).monospacedDigit()
                 if coverage == .partial {
                     Text(L("cockpit_comfort_quota_partial"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
             } else {
                 Text(L("cockpit_comfort_quota_missing"))
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
             }
         }
     }
@@ -444,11 +449,11 @@ struct CockpitCalendarStatusEditor: View {
     var unavailableReason: String?
 
     var body: some View {
-        GroupBox(L("cockpit_ui_calendar_personal_status")) {
+        GroupBox {
             VStack(alignment: .leading, spacing: 12) {
                 if !self.compact {
                     Text(L("cockpit_ui_calendar_subjective_note"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
                 HStack(spacing: 10) {
                     ForEach([CockpitFeeling.light, .comfortable, .overloaded], id: \.self) { feeling in
@@ -462,20 +467,29 @@ struct CockpitCalendarStatusEditor: View {
                     Label(
                         self.unavailableReason ?? L("cockpit_ui_calendar_future"),
                         systemImage: "calendar.badge.exclamationmark")
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 }
                 if let error = self.errorMessage {
                     Label(error, systemImage: "exclamationmark.triangle")
-                        .font(.caption).foregroundStyle(.orange)
+                        .font(CockpitCalendarTypography.caption).foregroundStyle(.orange)
                 }
             }
             .padding(8)
+        } label: {
+            Text(L("cockpit_ui_calendar_personal_status")).font(CockpitCalendarTypography.body)
         }
+        .font(CockpitCalendarTypography.body)
     }
 
     private var clearButton: some View {
-        Button(L("cockpit_ui_calendar_clear")) { self.onClear() }
-            .disabled(!self.canRecord || self.selected == nil)
+        Button { self.onClear() } label: {
+            Text(L("cockpit_ui_calendar_clear"))
+                .font(CockpitCalendarTypography.body)
+                .padding(.horizontal, 8).padding(.vertical, 5)
+                .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 6))
+        }
+        .buttonStyle(.plain)
+        .disabled(!self.canRecord || self.selected == nil)
     }
 
     private func statusButton(_ feeling: CockpitFeeling, selected: Bool) -> some View {
@@ -485,7 +499,7 @@ struct CockpitCalendarStatusEditor: View {
         } label: {
             HStack(spacing: 6) {
                 Text(feeling.cockpitEmoji).accessibilityHidden(true)
-                Text(feeling.calendarTitle)
+                Text(feeling.calendarTitle).fixedSize(horizontal: false, vertical: true)
                 if selected {
                     Image(systemName: "checkmark.circle.fill").accessibilityHidden(true)
                 }

@@ -10,9 +10,17 @@ struct CockpitPlanSummaryView: View {
                 Label(L("cockpit_ui_stale"), systemImage: "clock.badge.exclamationmark")
                     .foregroundStyle(.orange)
             }
-            HStack(spacing: 12) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                self.metric(L("cockpit_advice_full_day"), value: self.percent(self.status.suggestedPercent))
+                VStack(alignment: .leading, spacing: 9) {
+                    Text(L("cockpit_advice_remaining_today")).font(.callout).foregroundStyle(.secondary)
+                    CockpitDailyBudgetRemainingValue(status: self.status, alignment: .leading, fontSize: 30)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(18)
+                .background(Color.primary.opacity(0.035), in: RoundedRectangle(cornerRadius: 12))
+                .accessibilityIdentifier("cockpit-summary-remaining-today")
                 self.metric(L("cockpit_ui_weekly_remaining"), value: self.percent(self.status.remainingPercent))
-                self.metric(L("cockpit_ui_suggestion"), value: self.percent(self.status.suggestedPercent))
                 self.metric(L("cockpit_ui_observed"), value: self.percent(
                     self.status.usedPercent,
                     partial: self.status.coverage != .complete))
@@ -21,6 +29,7 @@ struct CockpitPlanSummaryView: View {
                 Text(CockpitDailyAdviceProjection.resetWindowText(window))
                     .font(.caption).foregroundStyle(.secondary)
             }
+            CockpitComfortAdviceSummaryView(status: self.status)
             Text(L("cockpit_advice_live_note")).font(.caption).foregroundStyle(.secondary)
             if self.status.suggestionIsPartial {
                 Text(L("cockpit_advice_partial_note")).font(.caption).foregroundStyle(.secondary)
@@ -40,8 +49,8 @@ struct CockpitPlanSummaryView: View {
         .background(Color.primary.opacity(0.035), in: RoundedRectangle(cornerRadius: 12))
     }
 
-    private func percent(_ value: Double?, partial: Bool = false) -> String {
+    private func percent(_ value: Double?, partial: Bool = false, upperBound: Bool = false) -> String {
         guard let value else { return "—" }
-        return (partial ? "≥ " : "") + cockpitLocalizedPercent(value)
+        return (partial ? (upperBound ? "≤ " : "≥ ") : "") + cockpitLocalizedPercent(value)
     }
 }

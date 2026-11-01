@@ -90,6 +90,9 @@ extension StatusItemController {
         let layoutSpendSignature = showBrandPercent
             ? self.storedMenuBarLayoutSpendSignature(for: provider, snapshot: snapshot)
             : nil
+        let layoutRecommendationSignature = showBrandPercent
+            ? self.storedMenuBarRecommendationSignature(for: provider, snapshot: snapshot)
+            : nil
 
         return [
             provider.rawValue,
@@ -113,7 +116,19 @@ extension StatusItemController {
             "layoutResets=\(layoutResetSignature ?? "nil")",
             "layoutCondWindows=\(layoutConditionalWindowSignature ?? "nil")",
             "layoutSpend=\(layoutSpendSignature ?? "nil")",
+            "layoutRecommendation=\(layoutRecommendationSignature ?? "nil")",
         ].joined(separator: "|")
+    }
+
+    private func storedMenuBarRecommendationSignature(
+        for provider: UsageProvider, snapshot: UsageSnapshot?) -> String?
+    {
+        guard !self.menuBarUsageSource(for: provider).isFleet else { return nil }
+        let resolution = self.renderedMenuBarLayoutResolution(for: provider)
+        guard !resolution.usesLegacyRendering,
+              resolution.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
+                  .contains(where: \.readsCockpitPlan) else { return nil }
+        return String(self.store.cockpitMenuBarPlanValues(provider: provider, snapshot: snapshot).hashValue)
     }
 
     private func storedMenuBarLayoutResetSignature(for provider: UsageProvider, snapshot: UsageSnapshot?) -> String? {

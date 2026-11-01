@@ -3013,7 +3013,7 @@
 "cockpit_comfort_curve_x" = "當天已用配額（%）";
 "cockpit_comfort_curve_y" = "主觀評分（%）";
 "cockpit_comfort_curve_details" = "%@ 筆回饋 · 模型說明";
-"cockpit_comfort_curve_explanation" = "輕鬆=100%、剛剛好=80%、過載=25%。這些是主觀評分，並非實測效率。保留原版固定曲線，僅擬合轉折點（0.1–100%），不會修改每日計畫。";
+"cockpit_comfort_curve_explanation" = "輕鬆=100%、剛剛好=80%、過載=25%。這些是主觀評分，並非實測效率。保留原版固定曲線，僅擬合轉折點（0.1–100%），用於自動建議，手動上限保持不變。";
 "cockpit_comfort_curve_weights" = "近期回饋權重較高，半衰期為14天；不完整用量以75%權重計入。累計用量可超過100%，評分下限為20%。";
 "cockpit_comfort_curve_empty" = "尚無可用配額回饋，顯示預設25%轉折點；請選擇日期並記錄體感。";
 "cockpit_comfort_quota_missing" = "此日期沒有可用配額觀測。體感仍會儲存，但不會參與曲線擬合。";
@@ -3170,7 +3170,7 @@
 "cockpit_advice_reset_account" = "規劃視窗：帳號重置 %@";
 "cockpit_advice_reset_announced" = "規劃視窗：已公告重置 %@；帳號是否重置仍需確認。";
 "cockpit_advice_reset_estimated" = "規劃視窗：預計重置 %@，並非官方承諾。";
-"cockpit_advice_live_note" = "根據最新觀測餘額和剩餘時間動態計算，手動上限保持不變。";
+"cockpit_advice_live_note" = "全天建議參考舒適曲線，不因今天剩餘小時減少而打折；今日還能用會扣除已記錄用量，手動上限優先。";
 "cockpit_advice_partial_note" = "今日用量紀錄不完整，建議額度為暫估值。";
 
 /* About CodexBar Cockpit */
@@ -3186,3 +3186,48 @@
 /* Codex reset banner */
 "cockpit_reset_banner_title" = "Codex 重置已公告";
 "cockpit_reset_banner_countdown" = "剩餘 %@";
+
+/* Full-day target and remaining daily allowance */
+"cockpit_advice_full_day" = "全天建議（週額度）";
+"cockpit_advice_remaining_today" = "今日還能用（占今日分配）";
+
+/* Comfort-informed daily advice */
+"cockpit_advice_comfort_default" = "舒適上限：%@ · 預設曲線";
+"cockpit_advice_comfort_fitted" = "舒適上限：%@ · 個人擬合";
+"cockpit_advice_risk_default" = "重置機率：%@ · 模型預設值";
+"cockpit_advice_risk_estimated" = "重置機率：%@ · 社群估計";
+"cockpit_advice_risk_announced" = "已公告將在未來 24 小時內重置，本帳號是否重置仍需確認。";
+"cockpit_advice_comfort_limited" = "自動建議已按舒適上限調低。";
+"cockpit_advice_comfort_limited_manual" = "曲線限制的是自動建議，手動上限仍優先。";
+"cockpit_advice_manual_priority" = "手動上限優先於自動建議生效。";
+"cockpit_advice_risk_help" = "公開訊號和模型假設無法確認此帳號已重置。";
+"cockpit_advice_comfort_samples" = "個人曲線依據 %d 條配額體感紀錄擬合。";
+"cockpit_advice_comfort_default_help" = "暫無個人配額體感資料時使用預設曲線。";
+"cockpit_advice_comfort_ceiling_help" = "此上限會根據重置機率和週末調整，僅用於自動建議，不限制手動上限。";
+
+/* Daily-allocation ratio and weekly equivalent */
+"cockpit_advice_weekly_equivalent" = "相當於週額度 %@";
+"cockpit_advice_daily_ratio_help" = "今日還能用以當日有效分配為 100%，手動上限優先；副值顯示相當於週額度的比例。";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "額度歷史";
+"cockpit_plan_history_coverage" = "實際記錄：%@ – %@（%d 個樣本）";
+"cockpit_plan_history_partial" = "僅顯示實際採集的記錄，缺少日期不表示用量為零。";
+"cockpit_plan_history_empty" = "此時間範圍內沒有額度記錄。";
+"cockpit_plan_cycle_details" = "重設週期詳情";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "每日建議用量";
+"cockpit_menu_daily_recommendation_short" = "建議";
+"cockpit_menu_daily_recommendation_help" = "Cockpit 根據舒適曲線與重設時段計算的全天建議，表示每週總額度的百分比；不是今日剩餘額度。沒有有效的本機帳號資料時顯示 —，觀測不完整時標示為估算。";
+"cockpit_menu_daily_recommendation_accessibility" = "每日建議用量：%@，占每週總額度";
+"cockpit_menu_daily_recommendation_partial" = "%@（觀測不完整，估算）";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "今日";
+"cockpit_menu_remaining_title" = "今日還能用";
+"cockpit_menu_remaining_percent" = "今日還能用：數字";
+"cockpit_menu_remaining_bar" = "今日還能用：用量條";
+"cockpit_menu_remaining_circle" = "今日還能用：圓形填充";
+"cockpit_menu_remaining_accessibility" = "今日還能用：%@，占今日分配額度；相當於每週總額度的 %@";
+"cockpit_menu_remaining_help" = "以今天分配的額度為100%，顯示今日還能用的比例。遵守個人上限與實際餘額，隨舒適曲線和重設時段更新；≤表示觀測不完整時的上界，≈表示資料過時，—表示未知。";

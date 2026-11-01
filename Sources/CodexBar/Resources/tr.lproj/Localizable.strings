@@ -3036,7 +3036,7 @@
 "cockpit_comfort_curve_x" = "Bugün kullanılan kota (%)";
 "cockpit_comfort_curve_y" = "Öznel puan (%)";
 "cockpit_comfort_curve_details" = "%@ gözlem · Model ayrıntıları";
-"cockpit_comfort_curve_explanation" = "Hafif = 100%, tam kararında = 80%, aşırı = 25%. Bunlar öznel puanlardır, ölçülen verimlilik değildir. Özgün sabit eğrinin yalnızca büküm noktası uyarlanır (0,1–100%); günlük planınız değişmez.";
+"cockpit_comfort_curve_explanation" = "Hafif = 100%, tam kararında = 80%, aşırı = 25%. Bunlar öznel puanlardır, ölçülen verimlilik değildir. Özgün sabit eğrinin yalnızca büküm noktası uyarlanır (0,1–100%); eğri otomatik önerileri etkiler; elle belirlenen sınırlar değişmez.";
 "cockpit_comfort_curve_weights" = "Yakın tarihli geri bildirimlerin ağırlığı daha yüksektir (yarı ömür 14 gün); eksik kullanım %75 ağırlık alır. Birikimli kullanım %100’ü aşabilir, puanın alt sınırı %20’dir.";
 "cockpit_comfort_curve_empty" = "Henüz kullanılabilir kota geri bildirimi yok. Varsayılan %25 büküm noktası gösteriliyor; bir tarih seçip deneyiminizi kaydedin.";
 "cockpit_comfort_quota_missing" = "Bu tarih için kullanılabilir kota gözlemi yok. Deneyiminiz kaydedilir ancak eğriyi uyarlamak için kullanılmaz.";
@@ -3191,7 +3191,7 @@
 "cockpit_advice_reset_account" = "Planning window: account reset %@";
 "cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
 "cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
-"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_live_note" = "The comfort curve informs the full-day target, without discounting hours already elapsed. Available today deducts recorded use; manual caps take priority.";
 "cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";
 
 /* About CodexBar Cockpit (English fallback) */
@@ -3207,3 +3207,48 @@
 /* Codex reset banner (English fallback) */
 "cockpit_reset_banner_title" = "Codex reset announced";
 "cockpit_reset_banner_countdown" = "In %@";
+
+/* Full-day target and remaining daily allowance (English fallback) */
+"cockpit_advice_full_day" = "Full-day target · weekly quota";
+"cockpit_advice_remaining_today" = "Available today · of daily allocation";
+
+/* Comfort-informed daily advice (English fallback) */
+"cockpit_advice_comfort_default" = "Comfort ceiling: %@ · default curve";
+"cockpit_advice_comfort_fitted" = "Comfort ceiling: %@ · personal fit";
+"cockpit_advice_risk_default" = "Reset chance: %@ · model default";
+"cockpit_advice_risk_estimated" = "Reset chance: %@ · community estimate";
+"cockpit_advice_risk_announced" = "Reset announced within 24 hours; this account still needs confirmation.";
+"cockpit_advice_comfort_limited" = "The comfort ceiling reduced the automatic target.";
+"cockpit_advice_comfort_limited_manual" = "The curve limits the automatic target; your manual cap still takes priority.";
+"cockpit_advice_manual_priority" = "Your manual cap takes priority over the automatic target.";
+"cockpit_advice_risk_help" = "Public signals and model assumptions do not confirm that this account has reset.";
+"cockpit_advice_comfort_samples" = "Personal curve fitted from %d quota feedback records.";
+"cockpit_advice_comfort_default_help" = "Uses the default curve until personal quota feedback is available.";
+"cockpit_advice_comfort_ceiling_help" = "The ceiling adjusts for reset chance and weekends. It applies to automatic targets, not manual caps.";
+
+/* Daily-allocation ratio and weekly equivalent (English fallback) */
+"cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
+"cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "Kota geçmişi";
+"cockpit_plan_history_coverage" = "Kaydedilen: %@ – %@ (%d örnek)";
+"cockpit_plan_history_partial" = "Yalnızca kaydedilen gözlemler gösterilir. Eksik tarihler kullanımın sıfır olduğu anlamına gelmez.";
+"cockpit_plan_history_empty" = "Bu dönemde kota gözlemi kaydedilmedi.";
+"cockpit_plan_cycle_details" = "Sıfırlama döngüsü ayrıntıları";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Önerilen günlük kullanım";
+"cockpit_menu_daily_recommendation_short" = "Öneri";
+"cockpit_menu_daily_recommendation_help" = "Cockpit, konfor eğrisi ve sıfırlama dönemine göre tüm gün için öneriyi toplam haftalık kotanın yüzdesi olarak hesaplar. Bu, bugün kalan kota değildir. Geçerli yerel hesap verisi yoksa — gösterilir; gözlemler eksikse değer tahmin olarak işaretlenir.";
+"cockpit_menu_daily_recommendation_accessibility" = "Önerilen günlük kullanım: haftalık kotanın %@ kadarı";
+"cockpit_menu_daily_recommendation_partial" = "%@ (eksik gözlemlerden tahmin edilmiştir)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Bugün";
+"cockpit_menu_remaining_title" = "Bugün kullanılabilir";
+"cockpit_menu_remaining_percent" = "Bugün kullanılabilir: yüzde";
+"cockpit_menu_remaining_bar" = "Bugün kullanılabilir: çubuk";
+"cockpit_menu_remaining_circle" = "Bugün kullanılabilir: dolu daire";
+"cockpit_menu_remaining_accessibility" = "Bugün kullanılabilir: günlük payın %@ kadarı; haftalık kotanın %@ kadarına eşdeğer";
+"cockpit_menu_remaining_help" = "Bugünkü payın hâlâ kullanılabilir kısmını gösterir; günlük payın tamamı %100 kabul edilir. Kişisel sınırları ve gerçek bakiyeyi dikkate alır, konfor eğrisi ve sıfırlama aralığına göre güncellenir. ≤ eksik gözlemlere dayalı üst sınırı, ≈ eski verileri, — bilinmeyen değeri gösterir.";

@@ -36,7 +36,7 @@ struct CockpitMonthGridView: View {
             HStack(spacing: 0) {
                 ForEach(Array(self.weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                     Text(symbol)
-                        .font(.caption.weight(.medium))
+                        .font(CockpitCalendarTypography.caption.weight(.medium))
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
@@ -106,13 +106,13 @@ struct CockpitCalendarDateCell: View {
                 HStack(spacing: 6) {
                     if self.showsWeekday {
                         Text(self.weekday)
-                            .font(.caption.weight(.medium))
+                            .font(CockpitCalendarTypography.caption.weight(.medium))
                             .foregroundStyle(self.today ? Color.red : .secondary)
                             .lineLimit(1)
                     }
                     Spacer(minLength: 0)
                     Text(codexBarLocalizedInteger(self.calendar.component(.day, from: self.day)))
-                        .font(.system(size: self.compact ? 12 : 15, weight: .medium))
+                        .font(CockpitCalendarTypography.font(size: self.compact ? 12 : 15, weight: .medium))
                         .monospacedDigit()
                         .foregroundStyle(self.today || self.selected ? Color.white : Color.primary)
                         .frame(width: self.compact ? 24 : 29, height: self.compact ? 24 : 29)
@@ -123,14 +123,15 @@ struct CockpitCalendarDateCell: View {
                         }
                 }
                 Text(self.value)
-                    .font(.caption.monospacedDigit())
+                    .font(CockpitCalendarTypography.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
-                    .lineLimit(self.compact ? 2 : nil)
+                    .lineLimit(self.compact ? 3 : nil)
                     .fixedSize(horizontal: false, vertical: true)
                 if self.compact {
                     HStack(alignment: .top, spacing: 4) {
                         if let feeling = self.model?.feeling {
-                            Text(feeling.cockpitEmoji).font(.caption2).accessibilityHidden(true)
+                            Text(feeling.cockpitEmoji).font(CockpitCalendarTypography.caption2)
+                                .accessibilityHidden(true)
                         }
                         if let model = self.model {
                             CockpitCalendarResetMarkers(model: model, compact: true)
@@ -143,7 +144,7 @@ struct CockpitCalendarDateCell: View {
                             Text(feeling.cockpitEmoji).accessibilityHidden(true)
                             Text(feeling.calendarTitle).foregroundStyle(.secondary)
                         }
-                        .font(.caption2)
+                        .font(CockpitCalendarTypography.caption2)
                         .lineLimit(1)
                     }
                     if let model = self.model {
@@ -252,7 +253,7 @@ private struct CockpitCalendarResetMarkers: View {
                 }
             }
         }
-        .font(.caption2)
+        .font(CockpitCalendarTypography.caption2)
         .accessibilityHidden(true)
     }
 
