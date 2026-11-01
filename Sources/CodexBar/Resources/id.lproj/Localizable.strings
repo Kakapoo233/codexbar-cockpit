@@ -3253,3 +3253,29 @@
 "cockpit_menu_remaining_circle" = "Tersedia hari ini: lingkaran terisi";
 "cockpit_menu_remaining_accessibility" = "Tersedia hari ini: %@ dari alokasi hari ini; setara dengan %@ dari kuota mingguan";
 "cockpit_menu_remaining_help" = "Menampilkan bagian alokasi hari ini yang masih tersedia, dengan total alokasi harian sebagai 100%. Mematuhi batas pribadi dan saldo aktual, serta diperbarui mengikuti kurva kenyamanan dan periode reset. ≤ menandai batas atas dari pengamatan yang tidak lengkap; ≈ data usang; — nilai tidak diketahui.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Sinkronkan pengaturan, penilaian kalender, dan batas pribadi";
+"Sync now" = "Sinkronkan sekarang";
+"Open sync folder" = "Buka folder sinkronisasi";
+"Sync folder" = "Folder sinkronisasi";
+"Last local file exchange" = "Pertukaran berkas lokal terakhir";
+"Devices with sync files" = "Perangkat dengan berkas sinkronisasi";
+"File sync in progress…" = "Menyinkronkan berkas…";
+"Files are up to date on this Mac." = "Berkas di Mac ini sudah diperbarui.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple menangani unggahan dan unduhan. Pertukaran berkas lokal tidak memastikan berkas telah diterima perangkat lain.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "Kunci API, cookie, token masuk, transkrip sesi, dan kredensial tim tidak pernah dimasukkan ke berkas ini.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Rekomendasi harian dihitung secara lokal. Jumlah token lokal dan log penggunaan mentah tidak disinkronkan.";
+"iCloud Drive is off." = "iCloud Drive dimatikan.";
+"Turn on iCloud Drive in System Settings, then try again." = "Aktifkan iCloud Drive di Pengaturan Sistem, lalu coba lagi.";
+"Waiting for the first file exchange." = "Menunggu pertukaran berkas pertama.";
+"iCloud upload confirmed" = "Unggahan ke iCloud dikonfirmasi";
+"Waiting for iCloud upload" = "Menunggu unggahan ke iCloud";
+"Cloud upload status unavailable" = "Status unggahan ke cloud tidak tersedia";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Menunggu iCloud Drive mengunduh berkas sinkronisasi.";
+"Sync files could not be read safely. Local data has been preserved." = "Berkas sinkronisasi tidak dapat dibaca dengan aman. Data lokal telah dipertahankan.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "Folder sinkronisasi tidak tersedia. Periksa iCloud Drive lalu coba lagi.";
+
+"iCloud Drive" = "iCloud Drive";

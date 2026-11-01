@@ -407,6 +407,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var managedCodexAccountCoordinator: ManagedCodexAccountCoordinator?
     private var codexAccountPromotionCoordinator: CodexAccountPromotionCoordinator?
     private var cloudSyncCoordinator: CloudSyncCoordinator?
+    private var iCloudDriveSyncCoordinator: ICloudDriveSyncCoordinator?
     private var cockpitTeamStore: CockpitTeamStore?
     private var settingsWindowController: SettingsWindowController?
     private var pendingUpdateSettingsOpen = false
@@ -441,6 +442,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.managedCodexAccountCoordinator = dependencies.managedCodexAccountCoordinator
         self.codexAccountPromotionCoordinator = dependencies.codexAccountPromotionCoordinator
         self.cloudSyncCoordinator = CloudSyncCoordinator(settings: dependencies.settings, state: self.cloudSyncState)
+        if !SettingsStore.isRunningTests {
+            self.iCloudDriveSyncCoordinator = ICloudDriveSyncCoordinator(
+                settings: dependencies.settings, state: self.cloudSyncState.drive)
+        }
         if !SettingsStore.isRunningTests {
             self.cockpitTeamStore = CockpitTeamStore(usageStore: dependencies.store, settings: dependencies.settings)
         }
@@ -496,7 +501,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.scheduleSettingsApplicationMenuValidation(
             missingItemRetriesRemaining: Self.settingsMenuReadinessRetryCount,
             fallbackVerificationRetriesRemaining: Self.settingsMenuFallbackVerificationRetryCount)
-        self.cloudSyncCoordinator?.start()
+        self.cloudSyncCoordinator?.start(enableCloudKit: false)
+        self.iCloudDriveSyncCoordinator?.start()
         if !SettingsStore.isRunningTests { self.cockpitTeamStore?.start() }
         Task { await self.settings?.httpServer.startSaved() }
         Task { @MainActor [weak self] in
@@ -557,6 +563,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         self.cloudSyncCoordinator?.stop()
+        self.iCloudDriveSyncCoordinator?.stop()
         self.cockpitTeamStore?.stop()
         self.memoryPressureMonitor.stop()
         #if DEBUG
@@ -569,7 +576,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
-        self.cloudSyncCoordinator?.applicationDidBecomeActive()
+        self.iCloudDriveSyncCoordinator?.applicationDidBecomeActive()
         if !SettingsStore.isRunningTests { Task { await self.cockpitTeamStore?.refresh() } }
     }
 
@@ -771,6 +778,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             if let concreteStatusController = statusController as? StatusItemController {
                 concreteStatusController.cloudSyncState = self.cloudSyncState
                 concreteStatusController.cockpitTeamStore = self.cockpitTeamStore
+                self.iCloudDriveSyncCoordinator?.attachPlanStore(concreteStatusController.cockpitPlanStore)
                 MenuSwitchFlickerProbe.startIfRequested(controller: concreteStatusController)
             }
             return

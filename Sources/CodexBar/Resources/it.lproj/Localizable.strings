@@ -3251,3 +3251,29 @@
 "cockpit_menu_remaining_circle" = "Disponibile oggi: cerchio pieno";
 "cockpit_menu_remaining_accessibility" = "Disponibile oggi: %@ della quota giornaliera; equivale al %@ della quota settimanale";
 "cockpit_menu_remaining_help" = "Mostra la parte ancora disponibile della quota di oggi, il cui totale corrisponde al 100%. Rispetta i limiti personali e il saldo effettivo e si aggiorna in base alla curva di comfort e al periodo di ripristino. ≤ indica un limite superiore ricavato da osservazioni incomplete; ≈ dati non aggiornati; — un valore sconosciuto.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Sincronizza impostazioni, valutazioni del calendario e limiti personali";
+"Sync now" = "Sincronizza ora";
+"Open sync folder" = "Apri cartella di sincronizzazione";
+"Sync folder" = "Cartella di sincronizzazione";
+"Last local file exchange" = "Ultimo scambio locale di file";
+"Devices with sync files" = "Dispositivi con file di sincronizzazione";
+"File sync in progress…" = "Sincronizzazione dei file…";
+"Files are up to date on this Mac." = "I file su questo Mac sono aggiornati.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple gestisce caricamenti e download. Uno scambio locale di file non conferma la ricezione su un altro dispositivo.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "Chiavi API, cookie, token di accesso, trascrizioni delle sessioni e credenziali del team non vengono mai inclusi in questi file.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "I consigli giornalieri vengono calcolati localmente. I totali locali dei token e i registri di utilizzo originali non vengono sincronizzati.";
+"iCloud Drive is off." = "iCloud Drive è disattivato.";
+"Turn on iCloud Drive in System Settings, then try again." = "Attiva iCloud Drive in Impostazioni di Sistema, poi riprova.";
+"Waiting for the first file exchange." = "In attesa del primo scambio di file.";
+"iCloud upload confirmed" = "Caricamento su iCloud confermato";
+"Waiting for iCloud upload" = "In attesa del caricamento su iCloud";
+"Cloud upload status unavailable" = "Stato del caricamento sul cloud non disponibile";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "In attesa che iCloud Drive scarichi i file di sincronizzazione.";
+"Sync files could not be read safely. Local data has been preserved." = "Impossibile leggere i file di sincronizzazione in modo sicuro. I dati locali sono stati conservati.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "La cartella di sincronizzazione non è disponibile. Controlla iCloud Drive e riprova.";
+
+"iCloud Drive" = "iCloud Drive";

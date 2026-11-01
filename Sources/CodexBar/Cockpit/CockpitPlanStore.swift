@@ -228,14 +228,35 @@ final class CockpitPlanStore {
         }
     }
 
+    func requireReadableDriveSyncState() throws {
+        guard self.canSave else { throw CocoaError(.fileReadCorruptFile) }
+    }
+
+    /// A remote change becomes observable only after its complete local snapshot is durable.
+    func persistDriveSyncState(_ state: CockpitPlanState) throws {
+        try self.requireReadableDriveSyncState()
+        do {
+            try self.writeState(state)
+            self.state = state
+            self.error = nil
+        } catch {
+            self.error = CockpitLocalizedMessage("cockpit_ui_plan_save_error", error.localizedDescription)
+            throw error
+        }
+    }
+
+    private func writeState(_ state: CockpitPlanState) throws {
+        let directory = self.fileURL.deletingLastPathComponent()
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let data = try JSONEncoder().encode(state)
+        try data.write(to: self.fileURL, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: self.fileURL.path)
+    }
+
     private func save() {
         guard self.canSave else { return }
         do {
-            let directory = self.fileURL.deletingLastPathComponent()
-            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-            let data = try JSONEncoder().encode(self.state)
-            try data.write(to: self.fileURL, options: .atomic)
-            try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: self.fileURL.path)
+            try self.writeState(self.state)
             self.error = nil
         } catch {
             self.error = CockpitLocalizedMessage("cockpit_ui_plan_save_error", error.localizedDescription)

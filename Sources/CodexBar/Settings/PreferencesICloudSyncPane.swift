@@ -1,178 +1,97 @@
-import CodexBarCore
+import AppKit
 import SwiftUI
 
 @MainActor
 struct ICloudSyncPane: View {
     @Bindable var settings: SettingsStore
     @Bindable var state: CloudSyncState
-    private static let securityFootnote =
-        "Secrets use iCloud end-to-end encryption via encryptedValues. " +
-        "Hooks and machine-local paths never sync."
+
+    private static let privacyNote =
+        "API keys, cookies, login tokens, session transcripts and team credentials never enter these files."
+    private static let transferNote =
+        "Apple handles upload and download. " +
+        "A local file exchange does not confirm delivery to another device."
+    private static let planningNote =
+        "Daily recommendations are calculated locally. " +
+        "Local token totals and raw usage logs are not synchronized."
 
     var body: some View {
         Form {
-            if self.state.status.needsAppUpdate {
-                Section {
-                    Label(
-                        L("Sync is paused: another Mac uses a newer version of CodexBar. Update to resume."),
-                        systemImage: "exclamationmark.triangle.fill")
-                        .font(.callout)
-                        .foregroundStyle(.orange)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(10)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
-                }
-            }
-
             Section {
                 Toggle(
-                    L("Sync settings and providers across your Macs via iCloud"),
-                    isOn: self.primarySyncBinding)
+                    L("Sync settings, calendar feedback, and personal caps"),
+                    isOn: Binding(
+                        get: { self.state.drive.enabled },
+                        set: { self.state.drive.setEnabled($0) }))
                     .toggleStyle(.checkbox)
-                    .disabled(!self.syncCanBeEnabled)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Toggle(L("Include API keys, cookies, and tokens"), isOn: self.includeSecretsBinding)
-                    Toggle(L("Sync usage snapshots"), isOn: self.snapshotsBinding)
-                    Toggle(L("Show accounts from other Macs"), isOn: self.showFleetAccountsBinding)
+                HStack {
+                    Button(L("Sync now")) { self.state.drive.synchronize() }
+                        .disabled(!self.state.drive.enabled || self.state.drive.isSynchronizing)
+                    Button(L("Open sync folder")) { self.openSyncFolder() }
+                        .disabled(self.state.drive.directoryURL == nil)
+                    if self.state.drive.isSynchronizing {
+                        ProgressView().controlSize(.small)
+                    }
                 }
-                .toggleStyle(.checkbox)
-                .padding(.leading, 20)
-                .disabled(!self.syncCanRun || !self.settings.iCloudSyncEnabled)
-            } header: {
-                Text(L("iCloud Sync"))
-            } footer: {
-                if let availabilityMessage = self.availabilityMessage {
-                    SettingsSectionFooter(availabilityMessage)
-                }
-            }
-
-            Section {
-                LabeledContent(
-                    L("Last successful fetch"),
-                    value: self.relativeTime(self.state.status.lastSuccessfulFetchAt))
-                LabeledContent(
-                    L("Last successful push"),
-                    value: self.relativeTime(self.state.status.lastSuccessfulPushAt))
-            } header: {
-                Text(L("Status"))
-            }
-
-            Section {
-                if self.devices.isEmpty {
-                    Text(L("No synced Macs yet."))
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(self.devices, id: \.deviceID) { device in
-                        HStack {
-                            ICloudSyncDeviceRow(
-                                device: device,
-                                isCurrentDevice: device.deviceID == self.settings.iCloudSyncDeviceID)
-                            if device.deviceID != self.settings.iCloudSyncDeviceID {
-                                Button(L("Remove"), role: .destructive) {
-                                    Task { await self.state.requestDeviceRemoval(device.deviceID) }
-                                }
-                                .disabled(!self.syncCanRun || !self.settings.iCloudSyncEnabled)
-                            }
-                        }
+                if let directory = self.state.drive.directoryURL {
+                    LabeledContent(L("Sync folder")) {
+                        Text(directory.path).font(.caption).textSelection(.enabled)
                     }
                 }
             } header: {
-                Text(L("Macs"))
+                Text(L("iCloud Drive"))
             } footer: {
-                SettingsSectionFooter(L(Self.securityFootnote))
+                SettingsSectionFooter(L(Self.privacyNote))
+            }
+
+            Section {
+                if let error = self.state.drive.errorMessage {
+                    Label(error, systemImage: "exclamationmark.triangle")
+                        .foregroundStyle(.orange).textSelection(.enabled)
+                } else {
+                    Text(self.statusText)
+                }
+                LabeledContent(
+                    L("Last local file exchange"),
+                    value: self.state.drive.lastSynchronizedAt?.relativeDescription() ?? L("Never"))
+                LabeledContent(L("Devices with sync files"), value: String(self.state.drive.deviceCount))
+                if self.state.drive.lastSynchronizedAt != nil {
+                    Text(self.uploadStatusText).foregroundStyle(.secondary)
+                }
+            } header: {
+                Text(L("Status"))
+            } footer: {
+                SettingsSectionFooter(L(Self.transferNote))
+            }
+
+            Section {
+                Text(L(Self.planningNote))
+                    .font(.callout).foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)
     }
 
-    private var syncCanBeEnabled: Bool {
-        self.state.availability == .available
+    private var statusText: String {
+        if !self.state.drive.enabled { return L("iCloud Drive is off.") }
+        if self.state.drive.isSynchronizing { return L("File sync in progress…") }
+        return self.state.drive.lastSynchronizedAt == nil
+            ? L("Waiting for the first file exchange.") : L("Files are up to date on this Mac.")
     }
 
-    private var syncCanRun: Bool {
-        self.syncCanBeEnabled && !self.state.status.needsAppUpdate
-    }
-
-    private var availabilityMessage: String? {
-        switch self.state.availability {
-        case .available:
-            nil
-        case .missingEntitlement:
-            L("Requires a signed release build of CodexBar.")
-        case .noICloudAccount:
-            L("Sign in to iCloud in System Settings to enable sync.")
-        case .restricted:
-            L("iCloud access is restricted on this Mac.")
+    private var uploadStatusText: String {
+        switch self.state.drive.uploadedToICloud {
+        case true: L("iCloud upload confirmed")
+        case false: L("Waiting for iCloud upload")
+        case nil: L("Cloud upload status unavailable")
         }
     }
 
-    private var devices: [DeviceSyncPayload] {
-        self.state.fleetDevices.values.sorted { lhs, rhs in
-            let lhsIsCurrent = lhs.deviceID == self.settings.iCloudSyncDeviceID
-            let rhsIsCurrent = rhs.deviceID == self.settings.iCloudSyncDeviceID
-            if lhsIsCurrent != rhsIsCurrent {
-                return lhsIsCurrent
-            }
-            if lhs.lastSeen != rhs.lastSeen {
-                return lhs.lastSeen > rhs.lastSeen
-            }
-            return lhs.hostName.localizedCaseInsensitiveCompare(rhs.hostName) == .orderedAscending
+    private func openSyncFolder() {
+        guard var directory = self.state.drive.directoryURL else { return }
+        while !FileManager.default.fileExists(atPath: directory.path), directory.path != "/" {
+            directory.deleteLastPathComponent()
         }
-    }
-
-    private var primarySyncBinding: Binding<Bool> {
-        Binding(
-            get: { self.settings.iCloudSyncEnabled },
-            set: { self.settings.iCloudSyncEnabled = $0 })
-    }
-
-    private var includeSecretsBinding: Binding<Bool> {
-        Binding(
-            get: { self.settings.iCloudSyncIncludeSecrets },
-            set: { self.settings.iCloudSyncIncludeSecrets = $0 })
-    }
-
-    private var snapshotsBinding: Binding<Bool> {
-        Binding(
-            get: { self.settings.iCloudSyncSnapshotsEnabled },
-            set: { self.settings.iCloudSyncSnapshotsEnabled = $0 })
-    }
-
-    private var showFleetAccountsBinding: Binding<Bool> {
-        Binding(
-            get: { self.settings.iCloudSyncShowFleetAccounts },
-            set: { self.settings.iCloudSyncShowFleetAccounts = $0 })
-    }
-
-    private func relativeTime(_ date: Date?) -> String {
-        date?.relativeDescription() ?? L("Never")
-    }
-}
-
-private struct ICloudSyncDeviceRow: View {
-    let device: DeviceSyncPayload
-    let isCurrentDevice: Bool
-
-    var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(self.device.hostName)
-                Text(String(format: L("Last seen %@"), self.device.lastSeen.relativeDescription()))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            if self.isCurrentDevice {
-                Text(L("This Mac"))
-                    .font(.caption2.weight(.medium))
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(.quaternary, in: Capsule())
-            }
-        }
+        if directory.path != "/" { NSWorkspace.shared.open(directory) }
     }
 }

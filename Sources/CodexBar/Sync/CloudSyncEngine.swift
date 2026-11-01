@@ -22,6 +22,7 @@ struct SyncStatus: Equatable, Sendable {
 @MainActor
 @Observable
 final class CloudSyncState {
+    var drive = ICloudDriveSyncState()
     var availability: SyncAvailability = .available
     var status = SyncStatus()
     var fleetDevices: [String: DeviceSyncPayload] = [:]

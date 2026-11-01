@@ -3253,3 +3253,29 @@
 "cockpit_menu_remaining_circle" = "قابل استفاده امروز: دایره پرشونده";
 "cockpit_menu_remaining_accessibility" = "قابل استفاده امروز: %@ از سهم امروز؛ معادل %@ از سهمیه هفتگی";
 "cockpit_menu_remaining_help" = "بخش باقی‌مانده از سهم امروز را نشان می‌دهد؛ کل سهم روزانه برابر با ۱۰۰٪ است. سقف شخصی و موجودی واقعی را رعایت می‌کند و بر پایه منحنی راحتی و بازه بازنشانی به‌روز می‌شود. ≤ حد بالای حاصل از مشاهدات ناقص، ≈ داده‌های قدیمی و — مقدار نامعلوم را نشان می‌دهد.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "همگام‌سازی تنظیمات، بازخورد تقویم و سقف‌های شخصی";
+"Sync now" = "هم‌اکنون همگام‌سازی شود";
+"Open sync folder" = "باز کردن پوشهٔ همگام‌سازی";
+"Sync folder" = "پوشهٔ همگام‌سازی";
+"Last local file exchange" = "آخرین تبادل محلی فایل‌ها";
+"Devices with sync files" = "دستگاه‌های دارای فایل همگام‌سازی";
+"File sync in progress…" = "در حال همگام‌سازی فایل‌ها…";
+"Files are up to date on this Mac." = "فایل‌های این Mac به‌روز هستند.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "بارگذاری و دریافت را Apple انجام می‌دهد. تبادل محلی فایل‌ها به معنی تأیید رسیدن آن‌ها به دستگاه دیگر نیست.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "کلیدهای API، کوکی‌ها، توکن‌های ورود، متن جلسه‌ها و اطلاعات ورود تیم هرگز در این فایل‌ها قرار نمی‌گیرند.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "پیشنهادهای روزانه به‌صورت محلی محاسبه می‌شوند. مجموع محلی توکن‌ها و گزارش‌های خام مصرف همگام‌سازی نمی‌شوند.";
+"iCloud Drive is off." = "iCloud Drive خاموش است.";
+"Turn on iCloud Drive in System Settings, then try again." = "iCloud Drive را در تنظیمات سیستم روشن کنید و دوباره تلاش کنید.";
+"Waiting for the first file exchange." = "در انتظار نخستین تبادل فایل‌ها.";
+"iCloud upload confirmed" = "بارگذاری در iCloud تأیید شد";
+"Waiting for iCloud upload" = "در انتظار بارگذاری در iCloud";
+"Cloud upload status unavailable" = "وضعیت بارگذاری در فضای ابری در دسترس نیست";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "در انتظار دریافت فایل‌های همگام‌سازی از iCloud Drive.";
+"Sync files could not be read safely. Local data has been preserved." = "خواندن امن فایل‌های همگام‌سازی ممکن نشد. داده‌های محلی حفظ شده‌اند.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "پوشهٔ همگام‌سازی در دسترس نیست. iCloud Drive را بررسی کنید و دوباره تلاش کنید.";
+
+"iCloud Drive" = "iCloud Drive";

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.10
+
+- Replace the unavailable personal CloudKit settings pane with iCloud Drive file synchronization for allowlisted preferences, menu-bar layouts, personal caps and calendar feedback.
+- Preserve account boundaries and device-local measurements; never export provider credentials or raw history.
+- Merge per-device revisions and explicit deletions, wait for undownloaded files and distinguish local exchange from Apple upload confirmation.
+
 ## 0.8.9 — Today’s available allowance in the menu bar
 
 - Add percentage, continuous bar and bottom-up filled-circle components for today’s available allowance. All three use the effective daily allocation as 100%, respect manual caps and actual balance, and expose the weekly equivalent in accessibility text.

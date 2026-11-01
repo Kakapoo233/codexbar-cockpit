@@ -108,6 +108,12 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitAppIdentity` centralizes fork-owned configuration, cache, defaults, and Keychain namespaces.
   `CockpitSettingsImport` exposes only a whitelist of presentation and provider selection settings.
 
+## Personal iCloud Drive synchronization
+
+The fork uses `ICloudDriveSyncCoordinator` and `ICloudDriveReplica` for credential-free personal document synchronization. The old CloudKit engine remains available for its protocol tests but is not activated by this app. Each device owns one versioned JSON file; per-key Lamport revisions and tombstones merge edits without shared-file overwrites. A local journal acknowledges only successfully applied typed projections. First-join defaults cannot overwrite existing cloud values. Undownloaded, corrupt or newer documents stop the exchange rather than becoming empty state.
+
+Settings use an explicit field whitelist and an atomic menu-layout/rule bundle. Planner synchronization includes personal caps and subjective records only, preserving quota/account boundaries and excluding raw observations. Local-machine Token measurements remain device-local even when the feeling is shared. Application startup, activation and a 15-second timer drive exchanges. Apple upload metadata is separate from the last successful local file exchange. See [setup and limits](ICLOUD_DRIVE.md).
+
 ## Team synchronization
 
 `CockpitTeamStore` is owned by the app delegate and shared by the menu panel and canonical settings.

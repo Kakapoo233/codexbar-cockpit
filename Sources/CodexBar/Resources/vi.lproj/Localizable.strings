@@ -3252,3 +3252,29 @@
 "cockpit_menu_remaining_circle" = "Còn dùng được hôm nay: hình tròn tô đầy";
 "cockpit_menu_remaining_accessibility" = "Còn dùng được hôm nay: %@ phân bổ trong ngày; tương đương %@ hạn mức tuần";
 "cockpit_menu_remaining_help" = "Hiển thị tỷ lệ phân bổ hôm nay vẫn còn dùng được, với tổng phân bổ trong ngày là 100%. Tuân theo giới hạn cá nhân và số dư thực tế, đồng thời cập nhật theo đường cong thoải mái và khoảng thời gian đặt lại. ≤ chỉ giới hạn trên khi quan sát chưa đầy đủ; ≈ chỉ dữ liệu cũ; — nghĩa là chưa biết.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Đồng bộ cài đặt, đánh giá trên lịch và giới hạn cá nhân";
+"Sync now" = "Đồng bộ ngay";
+"Open sync folder" = "Mở thư mục đồng bộ";
+"Sync folder" = "Thư mục đồng bộ";
+"Last local file exchange" = "Lần trao đổi tệp cục bộ gần nhất";
+"Devices with sync files" = "Thiết bị có tệp đồng bộ";
+"File sync in progress…" = "Đang đồng bộ tệp…";
+"Files are up to date on this Mac." = "Các tệp trên máy Mac này đã được cập nhật.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple xử lý việc tải lên và tải xuống. Việc trao đổi tệp cục bộ không xác nhận tệp đã đến thiết bị khác.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "Khóa API, cookie, mã đăng nhập, nội dung phiên và thông tin xác thực nhóm không bao giờ được đưa vào các tệp này.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Khuyến nghị hằng ngày được tính cục bộ. Tổng token cục bộ và nhật ký sử dụng thô không được đồng bộ.";
+"iCloud Drive is off." = "iCloud Drive đang tắt.";
+"Turn on iCloud Drive in System Settings, then try again." = "Bật iCloud Drive trong Cài đặt hệ thống rồi thử lại.";
+"Waiting for the first file exchange." = "Đang chờ lần trao đổi tệp đầu tiên.";
+"iCloud upload confirmed" = "Đã xác nhận tải lên iCloud";
+"Waiting for iCloud upload" = "Đang chờ tải lên iCloud";
+"Cloud upload status unavailable" = "Không có trạng thái tải lên đám mây";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Đang chờ iCloud Drive tải xuống các tệp đồng bộ.";
+"Sync files could not be read safely. Local data has been preserved." = "Không thể đọc an toàn các tệp đồng bộ. Dữ liệu cục bộ đã được giữ lại.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "Không có thư mục đồng bộ. Kiểm tra iCloud Drive rồi thử lại.";
+
+"iCloud Drive" = "iCloud Drive";

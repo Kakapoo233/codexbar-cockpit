@@ -3253,3 +3253,29 @@
 "cockpit_menu_remaining_circle" = "ยังใช้ได้วันนี้: วงกลมเติมเต็ม";
 "cockpit_menu_remaining_accessibility" = "ยังใช้ได้วันนี้: %@ ของส่วนที่จัดสรรวันนี้ เทียบเท่า %@ ของโควตารายสัปดาห์";
 "cockpit_menu_remaining_help" = "แสดงสัดส่วนที่ยังใช้ได้จากส่วนที่จัดสรรวันนี้ โดยยอดรวมรายวันเท่ากับ 100% เคารพขีดจำกัดส่วนตัวและยอดคงเหลือจริง และปรับตามเส้นโค้งความสบายกับช่วงรีเซ็ต ≤ หมายถึงขอบเขตบนจากข้อมูลสังเกตที่ไม่ครบ ≈ หมายถึงข้อมูลเก่า และ — หมายถึงไม่ทราบ";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "ซิงค์การตั้งค่า ความเห็นในปฏิทิน และขีดจำกัดส่วนตัว";
+"Sync now" = "ซิงค์ตอนนี้";
+"Open sync folder" = "เปิดโฟลเดอร์ซิงค์";
+"Sync folder" = "โฟลเดอร์ซิงค์";
+"Last local file exchange" = "การแลกเปลี่ยนไฟล์ในเครื่องครั้งล่าสุด";
+"Devices with sync files" = "อุปกรณ์ที่มีไฟล์ซิงค์";
+"File sync in progress…" = "กำลังซิงค์ไฟล์…";
+"Files are up to date on this Mac." = "ไฟล์บน Mac เครื่องนี้เป็นปัจจุบันแล้ว";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple จัดการการอัปโหลดและดาวน์โหลด การแลกเปลี่ยนไฟล์ในเครื่องไม่ได้ยืนยันว่าไฟล์ส่งถึงอุปกรณ์อื่นแล้ว";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "คีย์ API, คุกกี้, โทเค็นเข้าสู่ระบบ, เนื้อหาเซสชัน และข้อมูลรับรองของทีมจะไม่ถูกรวมไว้ในไฟล์เหล่านี้";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "คำแนะนำรายวันคำนวณในเครื่อง ยอดรวมโทเค็นในเครื่องและบันทึกการใช้งานดิบจะไม่ซิงค์";
+"iCloud Drive is off." = "iCloud Drive ปิดอยู่";
+"Turn on iCloud Drive in System Settings, then try again." = "เปิด iCloud Drive ในการตั้งค่าระบบ แล้วลองอีกครั้ง";
+"Waiting for the first file exchange." = "กำลังรอการแลกเปลี่ยนไฟล์ครั้งแรก";
+"iCloud upload confirmed" = "ยืนยันการอัปโหลดไปยัง iCloud แล้ว";
+"Waiting for iCloud upload" = "กำลังรออัปโหลดไปยัง iCloud";
+"Cloud upload status unavailable" = "ไม่สามารถตรวจสอบสถานะการอัปโหลดบนคลาวด์ได้";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "กำลังรอ iCloud Drive ดาวน์โหลดไฟล์ซิงค์";
+"Sync files could not be read safely. Local data has been preserved." = "ไม่สามารถอ่านไฟล์ซิงค์ได้อย่างปลอดภัย ข้อมูลในเครื่องได้รับการเก็บรักษาไว้แล้ว";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "ไม่สามารถใช้โฟลเดอร์ซิงค์ได้ โปรดตรวจสอบ iCloud Drive แล้วลองอีกครั้ง";
+
+"iCloud Drive" = "iCloud Drive";

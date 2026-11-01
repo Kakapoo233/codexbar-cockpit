@@ -3252,3 +3252,29 @@
 "cockpit_menu_remaining_circle" = "Bugün kullanılabilir: dolu daire";
 "cockpit_menu_remaining_accessibility" = "Bugün kullanılabilir: günlük payın %@ kadarı; haftalık kotanın %@ kadarına eşdeğer";
 "cockpit_menu_remaining_help" = "Bugünkü payın hâlâ kullanılabilir kısmını gösterir; günlük payın tamamı %100 kabul edilir. Kişisel sınırları ve gerçek bakiyeyi dikkate alır, konfor eğrisi ve sıfırlama aralığına göre güncellenir. ≤ eksik gözlemlere dayalı üst sınırı, ≈ eski verileri, — bilinmeyen değeri gösterir.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Ayarları, takvim değerlendirmelerini ve kişisel sınırları eşzamanla";
+"Sync now" = "Şimdi eşzamanla";
+"Open sync folder" = "Eşzamanlama klasörünü aç";
+"Sync folder" = "Eşzamanlama klasörü";
+"Last local file exchange" = "Son yerel dosya alışverişi";
+"Devices with sync files" = "Eşzamanlama dosyası bulunan cihazlar";
+"File sync in progress…" = "Dosyalar eşzamanlanıyor…";
+"Files are up to date on this Mac." = "Bu Mac’teki dosyalar güncel.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Yükleme ve indirme işlemlerini Apple yönetir. Yerel dosya alışverişi, dosyaların başka bir cihaza ulaştığını doğrulamaz.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "API anahtarları, çerezler, oturum açma belirteçleri, oturum içerikleri ve ekip kimlik bilgileri bu dosyalara hiçbir zaman eklenmez.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Günlük öneriler yerel olarak hesaplanır. Yerel token toplamları ve ham kullanım günlükleri eşzamanlanmaz.";
+"iCloud Drive is off." = "iCloud Drive kapalı.";
+"Turn on iCloud Drive in System Settings, then try again." = "Sistem Ayarları’nda iCloud Drive’ı açıp yeniden deneyin.";
+"Waiting for the first file exchange." = "İlk dosya alışverişi bekleniyor.";
+"iCloud upload confirmed" = "iCloud’a yükleme doğrulandı";
+"Waiting for iCloud upload" = "iCloud’a yükleme bekleniyor";
+"Cloud upload status unavailable" = "Buluta yükleme durumu kullanılamıyor";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "iCloud Drive’ın eşzamanlama dosyalarını indirmesi bekleniyor.";
+"Sync files could not be read safely. Local data has been preserved." = "Eşzamanlama dosyaları güvenli şekilde okunamadı. Yerel veriler korundu.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "Eşzamanlama klasörü kullanılamıyor. iCloud Drive’ı kontrol edip yeniden deneyin.";
+
+"iCloud Drive" = "iCloud Drive";

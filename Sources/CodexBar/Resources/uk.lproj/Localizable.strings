@@ -3250,3 +3250,29 @@
 "cockpit_menu_remaining_circle" = "Доступно сьогодні: заповнене коло";
 "cockpit_menu_remaining_accessibility" = "Доступно сьогодні: %@ денного обсягу; відповідає %@ тижневого ліміту";
 "cockpit_menu_remaining_help" = "Показує залишкову частку виділеного на сьогодні обсягу, де весь денний обсяг дорівнює 100%. Враховує особисті обмеження та фактичний залишок; оновлюється за кривою комфорту й періодом скидання. ≤ позначає верхню межу за неповних спостережень; ≈ застарілі дані; — невідоме значення.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Синхронізувати параметри, оцінки в календарі й особисті ліміти";
+"Sync now" = "Синхронізувати зараз";
+"Open sync folder" = "Відкрити папку синхронізації";
+"Sync folder" = "Папка синхронізації";
+"Last local file exchange" = "Останній локальний обмін файлами";
+"Devices with sync files" = "Пристрої з файлами синхронізації";
+"File sync in progress…" = "Синхронізація файлів…";
+"Files are up to date on this Mac." = "Файли на цьому Mac оновлено.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple керує надсиланням і завантаженням. Локальний обмін файлами не підтверджує їх отримання іншим пристроєм.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "Ключі API, файли cookie, токени входу, вміст сеансів і облікові дані команди ніколи не потрапляють до цих файлів.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Щоденні рекомендації обчислюються локально. Локальні суми токенів і необроблені журнали використання не синхронізуються.";
+"iCloud Drive is off." = "iCloud Drive вимкнено.";
+"Turn on iCloud Drive in System Settings, then try again." = "Увімкніть iCloud Drive у Системних параметрах і повторіть спробу.";
+"Waiting for the first file exchange." = "Очікування першого обміну файлами.";
+"iCloud upload confirmed" = "Надсилання до iCloud підтверджено";
+"Waiting for iCloud upload" = "Очікування надсилання до iCloud";
+"Cloud upload status unavailable" = "Стан надсилання до хмари недоступний";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Очікування завантаження файлів синхронізації з iCloud Drive.";
+"Sync files could not be read safely. Local data has been preserved." = "Не вдалося безпечно прочитати файли синхронізації. Локальні дані збережено.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "Папка синхронізації недоступна. Перевірте iCloud Drive і повторіть спробу.";
+
+"iCloud Drive" = "iCloud Drive";

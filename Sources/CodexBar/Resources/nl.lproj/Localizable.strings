@@ -3244,3 +3244,29 @@
 "cockpit_menu_remaining_circle" = "Vandaag beschikbaar: gevulde cirkel";
 "cockpit_menu_remaining_accessibility" = "Vandaag beschikbaar: %@ van de dagtoewijzing; komt overeen met %@ van het weekquotum";
 "cockpit_menu_remaining_help" = "Toont welk deel van de toewijzing voor vandaag nog beschikbaar is, waarbij de volledige dagtoewijzing 100% is. Houdt rekening met persoonlijke limieten en het werkelijke saldo en wordt bijgewerkt op basis van de comfortcurve en het resetvenster. ≤ geeft een bovengrens bij onvolledige waarnemingen aan; ≈ verouderde gegevens; — een onbekende waarde.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Instellingen, kalenderfeedback en persoonlijke limieten synchroniseren";
+"Sync now" = "Nu synchroniseren";
+"Open sync folder" = "Synchronisatiemap openen";
+"Sync folder" = "Synchronisatiemap";
+"Last local file exchange" = "Laatste lokale bestandsuitwisseling";
+"Devices with sync files" = "Apparaten met synchronisatiebestanden";
+"File sync in progress…" = "Bestanden worden gesynchroniseerd…";
+"Files are up to date on this Mac." = "De bestanden op deze Mac zijn bijgewerkt.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple verzorgt het uploaden en downloaden. Een lokale bestandsuitwisseling bevestigt geen ontvangst op een ander apparaat.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "API-sleutels, cookies, aanmeldingstokens, sessietranscripten en teamreferenties worden nooit in deze bestanden opgenomen.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Dagelijkse aanbevelingen worden lokaal berekend. Lokale tokentotalen en onbewerkte gebruikslogboeken worden niet gesynchroniseerd.";
+"iCloud Drive is off." = "iCloud Drive is uitgeschakeld.";
+"Turn on iCloud Drive in System Settings, then try again." = "Schakel iCloud Drive in via Systeeminstellingen en probeer het opnieuw.";
+"Waiting for the first file exchange." = "Wachten op de eerste bestandsuitwisseling.";
+"iCloud upload confirmed" = "Upload naar iCloud bevestigd";
+"Waiting for iCloud upload" = "Wachten op upload naar iCloud";
+"Cloud upload status unavailable" = "Status van cloudupload niet beschikbaar";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Wachten tot iCloud Drive de synchronisatiebestanden heeft gedownload.";
+"Sync files could not be read safely. Local data has been preserved." = "De synchronisatiebestanden konden niet veilig worden gelezen. Lokale gegevens zijn behouden.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "De synchronisatiemap is niet beschikbaar. Controleer iCloud Drive en probeer het opnieuw.";
+
+"iCloud Drive" = "iCloud Drive";

@@ -3251,3 +3251,29 @@
 "cockpit_menu_remaining_circle" = "Disponible avui: cercle ple";
 "cockpit_menu_remaining_accessibility" = "Disponible avui: %@ de l’assignació diària; equival al %@ de la quota setmanal";
 "cockpit_menu_remaining_help" = "Mostra la part de l’assignació d’avui encara disponible; el total diari equival al 100%. Respecta els límits personals i el saldo real i s’actualitza segons la corba de comoditat i el període de reinici. ≤ indica un límit superior amb observacions incompletes; ≈ dades antigues; — un valor desconegut.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Sincronitza la configuració, les valoracions del calendari i els límits personals";
+"Sync now" = "Sincronitza ara";
+"Open sync folder" = "Obre la carpeta de sincronització";
+"Sync folder" = "Carpeta de sincronització";
+"Last local file exchange" = "Últim intercanvi local de fitxers";
+"Devices with sync files" = "Dispositius amb fitxers de sincronització";
+"File sync in progress…" = "S’estan sincronitzant els fitxers…";
+"Files are up to date on this Mac." = "Els fitxers d’aquest Mac estan actualitzats.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple gestiona les càrregues i les baixades. Un intercanvi local de fitxers no confirma que hagin arribat a un altre dispositiu.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "Les claus API, galetes, testimonis d’inici de sessió, transcripcions de sessions i credencials de l’equip no s’inclouen mai en aquests fitxers.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Les recomanacions diàries es calculen localment. Els totals locals de tokens i els registres d’ús originals no se sincronitzen.";
+"iCloud Drive is off." = "iCloud Drive està desactivat.";
+"Turn on iCloud Drive in System Settings, then try again." = "Activa iCloud Drive a Configuració del Sistema i torna-ho a provar.";
+"Waiting for the first file exchange." = "S’està esperant el primer intercanvi de fitxers.";
+"iCloud upload confirmed" = "Càrrega a iCloud confirmada";
+"Waiting for iCloud upload" = "S’està esperant la càrrega a iCloud";
+"Cloud upload status unavailable" = "Estat de càrrega al núvol no disponible";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "S’està esperant que iCloud Drive baixi els fitxers de sincronització.";
+"Sync files could not be read safely. Local data has been preserved." = "No s’han pogut llegir els fitxers de sincronització de manera segura. Les dades locals s’han conservat.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "La carpeta de sincronització no està disponible. Comprova iCloud Drive i torna-ho a provar.";
+
+"iCloud Drive" = "iCloud Drive";
