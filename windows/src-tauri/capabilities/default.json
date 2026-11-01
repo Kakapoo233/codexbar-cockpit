@@ -1,0 +1,30 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Local system tray panel capabilities",
+  "windows": [
+    "widget"
+  ],
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-outer-position",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "notification:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "url": "https://github.com/*/*/releases*"
+        },
+        {
+          "url": "https://codex-resets.com/"
+        },
+        {
+          "url": "https://codex-reset-risk-dashboard.xr08255920.workers.dev/"
+        }
+      ]
+    }
+  ]
+}
