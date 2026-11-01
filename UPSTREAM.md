@@ -14,3 +14,7 @@ not bundled.
 Keep upstream changes separate from integration changes. Merge a reviewed stable release, rerun
 provider and Cockpit regression tests, and verify app identity and storage paths before packaging.
 The historical upstream workflows are retained as inactive text in docs/cockpit/upstream-workflows.
+
+The Windows client under `windows/` imports the Cockpit v0.3.4 desktop sources at the pinned commit above.
+Its upstream MIT notice is retained in `windows/LICENSE.upstream`. Bundled fonts were omitted;
+Windows shell, planning semantics and application identity are adapted for this fork.

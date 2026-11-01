@@ -4,6 +4,7 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Adapt to Windows with Tauri | Implementing in Windows 0.1.0-alpha.1 | System tray and same-panel navigation; genuine native build, installer and Windows acceptance required. See WINDOWS_PORT.md. |
 | Repair personal iCloud synchronization using iCloud Drive | Implemented and installed in 0.8.10 | Typed non-secret settings and personal calendar/cap records, per-device files, deterministic merge/deletions, explicit local/Apple upload status and two-client regression coverage. |
 | Add today’s available allowance to the menu-bar layout in three forms | Implemented and installed in 0.8.9 | Percentage, bar and filled circle agree with the homepage daily-allocation ratio, update while closed, preserve uncertainty and show the weekly equivalent accessibly. |
 | Restore calendar text to its size before the 50% enlargement | Implemented and installed in 0.8.8 | Original native type sizes, matching date-cell and badge dimensions, and working date selectors. |

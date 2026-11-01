@@ -1,0 +1,64 @@
+html, body, #root { width:100%; height:100%; margin:0; overflow:hidden; }
+body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background:var(--tray-bg); color:var(--tray-text); }
+:root { --tray-bg:#f3f5f8; --tray-card:#fff; --tray-text:#202b3d; --tray-muted:#617087; --tray-border:#dce2ea; --tray-accent:#1769dd; }
+:root[data-appearance="dark"] { --tray-bg:#171d28; --tray-card:#222b3a; --tray-text:#edf2fa; --tray-muted:#a9b6ca; --tray-border:#374459; --tray-accent:#77acff; }
+.tray-panel { display:flex; flex-direction:column; height:100%; width:100%; background:var(--tray-bg); color:var(--tray-text); font-size:calc(13px * var(--ui-font-scale,1)); box-sizing:border-box; }
+.tray-panel *, .tray-panel *::before, .tray-panel *::after { box-sizing:border-box; }
+.tray-panel button,.tray-panel input,.tray-panel select { font:inherit; }
+.tray-panel button { cursor:pointer; border:1px solid var(--tray-border); color:inherit; background:var(--tray-card); border-radius:7px; padding:7px 10px; }
+.tray-panel button:disabled { cursor:default; opacity:.45; }
+.tray-panel button:focus-visible,.tray-panel input:focus-visible,.tray-panel select:focus-visible { outline:2px solid var(--tray-accent); outline-offset:2px; }
+.tray-panel button[aria-pressed="true"] { background:var(--tray-accent); color:var(--tray-bg); border-color:var(--tray-accent); }
+.tray-panel-header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px 10px; flex-shrink:0; }
+.tray-panel-header strong { font-size:1.14em; }
+.tray-panel-header small { margin-left:12px; color:var(--tray-muted); }
+.tray-header-actions { display:flex; gap:6px; }
+.tray-header-actions button { display:grid; place-items:center; width:34px; height:32px; padding:6px; }
+.tray-header-actions svg { width:18px; height:18px; }
+.tray-page-tabs { display:flex; gap:6px; padding:0 18px 12px; flex-shrink:0; border-bottom:1px solid var(--tray-border); }
+.tray-page-tabs button { flex:1; min-width:0; white-space:nowrap; }
+.tray-page-layout { display:flex; flex:1; min-height:0; overflow:hidden; }
+.tray-page-content { flex:1; min-width:0; overflow-y:auto; padding:16px 18px 30px; overscroll-behavior:contain; }
+.tray-page-content > * + * { margin-top:16px; }
+.tray-date-sidebar { display:flex; flex-direction:column; align-items:stretch; width:104px; flex-shrink:0; padding:18px 8px; gap:8px; border-right:1px solid var(--tray-border); }
+.tray-date-sidebar button { padding:9px 4px; }
+.tray-card,.tray-panel .minimal-section { background:var(--tray-card); border:1px solid var(--tray-border); border-radius:12px; padding:16px; }
+.tray-card h2 { margin:0 0 15px; display:flex; justify-content:space-between; align-items:baseline; font-size:1.04em; }
+.tray-card h2 small { color:var(--tray-muted); font-weight:400; }
+.tray-card p { line-height:1.6; }
+.tray-advice-values { display:grid; grid-template-columns:1fr 1.4fr 1fr; gap:16px; margin-bottom:18px; }
+.tray-advice-values > div { display:flex; flex-direction:column; gap:6px; }
+.tray-advice-values strong { font-size:2em; font-variant-numeric:tabular-nums; color:var(--tray-accent); }
+.tray-advice-values small,.tray-card > small { color:var(--tray-muted); line-height:1.5; }
+.tray-cap-control { display:flex; gap:12px; align-items:center; margin:10px 0 8px; }
+.tray-cap-control input { width:120px; }
+.tray-panel input:not([type="checkbox"]):not([type="range"]),.tray-panel select { background:var(--tray-bg); border:1px solid var(--tray-border); border-radius:6px; padding:7px; color:inherit; }
+.tray-provider-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+.tray-window-meter { margin:12px 0; }
+.tray-window-meter > span { display:flex; justify-content:space-between; margin-bottom:6px; color:var(--tray-muted); }
+.tray-window-meter strong { color:var(--tray-text); }
+.tray-meter-track { height:7px; border-radius:6px; background:var(--tray-border); overflow:hidden; }
+.tray-meter-track i { display:block; height:100%; background:var(--tray-accent); border-radius:inherit; }
+.tray-reset-announcement { border:1px solid color-mix(in srgb,var(--tray-accent) 40%,var(--tray-border)); background:color-mix(in srgb,var(--tray-accent) 8%,var(--tray-card)); border-radius:10px; padding:12px 15px; display:flex; flex-direction:column; gap:7px; }
+.tray-error { display:flex; align-items:center; gap:10px; justify-content:space-between; background:#fff2db; color:#684516; padding:10px 18px; flex-shrink:0; }
+.tray-settings fieldset { padding:0; border:0; margin:0; min-width:0; }
+.tray-settings fieldset > * + *, .tray-settings > * + * { margin-top:16px; }
+.tray-settings label { display:flex; gap:12px; align-items:center; justify-content:space-between; margin:14px 0; }
+.tray-settings label:has(input[type="checkbox"]) { justify-content:flex-start; }
+.tray-settings label input[type="range"] { flex:1; max-width:300px; }
+.tray-settings output { min-width:45px; }
+.tray-panel .usage-note { color:var(--tray-muted); line-height:1.6; font-size:.92em; }
+.tray-quota-history svg { width:100%; max-height:190px; }
+.tray-quota-history svg text { fill:var(--tray-muted); font-size:10px; }
+.tray-chart-grid { stroke:var(--tray-border); fill:none; }
+.tray-chart-line { stroke:var(--tray-accent); stroke-width:2; fill:none; }
+.tray-chart-dot { fill:var(--tray-accent); }
+.tray-chart-axis { display:flex; justify-content:space-between; color:var(--tray-muted); font-size:.9em; margin:0 15px 8px 30px; }
+.tray-panel .codex-usage-panel { max-width:none; width:100%; margin:0; background:var(--tray-card); border:1px solid var(--tray-border); padding:16px; border-radius:12px; }
+.tray-panel .usage-toolbar { flex-wrap:wrap; }
+.tray-panel .task-usage-details { max-height:none; }
+.tray-panel .usage-task-list { min-height:300px; }
+.tray-panel .comfort-history-panel,.tray-panel .comfort-curve-panel { background:var(--tray-card); border:1px solid var(--tray-border); border-radius:12px; padding:16px; }
+.tray-panel .comfort-history-grid--day { grid-template-columns:1fr; }
+.tray-panel .comfort-history-grid--day .comfort-history-day { min-height:92px; }
+@media(max-width:650px) { .tray-advice-values { grid-template-columns:1fr; } .tray-date-sidebar { width:84px; } .tray-page-content { padding:12px; } }

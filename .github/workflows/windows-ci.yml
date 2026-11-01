@@ -1,0 +1,52 @@
+name: Windows tray client
+on:
+  push:
+    branches: [feat/windows-tray-client]
+    paths: ['windows/**', '.github/workflows/windows-ci.yml']
+  pull_request:
+    paths: ['windows/**', '.github/workflows/windows-ci.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Install locked frontend dependencies
+        run: npm ci
+      - name: Frontend tests
+        run: npm test
+      - name: Build frontend
+        run: npm run build
+      - name: Rust formatting
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+      - name: Native tests
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml
+      - name: Build Windows installer
+        run: npm run tauri build -- --bundles nsis
+      - name: Isolated native tray startup
+        shell: pwsh
+        run: |
+          $marker = Join-Path $env:RUNNER_TEMP 'cockpit-smoke.json'
+          $env:COCKPIT_SMOKE_OUTPUT = $marker
+          $app = Start-Process 'src-tauri/target/release/codexbar-cockpit-windows.exe' -ArgumentList '--smoke-test' -PassThru
+          if (-not $app.WaitForExit(30000)) { $app.Kill(); throw 'Tray startup timed out' }
+          if ($app.ExitCode -ne 0 -or -not (Test-Path $marker)) { throw 'Tray startup failed' }
+          Get-Content $marker
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: codexbar-cockpit-windows-x64-alpha
+          path: windows/src-tauri/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+          retention-days: 14

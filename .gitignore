@@ -7,6 +7,10 @@ xcuserdata/
 
 # Build products
 .build/
+windows/node_modules/
+windows/dist/
+windows/src-tauri/target/
+windows/src-tauri/gen/
 DerivedData
 
 # Bundles / artifacts
