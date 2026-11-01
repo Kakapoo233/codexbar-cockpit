@@ -17,7 +17,7 @@ struct CockpitDailyRemainingRendererTests {
                 data: data,
                 icon: nil,
                 options: fixture.options(showUsed: showUsed))
-            #expect(output.attributedTitle.string == "Today \(Int(percent))%")
+            #expect(output.attributedTitle.string == "T \(Int(percent))%")
             #expect(output.accessibilityLabel == L(
                 "cockpit_menu_remaining_accessibility", "\(Int(percent))%", "\(Int(percent / 5))%"))
         }
@@ -38,7 +38,8 @@ struct CockpitDailyRemainingRendererTests {
         let exact = renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
         data.cockpitDailyRemaining = .init(percent: 75, weeklyPercent: 15, isUpperBound: true, isStale: true)
         let partial = renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
-        #expect(partial.attributedTitle.string.contains("≈≤"))
+        #expect(partial.attributedTitle.string.contains("≈"))
+        #expect(!partial.attributedTitle.string.contains("≤"))
         #expect(partial.accessibilityLabel.contains("≤75%"))
         #expect(partial.accessibilityLabel.contains("≤15%"))
         #expect(partial.accessibilityLabel.hasSuffix(L("cockpit_ui_stale")))
@@ -87,7 +88,7 @@ struct CockpitDailyRemainingRendererTests {
                     renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
                 }
                 #expect(chinese.attributedTitle.string.hasPrefix("今日 "))
-                #expect(english.attributedTitle.string.hasPrefix("Today "))
+                #expect(english.attributedTitle.string.hasPrefix("T "))
                 #expect(chinese.accessibilityLabel != english.accessibilityLabel)
                 #expect(renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
                     .attributedTitle === chinese.attributedTitle)
