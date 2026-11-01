@@ -2941,7 +2941,7 @@
 "menu_bar_help_percent" = "Shows the selected quota window as used or remaining percent, following your usage display setting. ~ marks an estimate.";
 "menu_bar_help_scoped_weekly" = "Shows a model-specific weekly quota when the provider supplies one, separately from the overall weekly quota.";
 "menu_bar_help_automatic" = "Uses the provider’s automatic usage metric. Some providers show a balance or text instead of a percentage.";
-"menu_bar_help_pace" = "Compares actual quota use with expected use at this point in the window. The displayed sign follows the Pace sign setting.";
+"menu_bar_help_pace" = "Codex weekly pace compares observed use today with the full-day automatic Cockpit recommendation × the elapsed fraction of the local day, in weekly quota percentage points. Partial data gives a lower bound; stale data is unavailable. Session and other-provider pace still uses the quota window. The displayed sign follows the Pace sign setting.";
 "menu_bar_help_usage_bar" = "Shows the automatic quota as a compact three-cell text meter, following the used or remaining setting.";
 "menu_bar_help_progress" = "Shows the selected quota window as a graphical bar, following the used or remaining setting.";
 "menu_bar_help_reset_countdown" = "Shows the time left until this quota window resets, when a reset time is available.";
@@ -3280,3 +3280,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "The sync folder is unavailable. Check iCloud Drive and try again.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Today: %@ pp ahead of recommendation";
+"cockpit_pace_today_behind" = "Today: %@ pp behind recommendation";
+"cockpit_pace_today_on_track" = "Today: on recommendation pace";
+"cockpit_pace_today_observed_ahead" = "Today: at least %@ pp ahead · incomplete data";
+"cockpit_pace_today_incomplete" = "Today's pace needs complete usage data";
+"cockpit_pace_today_unavailable" = "Today's recommendation pace is unavailable";
+"cockpit_pace_quota_forecast" = "Quota forecast: %@";

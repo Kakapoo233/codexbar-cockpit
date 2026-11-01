@@ -815,6 +815,7 @@ extension StatusItemController {
             for: provider, snapshot: snapshot, projection: codexProjection)
 
         let pace: UsagePace?
+        var usesRecommendationPace = false
         switch mode {
         case .percent:
             pace = nil
@@ -825,7 +826,9 @@ extension StatusItemController {
                 projection: codexProjection,
                 combinedLanes: combinedLanes,
                 percentWindow: percentWindow)
-            pace = isFleet ? nil : paceWindow.flatMap { window in
+            usesRecommendationPace = !isFleet && self.store.usesCockpitRecommendationPace(
+                provider: provider, window: paceWindow, snapshot: snapshot)
+            pace = isFleet || usesRecommendationPace ? nil : paceWindow.flatMap { window in
                 self.store.weeklyPace(
                     provider: provider,
                     window: window,
@@ -875,6 +878,9 @@ extension StatusItemController {
             percentWindow: displayPercentWindow,
             pace: pace,
             paceReservePositive: self.settings.menuBarPaceReservePositive,
+            recommendationPace: usesRecommendationPace ? self.store.cockpitRecommendationPace(
+                provider: provider, snapshot: snapshot, now: now) : nil,
+            usesRecommendationPace: usesRecommendationPace,
             showUsed: self.settings.usageBarsShowUsed,
             estimated: snapshot?.dataConfidence == .estimated,
             resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,

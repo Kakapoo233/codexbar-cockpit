@@ -2906,7 +2906,7 @@
 "menu_bar_help_percent" = "사용량 표시 설정에 따라 선택한 할당량 기간의 사용 또는 잔여 비율을 표시합니다. ~는 추정값입니다.";
 "menu_bar_help_scoped_weekly" = "제공업체에서 제공하는 경우 전체 주간 할당량과 별도로 모델별 주간 할당량을 표시합니다.";
 "menu_bar_help_automatic" = "제공업체의 자동 사용량 지표를 사용합니다. 일부 제공업체는 백분율 대신 잔액이나 텍스트를 표시합니다.";
-"menu_bar_help_pace" = "이 기간의 현재 시점에서 실제 할당량 소비와 예상 소비를 비교합니다. 표시 부호는 속도 부호 설정을 따릅니다.";
+"menu_bar_help_pace" = "Codex 주간 속도는 오늘 관측한 사용량을 “Cockpit의 하루 자동 권장량 × 현지 날짜의 경과 비율”과 비교하며 주간 할당량의 퍼센트포인트로 표시합니다. 불완전한 데이터는 하한값이며 오래된 데이터는 사용할 수 없습니다. 세션과 다른 제공업체는 계속 할당량 주기를 사용합니다. 표시 부호는 속도 부호 설정을 따릅니다.";
 "menu_bar_help_usage_bar" = "사용 또는 잔여 설정에 따라 자동 할당량을 세 칸짜리 간단한 문자 막대로 표시합니다.";
 "menu_bar_help_progress" = "사용 또는 잔여 설정에 따라 선택한 할당량 기간을 그래픽 막대로 표시합니다.";
 "menu_bar_help_reset_countdown" = "재설정 시간을 알 수 있으면 이 할당량 기간이 재설정될 때까지 남은 시간을 표시합니다.";
@@ -3245,3 +3245,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "동기화 폴더를 사용할 수 없습니다. iCloud Drive를 확인한 후 다시 시도하세요.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "오늘: 권장 속도보다 %@ 퍼센트포인트 빠름";
+"cockpit_pace_today_behind" = "오늘: 권장 속도보다 %@ 퍼센트포인트 느림";
+"cockpit_pace_today_on_track" = "오늘: 권장 속도에 맞음";
+"cockpit_pace_today_observed_ahead" = "오늘: 최소 %@ 퍼센트포인트 빠름 · 불완전한 데이터";
+"cockpit_pace_today_incomplete" = "오늘의 속도에는 완전한 사용량 데이터가 필요합니다";
+"cockpit_pace_today_unavailable" = "오늘의 권장 속도를 사용할 수 없습니다";
+"cockpit_pace_quota_forecast" = "주간 할당량 예측: %@";

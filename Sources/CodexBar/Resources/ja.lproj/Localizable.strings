@@ -2938,7 +2938,7 @@
 "menu_bar_help_percent" = "使用量の表示設定に従い、選択した割り当て期間の使用率または残量率を表示します。~ は推定値です。";
 "menu_bar_help_scoped_weekly" = "提供されている場合、全体の週次割り当てとは別に、モデル固有の週次割り当てを表示します。";
 "menu_bar_help_automatic" = "プロバイダーの自動使用量指標を使います。プロバイダーによっては割合の代わりに残高やテキストを表示します。";
-"menu_bar_help_pace" = "期間内の現時点における実際の消費と想定消費を比較します。表示の正負はペースの符号設定に従います。";
+"menu_bar_help_pace" = "Codex の週間ペースは、今日観測した使用量と「Cockpit の自動日次推奨量 × 現地の一日の経過割合」を比較し、週間枠のパーセントポイントで表します。不完全なデータは下限値で、古いデータは利用できません。セッションと他のプロバイダーは引き続き割り当て期間を使います。表示の符号はペースの符号設定に従います。";
 "menu_bar_help_usage_bar" = "使用済み・残量の設定に従い、自動選択された割り当てを3セルのコンパクトな文字メーターで表示します。";
 "menu_bar_help_progress" = "使用済み・残量の設定に従い、選択した割り当て期間をグラフィカルなバーで表示します。";
 "menu_bar_help_reset_countdown" = "リセット時刻を取得できる場合、この割り当て期間のリセットまでの残り時間を表示します。";
@@ -3277,3 +3277,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "同期フォルダを利用できません。iCloud Driveを確認して、もう一度お試しください。";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "今日：推奨ペースより %@ ポイント超過";
+"cockpit_pace_today_behind" = "今日：推奨ペースより %@ ポイント少ない";
+"cockpit_pace_today_on_track" = "今日：推奨ペースどおり";
+"cockpit_pace_today_observed_ahead" = "今日：少なくとも %@ ポイント超過 · データ不完全";
+"cockpit_pace_today_incomplete" = "今日のペースには完全な使用量データが必要です";
+"cockpit_pace_today_unavailable" = "今日の推奨ペースは利用できません";
+"cockpit_pace_quota_forecast" = "週間枠の予測：%@";

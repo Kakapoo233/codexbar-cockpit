@@ -20,6 +20,7 @@ enum UsageMenuCardContext {
         var sourceLabel: String?
         var credits: CreditsSnapshot?
         var tokenAccountID: UUID?
+        var allowsLocalCockpitPlan = true
     }
 
     var account: Account? {
@@ -162,6 +163,13 @@ extension UsageStore {
             kiloAutoMode: !isSettings && provider == .kilo && self.settings.kiloUsageDataSource == .auto,
             hidePersonalInfo: self.settings.hidePersonalInfo,
             weeklyPace: weeklyPace,
+            cockpitRecommendationPace: account?.allowsLocalCockpitPlan == false ? nil : self.cockpitRecommendationPace(
+                provider: provider, snapshot: snapshot, now: now),
+            usesCockpitRecommendationPace: account?.allowsLocalCockpitPlan != false && self
+                .usesCockpitRecommendationPace(
+                    provider: provider,
+                    window: weeklyWindow,
+                    snapshot: snapshot),
             sessionEquivalentForecast: forecast,
             quotaWarningThresholds: [
                 .session: self.quotaWarningMarkerThresholds(provider: provider, window: .session),

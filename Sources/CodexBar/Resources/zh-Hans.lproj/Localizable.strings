@@ -2928,7 +2928,7 @@
 "menu_bar_help_percent" = "显示所选额度周期的已用或剩余比例，遵循用量显示设置；~ 表示估算值。";
 "menu_bar_help_scoped_weekly" = "显示服务商提供的特定模型每周额度，与整体每周额度分开。";
 "menu_bar_help_automatic" = "使用服务商的自动用量指标；部分服务商显示余额或文字，而非百分比。";
-"menu_bar_help_pace" = "比较当前实际额度消耗与本周期此时的预期消耗；显示的正负号遵循“速度符号”设置。";
+"menu_bar_help_pace" = "Codex 每周节奏比较今日已观测用量与“Cockpit 全天自动推荐额度 × 本地当天已过时间比例”，差值以周额度百分点表示。数据不完整时仅为下界，过期数据不可用。会话及其他提供商仍按额度周期计算；显示正负号遵循“速度符号”设置。";
 "menu_bar_help_usage_bar" = "用三个字符格显示自动额度，遵循已用或剩余的显示设置。";
 "menu_bar_help_progress" = "用图形进度条显示所选额度周期，遵循已用或剩余的显示设置。";
 "menu_bar_help_reset_countdown" = "在重置时间可用时，显示此额度周期距离重置还剩多久。";
@@ -3269,3 +3269,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "同步文件夹不可用。请检查 iCloud Drive 后重试。";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "今日：比推荐节奏快 %@ 个周额度百分点";
+"cockpit_pace_today_behind" = "今日：比推荐节奏慢 %@ 个周额度百分点";
+"cockpit_pace_today_on_track" = "今日：符合推荐节奏";
+"cockpit_pace_today_observed_ahead" = "今日：至少快 %@ 个周额度百分点 · 数据不完整";
+"cockpit_pace_today_incomplete" = "今日节奏需要完整的用量数据";
+"cockpit_pace_today_unavailable" = "今日推荐节奏暂不可用";
+"cockpit_pace_quota_forecast" = "周额度预测：%@";

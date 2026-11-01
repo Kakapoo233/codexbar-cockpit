@@ -2940,7 +2940,7 @@
 "menu_bar_help_percent" = "Menampilkan persentase kuota terpakai atau tersisa untuk periode yang dipilih, mengikuti pengaturan tampilan penggunaan. ~ menandai perkiraan.";
 "menu_bar_help_scoped_weekly" = "Menampilkan kuota mingguan khusus model jika disediakan, terpisah dari kuota mingguan keseluruhan.";
 "menu_bar_help_automatic" = "Menggunakan metrik penggunaan otomatis penyedia. Beberapa penyedia menampilkan saldo atau teks, bukan persentase.";
-"menu_bar_help_pace" = "Membandingkan penggunaan kuota aktual dengan penggunaan yang diharapkan pada saat ini dalam periode. Tanda yang ditampilkan mengikuti pengaturan tanda laju.";
+"menu_bar_help_pace" = "Laju mingguan Codex membandingkan penggunaan yang diamati hari ini dengan rekomendasi otomatis sehari penuh Cockpit × bagian hari lokal yang telah berlalu, dalam poin persentase kuota mingguan. Data parsial memberikan batas bawah; data kedaluwarsa tidak tersedia. Sesi dan penyedia lain tetap menggunakan periode kuota. Tanda yang ditampilkan mengikuti pengaturan tanda laju.";
 "menu_bar_help_usage_bar" = "Menampilkan kuota otomatis sebagai meter teks tiga sel yang ringkas, mengikuti pengaturan terpakai atau tersisa.";
 "menu_bar_help_progress" = "Menampilkan periode kuota yang dipilih sebagai bilah grafis, mengikuti pengaturan terpakai atau tersisa.";
 "menu_bar_help_reset_countdown" = "Menampilkan waktu tersisa hingga periode kuota ini direset, jika waktu reset tersedia.";
@@ -3279,3 +3279,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Folder sinkronisasi tidak tersedia. Periksa iCloud Drive lalu coba lagi.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Hari ini: %@ poin di atas rekomendasi";
+"cockpit_pace_today_behind" = "Hari ini: %@ poin di bawah rekomendasi";
+"cockpit_pace_today_on_track" = "Hari ini: sesuai laju rekomendasi";
+"cockpit_pace_today_observed_ahead" = "Hari ini: setidaknya %@ poin di atas · data tidak lengkap";
+"cockpit_pace_today_incomplete" = "Laju hari ini memerlukan data penggunaan lengkap";
+"cockpit_pace_today_unavailable" = "Laju rekomendasi hari ini tidak tersedia";
+"cockpit_pace_quota_forecast" = "Perkiraan kuota: %@";

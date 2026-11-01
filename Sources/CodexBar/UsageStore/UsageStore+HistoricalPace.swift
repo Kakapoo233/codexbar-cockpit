@@ -65,17 +65,23 @@ extension UsageStore {
 
     /// Signed pace delta (`+11%`, `-8%`, `0%`) for a menu-bar layout pace token, or nil when the window
     /// carries no pace-capable metadata. Shared by the status item and the layout editor preview so both
-    /// resolve pace through the same historical/work-day settings as the menu card.
+    /// resolve Codex's weekly comparison through the shared Cockpit plan. Other lanes retain window pace.
     func menuBarLayoutPaceText(
         provider: UsageProvider,
         window: RateWindow?,
+        snapshot: UsageSnapshot? = nil,
         dataConfidence: UsageDataConfidence,
         now: Date = .init(),
         minimumExpectedPercent: Double = 3,
         minimumElapsedPercent: Double? = nil)
         -> String?
     {
-        window
+        if self.usesCockpitRecommendationPace(provider: provider, window: window, snapshot: snapshot) {
+            return CockpitRecommendationPaceText.menuBarText(
+                pace: self.cockpitRecommendationPace(provider: provider, snapshot: snapshot, now: now),
+                reservePositive: self.settings.menuBarPaceReservePositive)
+        }
+        return window
             .flatMap {
                 self.weeklyPace(
                     provider: provider,
@@ -93,13 +99,20 @@ extension UsageStore {
     func menuBarLayoutPaceDelta(
         provider: UsageProvider,
         window: RateWindow?,
+        snapshot: UsageSnapshot? = nil,
         dataConfidence: UsageDataConfidence,
         now: Date = .init(),
         minimumExpectedPercent: Double = 3,
         minimumElapsedPercent: Double? = nil)
         -> Double?
     {
-        window
+        if self.usesCockpitRecommendationPace(provider: provider, window: window, snapshot: snapshot) {
+            // A lower bound cannot safely drive arbitrary equality, greater-than and less-than rules.
+            guard let pace = self.cockpitRecommendationPace(provider: provider, snapshot: snapshot, now: now),
+                  !pace.isLowerBound else { return nil }
+            return pace.deltaPercent.rounded()
+        }
+        return window
             .flatMap {
                 self.weeklyPace(
                     provider: provider,

@@ -42,12 +42,19 @@ extension UsageMenuCardView.Model {
                     showUsed: input.usageBarsShowUsed)
             case .weekly:
                 id = "secondary"
-                paceDetail = Self.weeklyPaceDetail(
-                    provider: input.provider,
-                    window: window,
-                    now: input.now,
-                    pace: Self.standardWeeklyPace(input: input, window: window),
-                    showUsed: input.usageBarsShowUsed)
+                if input.usesCockpitRecommendationPace {
+                    paceDetail = CockpitRecommendationPaceText.weeklyDetail(
+                        pace: input.cockpitRecommendationPace,
+                        officialPace: input.weeklyPace,
+                        now: input.now)
+                } else {
+                    paceDetail = Self.weeklyPaceDetail(
+                        provider: input.provider,
+                        window: window,
+                        now: input.now,
+                        pace: Self.standardWeeklyPace(input: input, window: window),
+                        showUsed: input.usageBarsShowUsed)
+                }
             case .monthly:
                 id = "monthly"
                 paceDetail = nil

@@ -2939,7 +2939,7 @@
 "menu_bar_help_percent" = "Kullanım görüntüleme ayarına göre seçilen kota döneminin kullanılan veya kalan yüzdesini gösterir. ~ işareti tahmini belirtir.";
 "menu_bar_help_scoped_weekly" = "Sağlayıcı sunuyorsa, genel haftalık kotadan ayrı olarak modele özgü haftalık kotayı gösterir.";
 "menu_bar_help_automatic" = "Sağlayıcının otomatik kullanım ölçütünü kullanır. Bazı sağlayıcılar yüzde yerine bakiye veya metin gösterir.";
-"menu_bar_help_pace" = "Dönemin bu noktasındaki gerçek kota tüketimini beklenen tüketimle karşılaştırır. Görünen işaret, tempo işareti ayarına uyar.";
+"menu_bar_help_pace" = "Codex haftalık hızı, bugün gözlemlenen kullanımı “Cockpit otomatik tam gün önerisi × yerel günün geçen bölümü” ile haftalık kotanın yüzde puanları cinsinden karşılaştırır. Eksik veriler alt sınır verir; eski veriler kullanılamaz. Oturumlar ve diğer sağlayıcılar kota dönemini kullanmaya devam eder. Gösterilen işaret, hız işareti ayarına uyar.";
 "menu_bar_help_usage_bar" = "Kullanılan veya kalan ayarına göre otomatik kotayı üç hücreli kompakt bir metin göstergesiyle gösterir.";
 "menu_bar_help_progress" = "Kullanılan veya kalan ayarına göre seçilen kota dönemini grafik çubuk olarak gösterir.";
 "menu_bar_help_reset_countdown" = "Sıfırlanma zamanı biliniyorsa bu kota döneminin sıfırlanmasına kalan süreyi gösterir.";
@@ -3278,3 +3278,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Eşzamanlama klasörü kullanılamıyor. iCloud Drive’ı kontrol edip yeniden deneyin.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Bugün: önerinin %@ yüzde puan üstünde";
+"cockpit_pace_today_behind" = "Bugün: önerinin %@ yüzde puan altında";
+"cockpit_pace_today_on_track" = "Bugün: önerilen hızda";
+"cockpit_pace_today_observed_ahead" = "Bugün: en az %@ yüzde puan üstünde · eksik veri";
+"cockpit_pace_today_incomplete" = "Bugünün hızı için eksiksiz kullanım verisi gerekir";
+"cockpit_pace_today_unavailable" = "Bugünün önerilen hızı kullanılamıyor";
+"cockpit_pace_quota_forecast" = "Kota tahmini: %@";

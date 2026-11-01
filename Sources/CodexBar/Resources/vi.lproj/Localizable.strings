@@ -2939,7 +2939,7 @@
 "menu_bar_help_percent" = "Hiển thị phần trăm hạn mức đã dùng hoặc còn lại của kỳ đã chọn, theo cài đặt hiển thị mức sử dụng. ~ đánh dấu giá trị ước tính.";
 "menu_bar_help_scoped_weekly" = "Hiển thị hạn mức tuần riêng cho mô hình nếu nhà cung cấp có cung cấp, tách biệt với hạn mức tuần tổng thể.";
 "menu_bar_help_automatic" = "Dùng chỉ số sử dụng tự động của nhà cung cấp. Một số nhà cung cấp hiển thị số dư hoặc văn bản thay vì phần trăm.";
-"menu_bar_help_pace" = "So sánh mức dùng hạn mức thực tế với mức dự kiến tại thời điểm này trong kỳ. Dấu hiển thị tuân theo cài đặt dấu nhịp độ.";
+"menu_bar_help_pace" = "Nhịp tuần Codex so sánh mức sử dụng đã quan sát hôm nay với đề xuất tự động cả ngày của Cockpit × tỷ lệ thời gian đã qua của ngày địa phương, tính bằng điểm phần trăm hạn mức tuần. Dữ liệu chưa đầy đủ cho biết giới hạn dưới; dữ liệu cũ không khả dụng. Phiên và các nhà cung cấp khác vẫn dùng chu kỳ hạn mức. Dấu hiển thị tuân theo cài đặt dấu nhịp.";
 "menu_bar_help_usage_bar" = "Hiển thị hạn mức tự động bằng thước văn bản gọn gồm ba ô, theo cài đặt đã dùng hoặc còn lại.";
 "menu_bar_help_progress" = "Hiển thị kỳ hạn mức đã chọn bằng thanh đồ họa, theo cài đặt đã dùng hoặc còn lại.";
 "menu_bar_help_reset_countdown" = "Hiển thị thời gian còn lại trước khi kỳ hạn mức này đặt lại, nếu có thời điểm đặt lại.";
@@ -3278,3 +3278,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Không có thư mục đồng bộ. Kiểm tra iCloud Drive rồi thử lại.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Hôm nay: cao hơn đề xuất %@ điểm phần trăm";
+"cockpit_pace_today_behind" = "Hôm nay: thấp hơn đề xuất %@ điểm phần trăm";
+"cockpit_pace_today_on_track" = "Hôm nay: đúng nhịp đề xuất";
+"cockpit_pace_today_observed_ahead" = "Hôm nay: cao hơn ít nhất %@ điểm phần trăm · dữ liệu chưa đầy đủ";
+"cockpit_pace_today_incomplete" = "Nhịp hôm nay cần dữ liệu sử dụng đầy đủ";
+"cockpit_pace_today_unavailable" = "Nhịp đề xuất hôm nay không khả dụng";
+"cockpit_pace_quota_forecast" = "Dự báo hạn mức: %@";

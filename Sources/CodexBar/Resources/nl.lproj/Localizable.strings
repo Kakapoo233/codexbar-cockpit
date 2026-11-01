@@ -2931,7 +2931,7 @@
 "menu_bar_help_percent" = "Toont het gebruikte of resterende percentage van de gekozen quotaperiode volgens de weergave-instelling voor gebruik. ~ geeft een schatting aan.";
 "menu_bar_help_scoped_weekly" = "Toont een modelspecifiek weekquotum als de aanbieder dat levert, los van het totale weekquotum.";
 "menu_bar_help_automatic" = "Gebruikt de automatische gebruiksmeting van de aanbieder. Sommige aanbieders tonen een saldo of tekst in plaats van een percentage.";
-"menu_bar_help_pace" = "Vergelijkt het werkelijke quotagebruik met het verwachte gebruik op dit moment in de periode. Het getoonde teken volgt de instelling voor het tempoteken.";
+"menu_bar_help_pace" = "Het wekelijkse Codex-tempo vergelijkt het vandaag waargenomen gebruik met de automatische dagaanbeveling van Cockpit × het verstreken deel van de lokale dag, in procentpunten van het weekquotum. Onvolledige gegevens geven een ondergrens; verouderde gegevens zijn niet beschikbaar. Sessies en andere aanbieders gebruiken nog steeds de quotumperiode. Het getoonde teken volgt de instelling voor het tempoteken.";
 "menu_bar_help_usage_bar" = "Toont het automatische quotum als een compacte tekstmeter met drie vakjes, volgens de instelling gebruikt of resterend.";
 "menu_bar_help_progress" = "Toont de gekozen quotaperiode als een grafische balk, volgens de instelling gebruikt of resterend.";
 "menu_bar_help_reset_countdown" = "Toont de resterende tijd tot deze quotaperiode wordt gereset, als het resettijdstip beschikbaar is.";
@@ -3270,3 +3270,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "De synchronisatiemap is niet beschikbaar. Controleer iCloud Drive en probeer het opnieuw.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Vandaag: %@ procentpunten boven de aanbeveling";
+"cockpit_pace_today_behind" = "Vandaag: %@ procentpunten onder de aanbeveling";
+"cockpit_pace_today_on_track" = "Vandaag: op het aanbevolen tempo";
+"cockpit_pace_today_observed_ahead" = "Vandaag: minstens %@ procentpunten erboven · onvolledige gegevens";
+"cockpit_pace_today_incomplete" = "Het tempo van vandaag vereist volledige gebruiksgegevens";
+"cockpit_pace_today_unavailable" = "Het aanbevolen tempo van vandaag is niet beschikbaar";
+"cockpit_pace_quota_forecast" = "Quotumprognose: %@";

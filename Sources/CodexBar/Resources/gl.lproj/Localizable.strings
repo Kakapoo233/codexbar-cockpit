@@ -2935,7 +2935,7 @@
 "menu_bar_help_percent" = "Mostra a porcentaxe usada ou restante do período de cota seleccionado, segundo a configuración de visualización do uso. ~ indica unha estimación.";
 "menu_bar_help_scoped_weekly" = "Mostra a cota semanal dun modelo concreto, se o provedor a ofrece, separada da cota semanal xeral.";
 "menu_bar_help_automatic" = "Usa a métrica automática do provedor. Algúns provedores mostran un saldo ou texto no canto dunha porcentaxe.";
-"menu_bar_help_pace" = "Compara o uso real da cota co esperado neste punto do período. O signo mostrado segue a configuración do signo do ritmo.";
+"menu_bar_help_pace" = "O ritmo semanal de Codex compara o uso observado hoxe coa recomendación diaria automática de Cockpit × a fracción transcorrida do día local, en puntos porcentuais da cota semanal. Os datos parciais dan un límite inferior; os datos desactualizados non están dispoñibles. As sesións e os demais provedores seguen usando o período da cota. O signo amosado segue a configuración do signo do ritmo.";
 "menu_bar_help_usage_bar" = "Mostra a cota automática como un indicador de texto compacto de tres celas, segundo a configuración de usado ou restante.";
 "menu_bar_help_progress" = "Mostra o período de cota seleccionado como unha barra gráfica, segundo a configuración de usado ou restante.";
 "menu_bar_help_reset_countdown" = "Mostra o tempo restante ata o restablecemento deste período de cota, cando se coñece a hora.";
@@ -3274,3 +3274,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "O cartafol de sincronización non está dispoñible. Comproba iCloud Drive e téntao de novo.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Hoxe: %@ puntos por riba da recomendación";
+"cockpit_pace_today_behind" = "Hoxe: %@ puntos por baixo da recomendación";
+"cockpit_pace_today_on_track" = "Hoxe: ao ritmo recomendado";
+"cockpit_pace_today_observed_ahead" = "Hoxe: polo menos %@ puntos por riba · datos incompletos";
+"cockpit_pace_today_incomplete" = "O ritmo de hoxe precisa datos de uso completos";
+"cockpit_pace_today_unavailable" = "O ritmo recomendado de hoxe non está dispoñible";
+"cockpit_pace_quota_forecast" = "Previsión de cota: %@";

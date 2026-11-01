@@ -34,6 +34,15 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   missing values are never drawn as zero. Bars and bottom-up filled circles represent remaining daily
   allowance independently of the global used/remaining switch. Cockpit V8 layout keys
   retain V7-and-earlier projections so rolling back does not invalidate the existing layout.
+- Codex's main weekly menu-bar Pace comparison reads the same account-matched automatic daily
+  recommendation as the homepage. Expected use is that full-day target multiplied by the elapsed
+  fraction of the local natural day (including DST); the target itself is not reduced. Deviation is
+  today's observed use minus that reference, in weekly quota percentage points. Manual caps remain
+  independent. Incomplete observations yield a one-sided lower bound and do not drive exact numeric
+  conditions or colors; missing/stale/account-or-cycle-mismatched plans remain unavailable. Session
+  lanes and other providers retain their window pace. The daily comparison never supplies a cumulative
+  weekly progress stripe or an account exhaustion ETA; the latter remains separately labeled as a quota
+  forecast. Placed pace components and their editor preview observe planner changes and minute ticks.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

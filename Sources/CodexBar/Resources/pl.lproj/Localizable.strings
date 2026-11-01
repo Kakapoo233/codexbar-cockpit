@@ -2939,7 +2939,7 @@
 "menu_bar_help_percent" = "Pokazuje wykorzystany lub pozostały procent wybranego okresu limitu zgodnie z ustawieniem wyświetlania zużycia. ~ oznacza szacunek.";
 "menu_bar_help_scoped_weekly" = "Pokazuje tygodniowy limit konkretnego modelu, jeśli dostawca go udostępnia, oddzielnie od ogólnego limitu tygodniowego.";
 "menu_bar_help_automatic" = "Używa automatycznej miary zużycia dostawcy. Niektórzy dostawcy pokazują saldo lub tekst zamiast wartości procentowej.";
-"menu_bar_help_pace" = "Porównuje rzeczywiste zużycie limitu z oczekiwanym w tym momencie okresu. Wyświetlany znak zależy od ustawienia znaku tempa.";
+"menu_bar_help_pace" = "Tygodniowe tempo Codex porównuje zaobserwowane dzisiejsze użycie z automatycznym dziennym zaleceniem Cockpit × upływającą częścią lokalnej doby, w punktach procentowych tygodniowego limitu. Niepełne dane dają dolną granicę; nieaktualne dane są niedostępne. Sesje i inni dostawcy nadal używają okresu limitu. Wyświetlany znak jest zgodny z ustawieniem znaku tempa.";
 "menu_bar_help_usage_bar" = "Pokazuje automatyczny limit jako zwarty wskaźnik tekstowy z trzema polami, zgodnie z ustawieniem wykorzystane lub pozostałe.";
 "menu_bar_help_progress" = "Pokazuje wybrany okres limitu jako pasek graficzny, zgodnie z ustawieniem wykorzystane lub pozostałe.";
 "menu_bar_help_reset_countdown" = "Pokazuje czas pozostały do odnowienia tego okresu limitu, jeśli termin jest dostępny.";
@@ -3278,3 +3278,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Folder synchronizacji jest niedostępny. Sprawdź iCloud Drive i spróbuj ponownie.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Dzisiaj: %@ p.p. powyżej zalecenia";
+"cockpit_pace_today_behind" = "Dzisiaj: %@ p.p. poniżej zalecenia";
+"cockpit_pace_today_on_track" = "Dzisiaj: zgodnie z zalecanym tempem";
+"cockpit_pace_today_observed_ahead" = "Dzisiaj: co najmniej %@ p.p. powyżej · niepełne dane";
+"cockpit_pace_today_incomplete" = "Dzisiejsze tempo wymaga pełnych danych użycia";
+"cockpit_pace_today_unavailable" = "Dzisiejsze zalecane tempo jest niedostępne";
+"cockpit_pace_quota_forecast" = "Prognoza limitu: %@";

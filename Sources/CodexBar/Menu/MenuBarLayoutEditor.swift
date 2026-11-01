@@ -972,6 +972,8 @@ struct MenuBarLayoutPreview: View {
     var body: some View {
         if self.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
             .contains(where: \.readsCockpitPlan)
+            || self.layout.referencedConditionalPredicates(conditionals: self.settings.menuBarLayoutConditionals)
+            .contains(where: \.metric.isClockDerivedRate)
         {
             TimelineView(.periodic(from: .now, by: 60)) { context in
                 MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
