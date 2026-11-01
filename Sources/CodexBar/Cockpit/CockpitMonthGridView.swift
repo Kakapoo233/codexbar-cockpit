@@ -54,12 +54,12 @@ struct CockpitMonthGridView: View {
                             selectedDay: self.selectedDay,
                             model: self.days[day],
                             metricText: self.metricText?(day),
-                            minimumHeight: self.compact ? 144 : 234,
+                            minimumHeight: self.compact ? 96 : 156,
                             compact: self.compact,
                             select: self.select)
                     } else {
                         Color.primary.opacity(0.018)
-                            .frame(height: self.compact ? 144 : 234)
+                            .frame(height: self.compact ? 96 : 156)
                             .modifier(CockpitCalendarCellBorder())
                     }
                 }
@@ -76,7 +76,7 @@ struct CockpitCalendarDateCell: View {
     let selectedDay: Date
     let model: CockpitCalendarDay?
     var metricText: String?
-    var minimumHeight: CGFloat = 234
+    var minimumHeight: CGFloat = 156
     var compact = false
     var showsWeekday = false
     let select: (Date) -> Void
@@ -115,7 +115,7 @@ struct CockpitCalendarDateCell: View {
                         .font(CockpitCalendarTypography.font(size: self.compact ? 12 : 15, weight: .medium))
                         .monospacedDigit()
                         .foregroundStyle(self.today || self.selected ? Color.white : Color.primary)
-                        .frame(width: self.compact ? 36 : 43.5, height: self.compact ? 36 : 43.5)
+                        .frame(width: self.compact ? 24 : 29, height: self.compact ? 24 : 29)
                         .background {
                             if self.today || self.selected {
                                 Circle().fill(self.today ? Color.red : Color.accentColor)

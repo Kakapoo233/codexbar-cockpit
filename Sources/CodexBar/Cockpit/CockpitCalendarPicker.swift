@@ -71,7 +71,7 @@ struct CockpitCalendarPicker<Value: Hashable>: NSViewRepresentable {
             }
             popUp.action = #selector(Coordinator.popUpChanged(_:))
         }
-        host.controlHeight = max(32, ceil(font.ascender - font.descender) + 10)
+        host.controlHeight = max(24, ceil(font.ascender - font.descender) + 8)
         control.invalidateIntrinsicContentSize()
         host.invalidateIntrinsicContentSize()
     }
@@ -121,7 +121,7 @@ struct CockpitCalendarPicker<Value: Hashable>: NSViewRepresentable {
 final class CockpitCalendarPickerHost: NSView {
     private(set) var control: NSControl?
     private(set) var style: CockpitCalendarPickerStyle?
-    var controlHeight: CGFloat = 32
+    var controlHeight: CGFloat = 24
 
     override var intrinsicContentSize: NSSize {
         NSSize(width: max(0, self.control?.intrinsicContentSize.width ?? 0), height: self.controlHeight)

@@ -94,17 +94,17 @@ struct CockpitCalendarPeriodView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if self.period.scale == .day {
-                self.dateStrip(minimumHeight: 240)
+                self.dateStrip(minimumHeight: 160)
             } else if self.period.scale == .week {
                 ViewThatFits(in: .horizontal) {
-                    self.dateStrip(minimumHeight: 264).frame(minWidth: 700)
+                    self.dateStrip(minimumHeight: 176).frame(minWidth: 560)
                     ScrollView(.horizontal) {
-                        self.dateStrip(minimumHeight: 264).frame(width: 700)
+                        self.dateStrip(minimumHeight: 176).frame(width: 560)
                     }
-                    .frame(height: 264)
+                    .frame(height: 176)
                 }
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 225), spacing: 0)], spacing: 0) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 0)], spacing: 0) {
                     ForEach(self.subperiods, id: \.start) { period in
                         self.cell(period)
                     }
@@ -143,7 +143,7 @@ struct CockpitCalendarPeriodView: View {
                 Text(title).font(CockpitCalendarTypography.caption.weight(.semibold))
                 Text(value).font(CockpitCalendarTypography.caption.monospacedDigit()).foregroundStyle(.secondary)
             }
-            .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             .padding(9)
             .background(selected ? Color.accentColor.opacity(0.055) : Color.clear)
             .modifier(CockpitCalendarCellBorder())
@@ -170,7 +170,7 @@ struct CockpitCalendarToolbar: View {
                 choices: CockpitCalendarScale.allCases,
                 title: { $0.cockpitTitle },
                 label: L("cockpit_calendar_scale"))
-                .frame(maxWidth: 750)
+                .frame(maxWidth: 500)
                 .frame(maxWidth: .infinity)
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .firstTextBaseline, spacing: 12) {
@@ -220,6 +220,6 @@ struct CockpitCalendarToolbar: View {
             choices: CockpitCalendarMetric.allCases,
             title: { $0.title },
             label: L("cockpit_calendar_metric"))
-            .frame(width: 225)
+            .frame(width: 150)
     }
 }

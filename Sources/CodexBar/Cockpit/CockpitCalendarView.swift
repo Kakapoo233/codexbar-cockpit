@@ -217,7 +217,7 @@ struct CockpitCalendarView: View {
                     label: L("cockpit_ui_feeling_records"),
                     style: .popUp)
             }
-            .frame(width: 300)
+            .frame(width: 200)
         }
     }
 

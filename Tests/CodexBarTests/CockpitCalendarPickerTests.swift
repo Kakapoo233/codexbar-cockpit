@@ -7,14 +7,14 @@ import Testing
 @MainActor
 struct CockpitCalendarPickerTests {
     @Test(arguments: [false, true])
-    func `native calendar choices retain enlarged type and write back to the binding`(popUp: Bool) async throws {
+    func `native calendar choices retain original type and write back to the binding`(popUp: Bool) async throws {
         try await Self.withPicker(style: popUp ? .popUp : .segmented) { host, selection in
             let control = try #require(Self.findControl(in: host))
-            #expect(control.font?.pointSize == 19.5)
-            #expect(control.frame.height >= 32)
+            #expect(control.font?.pointSize == 13)
+            #expect(control.frame.height >= 24)
             #expect(control.accessibilityLabel() == "Synthetic calendar scale")
             if let popUp = control as? NSPopUpButton {
-                #expect(popUp.menu?.font.pointSize == 19.5)
+                #expect(popUp.menu?.font.pointSize == 13)
                 #expect(popUp.indexOfSelectedItem == 0)
                 popUp.selectItem(at: 2)
             } else {
@@ -37,7 +37,7 @@ struct CockpitCalendarPickerTests {
                 let segmented = try #require(updated as? NSSegmentedControl)
                 #expect(segmented.selectedSegment == 1)
             }
-            #expect(updated.font?.pointSize == 19.5)
+            #expect(updated.font?.pointSize == 13)
         }
     }
 

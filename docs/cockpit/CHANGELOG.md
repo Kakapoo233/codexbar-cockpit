@@ -1,5 +1,9 @@
 # Cockpit changes
 
+## 0.8.8 — Restore original calendar text size
+
+- Restore calendar typography to its size before the 50% enlargement, including date cells, selectors, details and chart labels. Return the associated cell, badge and chart dimensions to their original sizes.
+
 ## 0.8.7 — Daily recommendation in the menu bar
 
 - Add a Daily recommendation component to the menu-bar layout editor. It displays Cockpit's full-day automatic recommendation as a percentage of the weekly quota, with a compact localized label and hover help.

@@ -1,9 +1,9 @@
 import AppKit
 import SwiftUI
 
-/// Calendar-only type sizes: enlarge the native text styles without scaling or blurring the whole panel.
+/// Calendar-only type sizes: use the original native text sizes without scaling the whole panel.
 enum CockpitCalendarTypography {
-    static let scale: CGFloat = 1.5
+    static let scale: CGFloat = 1
 
     static var body: Font {
         self.font(.body)
