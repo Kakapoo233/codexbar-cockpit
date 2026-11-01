@@ -2932,7 +2932,7 @@
 "menu_bar_help_percent" = "Zeigt den verbrauchten oder verbleibenden Anteil des gewählten Kontingentzeitraums gemäß der Nutzungseinstellung. ~ kennzeichnet eine Schätzung.";
 "menu_bar_help_scoped_weekly" = "Zeigt ein modellspezifisches Wochenkontingent, sofern der Anbieter eines bereitstellt, getrennt vom gesamten Wochenkontingent.";
 "menu_bar_help_automatic" = "Verwendet die automatische Nutzungskennzahl des Anbieters. Manche Anbieter zeigen ein Guthaben oder Text statt eines Prozentsatzes.";
-"menu_bar_help_pace" = "Vergleicht den tatsächlichen Verbrauch mit dem zu diesem Zeitpunkt erwarteten Verbrauch. Das Vorzeichen folgt der Einstellung für das Tempo-Vorzeichen.";
+"menu_bar_help_pace" = "Das wöchentliche Codex-Tempo vergleicht die heute beobachtete Nutzung mit der automatischen Cockpit-Tagesempfehlung × dem verstrichenen Anteil des lokalen Tages, in Prozentpunkten des Wochenkontingents. Unvollständige Daten liefern eine Untergrenze; veraltete Daten sind nicht verfügbar. Sitzungen und andere Anbieter verwenden weiterhin den Kontingentzeitraum. Das angezeigte Vorzeichen folgt der Tempo-Vorzeicheneinstellung.";
 "menu_bar_help_usage_bar" = "Zeigt das automatische Kontingent als kompakte Textanzeige mit drei Feldern gemäß der Einstellung für verbraucht oder verbleibend.";
 "menu_bar_help_progress" = "Zeigt den gewählten Kontingentzeitraum als grafischen Balken gemäß der Einstellung für verbraucht oder verbleibend.";
 "menu_bar_help_reset_countdown" = "Zeigt die verbleibende Zeit bis zur Zurücksetzung dieses Kontingentzeitraums, sofern ein Zeitpunkt verfügbar ist.";
@@ -3271,3 +3271,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Der Synchronisierungsordner ist nicht verfügbar. Prüfe iCloud Drive und versuche es erneut.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Heute: %@ Prozentpunkte über der Empfehlung";
+"cockpit_pace_today_behind" = "Heute: %@ Prozentpunkte unter der Empfehlung";
+"cockpit_pace_today_on_track" = "Heute: im empfohlenen Tempo";
+"cockpit_pace_today_observed_ahead" = "Heute: mindestens %@ Prozentpunkte darüber · unvollständige Daten";
+"cockpit_pace_today_incomplete" = "Das heutige Tempo benötigt vollständige Nutzungsdaten";
+"cockpit_pace_today_unavailable" = "Das heutige Empfehlungstempo ist nicht verfügbar";
+"cockpit_pace_quota_forecast" = "Kontingentprognose: %@";

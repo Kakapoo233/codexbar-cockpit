@@ -2933,7 +2933,7 @@
 "menu_bar_help_percent" = "Visar använd eller återstående procent för den valda kvotperioden enligt inställningen för användningsvisning. ~ markerar en uppskattning.";
 "menu_bar_help_scoped_weekly" = "Visar en modellspecifik veckokvot, om leverantören tillhandahåller en, separat från den totala veckokvoten.";
 "menu_bar_help_automatic" = "Använder leverantörens automatiska användningsmått. Vissa leverantörer visar ett saldo eller text i stället för en procentsats.";
-"menu_bar_help_pace" = "Jämför den faktiska kvotanvändningen med den förväntade vid denna tidpunkt i perioden. Tecknet följer inställningen för tempots tecken.";
+"menu_bar_help_pace" = "Codex veckotakt jämför dagens observerade användning med Cockpits automatiska dagsrekommendation × den förflutna andelen av det lokala dygnet, i procentenheter av veckokvoten. Ofullständiga data ger en nedre gräns; inaktuella data är inte tillgängliga. Sessioner och andra leverantörer använder fortfarande kvotperioden. Det visade tecknet följer inställningen för takttecken.";
 "menu_bar_help_usage_bar" = "Visar den automatiska kvoten som en kompakt textmätare med tre rutor enligt inställningen för använt eller återstående.";
 "menu_bar_help_progress" = "Visar den valda kvotperioden som en grafisk stapel enligt inställningen för använt eller återstående.";
 "menu_bar_help_reset_countdown" = "Visar tiden kvar tills denna kvotperiod återställs, när en återställningstid finns.";
@@ -3272,3 +3272,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Synkroniseringsmappen är inte tillgänglig. Kontrollera iCloud Drive och försök igen.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Idag: %@ procentenheter över rekommendationen";
+"cockpit_pace_today_behind" = "Idag: %@ procentenheter under rekommendationen";
+"cockpit_pace_today_on_track" = "Idag: i rekommenderad takt";
+"cockpit_pace_today_observed_ahead" = "Idag: minst %@ procentenheter över · ofullständiga data";
+"cockpit_pace_today_incomplete" = "Dagens takt kräver fullständiga användningsdata";
+"cockpit_pace_today_unavailable" = "Dagens rekommenderade takt är inte tillgänglig";
+"cockpit_pace_quota_forecast" = "Kvotprognos: %@";

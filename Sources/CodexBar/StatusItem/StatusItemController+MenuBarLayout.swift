@@ -409,17 +409,20 @@ extension UsageStore {
             sessionPace: includeLocalDerivedData ? self.menuBarLayoutPaceText(
                 provider: provider,
                 window: windows.session,
+                snapshot: snapshot,
                 dataConfidence: snapshot?.dataConfidence ?? .unknown,
                 now: now) : nil,
             weeklyPace: includeLocalDerivedData ? self.menuBarLayoutPaceText(
                 provider: provider,
                 window: windows.weekly,
+                snapshot: snapshot,
                 dataConfidence: snapshot?.dataConfidence ?? .unknown,
                 now: now,
                 minimumElapsedPercent: 1) : nil,
             automaticPace: includeLocalDerivedData ? self.menuBarLayoutPaceText(
                 provider: provider,
                 window: windows.automatic,
+                snapshot: snapshot,
                 dataConfidence: snapshot?.dataConfidence ?? .unknown,
                 now: now) : nil,
             runsOut: runsOut,
@@ -436,17 +439,20 @@ extension UsageStore {
                 sessionPaceDelta: includeLocalDerivedData ? self.menuBarLayoutPaceDelta(
                     provider: provider,
                     window: windows.session,
+                    snapshot: snapshot,
                     dataConfidence: snapshot?.dataConfidence ?? .unknown,
                     now: now) : nil,
                 weeklyPaceDelta: includeLocalDerivedData ? self.menuBarLayoutPaceDelta(
                     provider: provider,
                     window: windows.weekly,
+                    snapshot: snapshot,
                     dataConfidence: snapshot?.dataConfidence ?? .unknown,
                     now: now,
                     minimumElapsedPercent: 1) : nil,
                 automaticPaceDelta: includeLocalDerivedData ? self.menuBarLayoutPaceDelta(
                     provider: provider,
                     window: windows.automatic,
+                    snapshot: snapshot,
                     dataConfidence: snapshot?.dataConfidence ?? .unknown,
                     now: now) : nil,
                 runsOutMinutes: pace?.etaSeconds.map { Int(($0 / 60).rounded()) },

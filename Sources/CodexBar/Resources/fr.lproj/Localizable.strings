@@ -2933,7 +2933,7 @@
 "menu_bar_help_percent" = "Affiche le pourcentage utilisé ou restant de la période de quota choisie, selon le réglage d’affichage de l’utilisation. ~ indique une estimation.";
 "menu_bar_help_scoped_weekly" = "Affiche le quota hebdomadaire propre à un modèle, si le fournisseur le propose, séparément du quota hebdomadaire global.";
 "menu_bar_help_automatic" = "Utilise la mesure automatique du fournisseur. Certains fournisseurs affichent un solde ou du texte plutôt qu’un pourcentage.";
-"menu_bar_help_pace" = "Compare l’utilisation réelle du quota à celle attendue à ce stade de la période. Le signe affiché suit le réglage du signe du rythme.";
+"menu_bar_help_pace" = "Le rythme hebdomadaire Codex compare l’utilisation observée aujourd’hui à la recommandation quotidienne automatique de Cockpit × la fraction écoulée du jour local, en points de pourcentage du quota hebdomadaire. Les données partielles donnent une borne inférieure ; les données périmées sont indisponibles. Les sessions et les autres fournisseurs utilisent toujours la période du quota. Le signe affiché suit le réglage du signe du rythme.";
 "menu_bar_help_usage_bar" = "Affiche le quota automatique sous forme d’un indicateur textuel compact à trois cases, selon le réglage utilisé ou restant.";
 "menu_bar_help_progress" = "Affiche la période de quota choisie sous forme de barre graphique, selon le réglage utilisé ou restant.";
 "menu_bar_help_reset_countdown" = "Affiche le temps restant avant la réinitialisation de cette période de quota, si l’heure est disponible.";
@@ -3272,3 +3272,12 @@
 "The sync folder is unavailable. Check iCloud Drive and try again." = "Le dossier de synchronisation est indisponible. Vérifiez iCloud Drive, puis réessayez.";
 
 "iCloud Drive" = "iCloud Drive";
+
+/* Daily recommendation pace */
+"cockpit_pace_today_ahead" = "Aujourd’hui : %@ points au-dessus de la recommandation";
+"cockpit_pace_today_behind" = "Aujourd’hui : %@ points sous la recommandation";
+"cockpit_pace_today_on_track" = "Aujourd’hui : rythme recommandé respecté";
+"cockpit_pace_today_observed_ahead" = "Aujourd’hui : au moins %@ points au-dessus · données incomplètes";
+"cockpit_pace_today_incomplete" = "Le rythme du jour nécessite des données d’utilisation complètes";
+"cockpit_pace_today_unavailable" = "Le rythme recommandé du jour est indisponible";
+"cockpit_pace_quota_forecast" = "Prévision du quota : %@";

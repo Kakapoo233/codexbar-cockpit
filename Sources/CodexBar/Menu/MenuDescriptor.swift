@@ -274,9 +274,8 @@ struct MenuDescriptor {
                     descriptionIsDetail: presentation.menu.usesPrimaryDescriptionAsDetail(snapshot: snap))
                 if paceVisible,
                    presentation.menu.showsPrimaryWeeklyPace,
-                   let pace = store.weeklyPace(provider: provider, window: primary, dataConfidence: snap.dataConfidence)
+                   let paceSummary = store.menuPaceSummary(provider: provider, window: primary, snapshot: snap)
                 {
-                    let paceSummary = UsagePaceText.weeklySummary(provider: provider, pace: pace)
                     entries.append(.text(paceSummary, .secondary))
                 }
                 if paceVisible,
@@ -313,9 +312,8 @@ struct MenuDescriptor {
                     entries.append(.text(detail, .secondary))
                 }
                 if paceVisible,
-                   let pace = store.weeklyPace(provider: provider, window: weekly, dataConfidence: snap.dataConfidence)
+                   let paceSummary = store.menuPaceSummary(provider: provider, window: weekly, snapshot: snap)
                 {
-                    let paceSummary = UsagePaceText.weeklySummary(provider: provider, pace: pace)
                     entries.append(.text(paceSummary, .secondary))
                 }
             }

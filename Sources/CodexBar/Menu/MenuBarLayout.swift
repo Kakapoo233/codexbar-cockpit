@@ -576,7 +576,8 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
 
     var readsCockpitPlan: Bool {
         switch self {
-        case .cockpitDailyRecommendation, .cockpitDailyRemaining: true
+        case .cockpitDailyRecommendation, .cockpitDailyRemaining,
+             .pace(window: .weekly), .pace(window: .automatic): true
         default: false
         }
     }

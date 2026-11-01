@@ -142,6 +142,7 @@ extension StatusItemController {
             context: .account(.init(
                 snapshot: snapshot.usage,
                 info: AccountInfo(email: label.isEmpty ? nil : label, plan: nil),
-                subtitle: badge)))
+                subtitle: badge,
+                allowsLocalCockpitPlan: false)))
     }
 }

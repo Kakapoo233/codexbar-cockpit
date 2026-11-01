@@ -15,6 +15,13 @@ extension StatusItemController {
             && self.settings.menuBarShowsResetTimeWhenExhausted
             && displayMode != .resetTime
 
+        if providers.contains(.codex), self.settings.menuBarShowsBrandIconWithPercent,
+           displayMode == .pace || displayMode == .both
+        {
+            delays.append(60 - now.timeIntervalSince1970.truncatingRemainder(dividingBy: 60)
+                + Self.menuBarCountdownRefreshEpsilon)
+        }
+
         var countdownResetDates: [Date] = []
         var absoluteResetDates: [Date] = []
         for provider in providers {

@@ -115,6 +115,8 @@ enum MenuBarDisplayText {
         percentWindow: RateWindow?,
         pace: UsagePace? = nil,
         paceReservePositive: Bool = false,
+        recommendationPace: CockpitRecommendationPace? = nil,
+        usesRecommendationPace: Bool = false,
         showUsed: Bool,
         estimated: Bool = false,
         resetTimeDisplayStyle: ResetTimeDisplayStyle = .countdown,
@@ -139,19 +141,22 @@ enum MenuBarDisplayText {
             // combined lane must not hide that this displayed lane is already exhausted.
             return self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
         }
+        let resolvedPaceText = usesRecommendationPace
+            ? CockpitRecommendationPaceText.menuBarText(pace: recommendationPace, reservePositive: paceReservePositive)
+            : self.paceText(pace: pace, reservePositive: paceReservePositive)
         switch mode {
         case .percent:
             return self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
         case .pace:
             // Pace can be temporarily unavailable near a reset or when a provider omits window metadata.
             // Keep the selected quota visible instead of collapsing the status item to an icon-only state.
-            return self.paceText(pace: pace, reservePositive: paceReservePositive)
+            return resolvedPaceText
                 ?? self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
         case .both:
             guard let percent = percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
             else { return nil }
             // Fall back to percent-only when pace is unavailable (e.g. Copilot)
-            guard let paceText = Self.paceText(pace: pace, reservePositive: paceReservePositive) else { return percent }
+            guard let paceText = resolvedPaceText else { return percent }
             return "\(percent) · \(paceText)"
         case .resetTime:
             guard let percentWindow else { return nil }
