@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowClockwise, GearSix, X } from "@phosphor-icons/react";
 import { isTauri, openExternalUrl } from "../lib/bridge";
 import type { CockpitDailyPlanStatus, CockpitQuotaObservation } from "../lib/cockpitDailyPlan";
@@ -91,6 +91,11 @@ export function TrayPanel(props: Props) {
   const zh = preferences.language !== "en";
   const [page, setPage] = useState<Page>("usage");
   const [range, setRange] = useState<Range>("7d");
+  const contentRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    // Pages share a scroll container, but a previous page's offset must not hide the next header.
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  }, [page]);
   const dateRange = useMemo(() => rangeFor(range, now), [range, now]);
   const reset = confirmedReset(forecast, now);
   const partial = plan.coverage !== "complete";
@@ -118,7 +123,7 @@ export function TrayPanel(props: Props) {
       {page === "statistics" && <aside className="tray-date-sidebar" aria-label={zh ? "统计时间范围" : "Statistics date range"}>
         {(["7d", "30d", "90d", "month", "all"] as const).map(value => <button key={value} type="button" aria-pressed={range === value} onClick={() => setRange(value)}>{({ "7d": zh ? "7 天" : "7 days", "30d": zh ? "30 天" : "30 days", "90d": zh ? "90 天" : "90 days", month: zh ? "本月至今" : "This month", all: zh ? "全部" : "All" })[value]}</button>)}
       </aside>}
-      <main className="tray-page-content" aria-label={({ usage: zh ? "用量页面" : "Usage page", statistics: zh ? "用量统计页面" : "Statistics page", calendar: zh ? "日历页面" : "Calendar page", members: zh ? "组员与设备页面" : "Members & devices page", settings: zh ? "设置页面" : "Settings page" })[page]}>
+      <main ref={contentRef} className="tray-page-content" aria-label={({ usage: zh ? "用量页面" : "Usage page", statistics: zh ? "用量统计页面" : "Statistics page", calendar: zh ? "日历页面" : "Calendar page", members: zh ? "组员与设备页面" : "Members & devices page", settings: zh ? "设置页面" : "Settings page" })[page]}>
         {(page === "usage" || page === "calendar") && (reset ? <section className="tray-reset-announcement" role="status"><strong>{zh ? "Codex 重置公告" : "Codex reset announcement"}</strong><span>{reset.toLocaleString(zh ? "zh-CN" : "en-US")} · {countdown(reset, now, zh)}</span></section>
           : page === "calendar" ? <section className="tray-reset-announcement"><strong>{zh ? "Codex 重置公告" : "Codex reset announcements"}</strong><span>{zh ? "暂无新鲜、已确定日期的重置公告。" : "No fresh confirmed reset date."}</span>{forecast?.historyResetDates?.length ? <details><summary>{zh ? "已同步重置历史" : "Synced reset history"}</summary><p>{forecast.historyResetDates.join(" · ")}</p></details> : null}</section> : null)}
         {page === "usage" && <>
@@ -153,7 +158,7 @@ export function TrayPanel(props: Props) {
           </fieldset>
           <LocalUsageSourceSettings zh={zh} onSaved={() => { props.onRefresh(); }} />
           <CloudSyncSettings usage={props.usage} zh={zh} onSynced={props.onUsageRefresh} />
-          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? "0.1.0-alpha.2"}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
+          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? "0.1.0-alpha.3"}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
         </div>}
       </main>
     </div>

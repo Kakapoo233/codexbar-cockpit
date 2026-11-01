@@ -54,14 +54,14 @@ body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background
 .tray-setting-control { display:grid; grid-template-columns:minmax(0,1fr) 4em; gap:12px; align-items:center; }
 .tray-setting-control input[type="range"] { width:100%; min-width:0; margin:0; }
 .tray-setting-control output { text-align:right; font-variant-numeric:tabular-nums; }
-.tray-setting-row input[type="checkbox"], .tray-provider-options input[type="checkbox"] {
-  width:16px; height:16px; margin:0; accent-color:var(--tray-accent);
+.tray-setting-row input[type="checkbox"], .tray-provider-options input[type="checkbox"], .tray-settings .cloud-share-option input[type="checkbox"] {
+  width:16px; height:16px; min-height:0; margin:0; flex:none; accent-color:var(--tray-accent);
 }
 .tray-setting-row input[type="checkbox"] { justify-self:start; }
 .tray-provider-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px 24px; }
 .tray-provider-options label { display:flex; align-items:center; gap:10px; margin:0; min-width:0; }
 .tray-settings .cloud-setup-form label:not(.cloud-share-option) { margin:0; }
-.tray-settings .cloud-setup-form label > input { min-width:0; min-height:2.6em; }
+.tray-settings .cloud-setup-form label:not(.cloud-share-option) > input { min-width:0; min-height:2.6em; }
 .tray-settings .cloud-setup-form label > small { grid-column:2; min-width:0; overflow-wrap:anywhere; }
 .tray-settings .cloud-share-option { min-width:0; margin:0; }
 .tray-panel .usage-note { color:var(--tray-muted); line-height:1.6; font-size:.92em; }
@@ -94,6 +94,7 @@ body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background
 .tray-panel .comfort-history-nav button svg { width:14px; height:14px; }
 .tray-panel .comfort-history-nav .comfort-history-today { width:auto; padding:0 10px; font-size:.92em; }
 .tray-panel .comfort-history-weekdays { font-size:.9em; }
+.tray-panel .comfort-history-weekdays--day { grid-template-columns:minmax(0,1fr); }
 .tray-panel .comfort-history-day { padding:6px 2px; }
 .tray-panel .comfort-history-day-number { font-size:1em; }
 .tray-panel .comfort-history-day-usage,
@@ -117,6 +118,12 @@ body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background
 .tray-page-tabs button { white-space:normal; overflow-wrap:anywhere; line-height:1.4; }
 .tray-panel .comfort-history-header .comfort-history-nav {
   display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center;
+}
+.tray-panel .comfort-history-header .comfort-history-nav > strong {
+  white-space:normal; overflow:visible; overflow-wrap:anywhere; text-align:center;
+}
+@media(min-width:701px) {
+  .tray-panel .comfort-history-header .comfort-history-nav { flex-basis:25em; }
 }
 @media(max-width:700px) {
   .tray-panel-header small { display:block; margin-left:0; }

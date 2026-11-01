@@ -11,6 +11,23 @@
       Math.abs(icon.y + icon.height / 2 - button.y - button.height / 2));
   });
   if (navOffsets.some(offset => offset > 1)) failures.push('Calendar arrow is off center');
+  const clippedCalendarPeriods = [...document.querySelectorAll('.comfort-history-nav > strong')]
+    .filter(element => element.scrollWidth > element.clientWidth + 1 || element.scrollHeight > element.clientHeight + 1).length;
+  if (clippedCalendarPeriods) failures.push('Calendar period text is clipped');
+  const dayHeader = document.querySelector('.comfort-history-grid--day')
+    ? document.querySelector('.comfort-history-weekdays > span') : null;
+  const dayGrid = document.querySelector('.comfort-history-grid--day');
+  const dayHeaderOffset = dayHeader && dayGrid ? (() => {
+    const header = dayHeader.getBoundingClientRect(), grid = dayGrid.getBoundingClientRect();
+    return Math.abs(header.left + header.width / 2 - grid.left - grid.width / 2);
+  })() : 0;
+  if (dayHeaderOffset > 1) failures.push('Day-view weekday is not centered over its date');
+  const cloudCheckboxes = [...document.querySelectorAll('.cloud-share-option input[type="checkbox"]')];
+  const cloudCheckboxStretch = cloudCheckboxes.some(input => {
+    const bounds = input.getBoundingClientRect();
+    return Math.abs(bounds.width - bounds.height) > 1;
+  });
+  if (cloudCheckboxStretch) failures.push('Cloud checkbox is stretched by text-field sizing');
   const controls = [...document.querySelectorAll('.tray-setting-row input, .tray-setting-row select')];
   const settingsOverflow = controls.some(control => {
     const field = control.closest('.tray-setting-row').getBoundingClientRect();
@@ -28,7 +45,7 @@
     .filter(element => element.scrollWidth > element.clientWidth + 1).length;
   if (clippedTabs) failures.push('Navigation text is clipped');
   const report = { pass: failures.length === 0, viewport: [innerWidth, innerHeight],
-    calendarArrowOffset: Math.max(0, ...navOffsets), controlCount: controls.length,
+    calendarArrowOffset: Math.max(0, ...navOffsets), clippedCalendarPeriods, dayHeaderOffset, cloudCheckboxStretch, controlCount: controls.length,
     controlColumnSpread: columnSpread, settingsOverflow, horizontalOverflow, clippedTabs, failures };
   if (failures.length) throw new Error(JSON.stringify(report));
   return report;

@@ -47,6 +47,20 @@ it("saves tray presentation and English text choices through canonical preferenc
   expect(fixture.onPreferences).toHaveBeenCalledWith(expect.objectContaining({ trayEnglish: true, language: "en" }));
   expect(screen.getByText("Cloud settings")).toBeInTheDocument();
 });
+it("starts a newly selected page at the top without resetting the active page on refresh", () => {
+  const fixture = props();
+  const { rerender } = render(<TrayPanel {...fixture} />);
+  fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+  const main = screen.getByRole("main");
+  main.scrollTop = 300;
+  rerender(<TrayPanel {...fixture} now={new Date(now.getTime() + 60_000)} />);
+  expect(main.scrollTop).toBe(300);
+  fireEvent.click(screen.getByRole("button", { name: "Calendar" }));
+  expect(main.scrollTop).toBe(0);
+  main.scrollTop = 100;
+  fireEvent.click(screen.getByRole("button", { name: "Statistics" }));
+  expect(main.scrollTop).toBe(0);
+});
 it("keeps unavailable allowance unknown and hides an absent confirmed reset", () => {
   render(<TrayPanel {...props()} />);
   expect(screen.queryByText("Codex reset announcement")).not.toBeInTheDocument();

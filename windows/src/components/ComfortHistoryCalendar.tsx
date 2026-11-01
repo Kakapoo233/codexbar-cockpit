@@ -95,6 +95,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
         range: "History range",
         week: "Last 7 days",
         month: "Month",
+        previousDay: "Previous day",
+        nextDay: "Next day",
         previousWeek: "Previous 7 days",
         nextWeek: "Next 7 days",
         previous: "Previous month",
@@ -111,6 +113,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
         range: "记录范围",
         week: "最近一周",
         month: "一月",
+        previousDay: "前一天",
+        nextDay: "后一天",
         previousWeek: "前 7 天",
         nextWeek: "后 7 天",
         previous: "上个月",
@@ -127,6 +131,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
   const days = useMemo(() => view === "day" ? [dateFromLocalDate(selectedDate)] : view === "week" ? weekDays : calendarDays(visibleMonth), [view, weekDays, visibleMonth, selectedDate]);
   const weekdays = view === "month" ? monthWeekdays : days.map(date => formatWeekday(date, language));
   const periodLabel = view === "day" ? formatSelectedDate(selectedDate, language) : view === "week" ? formatWeekRange(days, language) : formatMonth(visibleMonth, language);
+  const previousLabel = view === "day" ? labels.previousDay : view === "week" ? labels.previousWeek : labels.previous;
+  const nextLabel = view === "day" ? labels.nextDay : view === "week" ? labels.nextWeek : labels.next;
   const recordsByDate = useMemo(() => new Map(records.map((record) => [record.localDate, record])), [records]);
   const dailyUsageByDate = useMemo(() => {
     const result = new Map<string, Omit<Pick<CodexDailyUsage, "localDate" | "observedUsedPercent" | "sampleCount" | "coverage">, "coverage"> & { coverage: CodexDailyUsage["coverage"] | "legacy" }>();
@@ -198,14 +204,14 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
           </div>
         </div>
         <div className="comfort-history-nav">
-          <button type="button" aria-label={view === "week" ? labels.previousWeek : labels.previous} title={view === "week" ? labels.previousWeek : labels.previous} onMouseDown={(event) => event.stopPropagation()} onClick={() => { if (view === "day") { const date = dateFromLocalDate(selectedDate); date.setUTCDate(date.getUTCDate() - 1); setSelectedDate(localDateKey(date)); } else if (view === "week") moveWeek(-1); else moveMonth(-1); }}><CaretLeft weight="bold" /></button>
+          <button type="button" aria-label={previousLabel} title={previousLabel} onMouseDown={(event) => event.stopPropagation()} onClick={() => { if (view === "day") { const date = dateFromLocalDate(selectedDate); date.setUTCDate(date.getUTCDate() - 1); setSelectedDate(localDateKey(date)); } else if (view === "week") moveWeek(-1); else moveMonth(-1); }}><CaretLeft weight="bold" /></button>
           <strong>{periodLabel}</strong>
-          <button type="button" aria-label={view === "week" ? labels.nextWeek : labels.next} title={view === "week" ? labels.nextWeek : labels.next} onMouseDown={(event) => event.stopPropagation()} onClick={() => { if (view === "day") { const date = dateFromLocalDate(selectedDate); date.setUTCDate(date.getUTCDate() + 1); setSelectedDate(localDateKey(date)); } else if (view === "week") moveWeek(1); else moveMonth(1); }}><CaretRight weight="bold" /></button>
+          <button type="button" aria-label={nextLabel} title={nextLabel} onMouseDown={(event) => event.stopPropagation()} onClick={() => { if (view === "day") { const date = dateFromLocalDate(selectedDate); date.setUTCDate(date.getUTCDate() + 1); setSelectedDate(localDateKey(date)); } else if (view === "week") moveWeek(1); else moveMonth(1); }}><CaretRight weight="bold" /></button>
           <button type="button" className="comfort-history-today" onMouseDown={(event) => event.stopPropagation()} onClick={goToday}>{labels.today}</button>
         </div>
       </header>
 
-      <div className="comfort-history-weekdays" role="row" aria-hidden="true">
+      <div className={`comfort-history-weekdays${view === "day" ? " comfort-history-weekdays--day" : ""}`} role="row" aria-hidden="true">
         {weekdays.map((weekday, index) => <span key={`${weekday}-${index}`}>{weekday}</span>)}
       </div>
       <div className={`comfort-history-grid${view === "week" ? " comfort-history-grid--week" : view === "day" ? " comfort-history-grid--day" : ""}`} role="grid" aria-label={periodLabel}>

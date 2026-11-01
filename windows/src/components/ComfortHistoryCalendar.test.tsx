@@ -51,6 +51,41 @@ function officialUsage(overrides: Partial<CodexDailyUsage> = {}): CodexDailyUsag
 }
 
 describe("ComfortHistoryCalendar", () => {
+  it.each([
+    { language: "en" as const, day: "Day", week: "Last 7 days", month: "Month", previousDay: "Previous day", nextDay: "Next day", previousWeek: "Previous 7 days", nextWeek: "Next 7 days", previousMonth: "Previous month", nextMonth: "Next month", initialDate: /Fri, Aug 14/, previousDate: /Thu, Aug 13/ },
+    { language: "zh-CN" as const, day: "日", week: "最近一周", month: "一月", previousDay: "前一天", nextDay: "后一天", previousWeek: "前 7 天", nextWeek: "后 7 天", previousMonth: "上个月", nextMonth: "下个月", initialDate: /8月14日周五/, previousDate: /8月13日周四/ },
+  ])("labels day navigation accurately and aligns its weekday header in $language", (labels) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-14T12:00:00+08:00"));
+    const onChange = vi.fn();
+    const { container } = render(<ComfortHistoryCalendar records={[]} language={labels.language} onChange={onChange} />);
+
+    fireEvent.click(screen.getByRole("button", { name: labels.day }));
+    const weekdayHeader = container.querySelector(".comfort-history-weekdays");
+    expect(weekdayHeader).toHaveClass("comfort-history-weekdays--day");
+    expect(weekdayHeader?.children).toHaveLength(1);
+    expect(screen.getAllByRole("gridcell")).toHaveLength(1);
+    expect(screen.getByRole("gridcell", { name: labels.initialDate })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: labels.previousDay })).toHaveAttribute("title", labels.previousDay);
+    expect(screen.getByRole("button", { name: labels.nextDay })).toHaveAttribute("title", labels.nextDay);
+
+    fireEvent.click(screen.getByRole("button", { name: labels.previousDay }));
+    expect(screen.getByRole("gridcell", { name: labels.previousDate })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: labels.nextDay }));
+    expect(screen.getByRole("gridcell", { name: labels.initialDate })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: labels.week }));
+    expect(weekdayHeader).not.toHaveClass("comfort-history-weekdays--day");
+    expect(weekdayHeader?.children).toHaveLength(7);
+    expect(screen.getByRole("button", { name: labels.previousWeek })).toHaveAttribute("title", labels.previousWeek);
+    expect(screen.getByRole("button", { name: labels.nextWeek })).toHaveAttribute("title", labels.nextWeek);
+    fireEvent.click(screen.getByRole("button", { name: labels.month }));
+    expect(weekdayHeader).not.toHaveClass("comfort-history-weekdays--day");
+    expect(screen.getByRole("button", { name: labels.previousMonth })).toHaveAttribute("title", labels.previousMonth);
+    expect(screen.getByRole("button", { name: labels.nextMonth })).toHaveAttribute("title", labels.nextMonth);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("shows emoji entries, edits a selected day, and disables future dates", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-08-14T12:00:00+08:00"));
