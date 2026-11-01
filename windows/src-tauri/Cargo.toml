@@ -1,6 +1,6 @@
 [package]
 name = "codexbar-cockpit-windows"
-version = "0.1.0-alpha.4"
+version = "0.1.0-alpha.5"
 description = "CodexBar Cockpit Windows system tray client"
 authors = ["Quota Float contributors"]
 license = "MIT"

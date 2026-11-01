@@ -30,5 +30,6 @@
 .floating-summary-meter.is-unknown .floating-summary-meter-fill { display:none; }
 .floating-summary-footer { display:flex; justify-content:space-between; align-items:center; gap:.45em; min-width:0; min-height:1.4em; padding-top:.5em; border-top:1px solid var(--tray-border,#dce2ea); color:var(--tray-muted,#617087); font-size:.8em; }
 .floating-summary-footer > span { min-width:0; white-space:nowrap; }
+.floating-summary-footer .floating-summary-recommendation { flex:1; overflow:hidden; text-overflow:ellipsis; }
 .floating-summary-footer-unit { opacity:.85; }
 .floating-summary-footer button { padding:.15em .4em; color:var(--tray-accent,#1769dd); flex:none; }

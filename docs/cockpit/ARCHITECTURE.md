@@ -129,6 +129,13 @@ Compact geometry is scaled with text and monitor DPI, clamped to the work area, 
 separate local floating-window document. Preview and smoke builders retain their credential-free
 isolation and never start real collectors or cloud synchronization.
 
+Windows also ports `CockpitRecommendationPace`: App computes one account/cycle-matched daily
+comparison from its published plan and observations, then shares it with the compact footer, Usage
+panel and native tray tooltip. It uses the same local-day/DST and partial-bound contract as macOS.
+A snapshot arriving before its matching ledger never borrows the old plan. The publication advances
+the local clock and the existing minute timer keeps recommendation and pace current; no additional
+collector or exhaustion forecast is created.
+
 ## Personal iCloud Drive synchronization
 
 The fork uses `ICloudDriveSyncCoordinator` and `ICloudDriveReplica` for credential-free personal document synchronization. The old CloudKit engine remains available for its protocol tests but is not activated by this app. Each device owns one versioned JSON file; per-key Lamport revisions and tombstones merge edits without shared-file overwrites. A local journal acknowledges only successfully applied typed projections. First-join defaults cannot overwrite existing cloud values. Undownloaded, corrupt or newer documents stop the exchange rather than becoming empty state.
