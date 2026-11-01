@@ -43,7 +43,9 @@ struct CockpitCalendarPeriodSummaryView: View {
     let metric: CockpitCalendarMetric
 
     var body: some View {
-        GroupBox(L("cockpit_calendar_period_total")) {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(L("cockpit_calendar_period_total"))
+                .font(.caption.weight(.medium)).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 6) {
                 Text(self.ledger.text(self.ledger.summary(for: self.period), metric: self.metric))
                     .font(.title3.monospacedDigit().weight(.semibold))
@@ -56,8 +58,9 @@ struct CockpitCalendarPeriodSummaryView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(6)
         }
+        .padding(12)
+        .modifier(CockpitCalendarSurface())
     }
 }
 
@@ -67,6 +70,7 @@ struct CockpitCalendarPeriodView: View {
     let metric: CockpitCalendarMetric
     let selectedDay: Date
     let select: (Date) -> Void
+    var days: [Date: CockpitCalendarDay] = [:]
 
     private var subperiods: [CockpitCalendarPeriod] {
         switch self.period.scale {
@@ -89,14 +93,45 @@ struct CockpitCalendarPeriodView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 8)], spacing: 8) {
-                ForEach(self.subperiods, id: \.start) { period in
-                    self.cell(period)
+            if self.period.scale == .day {
+                self.dateStrip(minimumHeight: 160)
+            } else if self.period.scale == .week {
+                ViewThatFits(in: .horizontal) {
+                    self.dateStrip(minimumHeight: 176).frame(minWidth: 560)
+                    ScrollView(.horizontal) {
+                        self.dateStrip(minimumHeight: 176).frame(width: 560)
+                    }
+                    .frame(height: 176)
                 }
+            } else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 0)], spacing: 0) {
+                    ForEach(self.subperiods, id: \.start) { period in
+                        self.cell(period)
+                    }
+                }
+                .modifier(CockpitCalendarSurface())
             }
             Text(L("cockpit_calendar_select_day"))
                 .font(.caption).foregroundStyle(.secondary)
         }
+    }
+
+    private func dateStrip(minimumHeight: CGFloat) -> some View {
+        HStack(alignment: .top, spacing: 0) {
+            ForEach(self.subperiods, id: \.start) { period in
+                CockpitCalendarDateCell(
+                    calendar: self.ledger.calendar,
+                    day: period.start,
+                    selectedDay: self.selectedDay,
+                    model: self.days[period.start],
+                    metricText: self.ledger.text(on: period.start, metric: self.metric),
+                    minimumHeight: minimumHeight,
+                    compact: self.period.scale == .week,
+                    showsWeekday: true,
+                    select: self.select)
+            }
+        }
+        .modifier(CockpitCalendarSurface())
     }
 
     private func cell(_ period: CockpitCalendarPeriod) -> some View {
@@ -110,14 +145,83 @@ struct CockpitCalendarPeriodView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             .padding(9)
-            .background(selected ? Color.accentColor.opacity(0.15) : Color.primary.opacity(0.035))
-            .clipShape(RoundedRectangle(cornerRadius: 7))
-            .overlay {
-                RoundedRectangle(cornerRadius: 7).stroke(selected ? Color.accentColor : Color.clear, lineWidth: 1)
-            }
+            .background(selected ? Color.accentColor.opacity(0.055) : Color.clear)
+            .modifier(CockpitCalendarCellBorder())
         }
         .buttonStyle(.plain)
         .help("\(title): \(value)")
         .accessibilityValue(L(selected ? "cockpit_ui_calendar_selected" : "cockpit_ui_calendar_unselected"))
+    }
+}
+
+/// The same controls stay below the pinned reset announcement for every calendar scale.
+struct CockpitCalendarToolbar: View {
+    let title: String
+    @Binding var scale: CockpitCalendarScale
+    @Binding var metric: CockpitCalendarMetric
+    let previous: () -> Void
+    let today: () -> Void
+    let next: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Picker(L("cockpit_calendar_scale"), selection: self.$scale) {
+                ForEach(CockpitCalendarScale.allCases) { scale in
+                    Text(scale.cockpitTitle).tag(scale)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .frame(maxWidth: 500)
+            .frame(maxWidth: .infinity)
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    self.periodTitle
+                    Spacer(minLength: 12)
+                    self.navigation
+                    self.metricPicker
+                }
+                VStack(alignment: .leading, spacing: 10) {
+                    self.periodTitle
+                    HStack {
+                        self.navigation
+                        Spacer(minLength: 12)
+                        self.metricPicker
+                    }
+                }
+            }
+        }
+        .accessibilityIdentifier("cockpit-calendar-toolbar")
+    }
+
+    private var periodTitle: some View {
+        Text(self.title)
+            .font(.system(size: 23, weight: .semibold))
+            .lineLimit(2)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var navigation: some View {
+        HStack(spacing: 0) {
+            Button(action: self.previous) { Image(systemName: "chevron.left") }
+                .accessibilityLabel(L("cockpit_calendar_previous"))
+            Button(L("cockpit_calendar_now"), action: self.today)
+            Button(action: self.next) { Image(systemName: "chevron.right") }
+                .accessibilityLabel(L("cockpit_calendar_next"))
+        }
+        .buttonStyle(.borderless)
+        .controlSize(.small)
+        .fixedSize()
+    }
+
+    private var metricPicker: some View {
+        Picker(L("cockpit_calendar_metric"), selection: self.$metric) {
+            ForEach(CockpitCalendarMetric.allCases) { metric in
+                Text(metric.title).tag(metric)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .frame(width: 150)
     }
 }

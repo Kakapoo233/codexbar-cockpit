@@ -154,6 +154,7 @@ struct SpendDashboardPane: View {
                     if self.showsTimeZoneControls {
                         SpendTimeZoneControls(settings: self.settings)
                     }
+                    SpendPlanUsageSection(store: self.store)
                     self.refreshStatus
                     self.codexCostCatchUpPanel
                     self.content

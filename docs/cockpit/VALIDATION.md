@@ -324,3 +324,21 @@ for remaining upstream algorithm and team/cloud differences.
 - The local render probe passed, but its exported image did not provide legible full-page visual
   evidence. Desktop accessibility attachment timed out; interactive layout acceptance remains pending.
 - No screenshots or local account data were published.
+
+## Calendar, reset banner and usage navigation (0.8.0)
+
+- 122 focused tests in 18 suites passed, covering calendar period arithmetic, feedback isolation,
+  dated-announcement gating and expiry, plan history account ownership, and session receipt privacy/save behavior.
+- `make check` passed with zero violations across 3,230 Swift files.
+- Synthetic day/week/month/quarter/year views at 600 and 960 points, plus full Usage and Calendar
+  panels at wide and compact sizes, rendered successfully. Inspected the pinned announcement/period order,
+  homepage countdown, cross-month week and explicit `+N` marker overflow. Images remain local.
+- Session height is now 920 points (compact list up to 420); the receipt action stays in the selected
+  session's fixed detail header and retains the existing contextual preview/export path.
+- Settings About 0.7.1 was also verified through the live accessibility interface. The user withdrew
+  the Usage & Spend failure report because it no longer occurs; no speculative repair was made.
+- Follow-up plan-history observation regression passed (2 tests): a history publication invalidates
+  an already displayed Statistics section even when no quota snapshot changes. Touched-file format/lint passed.
+- 0.8.0 build 20 passed package/signature and isolated startup checks; installed with the previous
+  developer bundle backed up. The installed executable path was confirmed running. Final interactive
+  Statistics/session acceptance remains pending reopening Settings after the update.

@@ -28,7 +28,9 @@ extension StatusItemController {
         {
             return submenu
         }
-        if let submenu = self.makeUsageHistorySubmenu(provider: provider, width: width) {
+        if !self.unifiedMenuPanelEnabledForController,
+           let submenu = self.makeUsageHistorySubmenu(provider: provider, width: width)
+        {
             return submenu
         }
         return self.makeStorageBreakdownSubmenu(provider: provider, width: width)

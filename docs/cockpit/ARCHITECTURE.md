@@ -22,6 +22,12 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   This reference does not rewrite automatic recommendations or personal caps.
 - `CockpitCalendarPeriod` and `CockpitCalendarLedger` provide page-local period browsing over loaded
   history, with calendar-aware boundaries and separate currency totals.
+- Day, week and month reuse the same calendar date cells and reset/feedback markers. A compact reset
+  announcement and period toolbar remain above the scrolling calendar and selected-day details.
+- The Usage homepage displays a countdown only for a fresh, pending public announcement with an exact
+  future date. Estimates, undated announcements and expired deadlines never create a homepage banner.
+  Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors;
+  they are available independently of local cost tracking.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to
   the explicit `local-machine` scope, independently of whichever quota account is currently selected.

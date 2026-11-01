@@ -116,136 +116,135 @@ struct CockpitCalendarView: View {
 
     var body: some View {
         let ledger = self.ledger
-        ScrollView {
+        VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text(self.periodTitle)
-                        .font(.title2.weight(.semibold))
-                    Spacer()
-                    Button { self.movePeriod(-1) } label: { Image(systemName: "chevron.left") }
-                        .accessibilityLabel(L("cockpit_calendar_previous"))
-                    Button(L("cockpit_calendar_now")) {
+                if let resetStore {
+                    CockpitResetSummaryView(
+                        store: resetStore,
+                        calendar: self.calendar,
+                        selectDate: { date in
+                            self.month = date
+                            self.selectedDay = date
+                        },
+                        compact: true)
+                }
+                CockpitCalendarToolbar(
+                    title: self.periodTitle,
+                    scale: self.$scale,
+                    metric: self.$metric,
+                    previous: { self.movePeriod(-1) },
+                    today: {
                         let now = Date()
                         self.month = now
                         self.selectedDay = now
-                    }
-                    Button { self.movePeriod(1) } label: { Image(systemName: "chevron.right") }
-                        .accessibilityLabel(L("cockpit_calendar_next"))
-                }
-                HStack {
-                    Picker(L("cockpit_calendar_scale"), selection: self.$scale) {
-                        ForEach(CockpitCalendarScale.allCases) { scale in
-                            Text(scale.cockpitTitle).tag(scale)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    Picker(L("cockpit_calendar_metric"), selection: self.$metric) {
-                        ForEach(CockpitCalendarMetric.allCases) { metric in
-                            Text(metric.title).tag(metric)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .frame(width: 170)
-                }
-                CockpitCalendarPeriodSummaryView(
-                    ledger: ledger,
-                    period: self.period,
-                    metric: self.metric)
-                if self.scale != .month {
-                    CockpitCalendarPeriodView(
-                        ledger: ledger,
-                        period: self.period,
-                        metric: self.metric,
-                        selectedDay: self.selectedDay,
-                        select: { self.selectedDay = $0 })
-                }
-                Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
-                    .font(.caption).foregroundStyle(.secondary)
-                if let resetStore {
-                    CockpitResetSummaryView(store: resetStore, calendar: self.calendar) { date in
-                        self.month = date
-                        self.selectedDay = date
-                    }
-                }
-                HStack {
-                    Text(spendDashboardLedgerDateText(
-                        self.selectedDay,
-                        timeZone: self.calendar.timeZone,
-                        accessibility: true))
-                        .font(.headline)
-                    Spacer()
-                    Picker(L("cockpit_ui_feeling_records"), selection: self.$feelingProvider) {
-                        ForEach([UsageProvider.codex, .claude], id: \.self) { provider in
-                            Text(ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName)
-                                .tag(provider)
-                        }
-                    }
-                    .frame(width: 200)
-                }
-                Picker(L("cockpit_comfort_mode"), selection: self.$experienceMode) {
-                    ForEach(CockpitExperienceMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                Text(L(self.experienceMode == .quota
-                        ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
-                    .font(.caption).foregroundStyle(.secondary)
-                self.personalStatus
-                if self.experienceMode == .quota {
-                    self.quotaFeedbackNotice
-                }
-                if [.month, .quarter, .year].contains(self.scale) {
-                    if self.scale != .month {
-                        Text(CockpitCalendarPeriod(
-                            containing: self.selectedDay,
-                            scale: .month,
-                            calendar: self.calendar).title(calendar: self.calendar))
-                            .font(.headline)
-                    }
-                    CockpitMonthGridView(
-                        calendar: self.calendar,
-                        month: self.displayedMonth,
-                        selectedDay: self.selectedDay,
-                        days: self.calendarDays(ledger: ledger),
-                        select: { self.selectedDay = $0 },
-                        compact: true,
-                        metricText: { ledger.text(on: $0, metric: self.metric) })
-                }
-                Text(L("cockpit_ui_calendar_subjective_note"))
-                    .font(.caption).foregroundStyle(.secondary)
-                Divider()
-                if let resetStore {
-                    CockpitResetDayDetails(
-                        events: self.resetEventsByDay[self.calendar.startOfDay(for: self.selectedDay)] ?? [],
-                        forecast: resetStore.calendarLocalForecast,
-                        selectedDay: self.selectedDay,
-                        calendar: self.calendar,
-                        scheduled: resetStore.pendingCalendarReset)
-                }
-                self.dayDetails
-                if self.experienceMode == .quota {
-                    CockpitQuotaComfortChartView(
-                        model: CockpitQuotaComfortModel.build(
-                            records: self.comfortRecords,
-                            providerID: self.feelingProvider.rawValue,
-                            accountID: self.experienceAccountID,
-                            calendar: self.calendar),
-                        records: self.comfortRecords)
-                } else {
-                    CockpitComfortChartView(
-                        model: CockpitComfortModel.build(
-                            records: self.comfortRecords,
-                            providerID: self.feelingProvider.rawValue,
-                            accountID: "local-machine",
-                            calendar: self.calendar),
-                        records: self.comfortRecords)
-                }
+                    },
+                    next: { self.movePeriod(1) })
             }
             .padding(16)
+            Divider()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    self.calendarContent(ledger: ledger)
+                    CockpitCalendarPeriodSummaryView(ledger: ledger, period: self.period, metric: self.metric)
+                    Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
+                        .font(.caption).foregroundStyle(.secondary)
+                    Divider()
+                    self.selectedDayHeader
+                    Picker(L("cockpit_comfort_mode"), selection: self.$experienceMode) {
+                        ForEach(CockpitExperienceMode.allCases) { mode in
+                            Text(mode.title).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    Text(L(self.experienceMode == .quota
+                            ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
+                        .font(.caption).foregroundStyle(.secondary)
+                    self.personalStatus
+                    if self.experienceMode == .quota {
+                        self.quotaFeedbackNotice
+                    }
+                    Text(L("cockpit_ui_calendar_subjective_note"))
+                        .font(.caption).foregroundStyle(.secondary)
+                    if let resetStore {
+                        CockpitResetDayDetails(
+                            events: self.resetEventsByDay[self.calendar.startOfDay(for: self.selectedDay)] ?? [],
+                            forecast: resetStore.calendarLocalForecast,
+                            selectedDay: self.selectedDay,
+                            calendar: self.calendar,
+                            scheduled: resetStore.pendingCalendarReset)
+                    }
+                    self.dayDetails
+                    if self.experienceMode == .quota {
+                        CockpitQuotaComfortChartView(
+                            model: CockpitQuotaComfortModel.build(
+                                records: self.comfortRecords,
+                                providerID: self.feelingProvider.rawValue,
+                                accountID: self.experienceAccountID,
+                                calendar: self.calendar),
+                            records: self.comfortRecords)
+                    } else {
+                        CockpitComfortChartView(
+                            model: CockpitComfortModel.build(
+                                records: self.comfortRecords,
+                                providerID: self.feelingProvider.rawValue,
+                                accountID: "local-machine",
+                                calendar: self.calendar),
+                            records: self.comfortRecords)
+                    }
+                }
+                .padding(16)
+            }
         }
         .onChange(of: self.scale) { _, _ in
             self.month = self.selectedDay
+        }
+    }
+
+    private var selectedDayHeader: some View {
+        HStack {
+            Text(spendDashboardLedgerDateText(
+                self.selectedDay,
+                timeZone: self.calendar.timeZone,
+                accessibility: true))
+                .font(.headline)
+            Spacer()
+            Picker(L("cockpit_ui_feeling_records"), selection: self.$feelingProvider) {
+                ForEach([UsageProvider.codex, .claude], id: \.self) { provider in
+                    Text(ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName)
+                        .tag(provider)
+                }
+            }
+            .frame(width: 200)
+        }
+    }
+
+    @ViewBuilder
+    private func calendarContent(ledger: CockpitCalendarLedger) -> some View {
+        if self.scale != .month {
+            CockpitCalendarPeriodView(
+                ledger: ledger,
+                period: self.period,
+                metric: self.metric,
+                selectedDay: self.selectedDay,
+                select: { self.selectedDay = $0 },
+                days: self.calendarDays(ledger: ledger))
+        }
+        if [.month, .quarter, .year].contains(self.scale) {
+            if self.scale != .month {
+                Text(CockpitCalendarPeriod(
+                    containing: self.selectedDay,
+                    scale: .month,
+                    calendar: self.calendar).title(calendar: self.calendar))
+                    .font(.headline)
+            }
+            CockpitMonthGridView(
+                calendar: self.calendar,
+                month: self.displayedMonth,
+                selectedDay: self.selectedDay,
+                days: self.calendarDays(ledger: ledger),
+                select: { self.selectedDay = $0 },
+                compact: true,
+                metricText: { ledger.text(on: $0, metric: self.metric) })
         }
     }
 
@@ -257,18 +256,18 @@ struct CockpitCalendarView: View {
         let eventsByDay = self.resetEventsByDay
         let forecast = self.resetStore?.calendarLocalForecast
         let scheduled = self.resetStore?.pendingCalendarReset?.scheduledFor
-        return Dictionary(uniqueKeysWithValues: CockpitCalendarProjection.cells(
-            month: self.displayedMonth,
-            calendar: self.calendar)
-            .compactMap(\.self).map { day in
-                (day, CockpitCalendarDay(
-                    day: day,
-                    tokens: ledger.tokens(on: day).total,
-                    feeling: self.feeling(on: day),
-                    resetKinds: (eventsByDay[day] ?? []).map(\.kind),
-                    hasResetForecast: forecast.map { self.calendar.isDate($0.estimatedAt, inSameDayAs: day) } ?? false,
-                    hasScheduledReset: scheduled.map { self.calendar.isDate($0, inSameDayAs: day) } ?? false))
-            })
+        let visibleDays = [.day, .week].contains(self.scale)
+            ? self.period.days(calendar: self.calendar)
+            : CockpitCalendarProjection.cells(month: self.displayedMonth, calendar: self.calendar).compactMap(\.self)
+        return Dictionary(uniqueKeysWithValues: visibleDays.map { day in
+            (day, CockpitCalendarDay(
+                day: day,
+                tokens: ledger.tokens(on: day).total,
+                feeling: self.feeling(on: day),
+                resetKinds: (eventsByDay[day] ?? []).map(\.kind),
+                hasResetForecast: forecast.map { self.calendar.isDate($0.estimatedAt, inSameDayAs: day) } ?? false,
+                hasScheduledReset: scheduled.map { self.calendar.isDate($0, inSameDayAs: day) } ?? false))
+        })
     }
 
     private var resetEventsByDay: [Date: [CockpitResetEvent]] {

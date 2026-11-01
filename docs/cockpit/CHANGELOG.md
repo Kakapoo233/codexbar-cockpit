@@ -1,5 +1,13 @@
 # Cockpit changes
 
+## 0.8.0 — Unified calendar and usage navigation
+
+- Give day, week and month calendars a shared date, selection and grid style; preserve daily usage, personal feedback and reset markers.
+- Keep the compact Codex reset announcement above calendar period controls, with expandable details.
+- Show an automatically updating homepage countdown only for a fresh, dated, pending reset announcement; hide it when absent or expired.
+- Embed the existing plan-utilization and quota-burndown charts in Usage Statistics instead of an extra homepage submenu.
+- Increase session list/detail space in Usage & Spend and pin the selected session receipt action above the scrolling detail.
+
 ## 0.7.1 — Fork About page
 
 - Show CodexBar Cockpit identity and project description with current version and localized build date.
