@@ -3235,3 +3235,10 @@
 "cockpit_plan_history_partial" = "Sono mostrate solo le osservazioni registrate. Le date mancanti non indicano un utilizzo pari a zero.";
 "cockpit_plan_history_empty" = "Non sono state registrate osservazioni della quota in questo periodo.";
 "cockpit_plan_cycle_details" = "Dettagli del ciclo di ripristino";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Utilizzo giornaliero consigliato";
+"cockpit_menu_daily_recommendation_short" = "Consiglio";
+"cockpit_menu_daily_recommendation_help" = "Cockpit calcola il consiglio per l’intera giornata in base alla curva di comfort e al periodo di ripristino, come percentuale della quota settimanale totale. Non è la quota rimanente di oggi. Mostra — in assenza di dati validi dell’account locale e indica una stima quando le osservazioni sono incomplete.";
+"cockpit_menu_daily_recommendation_accessibility" = "Utilizzo giornaliero consigliato: %@ della quota settimanale";
+"cockpit_menu_daily_recommendation_partial" = "%@ (stima basata su osservazioni incomplete)";

@@ -3237,3 +3237,10 @@
 "cockpit_plan_history_partial" = "فقط مشاهدات ثبت‌شده نمایش داده می‌شوند. نبودن تاریخ‌ها به معنای مصرف صفر نیست.";
 "cockpit_plan_history_empty" = "در این بازه هیچ مشاهده‌ای از سهمیه ثبت نشده است.";
 "cockpit_plan_cycle_details" = "جزئیات چرخهٔ بازنشانی";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "مصرف روزانهٔ پیشنهادی";
+"cockpit_menu_daily_recommendation_short" = "پیشنهاد";
+"cockpit_menu_daily_recommendation_help" = "Cockpit پیشنهاد کل روز را بر اساس منحنی آسودگی و بازهٔ بازنشانی، به‌صورت درصدی از کل سهمیهٔ هفتگی محاسبه می‌کند. این مقدار سهمیهٔ باقی‌ماندهٔ امروز نیست. بدون داده‌های معتبر حساب محلی، — نمایش داده می‌شود و در صورت ناقص بودن مشاهدات، مقدار به‌عنوان تخمین مشخص می‌شود.";
+"cockpit_menu_daily_recommendation_accessibility" = "مصرف روزانهٔ پیشنهادی: %@ از سهمیهٔ هفتگی";
+"cockpit_menu_daily_recommendation_partial" = "%@ (تخمین بر اساس مشاهدات ناقص)";

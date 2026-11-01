@@ -3229,3 +3229,10 @@
 "cockpit_plan_history_partial" = "Es werden nur erfasste Beobachtungen angezeigt. Fehlende Tage bedeuten nicht, dass nichts genutzt wurde.";
 "cockpit_plan_history_empty" = "Für diesen Zeitraum wurden keine Kontingentbeobachtungen erfasst.";
 "cockpit_plan_cycle_details" = "Details zum Zurücksetzungszyklus";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Tägliche Nutzungsempfehlung";
+"cockpit_menu_daily_recommendation_short" = "Empfehlung";
+"cockpit_menu_daily_recommendation_help" = "Cockpit berechnet die Empfehlung für den ganzen Tag anhand der Komfortkurve und des Rücksetzungszeitraums, als Prozentsatz des gesamten Wochenkontingents. Sie entspricht nicht dem heute noch verfügbaren Kontingent. Ohne gültige lokale Kontodaten erscheint —; bei unvollständigen Beobachtungen wird der Wert als Schätzung gekennzeichnet.";
+"cockpit_menu_daily_recommendation_accessibility" = "Tägliche Nutzungsempfehlung: %@ des Wochenkontingents";
+"cockpit_menu_daily_recommendation_partial" = "%@ (aus unvollständigen Beobachtungen geschätzt)";

@@ -149,6 +149,7 @@ struct MenuBarLayoutEditorTests {
             .lanePercent(lane: .secondary),
             .extraPercent(id: "cursor-grok-bot"),
             .percent(window: .automatic),
+            .cockpitDailyRecommendation,
             .usageBar,
             .progressBar(window: .session),
             .progressBar(window: .weekly),

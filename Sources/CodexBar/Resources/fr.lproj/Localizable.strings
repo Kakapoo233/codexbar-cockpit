@@ -3230,3 +3230,10 @@
 "cockpit_plan_history_partial" = "Seules les observations enregistrées sont affichées. Les dates manquantes ne signifient pas une utilisation nulle.";
 "cockpit_plan_history_empty" = "Aucune observation du quota n’a été enregistrée pendant cette période.";
 "cockpit_plan_cycle_details" = "Détails du cycle de réinitialisation";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Utilisation quotidienne recommandée";
+"cockpit_menu_daily_recommendation_short" = "Conseil";
+"cockpit_menu_daily_recommendation_help" = "Cockpit calcule la recommandation pour la journée entière à partir de la courbe de confort et de la période de réinitialisation, en pourcentage du quota hebdomadaire total. Il ne s’agit pas du quota restant aujourd’hui. Affiche — sans données de compte locales valides et signale une estimation lorsque les observations sont incomplètes.";
+"cockpit_menu_daily_recommendation_accessibility" = "Utilisation quotidienne recommandée : %@ du quota hebdomadaire";
+"cockpit_menu_daily_recommendation_partial" = "%@ (estimation à partir d’observations incomplètes)";

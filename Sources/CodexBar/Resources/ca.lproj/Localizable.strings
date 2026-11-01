@@ -3235,3 +3235,10 @@
 "cockpit_plan_history_partial" = "Només es mostren les observacions registrades. Les dates que falten no indiquen un ús nul.";
 "cockpit_plan_history_empty" = "No s’han registrat observacions de quota en aquest període.";
 "cockpit_plan_cycle_details" = "Detalls del cicle de restabliment";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Ús diari recomanat";
+"cockpit_menu_daily_recommendation_short" = "Recomanació";
+"cockpit_menu_daily_recommendation_help" = "El Cockpit calcula la recomanació per a tot el dia a partir de la corba de confort i el període de restabliment, com a percentatge de la quota setmanal total. No és la quota restant d’avui. Mostra — si no hi ha dades vàlides del compte local i indica que és una estimació quan les observacions són incompletes.";
+"cockpit_menu_daily_recommendation_accessibility" = "Ús diari recomanat: %@ de la quota setmanal";
+"cockpit_menu_daily_recommendation_partial" = "%@ (estimat a partir d’observacions incompletes)";

@@ -20,6 +20,7 @@ extension MenuBarLayoutToken {
         case .runsOut: L("menu_bar_help_runs_out")
         case .runsOutCompact: L("menu_bar_help_runs_out_compact")
         case .balance: L("menu_bar_help_balance")
+        case .cockpitDailyRecommendation: L("cockpit_menu_daily_recommendation_help")
         case .costToday: L("menu_bar_help_cost_today")
         case .costWindow: L("menu_bar_help_cost_window")
         case .tokensPerMinute: L("Latest tokens per minute (OpenAI Admin API)")

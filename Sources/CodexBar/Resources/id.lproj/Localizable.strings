@@ -3237,3 +3237,10 @@
 "cockpit_plan_history_partial" = "Hanya pengamatan yang tercatat ditampilkan. Tanggal yang tidak ada bukan berarti penggunaan nol.";
 "cockpit_plan_history_empty" = "Tidak ada pengamatan kuota yang tercatat dalam periode ini.";
 "cockpit_plan_cycle_details" = "Detail siklus reset";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Penggunaan harian yang disarankan";
+"cockpit_menu_daily_recommendation_short" = "Saran";
+"cockpit_menu_daily_recommendation_help" = "Cockpit menghitung saran untuk satu hari penuh berdasarkan kurva kenyamanan dan periode pengaturan ulang, sebagai persentase dari total kuota mingguan. Ini bukan sisa kuota hari ini. Menampilkan — jika tidak ada data akun lokal yang valid dan menandai nilai sebagai perkiraan saat pengamatan tidak lengkap.";
+"cockpit_menu_daily_recommendation_accessibility" = "Penggunaan harian yang disarankan: %@ dari kuota mingguan";
+"cockpit_menu_daily_recommendation_partial" = "%@ (perkiraan dari pengamatan yang tidak lengkap)";

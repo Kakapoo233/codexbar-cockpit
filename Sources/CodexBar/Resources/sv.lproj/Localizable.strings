@@ -3230,3 +3230,10 @@
 "cockpit_plan_history_partial" = "Endast registrerade observationer visas. Saknade datum innebär inte att användningen var noll.";
 "cockpit_plan_history_empty" = "Inga kvotobservationer registrerades under den här perioden.";
 "cockpit_plan_cycle_details" = "Detaljer om återställningscykeln";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Rekommenderad daglig användning";
+"cockpit_menu_daily_recommendation_short" = "Rekommendation";
+"cockpit_menu_daily_recommendation_help" = "Cockpit beräknar rekommendationen för hela dagen utifrån komfortkurvan och återställningsperioden, som en procentandel av den totala veckokvoten. Det är inte dagens återstående kvot. Visar — utan giltiga lokala kontouppgifter och markerar värdet som en uppskattning vid ofullständiga observationer.";
+"cockpit_menu_daily_recommendation_accessibility" = "Rekommenderad daglig användning: %@ av veckokvoten";
+"cockpit_menu_daily_recommendation_partial" = "%@ (uppskattat utifrån ofullständiga observationer)";

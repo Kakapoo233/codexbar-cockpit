@@ -3215,3 +3215,10 @@
 "cockpit_plan_history_partial" = "僅顯示實際採集的記錄，缺少日期不表示用量為零。";
 "cockpit_plan_history_empty" = "此時間範圍內沒有額度記錄。";
 "cockpit_plan_cycle_details" = "重設週期詳情";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "每日建議用量";
+"cockpit_menu_daily_recommendation_short" = "建議";
+"cockpit_menu_daily_recommendation_help" = "Cockpit 根據舒適曲線與重設時段計算的全天建議，表示每週總額度的百分比；不是今日剩餘額度。沒有有效的本機帳號資料時顯示 —，觀測不完整時標示為估算。";
+"cockpit_menu_daily_recommendation_accessibility" = "每日建議用量：%@，占每週總額度";
+"cockpit_menu_daily_recommendation_partial" = "%@（觀測不完整，估算）";

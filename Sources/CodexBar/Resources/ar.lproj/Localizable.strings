@@ -3237,3 +3237,10 @@
 "cockpit_plan_history_partial" = "تُعرض الملاحظات المسجّلة فقط. لا تعني التواريخ المفقودة أن الاستخدام كان صفراً.";
 "cockpit_plan_history_empty" = "لم تُسجّل ملاحظات للحصة خلال هذه الفترة.";
 "cockpit_plan_cycle_details" = "تفاصيل دورة إعادة التعيين";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "الاستخدام اليومي الموصى به";
+"cockpit_menu_daily_recommendation_short" = "التوصية";
+"cockpit_menu_daily_recommendation_help" = "يحسب Cockpit التوصية لليوم الكامل استنادًا إلى منحنى الراحة وفترة إعادة التعيين، كنسبة مئوية من إجمالي الحصة الأسبوعية. هذه ليست الحصة المتبقية اليوم. يعرض — عند عدم توفر بيانات صالحة للحساب المحلي، ويشير إلى أن القيمة تقديرية عندما تكون الملاحظات غير مكتملة.";
+"cockpit_menu_daily_recommendation_accessibility" = "الاستخدام اليومي الموصى به: %@ من الحصة الأسبوعية";
+"cockpit_menu_daily_recommendation_partial" = "%@ (تقدير يستند إلى ملاحظات غير مكتملة)";

@@ -3234,3 +3234,10 @@
 "cockpit_plan_history_partial" = "Показано лише записані спостереження. Пропущені дати не означають нульове використання.";
 "cockpit_plan_history_empty" = "За цей період спостережень квоти не записано.";
 "cockpit_plan_cycle_details" = "Подробиці циклу скидання";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Рекомендоване використання на день";
+"cockpit_menu_daily_recommendation_short" = "Рекомендація";
+"cockpit_menu_daily_recommendation_help" = "Cockpit обчислює рекомендацію на весь день за кривою комфорту та періодом скидання, у відсотках від загального тижневого ліміту. Це не залишок ліміту на сьогодні. Без дійсних даних локального облікового запису відображається —; за неповних спостережень значення позначається як оцінка.";
+"cockpit_menu_daily_recommendation_accessibility" = "Рекомендоване використання на день: %@ тижневого ліміту";
+"cockpit_menu_daily_recommendation_partial" = "%@ (оцінка за неповними спостереженнями)";

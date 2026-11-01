@@ -3231,3 +3231,10 @@
 "cockpit_plan_history_partial" = "Apenas as observações registradas são exibidas. Datas ausentes não significam uso zero.";
 "cockpit_plan_history_empty" = "Nenhuma observação da cota foi registrada neste período.";
 "cockpit_plan_cycle_details" = "Detalhes do ciclo de redefinição";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Uso diário recomendado";
+"cockpit_menu_daily_recommendation_short" = "Recomendado";
+"cockpit_menu_daily_recommendation_help" = "O Cockpit calcula a recomendação para o dia inteiro com base na curva de conforto e no período de redefinição, como porcentagem da cota semanal total. Não é a cota restante de hoje. Exibe — quando não há dados válidos da conta local e indica uma estimativa quando as observações estão incompletas.";
+"cockpit_menu_daily_recommendation_accessibility" = "Uso diário recomendado: %@ da cota semanal";
+"cockpit_menu_daily_recommendation_partial" = "%@ (estimado com base em observações incompletas)";

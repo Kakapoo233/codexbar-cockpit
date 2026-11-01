@@ -24,6 +24,13 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   A known zero daily allocation displays 0%; missing measurements remain unknown in both units.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
+  The status controller shares its planner with `UsageStore` for menu-bar layout and preview rendering;
+  previews never instantiate another collector or persistence store. The optional Daily recommendation
+  component reads `suggestedPercent`, the full-day automatic share of the weekly quota, independently
+  of manual caps and the used/remaining presentation switch. Matching provider/account/organization is
+  required; remote fleet sources do not use the local plan. Planner and reset metadata participate in icon
+  observation, and a placed component uses the existing minute refresh scheduler. Cockpit V7 layout keys
+  retain V6-and-earlier projections so rolling back does not invalidate the existing layout.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

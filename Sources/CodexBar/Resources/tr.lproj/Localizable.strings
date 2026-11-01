@@ -3236,3 +3236,10 @@
 "cockpit_plan_history_partial" = "Yalnızca kaydedilen gözlemler gösterilir. Eksik tarihler kullanımın sıfır olduğu anlamına gelmez.";
 "cockpit_plan_history_empty" = "Bu dönemde kota gözlemi kaydedilmedi.";
 "cockpit_plan_cycle_details" = "Sıfırlama döngüsü ayrıntıları";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Önerilen günlük kullanım";
+"cockpit_menu_daily_recommendation_short" = "Öneri";
+"cockpit_menu_daily_recommendation_help" = "Cockpit, konfor eğrisi ve sıfırlama dönemine göre tüm gün için öneriyi toplam haftalık kotanın yüzdesi olarak hesaplar. Bu, bugün kalan kota değildir. Geçerli yerel hesap verisi yoksa — gösterilir; gözlemler eksikse değer tahmin olarak işaretlenir.";
+"cockpit_menu_daily_recommendation_accessibility" = "Önerilen günlük kullanım: haftalık kotanın %@ kadarı";
+"cockpit_menu_daily_recommendation_partial" = "%@ (eksik gözlemlerden tahmin edilmiştir)";

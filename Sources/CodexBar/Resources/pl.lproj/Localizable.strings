@@ -3236,3 +3236,10 @@
 "cockpit_plan_history_partial" = "Wyświetlane są tylko zarejestrowane obserwacje. Brakujące daty nie oznaczają zerowego użycia.";
 "cockpit_plan_history_empty" = "W tym okresie nie zarejestrowano obserwacji limitu.";
 "cockpit_plan_cycle_details" = "Szczegóły cyklu resetowania";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Zalecane dzienne użycie";
+"cockpit_menu_daily_recommendation_short" = "Zalecenie";
+"cockpit_menu_daily_recommendation_help" = "Cockpit oblicza zalecenie na cały dzień na podstawie krzywej komfortu i okresu resetowania, jako procent całkowitego limitu tygodniowego. Nie jest to pozostały limit na dziś. Wyświetla — bez prawidłowych danych konta lokalnego, a przy niepełnych obserwacjach oznacza wartość jako szacunkową.";
+"cockpit_menu_daily_recommendation_accessibility" = "Zalecane dzienne użycie: %@ limitu tygodniowego";
+"cockpit_menu_daily_recommendation_partial" = "%@ (oszacowanie na podstawie niepełnych obserwacji)";

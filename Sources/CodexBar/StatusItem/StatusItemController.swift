@@ -513,6 +513,7 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     private func wireBindings() {
         if !SettingsStore.isRunningTests {
             self.cockpitPlanStore.ingest(self.store)
+            self.store.cockpitPlanStore = self.cockpitPlanStore
             self.startCockpitResetHistory()
         }
         self.observeStoreChanges()

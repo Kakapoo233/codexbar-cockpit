@@ -3234,3 +3234,10 @@
 "cockpit_plan_history_partial" = "Показаны только записанные наблюдения. Пропущенные даты не означают нулевое использование.";
 "cockpit_plan_history_empty" = "За этот период наблюдений квоты не записано.";
 "cockpit_plan_cycle_details" = "Подробности цикла сброса";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Рекомендуемый расход на день";
+"cockpit_menu_daily_recommendation_short" = "Рекомендация";
+"cockpit_menu_daily_recommendation_help" = "Cockpit рассчитывает рекомендацию на весь день по кривой комфорта и периоду сброса, в процентах от общего недельного лимита. Это не остаток лимита на сегодня. Без действительных данных локальной учётной записи отображается —; при неполных наблюдениях значение отмечается как оценка.";
+"cockpit_menu_daily_recommendation_accessibility" = "Рекомендуемый расход на день: %@ недельного лимита";
+"cockpit_menu_daily_recommendation_partial" = "%@ (оценка по неполным наблюдениям)";

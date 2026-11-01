@@ -3203,3 +3203,10 @@
 "cockpit_plan_history_partial" = "실제로 기록된 관측값만 표시합니다. 누락된 날짜가 사용량 0을 의미하지는 않습니다.";
 "cockpit_plan_history_empty" = "이 기간에는 할당량 관측 기록이 없습니다.";
 "cockpit_plan_cycle_details" = "초기화 주기 세부 정보";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "일일 권장 사용량";
+"cockpit_menu_daily_recommendation_short" = "권장";
+"cockpit_menu_daily_recommendation_help" = "Cockpit이 편안함 곡선과 초기화 기간을 바탕으로 계산한 하루 전체 권장 사용량이며, 전체 주간 한도의 백분율로 표시됩니다. 오늘 남은 사용량이 아닙니다. 유효한 로컬 계정 데이터가 없으면 —를 표시하고, 관측이 불완전하면 추정치로 표시합니다.";
+"cockpit_menu_daily_recommendation_accessibility" = "일일 권장 사용량: 주간 한도의 %@";
+"cockpit_menu_daily_recommendation_partial" = "%@ (불완전한 관측에 따른 추정치)";

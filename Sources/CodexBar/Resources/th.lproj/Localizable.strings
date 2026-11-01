@@ -3237,3 +3237,10 @@
 "cockpit_plan_history_partial" = "แสดงเฉพาะข้อมูลที่บันทึกไว้เท่านั้น วันที่ขาดหายไม่ได้หมายความว่าไม่มีการใช้งาน";
 "cockpit_plan_history_empty" = "ไม่มีข้อมูลการสังเกตโควตาที่บันทึกไว้ในช่วงเวลานี้";
 "cockpit_plan_cycle_details" = "รายละเอียดรอบการรีเซ็ต";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "ปริมาณการใช้งานรายวันที่แนะนำ";
+"cockpit_menu_daily_recommendation_short" = "แนะนำ";
+"cockpit_menu_daily_recommendation_help" = "Cockpit คำนวณปริมาณที่แนะนำสำหรับทั้งวันจากเส้นโค้งความสบายและช่วงเวลารีเซ็ต โดยแสดงเป็นเปอร์เซ็นต์ของโควตารายสัปดาห์ทั้งหมด ค่านี้ไม่ใช่โควตาที่เหลือของวันนี้ แสดง — เมื่อไม่มีข้อมูลบัญชีในเครื่องที่ถูกต้อง และระบุว่าเป็นค่าประมาณเมื่อข้อมูลการสังเกตไม่ครบถ้วน";
+"cockpit_menu_daily_recommendation_accessibility" = "ปริมาณการใช้งานรายวันที่แนะนำ: %@ ของโควตารายสัปดาห์";
+"cockpit_menu_daily_recommendation_partial" = "%@ (ประมาณจากข้อมูลการสังเกตที่ไม่ครบถ้วน)";

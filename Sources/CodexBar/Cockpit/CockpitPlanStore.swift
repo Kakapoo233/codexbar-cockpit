@@ -39,6 +39,38 @@ final class CockpitPlanStore {
         self.accounts[provider] ?? "unidentified"
     }
 
+    var menuBarObservationToken: Int {
+        _ = self.state
+        _ = self.accounts
+        _ = self.resetHistoryStore?.history
+        _ = self.resetHistoryStore?.status
+        _ = self.resetHistoryStore?.forecast
+        _ = self.resetHistoryStore?.lastSyncedAt
+        _ = self.resetHistoryStore?.lastStatusSyncedAt
+        return 0
+    }
+
+    /// Provider and account switches can reach the status item before the planner's ingest task.
+    /// Never show the previous account's suggestion during that interval.
+    func status(
+        for provider: UsageProvider,
+        matching snapshot: UsageSnapshot?,
+        on date: Date = Date()) -> CockpitDayStatus?
+    {
+        guard let snapshot, Self.weeklyWindow(in: snapshot) != nil,
+              let accountID = Self.snapshotAccountID(provider: provider, snapshot: snapshot),
+              self.accounts[provider] == accountID else { return nil }
+        return self.status(for: provider, on: date)
+    }
+
+    private static func snapshotAccountID(provider: UsageProvider, snapshot: UsageSnapshot) -> String? {
+        guard let identity = snapshot.identity(for: provider.instanceID),
+              let owner = identity.accountID ?? identity.accountEmail,
+              !owner.isEmpty else { return nil }
+        let scope = [provider.rawValue, owner, identity.accountOrganization ?? ""].joined(separator: "\u{1f}")
+        return SHA256.hash(data: Data(scope.utf8)).map { String(format: "%02x", $0) }.joined()
+    }
+
     func status(for provider: UsageProvider, on date: Date = Date()) -> CockpitDayStatus {
         let status = self.state.status(
             providerID: provider.rawValue, accountID: self.accountID(for: provider), on: date)
@@ -67,14 +99,10 @@ final class CockpitPlanStore {
         var currentAccounts: [UsageProvider: String] = [:]
         for provider in UsageProvider.allCases {
             guard let snapshot = snapshots[provider.instanceID],
-                  let identity = snapshot.identity(for: provider.instanceID),
-                  let owner = identity.accountID ?? identity.accountEmail,
-                  !owner.isEmpty,
+                  let accountID = Self.snapshotAccountID(provider: provider, snapshot: snapshot),
                   let window = Self.weeklyWindow(in: snapshot),
                   let reset = window.resetsAt
             else { continue }
-            let scope = [provider.rawValue, owner, identity.accountOrganization ?? ""].joined(separator: "\u{1f}")
-            let accountID = SHA256.hash(data: Data(scope.utf8)).map { String(format: "%02x", $0) }.joined()
             currentAccounts[provider] = accountID
             let observation = CockpitQuotaSnapshot(
                 providerID: provider.rawValue,

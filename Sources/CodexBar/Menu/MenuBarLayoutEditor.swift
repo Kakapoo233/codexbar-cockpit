@@ -53,6 +53,7 @@ enum MenuBarLayoutPaletteTokens {
         ] + MenuBarLayoutLane.available(for: provider, snapshot: snapshot).map { .lanePercent(lane: $0) }
             + MenuBarLayoutNamedExtra.availableTokens(provider: provider, snapshot: snapshot) + [
                 .percent(window: .automatic),
+                .cockpitDailyRecommendation,
                 .usageBar,
                 .progressBar(window: .session),
                 .progressBar(window: .weekly),
@@ -89,6 +90,7 @@ enum MenuBarLayoutPaletteTokens {
         .percent(window: .scopedWeekly),
         .percent(window: .spend),
         .percent(window: .automatic),
+        .cockpitDailyRecommendation,
         .usageBar,
         .progressBar(window: .session),
         .progressBar(window: .weekly),
@@ -962,18 +964,28 @@ struct MenuBarLayoutPreview: View {
     private let renderer = MenuBarLayoutRenderer()
 
     var body: some View {
-        MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
-            self.localizedPreview
+        if self.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
+            .contains(.cockpitDailyRecommendation)
+        {
+            TimelineView(.periodic(from: .now, by: 60)) { context in
+                MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+                    self.localizedPreview(now: context.date)
+                }
+            }
+        } else {
+            MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
+                self.localizedPreview(now: Date())
+            }
         }
     }
 
-    private var localizedPreview: some View {
+    private func localizedPreview(now: Date) -> some View {
         let provider = self.provider ?? .codex
-        let snapshot = self.store.snapshot(for: provider.instanceID)
-        let data = snapshot.map { self.liveData(provider: provider, snapshot: $0) }
+        let snapshot = self.store.menuBarSnapshot(for: provider.instanceID)
+        let data = snapshot.map { self.liveData(provider: provider, snapshot: $0, now: now) }
             ?? self.representativeData(provider: provider)
         let icon = ProviderBrandIcon.image(for: provider)
-        let minute = Date(timeIntervalSince1970: floor(Date().timeIntervalSince1970 / 60) * 60)
+        let minute = Date(timeIntervalSince1970: floor(now.timeIntervalSince1970 / 60) * 60)
         let appearanceName = self.colorScheme == .dark ? "darkAqua" : "aqua"
         let rendered = self.renderer.render(
             layout: self.layout,
@@ -996,8 +1008,7 @@ struct MenuBarLayoutPreview: View {
         return MenuBarLayoutPreviewText(rendered: rendered)
     }
 
-    func liveData(provider: UsageProvider, snapshot: UsageSnapshot) -> MenuBarLayoutRenderData {
-        let now = Date()
+    func liveData(provider: UsageProvider, snapshot: UsageSnapshot, now: Date = Date()) -> MenuBarLayoutRenderData {
         let cost = self.store.tokenSnapshotForCurrentProviderConfig(for: provider)?.snapshot
         let costToday = MenuBarLayoutCostResolver.todayCostUSD(snapshot: cost, now: now)
         // Thresholds are USD, and `convertedCost` returns the source amount unchanged when no rate
@@ -1021,6 +1032,9 @@ struct MenuBarLayoutPreview: View {
                 },
                 todayUSD: costToday.flatMap(toUSD),
                 last30DaysUSD: cost?.last30DaysCostUSD.flatMap(toUSD)),
+            includeCockpitRecommendation: self.layout
+                .flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
+                .contains(.cockpitDailyRecommendation),
             now: now)
     }
 
@@ -1101,7 +1115,8 @@ struct MenuBarLayoutPreview: View {
             spend: MenuBarLayoutRenderWindow(spend),
             spendPace: samplePace(spend),
             spendAmount: "$460",
-            spendBudget: "$460 / $1,000")
+            spendBudget: "$460 / $1,000",
+            cockpitDailyRecommendationPercent: 15)
     }
 }
 
@@ -1244,6 +1259,7 @@ extension MenuBarLayoutToken {
         case .balance: L("Balance")
         case .tokensPerMinute: L("Tokens / min")
         case .tokensSparkline: L("Tokens / min graph")
+        case .cockpitDailyRecommendation: L("cockpit_menu_daily_recommendation")
         case .costToday: L("menu_bar_layout_token_cost_today")
         case .costWindow: L("menu_bar_layout_token_cost_window")
         case .spendAmount: L("Spend")
@@ -1297,6 +1313,7 @@ extension MenuBarLayoutToken {
         case .balance: "creditcard"
         case .tokensPerMinute: "speedometer"
         case .tokensSparkline: "chart.bar.xaxis"
+        case .cockpitDailyRecommendation: "gauge.with.dots.needle.50percent"
         case .costToday, .spendAmount, .spendBudget: "dollarsign.circle"
         case .costWindow: "calendar.badge.clock"
         case .separatorDot: "smallcircle.filled.circle"

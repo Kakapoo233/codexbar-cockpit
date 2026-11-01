@@ -3236,3 +3236,10 @@
 "cockpit_plan_history_partial" = "Chỉ hiển thị các quan sát đã ghi nhận. Ngày bị thiếu không có nghĩa là mức sử dụng bằng không.";
 "cockpit_plan_history_empty" = "Không có quan sát hạn mức nào được ghi nhận trong khoảng thời gian này.";
 "cockpit_plan_cycle_details" = "Chi tiết chu kỳ đặt lại";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Mức dùng hằng ngày được đề xuất";
+"cockpit_menu_daily_recommendation_short" = "Đề xuất";
+"cockpit_menu_daily_recommendation_help" = "Cockpit tính mức đề xuất cho cả ngày dựa trên đường cong thoải mái và khoảng thời gian đặt lại, theo phần trăm tổng hạn mức hằng tuần. Đây không phải hạn mức còn lại hôm nay. Hiển thị — khi không có dữ liệu tài khoản cục bộ hợp lệ và đánh dấu là ước tính nếu quan sát chưa đầy đủ.";
+"cockpit_menu_daily_recommendation_accessibility" = "Mức dùng hằng ngày được đề xuất: %@ hạn mức hằng tuần";
+"cockpit_menu_daily_recommendation_partial" = "%@ (ước tính từ các quan sát chưa đầy đủ)";

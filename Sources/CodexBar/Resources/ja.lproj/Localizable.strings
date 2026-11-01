@@ -3235,3 +3235,10 @@
 "cockpit_plan_history_partial" = "実際に記録された観測値のみを表示します。日付が欠けていても、使用量がゼロとは限りません。";
 "cockpit_plan_history_empty" = "この期間には利用枠の観測記録がありません。";
 "cockpit_plan_cycle_details" = "リセット周期の詳細";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "1日の推奨使用量";
+"cockpit_menu_daily_recommendation_short" = "推奨";
+"cockpit_menu_daily_recommendation_help" = "快適度曲線とリセット期間に基づいて Cockpit が計算した1日全体の推奨使用量です。週の合計利用枠に対する割合を示し、今日の残り利用枠ではありません。有効なローカルアカウントデータがない場合は — を表示し、観測が不完全な場合は推定値として示します。";
+"cockpit_menu_daily_recommendation_accessibility" = "1日の推奨使用量：週間利用枠の %@";
+"cockpit_menu_daily_recommendation_partial" = "%@（不完全な観測に基づく推定値）";

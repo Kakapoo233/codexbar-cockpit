@@ -100,6 +100,10 @@ struct MenuBarLayoutRenderData: Hashable {
     var spendAmount: String?
     var spendBudget: String?
     var spendCurrencySymbol = "$"
+    /// Full-day automatic recommendation in weekly-quota percentage points.
+    var cockpitDailyRecommendationPercent: Double?
+    var cockpitDailyRecommendationIsPartial = false
+    var cockpitDailyRecommendationIsStale = false
 
     func extraTitle(_ id: String) -> String? {
         ProviderDescriptorRegistry.descriptor(for: self.provider).menuBarMetrics.namedExtras[id].map { title in
@@ -820,6 +824,8 @@ final class MenuBarLayoutRenderer {
                 data.balance,
                 unavailableLabel: L("%@ unavailable", L("Balance")),
                 attributes: style.attributes)
+        case .cockpitDailyRecommendation:
+            return self.cockpitDailyRecommendationToken(data: data, attributes: style.attributes)
         case .costToday:
             return self.optionalTextToken(
                 data.costToday,
@@ -1202,6 +1208,34 @@ final class MenuBarLayoutRenderer {
             return clamped <= 0.04045 ? clamped / 12.92 : pow((clamped + 0.055) / 1.055, 2.4)
         }
         return 0.2126 * linear(color.red) + 0.7152 * linear(color.green) + 0.0722 * linear(color.blue)
+    }
+
+    private static func cockpitDailyRecommendationToken(
+        data: MenuBarLayoutRenderData,
+        attributes: [NSAttributedString.Key: Any])
+        -> (value: NSAttributedString, accessibilityText: String?)
+    {
+        let label = L("cockpit_menu_daily_recommendation_short")
+        guard let value = data.cockpitDailyRecommendationPercent, value.isFinite, value >= 0 else {
+            return self.textToken(
+                "\(label) —",
+                accessibilityText: L("%@ unavailable", L("cockpit_menu_daily_recommendation")),
+                attributes: attributes)
+        }
+        let percent = (value / 100).formatted(
+            .percent.precision(.fractionLength(0...1)).locale(codexBarLocalizedResourceLocale()))
+        var accessibility = L("cockpit_menu_daily_recommendation_accessibility", percent)
+        if data.cockpitDailyRecommendationIsPartial {
+            accessibility = L("cockpit_menu_daily_recommendation_partial", accessibility)
+        }
+        if data.cockpitDailyRecommendationIsStale {
+            accessibility += ", " + L("cockpit_ui_stale")
+        }
+        let approximate = data.cockpitDailyRecommendationIsPartial || data.cockpitDailyRecommendationIsStale
+        return self.textToken(
+            "\(label) \(approximate ? "≈" : "")\(percent)",
+            accessibilityText: accessibility,
+            attributes: attributes)
     }
 
     private static func optionalTextToken(

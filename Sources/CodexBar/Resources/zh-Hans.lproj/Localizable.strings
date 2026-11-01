@@ -3227,3 +3227,10 @@
 "cockpit_plan_history_partial" = "仅显示实际采集的记录，缺失日期不表示用量为零。";
 "cockpit_plan_history_empty" = "此时间范围内没有额度记录。";
 "cockpit_plan_cycle_details" = "重置周期详情";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "每日推荐用量";
+"cockpit_menu_daily_recommendation_short" = "建议";
+"cockpit_menu_daily_recommendation_help" = "Cockpit 根据舒适曲线与重置窗口计算的全天建议，表示每周总额度的百分比；不是今日剩余额度。无有效本机账号数据时显示 —，观测不完整时标记为估算。";
+"cockpit_menu_daily_recommendation_accessibility" = "每日推荐用量：%@，占每周总额度";
+"cockpit_menu_daily_recommendation_partial" = "%@（观测不完整，估算）";

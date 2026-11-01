@@ -1,5 +1,12 @@
 # Cockpit changes
 
+## 0.8.7 — Daily recommendation in the menu bar
+
+- Add a Daily recommendation component to the menu-bar layout editor. It displays Cockpit's full-day automatic recommendation as a percentage of the weekly quota, with a compact localized label and hover help.
+- Share the existing comfort/reset planner with the status item and settings preview. Refresh with quota observations, comfort feedback, public reset changes and the clock, even while the menu is closed.
+- Preserve account boundaries, mark incomplete or stale estimates, and keep remote fleet readings separate from local advice. The English status-text setting applies to the new component.
+- Keep existing layouts unchanged until the component is added. Store the new layout in a fork-specific generation with older-readable projections for rollback.
+
 ## 0.8.6 — Persistent statistics date controls
 
 - Move the reporting-range choices into a fixed left sidebar. Statistics scroll independently, keeping 7/30/90-day, month-to-date and all-history choices available at every scroll position.

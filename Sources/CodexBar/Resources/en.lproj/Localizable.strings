@@ -3238,3 +3238,10 @@
 "cockpit_plan_history_partial" = "Only recorded observations are shown. Missing dates are not zero usage.";
 "cockpit_plan_history_empty" = "No quota observations were recorded in this period.";
 "cockpit_plan_cycle_details" = "Reset-cycle details";
+
+/* Cockpit daily recommendation in the top menu bar */
+"cockpit_menu_daily_recommendation" = "Daily recommendation";
+"cockpit_menu_daily_recommendation_short" = "Daily";
+"cockpit_menu_daily_recommendation_help" = "Full-day recommendation calculated by Cockpit from the comfort curve and reset window, as a percentage of the total weekly quota. This is not today's remaining allowance. Shows — without valid local account data and marks incomplete observations as an estimate.";
+"cockpit_menu_daily_recommendation_accessibility" = "Daily recommendation: %@ of the weekly quota";
+"cockpit_menu_daily_recommendation_partial" = "%@ (estimated from incomplete observations)";
