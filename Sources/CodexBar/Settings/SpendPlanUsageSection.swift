@@ -33,10 +33,35 @@ struct SpendPlanUsageSection: View {
         }
     }
 
+    func displayedHistories(for provider: UsageProvider) -> [PlanUtilizationSeriesHistory] {
+        let controller = self.store.sharedSpendDashboardController()
+        return Self.filterHistories(
+            self.store.planUtilizationHistorySelection(for: provider, readOnly: true).histories,
+            period: controller.selectedPeriod,
+            now: controller.reportingDate,
+            calendar: controller.configuration?.bucketCalendar ?? .current)
+    }
+
+    static func filterHistories(
+        _ histories: [PlanUtilizationSeriesHistory],
+        period: CostReportingPeriod,
+        now: Date,
+        calendar: Calendar) -> [PlanUtilizationSeriesHistory]
+    {
+        let start = period.bounds(now: now, calendar: calendar).lowerBound
+        return histories.map { history in
+            PlanUtilizationSeriesHistory(
+                name: history.name,
+                windowMinutes: history.windowMinutes,
+                entries: history.entries.filter { $0.capturedAt >= start && $0.capturedAt <= now })
+        }
+    }
+
     private func history(for provider: UsageProvider) -> some View {
-        let histories = self.store.planUtilizationHistorySelection(for: provider, readOnly: true).histories
+        let histories = self.displayedHistories(for: provider)
+        let controller = self.store.sharedSpendDashboardController()
         let burndown = QuotaBurndownChartMenuView(
-            provider: provider, histories: histories, width: self.chartWidth)
+            provider: provider, histories: histories, width: self.chartWidth, referenceDate: controller.reportingDate)
         return VStack(alignment: .leading, spacing: 10) {
             Text(ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName)
                 .font(.subheadline.weight(.semibold))
@@ -50,7 +75,9 @@ struct SpendPlanUsageSection: View {
                 provider: provider,
                 histories: histories,
                 snapshot: self.store.snapshot(for: provider.instanceID),
-                width: self.chartWidth)
+                width: self.chartWidth,
+                referenceDate: controller.reportingDate,
+                pointLimit: nil)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .overlay {

@@ -36,8 +36,10 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   accommodate the larger text. Narrow weekly strips retain horizontal scrolling.
 - The Usage homepage displays a countdown only for a fresh, pending public announcement with an exact
   future date. Estimates, undated announcements and expired deadlines never create a homepage banner.
-  Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors;
-  they are available independently of local cost tracking.
+  Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors.
+  They filter captured observations using the shared statistics period, reporting date and bucket time zone;
+  Statistics charts retain all selected points, while compact menu charts keep their 30-point limit.
+  They are available independently of local cost tracking.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to
   the explicit `local-machine` scope, independently of whichever quota account is currently selected.

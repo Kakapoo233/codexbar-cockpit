@@ -1199,6 +1199,11 @@ final class SpendDashboardController {
     private var loadedInputs: [SpendDashboardModel.ProviderInput] = []
     private var loadedInputScopes: [String: SpendDashboardLoadedInputScope] = [:]
     private var loadedAt = Date()
+    /// Quota samples can arrive independently of a cost refresh, including while costs are disabled.
+    var reportingDate: Date {
+        self.nowProvider()
+    }
+
     private var lastSuccessfulConfiguration: SpendDashboardConfiguration?
     private var phase = LoadPhase.ordinary
     // Throttle high-frequency date-window refreshes (didBecomeActive bursts).

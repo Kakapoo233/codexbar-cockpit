@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.8.4 — Statistics range synchronization
+
+- Make Plan Usage history follow the Statistics page's 7/30/90-day, month-to-date and all-history selection, using the configured reporting time zone and observation dates.
+- Keep all selected chart points in Statistics while preserving the compact menu chart limit. Exclude future observations without discarding valid samples that have future reset dates.
+
 ## 0.8.3 — Larger calendar text
 
 - Increase calendar text by 50%, including dates, values, controls, reset notices and comfort charts.
