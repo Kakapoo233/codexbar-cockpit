@@ -1077,10 +1077,27 @@ impl Drop for PreviewProfile {
     }
 }
 
+fn smoke_window_url(floating: bool) -> tauri::WebviewUrl {
+    tauri::WebviewUrl::App(if floating {
+        "index.html?synthetic-preview=1&surface=compact&sample=usage".into()
+    } else {
+        "index.html?synthetic-preview=1".into()
+    })
+}
+
 pub fn run_smoke_test() {
     // This separate builder has no plugins, invoke handlers, state loaders, collectors or HTTP clients.
     // Frontend calls therefore cannot read provider credentials or start cloud synchronization.
     let floating = std::env::args().any(|arg| arg == "--smoke-floating");
+    let mut context = crate::app_context();
+    context
+        .config_mut()
+        .app
+        .windows
+        .iter_mut()
+        .find(|window| window.label == "widget")
+        .expect("missing widget configuration for isolated smoke test")
+        .url = smoke_window_url(floating);
     let app = tauri::Builder::default().setup(move |app| {
         if floating {
             let preferences = crate::models::WidgetPreferences {
@@ -1108,13 +1125,32 @@ pub fn run_smoke_test() {
             handle.exit(if healthy { 0 } else { 1 });
         });
         Ok(())
-    }).build(crate::app_context()).expect("failed to build isolated tray smoke test");
+    }).build(context).expect("failed to build isolated tray smoke test");
     app.run(|_, _| {});
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn isolated_smoke_windows_use_matching_synthetic_frontend_surfaces() {
+        for (floating, expected) in [
+            (false, "index.html?synthetic-preview=1"),
+            (
+                true,
+                "index.html?synthetic-preview=1&surface=compact&sample=usage",
+            ),
+        ] {
+            let tauri::WebviewUrl::App(path) = smoke_window_url(floating) else {
+                panic!("smoke frontend must be a bundled app page");
+            };
+            assert_eq!(path.to_string_lossy(), expected);
+            let url = format!("http://tauri.localhost/{expected}")
+                .parse()
+                .unwrap();
+            assert!(preview_navigation_allowed(&url));
+        }
+    }
     #[test]
     fn compact_geometry_scales_with_text_and_dpi_without_leaving_work_area() {
         assert_eq!(
