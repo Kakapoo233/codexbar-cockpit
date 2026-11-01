@@ -3211,8 +3211,8 @@
 "cockpit_reset_banner_countdown" = "In %@";
 
 /* Full-day target and remaining daily allowance */
-"cockpit_advice_full_day" = "Full-day target";
-"cockpit_advice_remaining_today" = "Available today";
+"cockpit_advice_full_day" = "Full-day target · weekly quota";
+"cockpit_advice_remaining_today" = "Available today · of daily allocation";
 
 /* Comfort-informed daily advice */
 "cockpit_advice_comfort_default" = "Comfort ceiling: %@ · default curve";
@@ -3227,3 +3227,7 @@
 "cockpit_advice_comfort_samples" = "Personal curve fitted from %d quota feedback records.";
 "cockpit_advice_comfort_default_help" = "Uses the default curve until personal quota feedback is available.";
 "cockpit_advice_comfort_ceiling_help" = "The ceiling adjusts for reset chance and weekends. It applies to automatic targets, not manual caps.";
+
+/* Daily-allocation ratio and weekly equivalent */
+"cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
+"cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";

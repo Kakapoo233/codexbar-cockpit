@@ -19,6 +19,24 @@ enum CockpitDailyAdviceProjection {
         return L(key, date)
     }
 
+    static func remainingDailyText(_ status: CockpitDayStatus) -> String {
+        self.remainingText(status.remainingDailyBudgetPercent, coverage: status.coverage)
+    }
+
+    static func remainingWeeklyText(_ status: CockpitDayStatus) -> String {
+        guard status.remainingDailyBudgetPercent != nil else { return "—" }
+        return self.remainingText(status.remainingSuggestedPercent, coverage: status.coverage)
+    }
+
+    static func remainingWeeklyEquivalentText(_ status: CockpitDayStatus) -> String {
+        L("cockpit_advice_weekly_equivalent", self.remainingWeeklyText(status))
+    }
+
+    private static func remainingText(_ value: Double?, coverage: CockpitCoverage) -> String {
+        guard let value else { return "—" }
+        return (coverage == .complete ? "" : "≤ ") + cockpitLocalizedPercent(value)
+    }
+
     static func comfortCeilingText(_ advice: CockpitComfortAdvice) -> String {
         let key = advice.curveStatus == .fitted
             ? "cockpit_advice_comfort_fitted" : "cockpit_advice_comfort_default"
@@ -145,12 +163,11 @@ struct CockpitDailyAdviceRow: View {
             self.providerTitle
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
-                self.metric(
-                    L("cockpit_advice_remaining_today"),
-                    self.status.remainingSuggestedPercent,
-                    partial: self.status.coverage != .complete,
-                    upperBound: true)
-                    .accessibilityIdentifier("cockpit-advice-remaining-today")
+                VStack(alignment: .trailing, spacing: 3) {
+                    Text(L("cockpit_advice_remaining_today")).font(.caption).foregroundStyle(.secondary)
+                    CockpitDailyBudgetRemainingValue(status: self.status)
+                }
+                .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.metric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.metric(
                     L("cockpit_ui_observed"),
@@ -172,12 +189,14 @@ struct CockpitDailyAdviceRow: View {
             self.providerTitle
             VStack(spacing: 8) {
                 self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
-                self.sidebarMetric(
-                    L("cockpit_advice_remaining_today"),
-                    self.status.remainingSuggestedPercent,
-                    partial: self.status.coverage != .complete,
-                    upperBound: true)
-                    .accessibilityIdentifier("cockpit-advice-remaining-today")
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text(L("cockpit_advice_remaining_today"))
+                        .font(.caption).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 8)
+                    CockpitDailyBudgetRemainingValue(status: self.status)
+                }
+                .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.sidebarMetric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.sidebarMetric(
                     L("cockpit_ui_observed"),
@@ -280,5 +299,24 @@ struct CockpitComfortAdviceSummaryView: View {
             ? L("cockpit_advice_comfort_samples", advice.sampleCount)
             : L("cockpit_advice_comfort_default_help")
         return source + " " + L("cockpit_advice_comfort_ceiling_help")
+    }
+}
+
+struct CockpitDailyBudgetRemainingValue: View {
+    let status: CockpitDayStatus
+    var alignment: HorizontalAlignment = .trailing
+    var fontSize: CGFloat = 19
+
+    var body: some View {
+        VStack(alignment: self.alignment, spacing: 3) {
+            Text(CockpitDailyAdviceProjection.remainingDailyText(self.status))
+                .font(.system(size: self.fontSize, weight: .semibold, design: .rounded)).monospacedDigit()
+                .accessibilityIdentifier("cockpit-advice-remaining-daily-ratio")
+            Text(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(self.status))
+                .font(.caption2).foregroundStyle(.secondary).monospacedDigit()
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("cockpit-advice-remaining-weekly-equivalent")
+        }
+        .help(L("cockpit_advice_daily_ratio_help"))
     }
 }

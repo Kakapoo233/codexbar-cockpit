@@ -12,11 +12,14 @@ struct CockpitPlanSummaryView: View {
             }
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 self.metric(L("cockpit_advice_full_day"), value: self.percent(self.status.suggestedPercent))
-                self.metric(L("cockpit_advice_remaining_today"), value: self.percent(
-                    self.status.remainingSuggestedPercent,
-                    partial: self.status.coverage != .complete,
-                    upperBound: true))
-                    .accessibilityIdentifier("cockpit-summary-remaining-today")
+                VStack(alignment: .leading, spacing: 9) {
+                    Text(L("cockpit_advice_remaining_today")).font(.callout).foregroundStyle(.secondary)
+                    CockpitDailyBudgetRemainingValue(status: self.status, alignment: .leading, fontSize: 30)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(18)
+                .background(Color.primary.opacity(0.035), in: RoundedRectangle(cornerRadius: 12))
+                .accessibilityIdentifier("cockpit-summary-remaining-today")
                 self.metric(L("cockpit_ui_weekly_remaining"), value: self.percent(self.status.remainingPercent))
                 self.metric(L("cockpit_ui_observed"), value: self.percent(
                     self.status.usedPercent,

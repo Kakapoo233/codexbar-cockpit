@@ -154,6 +154,18 @@ public struct CockpitDayStatus: Equatable, Sendable {
               let remaining = self.remainingPercent else { return nil }
         return min(remaining, max(0, limit - used))
     }
+
+    /// Share of today's effective allocation still available, distinct from the original weekly quota unit.
+    /// Completeness remains on the status so the presentation can label partial observations separately.
+    public var remainingDailyBudgetPercent: Double? {
+        guard let limit = self.effectiveCapPercent, limit.isFinite, limit >= 0,
+              let used = self.usedPercent, used.isFinite, used >= 0,
+              let remaining = self.remainingPercent, remaining.isFinite, remaining >= 0,
+              let available = self.remainingSuggestedPercent, available.isFinite, available >= 0 else { return nil }
+        guard limit > 0 else { return 0 }
+        let fraction = min(100, max(0, available / limit * 100))
+        return (fraction * 100).rounded() / 100
+    }
 }
 
 public enum CockpitCalendar {

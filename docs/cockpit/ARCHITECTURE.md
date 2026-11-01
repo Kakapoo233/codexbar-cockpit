@@ -18,6 +18,10 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Current-cycle observed use is added back before allocating that share, then deducted once from
   today's available allowance. Earlier cycles stay consumed; manual caps and the actual remaining
   balance bound the allowance. Missing/partial observation retains its uncertainty.
+  The UI shows available allowance as a percentage of the effective daily allocation (manual cap when
+  present), together with the equivalent percentage of the weekly quota. For example, 15% of weekly quota
+  remaining from a 20% daily allocation is shown as 75% of today's allocation and 15% of weekly quota.
+  A known zero daily allocation displays 0%; missing measurements remain unknown in both units.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.

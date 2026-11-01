@@ -4,6 +4,7 @@ Updated 2026-10-31. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Show today's availability relative to the daily allocation, alongside weekly quota percentage | Implemented and installed in 0.8.2 | A 20% weekly daily allocation with 5% weekly consumed displays 75% of today's allocation and 15% of weekly quota. Manual caps select the denominator; partial/unknown values retain their meaning. |
 | Correct full-day advice and show available allowance separately | Implemented and installed in 0.8.1 | 90% remaining / 6 days gives a 15% base allocation at 08:00, before reset-risk boost and comfort cap; observed use is deducted once and allowance is bounded by actual balance. |
 | Use the original Cockpit comfort curve in daily estimates | Implemented and installed in 0.8.1 | Same-account quota feedback fits the curve; baseline/fitted cap and risk sources are explained. Manual caps retain priority. Token feedback never becomes quota percentage. |
 | Unify day/week/month calendar styling, inspired by Apple Calendar | Implemented and installed in 0.8.0 | Shared date/selection/grid styling; all status/reset markers remain reachable at wide and narrow widths. |
@@ -15,6 +16,8 @@ Updated 2026-10-31. These items are one ongoing local developer-app iteration; s
 | Diagnose Usage & Spend not working | Closed by user | User reports the problem is no longer present and requested skipping it; no speculative fix. |
 | Update Settings About | Delivered; live-verified | Correct fork identity, version, project/support/changelog links and upstream attribution. |
 
-0.8.1 validation: 81 focused tests across 12 suites passed. `make check` passed (3,236 Swift files; 23 locale catalogs); final test-fixture type fixes passed targeted format/lint. The original 08:00 regression now returns 15.75% with the default risk model, instead of 10%. Wide and narrow synthetic panel renders were inspected, and a local-data calculation retained partial coverage. Packaging, signatures and isolated startup passed. Developer app 0.8.1 build 21 is installed and running with a 0.8.0 backup. Live panel interaction remains unverified because the UI connection times out.
+0.8.2 validation: 93 focused tests across 14 suites passed. `make check` passed (3,238 Swift files; 23 locale catalogs). A GitHub compiler error in the comfort chart was fixed with an explicit distance conversion; targeted format/lint and 11 follow-up tests passed. Wide and narrow synthetic panels show both daily and weekly units. Packaging, signatures and isolated startup passed; developer app 0.8.2 build 22 is installed and running with a 0.8.1 backup. Live panel interaction remains unverified because the UI connection times out.
+
+0.8.1 validation: 81 focused tests across 12 suites passed. The original 08:00 regression returned 15.75% with the default risk model instead of 10%. A local-data calculation retained partial coverage. User feedback clarified that today's available percentage must use the daily allocation as its denominator; 0.8.2 adds that display while retaining the weekly equivalent.
 
 0.8.0 validation: 122 focused tests across 18 suites passed, plus 2 follow-up plan-history refresh tests. Packaging and isolated startup passed. About was live-verified; final interactive acceptance of the updated Statistics/session controls is pending opening Settings. Synthetic screenshots remain local. Original CodexBar is not replaced.

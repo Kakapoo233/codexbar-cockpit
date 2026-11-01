@@ -156,7 +156,7 @@ struct CockpitQuotaComfortChartView: View {
             guard let x = proxy.position(forX: sample.usedPercent), let y = proxy.position(forY: sample.score)
             else { return nil }
             let distance = hypot(location.x - frame.minX - x, location.y - frame.minY - y)
-            return distance <= 18 ? (sample.id, distance) : nil
+            return distance <= 18 ? (sample.id, Double(distance)) : nil
         }
         return matches.min { $0.1 < $1.1 }?.0
     }

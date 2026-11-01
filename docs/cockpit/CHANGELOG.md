@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.2 — Daily and weekly percentage bases
+
+- Show today's available allowance primarily as a percentage of today's effective allocation, with its equivalent weekly-quota percentage alongside it.
+- Use the manual cap as the daily allocation when present. Retain partial bounds, unknown values and actual-balance limits without changing the comfort calculation.
+- Make the comfort-chart hover distance conversion explicit for the GitHub macOS compiler.
+
 ## 0.8.1 — Full-day comfort-aware advice
 
 - Show a full-day quota target separately from the amount still available today, instead of shrinking the target by the hours left until midnight.

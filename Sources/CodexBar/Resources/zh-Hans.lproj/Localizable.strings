@@ -3200,8 +3200,8 @@
 "cockpit_reset_banner_countdown" = "剩余 %@";
 
 /* Full-day target and remaining daily allowance */
-"cockpit_advice_full_day" = "全天建议";
-"cockpit_advice_remaining_today" = "今日还能用";
+"cockpit_advice_full_day" = "全天建议（周额度）";
+"cockpit_advice_remaining_today" = "今日还能用（占今日分配）";
 
 /* Comfort-informed daily advice */
 "cockpit_advice_comfort_default" = "舒适上限：%@ · 默认曲线";
@@ -3216,3 +3216,7 @@
 "cockpit_advice_comfort_samples" = "个人曲线依据 %d 条配额体感记录拟合。";
 "cockpit_advice_comfort_default_help" = "暂无个人配额体感数据时使用默认曲线。";
 "cockpit_advice_comfort_ceiling_help" = "此上限会根据重置概率和周末调整，仅用于自动建议，不限制手动上限。";
+
+/* Daily-allocation ratio and weekly equivalent */
+"cockpit_advice_weekly_equivalent" = "相当于周额度 %@";
+"cockpit_advice_daily_ratio_help" = "今日还能用以当日有效分配为 100%，手动上限优先；副值显示相当于周额度的比例。";
