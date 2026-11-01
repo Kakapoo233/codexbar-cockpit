@@ -4,6 +4,7 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Fix Windows calendar and settings alignment | Implemented in Windows alpha.2; native verification pending | Calendar arrow center error 5px → 0; aligned settings columns, responsive wrapping and readable tray-theme calendar text. |
 | Adapt to Windows with Tauri | Implementing in Windows 0.1.0-alpha.1 | System tray and same-panel navigation; genuine native build, installer and Windows acceptance required. See WINDOWS_PORT.md. |
 | Repair personal iCloud synchronization using iCloud Drive | Implemented and installed in 0.8.10 | Typed non-secret settings and personal calendar/cap records, per-device files, deterministic merge/deletions, explicit local/Apple upload status and two-client regression coverage. |
 | Add today’s available allowance to the menu-bar layout in three forms | Implemented and installed in 0.8.9 | Percentage, bar and filled circle agree with the homepage daily-allocation ratio, update while closed, preserve uncertainty and show the weekly equivalent accessibly. |
@@ -46,3 +47,5 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 0.8.1 validation: 81 focused tests across 12 suites passed. The original 08:00 regression returned 15.75% with the default risk model instead of 10%. A local-data calculation retained partial coverage. User feedback clarified that today's available percentage must use the daily allocation as its denominator; 0.8.2 adds that display while retaining the weekly equivalent.
 
 0.8.0 validation: 122 focused tests across 18 suites passed, plus 2 follow-up plan-history refresh tests. Packaging and isolated startup passed. About was live-verified; final interactive acceptance of the updated Statistics/session controls is pending opening Settings. Synthetic screenshots remain local. Original CodexBar is not replaced.
+
+Windows alpha.2 alignment validation: real browser geometry reproduced a 5px calendar-arrow offset and inconsistent settings control columns. The corrected arrow offset and wide settings-column spread are both 0px. Selected 520/920px, Chinese/English, 100%/200% UI-font and light/dark cases were checked without horizontal overflow, including day/week/month. These are rendered-browser checks, not physical Windows DPI claims. A read-only geometry probe and isolated visible native preview support Workstation verification.

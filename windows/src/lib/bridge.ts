@@ -169,7 +169,10 @@ function enqueueRuntimeWrite(operation: () => Promise<void>): Promise<void> {
   return next;
 }
 
-export const isTauri = () => "__TAURI_INTERNALS__" in window;
+// An explicit, isolated native preview uses the same synthetic branch as a browser.
+// The native --ui-preview builder has no application commands or plugins either.
+export const isSyntheticPreview = () => new URLSearchParams(window.location?.search ?? "").get("synthetic-preview") === "1";
+export const isTauri = () => "__TAURI_INTERNALS__" in window && !isSyntheticPreview();
 
 export async function fetchSnapshots(force = false): Promise<ProviderSnapshot[]> {
   if (!isTauri()) return mockSnapshots;
@@ -234,6 +237,7 @@ export async function fetchCodexDailyUsageHistory(): Promise<CodexDailyUsage[]> 
 }
 
 export async function openExternalUrl(url: string): Promise<void> {
+  if (isSyntheticPreview()) return;
   if (!isTauri()) {
     window.open(url, "_blank", "noopener,noreferrer");
     return;

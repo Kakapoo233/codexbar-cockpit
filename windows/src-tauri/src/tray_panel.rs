@@ -325,6 +325,102 @@ pub fn setup(app: &tauri::App) -> tauri::Result<()> {
     Ok(())
 }
 
+/// A persistent, visible WebView2 window for synthetic UI checks. Unlike normal startup it has no
+/// collectors, app state, credentials, command handlers, plugins, tray, or single-instance callback.
+pub fn run_ui_preview() {
+    let profile = PreviewProfile::create().expect("failed to create temporary UI preview profile");
+    let mut context = crate::app_context();
+    let mut window_config = context
+        .config()
+        .app
+        .windows
+        .iter()
+        .find(|window| window.label == "widget")
+        .cloned()
+        .expect("missing panel configuration for UI preview");
+    window_config.label = "ui-preview".into();
+    window_config.url = tauri::WebviewUrl::App("index.html?synthetic-preview=1".into());
+    window_config.title = "CodexBar Cockpit - Synthetic UI Preview".into();
+    window_config.visible = true;
+    window_config.focus = true;
+    window_config.skip_taskbar = false;
+    window_config.always_on_top = false;
+    window_config.decorations = true;
+    window_config.resizable = true;
+    context.config_mut().app.windows.clear();
+    context.config_mut().identifier.push_str(".ui-preview");
+    context.config_mut().app.security.csp = Some(tauri::utils::config::Csp::Policy(
+        "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'; img-src 'self' data:"
+            .into(),
+    ));
+    let data_directory = profile.0.clone();
+    let app = tauri::Builder::default()
+        .setup(move |app| {
+            tauri::WebviewWindowBuilder::from_config(app, &window_config)?
+                .data_directory(data_directory.clone())
+                .incognito(true)
+                .on_navigation(preview_navigation_allowed)
+                .on_new_window(|_, _| tauri::webview::NewWindowResponse::Deny)
+                .build()?;
+            Ok(())
+        })
+        .on_window_event(|window, event| {
+            if matches!(event, WindowEvent::CloseRequested { .. }) {
+                window.app_handle().exit(0);
+            }
+        })
+        .build(context)
+        .expect("failed to build isolated UI preview");
+    app.run(|_, _| {});
+    drop(profile);
+}
+
+fn preview_navigation_allowed(url: &tauri::Url) -> bool {
+    url.as_str() == "about:blank"
+        || (matches!(url.scheme(), "http" | "https" | "tauri")
+            && matches!(
+                url.host_str(),
+                Some("localhost" | "127.0.0.1" | "tauri.localhost")
+            )
+            && matches!(url.path(), "/" | "/index.html")
+            && url
+                .query_pairs()
+                .any(|(key, value)| key == "synthetic-preview" && value == "1"))
+}
+
+struct PreviewProfile(std::path::PathBuf);
+
+impl PreviewProfile {
+    fn create() -> std::io::Result<Self> {
+        let timestamp = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(std::io::Error::other)?
+            .as_nanos();
+        for attempt in 0..32 {
+            let directory = std::env::temp_dir().join(format!(
+                "codexbar-cockpit-ui-preview-{}-{timestamp}-{attempt}",
+                std::process::id()
+            ));
+            match std::fs::create_dir(&directory) {
+                Ok(()) => return Ok(Self(directory)),
+                Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+                Err(error) => return Err(error),
+            }
+        }
+        Err(std::io::Error::other(
+            "could not allocate a fresh UI preview profile",
+        ))
+    }
+}
+
+impl Drop for PreviewProfile {
+    fn drop(&mut self) {
+        // WebView2 may briefly retain a file handle after exit. Leaving a uniquely created temporary
+        // profile in that case is safer than touching any existing app profile.
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
 pub fn run_smoke_test() {
     // This separate builder has no plugins, invoke handlers, state loaders, collectors or HTTP clients.
     // Frontend calls therefore cannot read provider credentials or start cloud synchronization.
@@ -352,6 +448,35 @@ pub fn run_smoke_test() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn synthetic_preview_navigation_stays_on_its_explicit_local_page() {
+        for value in [
+            "http://tauri.localhost/index.html?synthetic-preview=1",
+            "tauri://localhost/index.html?synthetic-preview=1",
+            "http://localhost:1420/?synthetic-preview=1",
+        ] {
+            assert!(preview_navigation_allowed(&value.parse().unwrap()));
+        }
+        for value in [
+            "https://example.com/index.html?synthetic-preview=1",
+            "file:///index.html?synthetic-preview=1",
+            "http://tauri.localhost/index.html",
+            "http://tauri.localhost/index.html?synthetic-preview=0",
+        ] {
+            assert!(!preview_navigation_allowed(&value.parse().unwrap()));
+        }
+    }
+    #[test]
+    fn every_ui_preview_gets_a_fresh_temporary_profile() {
+        let first = PreviewProfile::create().unwrap();
+        let second = PreviewProfile::create().unwrap();
+        assert_ne!(first.0, second.0);
+        assert!(first.0.is_dir() && second.0.is_dir());
+        assert_eq!(first.0.parent(), Some(std::env::temp_dir().as_path()));
+        let first_path = first.0.clone();
+        drop(first);
+        assert!(!first_path.exists());
+    }
     #[test]
     fn panel_stays_inside_dpi_scaled_work_area_on_negative_monitor() {
         for scale in [1.0, 1.5, 2.0] {

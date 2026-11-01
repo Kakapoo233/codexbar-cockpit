@@ -11,6 +11,8 @@ vi.mock("../lib/customTaskCard", () => ({ copyCustomTaskCard: vi.fn(async () => 
 vi.mock("../lib/tokeiBridge", () => ({ getProjectUsage: vi.fn(), getTokeiUsage: vi.fn(), saveTokeiGroups: vi.fn() }));
 
 beforeEach(() => {
+  // Keep relative fixtures and Shanghai reporting on the same test day, independent of wall-clock rollover.
+  vi.setSystemTime(new Date("2026-11-01T12:00:00.000Z"));
   vi.mocked(copyCustomTaskCard).mockClear();
   vi.mocked(getTokeiUsage).mockReset().mockResolvedValue(createUsagePreview());
   vi.mocked(saveTokeiGroups).mockReset().mockImplementation(async (settings) => settings);
@@ -30,7 +32,10 @@ beforeEach(() => {
     ],
   });
 });
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 
 describe("quiet Codex usage view", () => {
   it.each([true, false])("explains aggregate-only peers without reporting zero tasks, zh=%s", async zh => {

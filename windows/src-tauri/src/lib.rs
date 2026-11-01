@@ -2903,6 +2903,10 @@ fn app_context() -> tauri::Context<tauri::Wry> {
 }
 
 pub fn run() {
+    if std::env::args().any(|arg| arg == "--ui-preview") {
+        tray_panel::run_ui_preview();
+        return;
+    }
     if std::env::args().any(|arg| arg == "--smoke-test") {
         tray_panel::run_smoke_test();
         return;
