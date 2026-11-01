@@ -3254,3 +3254,29 @@
 "cockpit_menu_remaining_circle" = "Available today: filled circle";
 "cockpit_menu_remaining_accessibility" = "Available today: %@ of today's allocation; equivalent to %@ of the weekly quota";
 "cockpit_menu_remaining_help" = "Shows the share of today's allocation still available, where the full daily allocation is 100%. Respects personal caps and the actual balance, and updates with the comfort curve and reset window. ≤ marks an upper bound from incomplete observations; ≈ marks stale data; — means unknown.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Sync settings, calendar feedback, and personal caps";
+"Sync now" = "Sync now";
+"Open sync folder" = "Open sync folder";
+"Sync folder" = "Sync folder";
+"Last local file exchange" = "Last local file exchange";
+"Devices with sync files" = "Devices with sync files";
+"File sync in progress…" = "File sync in progress…";
+"Files are up to date on this Mac." = "Files are up to date on this Mac.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple handles upload and download. A local file exchange does not confirm delivery to another device.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "API keys, cookies, login tokens, session transcripts and team credentials never enter these files.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized.";
+"iCloud Drive is off." = "iCloud Drive is off.";
+"Turn on iCloud Drive in System Settings, then try again." = "Turn on iCloud Drive in System Settings, then try again.";
+"Waiting for the first file exchange." = "Waiting for the first file exchange.";
+"iCloud upload confirmed" = "iCloud upload confirmed";
+"Waiting for iCloud upload" = "Waiting for iCloud upload";
+"Cloud upload status unavailable" = "Cloud upload status unavailable";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Waiting for iCloud Drive to download sync files.";
+"Sync files could not be read safely. Local data has been preserved." = "Sync files could not be read safely. Local data has been preserved.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "The sync folder is unavailable. Check iCloud Drive and try again.";
+
+"iCloud Drive" = "iCloud Drive";

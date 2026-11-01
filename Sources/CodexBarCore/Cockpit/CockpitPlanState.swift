@@ -17,6 +17,16 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         self.observedDaySummaries = []
     }
 
+    /// Replaces only user-authored personal records after a typed synchronization adapter has
+    /// validated and merged them. Quota observations, historical anchors and archived usage stay local.
+    public mutating func replacePersonalSyncRecords(
+        personalCaps: [CockpitPersonalCap],
+        comfortRecords: [CockpitComfortRecord])
+    {
+        self.personalCaps = personalCaps
+        self.comfortRecords = comfortRecords
+    }
+
     private enum CodingKeys: String, CodingKey {
         case snapshots, plans, personalCaps, comfortRecords, observedDaySummaries
     }

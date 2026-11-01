@@ -3219,3 +3219,29 @@
 "cockpit_menu_remaining_circle" = "오늘 사용 가능: 원 채우기";
 "cockpit_menu_remaining_accessibility" = "오늘 사용 가능: 오늘 할당량의 %@, 주간 총할당량의 %@에 해당";
 "cockpit_menu_remaining_help" = "오늘 할당량 전체를 100%로 하여 아직 사용할 수 있는 비율을 표시합니다. 개인 한도와 실제 잔여량을 준수하며 편안함 곡선과 초기화 시점에 따라 갱신됩니다. ≤는 불완전한 관측에 따른 상한, ≈는 오래된 데이터, —는 알 수 없음을 뜻합니다.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "설정, 캘린더 피드백 및 개인 한도 동기화";
+"Sync now" = "지금 동기화";
+"Open sync folder" = "동기화 폴더 열기";
+"Sync folder" = "동기화 폴더";
+"Last local file exchange" = "최근 로컬 파일 교환";
+"Devices with sync files" = "동기화 파일이 있는 기기";
+"File sync in progress…" = "파일 동기화 중…";
+"Files are up to date on this Mac." = "이 Mac의 파일이 최신 상태입니다.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "업로드와 다운로드는 Apple이 처리합니다. 로컬 파일 교환이 완료되어도 다른 기기에 전달되었다는 뜻은 아닙니다.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "API 키, 쿠키, 로그인 토큰, 세션 대화 내용 및 팀 자격 증명은 이 파일에 포함되지 않습니다.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "일일 권장량은 로컬에서 계산됩니다. 로컬 토큰 총량과 원본 사용량 로그는 동기화되지 않습니다.";
+"iCloud Drive is off." = "iCloud Drive가 꺼져 있습니다.";
+"Turn on iCloud Drive in System Settings, then try again." = "시스템 설정에서 iCloud Drive를 켠 후 다시 시도하세요.";
+"Waiting for the first file exchange." = "첫 파일 교환을 기다리는 중입니다.";
+"iCloud upload confirmed" = "iCloud 업로드 확인됨";
+"Waiting for iCloud upload" = "iCloud 업로드 대기 중";
+"Cloud upload status unavailable" = "클라우드 업로드 상태를 확인할 수 없음";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "iCloud Drive에서 동기화 파일을 다운로드하기를 기다리는 중입니다.";
+"Sync files could not be read safely. Local data has been preserved." = "동기화 파일을 안전하게 읽을 수 없습니다. 로컬 데이터는 보존되었습니다.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "동기화 폴더를 사용할 수 없습니다. iCloud Drive를 확인한 후 다시 시도하세요.";
+
+"iCloud Drive" = "iCloud Drive";

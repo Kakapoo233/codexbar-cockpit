@@ -3253,3 +3253,29 @@
 "cockpit_menu_remaining_circle" = "المتاح اليوم: دائرة ممتلئة";
 "cockpit_menu_remaining_accessibility" = "المتاح اليوم: %@ من مخصصات اليوم؛ يعادل %@ من الحصة الأسبوعية";
 "cockpit_menu_remaining_help" = "يعرض الجزء الذي لا يزال متاحًا من مخصصات اليوم، حيث تمثل المخصصات اليومية الكاملة 100%. يراعي الحدود الشخصية والرصيد الفعلي ويتحدث وفق منحنى الراحة وفترة إعادة التعيين. يشير ≤ إلى حد أعلى عند عدم اكتمال الملاحظات، و≈ إلى بيانات قديمة، و— إلى قيمة غير معروفة.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "مزامنة الإعدادات وتقييمات التقويم والحدود الشخصية";
+"Sync now" = "المزامنة الآن";
+"Open sync folder" = "فتح مجلد المزامنة";
+"Sync folder" = "مجلد المزامنة";
+"Last local file exchange" = "آخر تبادل محلي للملفات";
+"Devices with sync files" = "الأجهزة التي تحتوي على ملفات مزامنة";
+"File sync in progress…" = "جارٍ مزامنة الملفات…";
+"Files are up to date on this Mac." = "الملفات على هذا الـ Mac محدّثة.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "تتولى Apple الرفع والتنزيل. لا يؤكد تبادل الملفات محليًا وصولها إلى جهاز آخر.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "لا تُضمَّن مفاتيح API أو ملفات تعريف الارتباط أو رموز تسجيل الدخول أو نصوص الجلسات أو بيانات اعتماد الفريق في هذه الملفات مطلقًا.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "تُحسب التوصيات اليومية محليًا. لا تتم مزامنة إجمالي الرموز المحلي أو سجلات الاستخدام الأصلية.";
+"iCloud Drive is off." = "iCloud Drive متوقف.";
+"Turn on iCloud Drive in System Settings, then try again." = "شغّل iCloud Drive في إعدادات النظام، ثم حاول مجددًا.";
+"Waiting for the first file exchange." = "في انتظار أول تبادل للملفات.";
+"iCloud upload confirmed" = "تم تأكيد الرفع إلى iCloud";
+"Waiting for iCloud upload" = "في انتظار الرفع إلى iCloud";
+"Cloud upload status unavailable" = "حالة الرفع إلى السحابة غير متاحة";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "في انتظار تنزيل iCloud Drive لملفات المزامنة.";
+"Sync files could not be read safely. Local data has been preserved." = "تعذّرت قراءة ملفات المزامنة بأمان. تم الاحتفاظ بالبيانات المحلية.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "مجلد المزامنة غير متاح. تحقّق من iCloud Drive وحاول مجددًا.";
+
+"iCloud Drive" = "iCloud Drive";

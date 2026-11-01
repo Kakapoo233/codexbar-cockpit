@@ -3246,3 +3246,29 @@
 "cockpit_menu_remaining_circle" = "Tillgängligt idag: fylld cirkel";
 "cockpit_menu_remaining_accessibility" = "Tillgängligt idag: %@ av dagens tilldelning; motsvarar %@ av veckokvoten";
 "cockpit_menu_remaining_help" = "Visar den andel av dagens tilldelning som fortfarande är tillgänglig, där hela dagstilldelningen är 100 %. Tar hänsyn till personliga gränser och faktiskt saldo och uppdateras efter komfortkurvan och återställningsperioden. ≤ anger en övre gräns vid ofullständiga observationer; ≈ inaktuella data; — ett okänt värde.";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "Synkronisera inställningar, kalenderomdömen och personliga gränser";
+"Sync now" = "Synkronisera nu";
+"Open sync folder" = "Öppna synkroniseringsmappen";
+"Sync folder" = "Synkroniseringsmapp";
+"Last local file exchange" = "Senaste lokala filutbytet";
+"Devices with sync files" = "Enheter med synkroniseringsfiler";
+"File sync in progress…" = "Synkroniserar filer…";
+"Files are up to date on this Mac." = "Filerna på denna Mac är uppdaterade.";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple hanterar uppladdning och hämtning. Ett lokalt filutbyte bekräftar inte att filerna har nått en annan enhet.";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "API-nycklar, kakor, inloggningstoken, sessionsutskrifter och teamets inloggningsuppgifter ingår aldrig i dessa filer.";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "Dagliga rekommendationer beräknas lokalt. Lokala tokensummor och ursprungliga användningsloggar synkroniseras inte.";
+"iCloud Drive is off." = "iCloud Drive är avstängt.";
+"Turn on iCloud Drive in System Settings, then try again." = "Aktivera iCloud Drive i Systeminställningar och försök igen.";
+"Waiting for the first file exchange." = "Väntar på det första filutbytet.";
+"iCloud upload confirmed" = "Uppladdning till iCloud bekräftad";
+"Waiting for iCloud upload" = "Väntar på uppladdning till iCloud";
+"Cloud upload status unavailable" = "Status för molnuppladdning är inte tillgänglig";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "Väntar på att iCloud Drive hämtar synkroniseringsfilerna.";
+"Sync files could not be read safely. Local data has been preserved." = "Synkroniseringsfilerna kunde inte läsas säkert. Lokala data har bevarats.";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "Synkroniseringsmappen är inte tillgänglig. Kontrollera iCloud Drive och försök igen.";
+
+"iCloud Drive" = "iCloud Drive";

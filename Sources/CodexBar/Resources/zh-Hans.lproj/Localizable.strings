@@ -3243,3 +3243,29 @@
 "cockpit_menu_remaining_circle" = "今日还能用：圆形填充";
 "cockpit_menu_remaining_accessibility" = "今日还能用：%@，占今日分配额度；相当于每周总额度的 %@";
 "cockpit_menu_remaining_help" = "以今天分配的额度为100%，显示今日还能用的比例。遵守个人上限与实际余额，随舒适曲线和重置窗口更新；≤表示观测不完整时的上界，≈表示数据陈旧，—表示未知。";
+
+/* iCloud Drive personal document synchronization */
+"Sync settings, calendar feedback, and personal caps" = "同步设置、日历反馈与个人上限";
+"Sync now" = "立即同步";
+"Open sync folder" = "打开同步文件夹";
+"Sync folder" = "同步文件夹";
+"Last local file exchange" = "最近本机文件交换";
+"Devices with sync files" = "有同步文件的设备";
+"File sync in progress…" = "正在同步文件…";
+"Files are up to date on this Mac." = "此 Mac 上的文件已更新。";
+"Apple handles upload and download. A local file exchange does not confirm delivery to another device." = "Apple 负责上传和下载。本机完成文件交换不代表数据已送达其他设备。";
+"API keys, cookies, login tokens, session transcripts and team credentials never enter these files." = "这些文件不包含 API Key、Cookie、登录令牌、会话正文或团队凭据。";
+"Daily recommendations are calculated locally. Local token totals and raw usage logs are not synchronized." = "每日建议在本机计算。本机 Token 总量和原始用量日志不会同步。";
+"iCloud Drive is off." = "iCloud Drive 已关闭。";
+"Turn on iCloud Drive in System Settings, then try again." = "请在系统设置中开启 iCloud Drive，然后重试。";
+"Waiting for the first file exchange." = "等待首次文件交换。";
+"iCloud upload confirmed" = "已确认上传至 iCloud";
+"Waiting for iCloud upload" = "等待上传至 iCloud";
+"Cloud upload status unavailable" = "无法获取云端上传状态";
+
+/* iCloud Drive sync errors */
+"Waiting for iCloud Drive to download sync files." = "正在等待 iCloud Drive 下载同步文件。";
+"Sync files could not be read safely. Local data has been preserved." = "无法安全读取同步文件。本机数据已保留。";
+"The sync folder is unavailable. Check iCloud Drive and try again." = "同步文件夹不可用。请检查 iCloud Drive 后重试。";
+
+"iCloud Drive" = "iCloud Drive";
