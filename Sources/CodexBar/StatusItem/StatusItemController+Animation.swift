@@ -750,13 +750,10 @@ extension StatusItemController {
         return value
     }
 
-    nonisolated static func buttonTitle(_ title: String?, hasImage: Bool, isDebugApp: Bool = false) -> String {
+    nonisolated static func buttonTitle(_ title: String?, hasImage: Bool, isDebugApp _: Bool = false) -> String {
         var parts: [String] = []
         if let title, !title.isEmpty {
             parts.append(title)
-        }
-        if isDebugApp {
-            parts.append("D")
         }
         let value = parts.joined(separator: " ")
         return hasImage && !value.isEmpty ? " \(value)" : value

@@ -824,10 +824,10 @@ struct StatusItemBalanceDisplayTests {
     }
 
     @Test
-    func `debug button title stays visible with or without a usage value`() {
-        #expect(StatusItemController.buttonTitle(nil, hasImage: true, isDebugApp: true) == " D")
-        #expect(StatusItemController.buttonTitle("42%", hasImage: true, isDebugApp: true) == " 42% D")
-        #expect(StatusItemController.buttonTitle("42%", hasImage: false, isDebugApp: true) == "42% D")
+    func `debug button title omits the development marker`() {
+        #expect(StatusItemController.buttonTitle(nil, hasImage: true, isDebugApp: true).isEmpty)
+        #expect(StatusItemController.buttonTitle("42%", hasImage: true, isDebugApp: true) == " 42%")
+        #expect(StatusItemController.buttonTitle("42%", hasImage: false, isDebugApp: true) == "42%")
     }
 
     @Test

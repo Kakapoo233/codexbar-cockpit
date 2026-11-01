@@ -548,7 +548,6 @@ final class MenuBarLayoutRenderer {
             Self.alignWindowPrefixes(in: result, promotedIcon: leadingIcon != nil)
         }
         if options.isDebugApp {
-            result.append(NSAttributedString(string: " D", attributes: attributes))
             // Every line can collapse when a conditional hides the only token in the layout.
             if accessibilityLines.isEmpty {
                 accessibilityLines.append(L("Debug"))
