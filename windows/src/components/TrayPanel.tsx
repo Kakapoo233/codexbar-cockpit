@@ -7,6 +7,8 @@ import type { TokeiUsage } from "../lib/tokeiUsage";
 import { calendarDate, localDateKey as reportingDateKey } from "../lib/usageDay";
 import { DEFAULT_PROVIDER_ORDER } from "../lib/providers";
 import { type UsageDateRange } from "../lib/usageCalendar";
+import type { CockpitRecommendationPace } from "../lib/cockpitRecommendationPace";
+import { RecommendationPace } from "./RecommendationPace";
 import { CodexUsagePanel } from "./CodexUsagePanel";
 import { ComfortHistoryCalendar } from "./ComfortHistoryCalendar";
 import { ComfortCurvePanel } from "./ComfortCurvePanel";
@@ -19,6 +21,7 @@ type Page = "usage" | "statistics" | "calendar" | "members" | "settings";
 type Range = "7d" | "30d" | "90d" | "month" | "all";
 interface Props {
   pageRequest?: { page: "usage" | "settings"; id: number };
+  pace?: CockpitRecommendationPace | null;
   preferences: WidgetPreferences; onPreferences: (value: WidgetPreferences) => void;
   snapshots: ProviderSnapshot[]; plan: CockpitDailyPlanStatus; history: CockpitQuotaObservation[];
   forecast: ResetForecast | null; now: Date; usage: TokeiUsage | null; usageError: boolean;
@@ -127,6 +130,7 @@ export function TrayPanel(props: Props) {
             <div className="tray-advice-values"><div><span>{zh ? "全天建议" : "Full-day recommendation"}</span><strong>{percent(plan.suggestedPercent, plan.suggestionIsPartial ? "≈" : "")}</strong><small>{zh ? "占周额度" : "of weekly quota"}</small></div>
               <div><span>{zh ? "今日还能用" : "Available today"}</span><strong>{percent(plan.remainingDailyBudgetPercent, qualifier)}</strong><small>{zh ? `今日分配为 100% · 周额度 ${percent(plan.remainingSuggestedPercent, qualifier)}` : `Daily allocation = 100% · Weekly ${percent(plan.remainingSuggestedPercent, qualifier)}`}</small></div>
               <div><span>{zh ? "舒适上限" : "Comfort limit"}</span><strong>{percent(plan.comfortAdvice?.softCapPercent)}</strong><small>{zh ? "占周额度" : "of weekly quota"}</small></div></div>
+            <RecommendationPace pace={props.pace ?? null} language={preferences.language} />
             <label className="tray-cap-control"><span>{zh ? "个人上限（占周额度）" : "Personal cap (weekly quota)"}</span><input type="number" min="0" max="100" step="0.1" value={plan.manualCapPercent ?? ""} placeholder={zh ? "自动建议" : "Automatic"} disabled={!props.canRecordFeedback || !props.settingsWritable} onChange={event => props.onPersonalCap(event.target.value === "" ? null : Number(event.target.value))} /></label>
             <button type="button" className="usage-text-button" disabled={plan.manualCapPercent === null} onClick={() => props.onPersonalCap(null)}>{zh ? "恢复自动建议" : "Restore automatic advice"}</button>
             {plan.remainingDailyBudgetPercent === null && <p className="usage-note">{zh ? "需要可识别账户的官方周额度观测；暂无数据不会当作 0%。" : "Official weekly observations with an identified account are required; unavailable values are not zero."}</p>}

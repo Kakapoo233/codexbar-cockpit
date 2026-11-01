@@ -1,0 +1,4 @@
+.recommendation-pace { display:flex; flex-direction:column; gap:.35em; min-width:0; margin-top:.8em; padding-top:.8em; border-top:1px solid var(--tray-border,#dce2ea); }
+.recommendation-pace strong { font-size:.95em; font-weight:600; overflow-wrap:anywhere; }
+.recommendation-pace small { color:var(--tray-muted,#617087); line-height:1.5; overflow-wrap:anywhere; }
+.recommendation-pace-compact { flex:none; font-variant-numeric:tabular-nums; white-space:nowrap; }

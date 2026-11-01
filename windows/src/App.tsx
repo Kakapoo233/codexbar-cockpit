@@ -6,6 +6,7 @@ import { resolveAppearanceMode, systemPrefersDark } from "./lib/appearance";
 import { useComfortUsage } from "./lib/useComfortUsage";
 import { createComfortFeedbackRecord, personalizeComfortCurve } from "./lib/comfortFeedback";
 import { buildCockpitDailyPlan, cockpitResetSignal, localCalendarDay, type CockpitQuotaObservation } from "./lib/cockpitDailyPlan";
+import { scopedRecommendationPace } from "./lib/scopedRecommendationPace";
 import { TrayPanel } from "./components/TrayPanel";
 import { FloatingSummary } from "./components/FloatingSummary";
 import { applyPreviewDisplayMode, beginFloatingDrag, compactPanel, getPanelPresentation, hidePanel, listenPanelPresentation, openFullPanel, type PanelPage, type PanelPresentation } from "./lib/panelPresentation";
@@ -71,6 +72,7 @@ export default function App() {
 
   const publishSnapshots = useCallback(async (values: ProviderSnapshot[]) => {
     if (!alive.current) return;
+    setNow(new Date());
     setSnapshots(values);
     if (!writable.current) return;
     const current = runtimeRef.current;
@@ -180,6 +182,9 @@ export default function App() {
     resetSignal,
   }), [scope, observations, now, ownFeedback, preferences.dailyBudgetLocalDate, preferences.dailyBudgetAccountScope, preferences.dailyBudgetPercent, today, resetSignal]);
 
+  const paceEnabled = (preferences.enabledProviders ?? ["codex"]).includes("codex") && !preferences.hiddenProviders.includes("codex");
+  const pace = useMemo(() => scopedRecommendationPace(paceEnabled ? codex : null, plan, observations, now), [paceEnabled, codex, plan, observations, now]);
+
   const dailyUsage: CodexDailyUsage[] = useMemo(() => {
     if (!scope) return [];
     const dates = [...new Set(observations.filter(value => value.providerID === "codex" && value.accountID === scope).map(value => localCalendarDay(new Date(value.capturedAt)).localDateKey))].sort();
@@ -201,10 +206,12 @@ export default function App() {
       if (!active) return;
       return invoke("update_tray", { percent: plan.remainingDailyBudgetPercent, weeklyPercent: plan.remainingSuggestedPercent,
         isUpperBound: plan.coverage !== "complete", isStale: plan.isStale || codex?.status === "stale",
-        mode: preferences.trayMode ?? "circle", english: preferences.trayEnglish === true });
+        mode: preferences.trayMode ?? "circle", english: preferences.trayEnglish === true,
+        recommendationPercent: plan.suggestedPercent, paceDelta: pace?.deltaPercent ?? null,
+        paceIsLowerBound: pace?.isLowerBound ?? plan.suggestionIsPartial });
     }).catch(() => { if (active) setError(zh ? "托盘显示更新失败。" : "The tray display could not be updated."); });
     return () => { active = false; };
-  }, [ready, plan.remainingDailyBudgetPercent, plan.remainingSuggestedPercent, plan.coverage, plan.isStale, codex?.status, preferences.trayMode, preferences.trayEnglish, zh]);
+  }, [ready, plan.remainingDailyBudgetPercent, plan.remainingSuggestedPercent, plan.coverage, plan.isStale, codex?.status, preferences.trayMode, preferences.trayEnglish, plan.suggestedPercent, plan.suggestionIsPartial, pace, zh]);
 
   const savePreferences = (next: WidgetPreferences) => {
     if (!preferenceWritable.current) return;
@@ -245,13 +252,13 @@ export default function App() {
     void operation().catch(() => setError(zh ? "窗口操作未完成，请从托盘重试。" : "Window action failed. Retry from the tray."));
   };
   return <>
-    {surface === "compact" && <FloatingSummary preferences={preferences} snapshots={snapshots} plan={plan}
+    {surface === "compact" && <FloatingSummary preferences={preferences} snapshots={snapshots} plan={plan} pace={pace}
     startupReady={ready} refreshing={refreshing} error={error}
     onOpen={page => windowAction(() => openFullPanel(page))} onHide={() => windowAction(hidePanel)}
     onDrag={() => windowAction(beginFloatingDrag)} onRefresh={() => { setError(null); void refresh(true); }} />}
 
     <div hidden={surface !== "panel"} style={{ width: "100%", height: "100%" }}>
-    <TrayPanel preferences={preferences} onPreferences={savePreferences} snapshots={snapshots} plan={plan} pageRequest={pageRequest}
+    <TrayPanel preferences={preferences} onPreferences={savePreferences} snapshots={snapshots} plan={plan} pace={pace} pageRequest={pageRequest}
     history={observations.filter(value => value.accountID === scope && value.providerID === "codex")} forecast={forecast} now={now}
     usage={usage} usageError={usageError} onUsageRefresh={refreshUsage} diagnostics={diagnostics} startupReady={ready}
     settingsWritable={preferenceWritable.current} error={error} onDismissError={() => setError(null)} refreshing={refreshing}

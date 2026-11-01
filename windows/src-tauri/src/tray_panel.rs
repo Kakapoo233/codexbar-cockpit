@@ -802,6 +802,55 @@ fn tooltip(
     }
 }
 
+fn recommendation_tooltip(
+    recommendation_percent: Option<f64>,
+    pace_delta: Option<f64>,
+    pace_is_lower_bound: Option<bool>,
+    stale: bool,
+    english: bool,
+) -> String {
+    let recommendation = recommendation_percent.filter(|value| value.is_finite() && *value >= 0.0);
+    let target = recommendation
+        .map(|value| {
+            format!(
+                "{}{value:.1}%",
+                if stale || pace_is_lower_bound.unwrap_or(false) {
+                    "≈"
+                } else {
+                    ""
+                }
+            )
+        })
+        .unwrap_or_else(|| "—".into());
+    // Pace is a comparison against the automatic target, never the tray's daily-allowance ratio.
+    // Incomplete observations yield a lower bound; round outward before displaying whole points.
+    let pace = if stale || recommendation.is_none() {
+        None
+    } else {
+        pace_delta.filter(|value| value.is_finite()).map(|value| {
+            let lower_bound = pace_is_lower_bound.unwrap_or(false);
+            let rounded = if lower_bound {
+                value.floor()
+            } else {
+                value.round()
+            };
+            let number = if rounded == 0.0 {
+                "0".into()
+            } else {
+                format!("{rounded:+.0}")
+            };
+            format!("{}{number}", if lower_bound { "≥" } else { "" })
+        })
+    };
+    if english {
+        let pace = pace.map_or_else(|| "—".into(), |value| format!("{value} pp"));
+        format!("T {target} weekly · Pace {pace}")
+    } else {
+        let pace = pace.map_or_else(|| "—".into(), |value| format!("{value}周额度百分点"));
+        format!("全天建议 {target}周额度 · 节奏 {pace}")
+    }
+}
+
 // Small bitmap glyphs remain legible when Windows scales the 36px tray image down.
 const DIGITS: [[u8; 5]; 11] = [
     [7, 5, 5, 5, 7],
@@ -885,17 +934,24 @@ pub fn update_tray(
     is_upper_bound: bool,
     is_stale: bool,
     english: bool,
+    recommendation_percent: Option<f64>,
+    pace_delta: Option<f64>,
+    pace_is_lower_bound: Option<bool>,
 ) -> Result<(), String> {
     validate_remaining(percent, weekly_percent, &mode)?;
     let tray = app.tray_by_id("main").ok_or("tray_unavailable")?;
     tray.set_icon(Some(meter_image(percent, &mode)))
         .map_err(|_| "tray_update_failed")?;
-    tray.set_tooltip(Some(tooltip(
-        percent,
-        weekly_percent,
-        is_upper_bound,
-        is_stale,
-        english,
+    tray.set_tooltip(Some(format!(
+        "{} · {}",
+        tooltip(percent, weekly_percent, is_upper_bound, is_stale, english),
+        recommendation_tooltip(
+            recommendation_percent,
+            pace_delta,
+            Some(is_upper_bound || pace_is_lower_bound.unwrap_or(false)),
+            is_stale,
+            english,
+        )
     )))
     .map_err(|_| "tray_update_failed")?;
     Ok(())
@@ -1378,5 +1434,74 @@ mod tests {
         }
         assert!(tooltip(Some(75.0), Some(15.0), true, true, true).contains("≈≤75.0%"));
         assert!(tooltip(None, None, false, false, false).contains("今日还能用 —"));
+    }
+
+    #[test]
+    fn recommendation_tooltip_preserves_weekly_point_units_and_zero() {
+        assert_eq!(
+            recommendation_tooltip(Some(20.0), Some(4.6), Some(false), false, true),
+            "T 20.0% weekly · Pace +5 pp"
+        );
+        assert_eq!(
+            recommendation_tooltip(Some(20.0), Some(-5.6), Some(false), false, false),
+            "全天建议 20.0%周额度 · 节奏 -6周额度百分点"
+        );
+        assert_eq!(
+            recommendation_tooltip(Some(0.0), Some(-0.1), None, false, true),
+            "T 0.0% weekly · Pace 0 pp"
+        );
+    }
+
+    #[test]
+    fn recommendation_tooltip_partial_deltas_round_outward_without_claiming_reserve() {
+        assert!(
+            recommendation_tooltip(Some(20.0), Some(4.6), Some(true), false, true)
+                .starts_with("T ≈20.0% weekly")
+        );
+        assert!(
+            recommendation_tooltip(Some(20.0), Some(4.6), Some(true), false, true)
+                .ends_with("Pace ≥+4 pp")
+        );
+        let negative = recommendation_tooltip(Some(20.0), Some(-5.6), Some(true), false, false);
+        assert!(negative.ends_with("节奏 ≥-6周额度百分点"));
+        assert!(!negative.contains("结余"));
+    }
+
+    #[test]
+    fn recommendation_tooltip_missing_invalid_or_stale_data_cannot_look_precise() {
+        assert_eq!(
+            recommendation_tooltip(None, None, None, false, true),
+            "T — weekly · Pace —"
+        );
+        for invalid in [f64::NAN, f64::INFINITY, -1.0] {
+            assert_eq!(
+                recommendation_tooltip(Some(invalid), Some(5.0), Some(false), false, true),
+                "T — weekly · Pace —"
+            );
+        }
+        for invalid in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            assert!(
+                recommendation_tooltip(Some(20.0), Some(invalid), Some(false), false, true)
+                    .ends_with("Pace —")
+            );
+        }
+        assert_eq!(
+            recommendation_tooltip(Some(20.0), Some(4.6), Some(false), true, true),
+            "T ≈20.0% weekly · Pace —"
+        );
+    }
+
+    #[test]
+    fn recommendation_tooltip_fits_normal_windows_tray_text_with_existing_allowance() {
+        for english in [true, false] {
+            let full = format!(
+                "{} · {}",
+                tooltip(Some(100.0), Some(100.0), true, false, english),
+                recommendation_tooltip(Some(28.8), Some(-15.6), Some(true), false, english),
+            );
+            assert!(full.encode_utf16().count() <= 127);
+            assert!(full.contains("100.0%"));
+            assert!(full.contains("≥-16"));
+        }
     }
 }

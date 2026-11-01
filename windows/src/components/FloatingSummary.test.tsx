@@ -6,6 +6,7 @@ import { FloatingSummary, type FloatingSummaryProps } from "./FloatingSummary";
 import { DEFAULT_WIDGET_PREFERENCES } from "../lib/preferences";
 import { buildCockpitDailyPlan } from "../lib/cockpitDailyPlan";
 import type { ProviderSnapshot } from "../types";
+import type { CockpitRecommendationPace } from "../lib/cockpitRecommendationPace";
 
 afterEach(cleanup);
 const now = new Date("2026-11-01T12:00:00Z");
@@ -33,6 +34,23 @@ it("keeps today's allocation ratio separate from weekly quota and recommendation
   expect(screen.getByLabelText("Available today: 75% of today's allocation; weekly equivalent 15%")).toHaveTextContent("75%");
   expect(screen.getByTitle("Full-day recommendation, as a share of weekly quota")).toHaveTextContent("T 20% recommended / week");
   expect(screen.getByText("T")).toBeInTheDocument();
+});
+
+const recommendationPace: CockpitRecommendationPace = {
+  suggestedPercent: 20, observedUsedPercent: 15.6, expectedUsedPercent: 10,
+  deltaPercent: 5.6, elapsedDayFraction: .5, isLowerBound: false,
+};
+
+it.each(["percent", "bar", "circle"] as const)("shows the shared recommendation pace beside the target in %s mode", mode => {
+  const props = fixture(); props.preferences.trayMode = mode;
+  const { container, rerender } = render(<FloatingSummary {...props} pace={recommendationPace} />);
+  expect(screen.getByText("Pace +6%")).toHaveAccessibleName(/expected by now 10%/);
+  expect(container.querySelector(".floating-summary-footer")).toHaveTextContent("T 20% recommended / weekPace +6%");
+  rerender(<FloatingSummary {...props} pace={{ ...recommendationPace, deltaPercent: -5.6, isLowerBound: true }} />);
+  expect(screen.getByText("Pace ≥-6%")).toHaveAccessibleName(/needs complete usage data/);
+  rerender(<FloatingSummary {...props} pace={recommendationPace} snapshots={[{ ...codex, status: "stale" }]} />);
+  expect(screen.getByText("Pace —")).toBeInTheDocument();
+  expect(screen.queryByText("Pace +6%")).not.toBeInTheDocument();
 });
 
 it.each(["bar", "circle"] as const)("renders %s as remaining fill and distinguishes unknown from measured zero", mode => {
@@ -81,12 +99,13 @@ it.each(["hidden", "disabled", "absent", "signed_out", "loading"] as const)("sup
   if (state === "absent") props.snapshots = props.snapshots.filter(value => value.provider !== "codex");
   if (state === "signed_out") props.snapshots = [{ ...codex, status: "signed_out" }];
   if (state === "loading") props.startupReady = false;
-  render(<FloatingSummary {...props} />);
+  render(<FloatingSummary {...props} pace={recommendationPace} />);
   expect(screen.queryByText("65%")).not.toBeInTheDocument();
   expect(screen.queryByText("74%")).not.toBeInTheDocument();
   expect(screen.queryByText("75%")).not.toBeInTheDocument();
   expect(screen.queryByText("99%")).not.toBeInTheDocument();
   expect(screen.getByTitle("Full-day recommendation, as a share of weekly quota")).toHaveTextContent("T —");
+  expect(screen.getByText("Pace —")).toBeInTheDocument();
 });
 
 it("keeps uncertainty accessible while omitting visible upper-bound glyphs", () => {

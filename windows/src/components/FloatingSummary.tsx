@@ -1,13 +1,16 @@
 import { ArrowsOutSimple, GearSix, Minus } from "@phosphor-icons/react";
 import type { PointerEvent } from "react";
 import type { CockpitDailyPlanStatus } from "../lib/cockpitDailyPlan";
+import type { CockpitRecommendationPace } from "../lib/cockpitRecommendationPace";
 import type { ProviderSnapshot, WidgetPreferences } from "../types";
+import { RecommendationPace } from "./RecommendationPace";
 import "./FloatingSummary.css";
 
 export interface FloatingSummaryProps {
   preferences: WidgetPreferences;
   snapshots: ProviderSnapshot[];
   plan: CockpitDailyPlanStatus;
+  pace?: CockpitRecommendationPace | null;
   startupReady: boolean;
   refreshing: boolean;
   error: string | null;
@@ -80,7 +83,8 @@ export function FloatingSummary(props: FloatingSummaryProps) {
       </div>
     </div>
     <footer className="floating-summary-footer">
-      <span title={zh ? "全天建议，占每周总额度" : "Full-day recommendation, as a share of weekly quota"}>{zh ? "建议" : "T"} {formatPercent(recommendation, zh, approximate || plan.suggestionIsPartial)}<span className="floating-summary-footer-unit">{zh ? " · 周额度" : " recommended / week"}</span></span>
+      <span className="floating-summary-recommendation" title={zh ? "全天建议，占每周总额度" : "Full-day recommendation, as a share of weekly quota"}>{zh ? "建议" : "T"} {formatPercent(recommendation, zh, approximate || plan.suggestionIsPartial)}<span className="floating-summary-footer-unit">{zh ? " · 周额度" : " recommended / week"}</span></span>
+      <RecommendationPace pace={usable && !approximate ? props.pace ?? null : null} language={preferences.language} compact />
       {props.error && <button type="button" disabled={props.refreshing} onClick={props.onRefresh}>{zh ? "重试" : "Retry"}</button>}
       {!props.error && !usable && <button type="button" onClick={() => props.onOpen("usage")}>{zh ? "查看" : "Details"}</button>}
     </footer>

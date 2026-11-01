@@ -65,3 +65,17 @@ verification use `--smoke-test --smoke-floating`. CI verifies both tray and floa
 The browser equivalent is `/?synthetic-preview=1&surface=compact&sample=usage`; its account and
 quota ledger are fictional and no native handlers are invoked. Browser geometry checks do not
 establish Windows drag, focus, tray or physical-DPI acceptance.
+
+
+## Daily recommendation pace (alpha.5)
+
+The compact footer, Usage panel and tray tooltip share the same local Codex plan. Expected use is
+`full-day automatic recommendation × elapsed local-day fraction`; deviation is observed use today
+minus that reference, in **weekly quota percentage points**. The daily target itself does not shrink
+as the day passes, and personal caps remain independent. Comfort-curve and valid reset-horizon changes
+recompute both recommendation and pace through the same App owner and minute timer.
+
+Incomplete observations yield a lower bound (`≥`), not a confirmed reserve. Missing/stale data, unknown
+accounts, non-main pools and snapshots awaiting matching account/cycle ingestion remain unavailable.
+Daily comparison is never an official-quota exhaustion ETA or a cumulative weekly progress stripe.
+The existing percentage/bar/circle allowance forms keep their original daily-allocation denominator.

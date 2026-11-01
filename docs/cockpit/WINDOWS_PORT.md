@@ -1,7 +1,8 @@
 # Windows tray client
 
-Status: Tauri approved; Windows tray client implementation in progress on feat/windows-tray-client.
-No Windows executable or installer has been built or verified yet.
+Current candidate: Windows 0.1.0-alpha.5, adding recommendation-linked pace to the tray/floating client.
+Local source validation and genuine Windows installer/native acceptance are recorded separately in
+WORK_QUEUE.md and the corresponding pull request.
 
 ## Product contract
 
@@ -10,8 +11,8 @@ application identity, AppData storage, build pipeline and installer. Initial ver
 Windows 11 x64; other Windows versions and architectures are not supported claims until tested.
 
 The proposed default is a notification-area tray icon opening one panel with Usage, Statistics,
-Calendar, and Members & Devices. Settings belongs to that panel's settings entry. Do not restore
-the upstream always-visible floating widget. Closing or deactivating the panel returns to the tray;
+Calendar, and Members & Devices. Settings belongs to that panel's settings entry. The user can instead
+select the compact floating summary; both surfaces share one App owner. Closing or deactivating the panel returns to the tray;
 an explicit Quit action terminates the app. Window placement must respect monitor work areas and DPI.
 
 Windows tray icons have bounded image space rather than the Mac menu bar's variable-width text.
