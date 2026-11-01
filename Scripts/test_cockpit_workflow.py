@@ -43,11 +43,31 @@ def check_workflow(workflow):
         raise ValueError('Fork CI must build, test and check in that order')
 
 
+def check_windows_workflow(workflow):
+    if '    runs-on: windows-latest' not in workflow:
+        raise ValueError('Windows client must build on Windows')
+    if '  contents: read' not in workflow or 'contents: write' in workflow:
+        raise ValueError('Windows CI must have read-only repository permission')
+    if not re.search(r'actions/checkout@[0-9a-f]{40}\b', workflow):
+        raise ValueError('Windows CI checkout must be pinned')
+    if 'continue-on-error:' in workflow or '|| true' in workflow:
+        raise ValueError('Windows verification must gate success')
+    required = [
+        'run: npm ci', 'run: npm test', 'run: npm run build',
+        'run: cargo test --locked --manifest-path src-tauri/Cargo.toml',
+        'run: npm run tauri build -- --bundles nsis',
+        "-ArgumentList '--smoke-test'", 'if-no-files-found: error',
+    ]
+    if any(command not in workflow for command in required):
+        raise ValueError('Windows CI must test, package, check startup and retain its installer')
+
+
 class CockpitWorkflowTests(unittest.TestCase):
     def test_current_workflow_builds_and_tests_fork_without_upstream_release_jobs(self):
         check_workflow(WORKFLOW.read_text())
         active = sorted(path.name for path in WORKFLOW.parent.iterdir() if path.suffix in {'.yml', '.yaml'})
-        self.assertEqual(active, ['cockpit-ci.yml'])
+        self.assertEqual(active, ['cockpit-ci.yml', 'windows-ci.yml'])
+        check_windows_workflow((WORKFLOW.parent / 'windows-ci.yml').read_text())
         cache = (ROOT / 'Scripts/ci_swiftpm_cache.py').read_text()
         self.assertIn('".github/workflows/cockpit-ci.yml"', cache)
         self.assertNotIn('".github/workflows/ci.yml"', cache)
@@ -67,6 +87,16 @@ class CockpitWorkflowTests(unittest.TestCase):
             with self.subTest(candidate=candidate):
                 with self.assertRaises(ValueError):
                     check_workflow(candidate)
+
+
+    def test_windows_checks_cannot_be_silently_skipped(self):
+        workflow = (WORKFLOW.parent / 'windows-ci.yml').read_text()
+        for original in ['run: npm test', 'run: npm run build',
+                         'run: cargo test --locked --manifest-path src-tauri/Cargo.toml',
+                         "-ArgumentList '--smoke-test'", 'contents: read']:
+            with self.subTest(original=original):
+                with self.assertRaises(ValueError):
+                    check_windows_workflow(workflow.replace(original, 'skipped'))
 
 
 if __name__ == '__main__':
