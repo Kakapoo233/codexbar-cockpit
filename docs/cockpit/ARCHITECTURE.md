@@ -70,6 +70,9 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   independent forks remain independent work.
 - `CockpitMenuPanelController` owns the menu-bar popover; `CockpitPanelView` owns its peer pages.
   The existing provider menu builders remain the source for provider cards and actions.
+- Statistics keeps its reporting-period choices in a fixed sidebar outside the scrolling content.
+  The sidebar uses the same controller binding as cost and quota history; direct session-detail
+  navigation retains its captured context and restores the sidebar when returning to Statistics.
 - `CockpitPanelLayout` shares screen, column, and native-card widths between the controller and view.
   Wide Usage pages keep the complete provider menu beside an independently scrolling advice column;
   narrow pages use one scrolling column. Native cards are built for the main column before mounting.

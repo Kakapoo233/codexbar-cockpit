@@ -135,33 +135,41 @@ struct SpendDashboardPane: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                if let request = self.sessionNavigation.request {
-                    HStack {
-                        Text(L("Sessions")).font(.title2.weight(.semibold))
-                        Spacer()
-                        Button(L("Usage & Spend")) { self.sessionNavigation.request = nil }
-                    }
-                    SessionUsageBrowser(
-                        context: request.context,
-                        hidePersonalInfo: self.settings.hidePersonalInfo,
-                        selectedSessionID: request.sessionID)
-                        .id(request.id)
-                        .frame(height: SessionUsageBrowser.preferredHeight)
-                } else {
-                    self.header
-                    if self.showsTimeZoneControls {
-                        SpendTimeZoneControls(settings: self.settings)
-                    }
-                    SpendPlanUsageSection(store: self.store)
-                    self.refreshStatus
-                    self.codexCostCatchUpPanel
-                    self.content
-                    self.dataControls
-                }
+        HStack(alignment: .top, spacing: 0) {
+            if self.sessionNavigation.request == nil {
+                self.rangeSidebar
+                Divider()
             }
-            .padding(24)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    if let request = self.sessionNavigation.request {
+                        HStack {
+                            Text(L("Sessions")).font(.title2.weight(.semibold))
+                            Spacer()
+                            Button(L("Usage & Spend")) { self.sessionNavigation.request = nil }
+                        }
+                        SessionUsageBrowser(
+                            context: request.context,
+                            hidePersonalInfo: self.settings.hidePersonalInfo,
+                            selectedSessionID: request.sessionID)
+                            .id(request.id)
+                            .frame(height: SessionUsageBrowser.preferredHeight)
+                    } else {
+                        self.header
+                        if self.showsTimeZoneControls {
+                            SpendTimeZoneControls(settings: self.settings)
+                        }
+                        SpendPlanUsageSection(store: self.store)
+                        self.refreshStatus
+                        self.codexCostCatchUpPanel
+                        self.content
+                        self.dataControls
+                    }
+                }
+                .padding(24)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityIdentifier("spend-dashboard-content-scroll")
         }
         .background(FocusResigningBackground())
         .onAppear {
@@ -227,6 +235,10 @@ struct SpendDashboardPane: View {
         Binding(get: { self.detailSelections[currency] ?? .providers }, set: { self.detailSelections[currency] = $0 })
     }
 
+    var rangeSidebar: SpendDashboardPeriodSidebar {
+        SpendDashboardPeriodSidebar(selection: self.periodBinding)
+    }
+
     var header: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 16) {
@@ -252,20 +264,6 @@ struct SpendDashboardPane: View {
                 }
                 .disabled(self.controller.isRefreshing || !self.settings.costUsageEnabled)
             }
-            Picker(L("Time range"), selection: self.periodBinding) {
-                Text(spendDashboardDayRangeText(7)).tag(CostReportingPeriod.rolling(days: 7))
-                Text(spendDashboardDayRangeText(30)).tag(CostReportingPeriod.rolling(days: 30))
-                Text(spendDashboardDayRangeText(90)).tag(CostReportingPeriod.rolling(days: 90))
-                Text(L("Month to date")).tag(CostReportingPeriod.monthToDate)
-                Text(L("All")).tag(CostReportingPeriod.allTime)
-                if case let .rolling(days) = self.controller.selectedPeriod, ![7, 30, 90].contains(days) {
-                    Text(spendDashboardDayRangeText(days)).tag(self.controller.selectedPeriod)
-                }
-            }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            .frame(maxWidth: 480, alignment: .leading)
-            .accessibilityIdentifier("spend-dashboard-range-picker")
         }
     }
 

@@ -4,11 +4,11 @@ import Testing
 @testable import CodexBar
 @testable import CodexBarCore
 
-/// Retain the real unified pages and native bridge while checking the active statistics hit path.
+/// Retain the real unified pages and bridge while verifying statistics bindings and scroll placement.
 @MainActor
 struct CockpitStatisticsInteractionTests {
     @Test(arguments: [CGSize(width: 960, height: 700), CGSize(width: 676, height: 460)])
-    func `retained pages do not intercept the statistics control center or its selection binding`(
+    func `statistics sidebar binding and independent scroll survive retained page navigation`(
         size: CGSize) async throws
     {
         let directory = FileManager.default.temporaryDirectory
@@ -105,6 +105,8 @@ struct CockpitStatisticsInteractionTests {
                 window.contentView = nil
                 window.close()
             }
+            let statistics = SpendDashboardPane(settings: settings, store: store, showsTimeZoneControls: false)
+            let sidebar = statistics.rangeSidebar
             let periods: [CostReportingPeriod] = [
                 .rolling(days: 7), .rolling(days: 30), .rolling(days: 90), .monthToDate, .allTime,
             ]
@@ -123,48 +125,34 @@ struct CockpitStatisticsInteractionTests {
                     #expect(calendarPicker != nil, "The actual retained calendar must be mounted")
                     continue
                 }
-                for (index, period) in periods.enumerated() {
-                    let control = try #require(Self.statisticsPicker(in: host))
-                    let frame = control.convert(control.bounds, to: host)
-                    #expect(host.bounds.contains(frame), "The statistics picker must be inside the visible panel")
-                    #expect(control.window === window)
-                    let parent = try #require(host.superview)
-                    // Native segment AX children are unavailable in an undisplayed window.
-                    // This checks the real control's center, not a guessed per-segment mouse position.
-                    let center = CGPoint(x: control.bounds.midX, y: control.bounds.midY)
-                    let parentPoint = control.convert(center, to: parent)
-                    let hit = try #require(
-                        host.hitTest(parentPoint),
-                        "No hit for \(size), segment \(index), point \(parentPoint), picker \(frame)")
-                    #expect(
-                        hit === control || hit.isDescendant(of: control),
-                        "\(size), segment \(index): hit \(type(of: hit)) instead of the active statistics range")
-                    #expect(control.isEnabled(forSegment: index))
-                    control.selectedSegment = index
-                    let action = try #require(control.action)
-                    let target = try #require(control.target)
-                    let handled = control.sendAction(action, to: target)
-                    #expect(handled)
+                guard let scroll = Self.statisticsScroll(in: host) else {
+                    throw SidebarFixtureError.missingContentScroll
+                }
+                let scrollFrame = scroll.convert(scroll.bounds, to: host)
+                #expect(abs(scrollFrame.minX - SpendDashboardPeriodSidebar.width) < 2)
+                #expect(scrollFrame.maxX <= host.bounds.maxX + 1)
+                for period in periods {
+                    sidebar.selection = period
                     try await Self.settle(host, controller: controller)
                     #expect(controller.selectedPeriod == period)
-                    let updated = try #require(Self.statisticsPicker(in: host))
-                    #expect(updated.selectedSegment == index)
+                    #expect(sidebar.selection == period)
                 }
             }
         }
     }
 
-    private static func statisticsPicker(in host: NSView) -> NSSegmentedControl? {
-        let labels = [
-            spendDashboardDayRangeText(7), spendDashboardDayRangeText(30), spendDashboardDayRangeText(90),
-            L("Month to date"), L("All"),
-        ]
-        let matches = Self.controls(in: host).filter { control in
-            control.segmentCount == labels.count
-                && labels.enumerated().allSatisfy { control.label(forSegment: $0.offset) == $0.element }
-                && !(control.superview is CockpitCalendarPickerHost)
+    private enum SidebarFixtureError: Error {
+        case missingContentScroll
+    }
+
+    private static func statisticsScroll(in host: NSView) -> NSScrollView? {
+        func scrolls(in view: NSView) -> [NSScrollView] {
+            (view as? NSScrollView).map { [$0] } ?? view.subviews.flatMap { scrolls(in: $0) }
         }
-        return matches.count == 1 ? matches.first : nil
+        return scrolls(in: host).filter { scroll in
+            let frame = scroll.convert(scroll.bounds, to: host)
+            return frame.minX >= SpendDashboardPeriodSidebar.width / 2 && scroll.documentView != nil
+        }.max { $0.bounds.width < $1.bounds.width }
     }
 
     private static func controls(in view: NSView) -> [NSSegmentedControl] {

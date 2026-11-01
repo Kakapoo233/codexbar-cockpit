@@ -28,17 +28,21 @@ struct SpendPlanHistoryTimelineScreenshotTests {
         try await CodexBarLocalizationOverride.$appLanguage.withValue("zh-Hans") {
             for days in [7, 30, 90] {
                 for width in [CGFloat(600), 920] {
-                    let view = VStack(alignment: .leading, spacing: 12) {
-                        Text(spendDashboardDayRangeText(days)).font(.title2.weight(.semibold))
-                        SpendPlanHistoryTimelineView(
-                            provider: .codex,
-                            histories: [history],
-                            period: .rolling(days: days),
-                            referenceDate: now,
-                            calendar: calendar)
-                        Spacer(minLength: 0)
+                    let view = HStack(alignment: .top, spacing: 0) {
+                        SpendDashboardPeriodSidebar(selection: .constant(.rolling(days: days)))
+                        Divider()
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(L("Usage & Spend")).font(.title2.weight(.semibold))
+                            SpendPlanHistoryTimelineView(
+                                provider: .codex,
+                                histories: [history],
+                                period: .rolling(days: days),
+                                referenceDate: now,
+                                calendar: calendar)
+                            Spacer(minLength: 0)
+                        }
+                        .padding(24)
                     }
-                    .padding(24)
                     let png = try await Self.pngData(view, size: CGSize(width: width, height: 460))
                     try png.write(to: directory.appendingPathComponent("quota-\(days)d-\(Int(width)).png"))
                 }

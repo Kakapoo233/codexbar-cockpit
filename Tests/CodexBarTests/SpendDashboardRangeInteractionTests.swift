@@ -4,11 +4,11 @@ import Testing
 @testable import CodexBar
 @testable import CodexBarCore
 
-/// Diagnose the real header's native action → period binding → model projection with isolated history.
+/// Verify the sidebar's production Binding and independent content scroll using isolated history.
 @MainActor
 struct SpendDashboardRangeInteractionTests {
     @Test
-    func `whole dashboard range choices keep native highlight days and cost synchronized`() async throws {
+    func `sidebar binding updates days and cost while content scrolls within its separate frame`() async throws {
         try await CodexBarLocalizationOverride.$appLanguage.withValue("en") {
             let settings = testSettingsStore(
                 suiteName: "SpendDashboardRangeInteraction",
@@ -58,10 +58,12 @@ struct SpendDashboardRangeInteractionTests {
             try await SpendDashboardStateWait.until {
                 !controller.isRefreshing && !controller.model.groups.isEmpty
             }
-            let host = NSHostingView(rootView: SpendDashboardPane(settings: settings, store: store)
+            let pane = SpendDashboardPane(settings: settings, store: store)
+            let sidebar = pane.rangeSidebar
+            let host = NSHostingView(rootView: pane
                 .environment(\.cockpitPageActive, false)
                 .environment(\.locale, Locale(identifier: "en_US")))
-            host.frame = CGRect(x: 0, y: 0, width: 900, height: 1250)
+            host.frame = CGRect(x: 0, y: 0, width: 900, height: 460)
             let window = NSWindow(
                 contentRect: host.frame,
                 styleMask: [.borderless],
@@ -74,9 +76,20 @@ struct SpendDashboardRangeInteractionTests {
                 window.close()
             }
             try await Self.settle(host)
-            let picker = try #require(Self.findRangePicker(in: host))
-            #expect(picker.segmentCount == 5)
-            #expect(picker.isEnabled)
+            guard let scroll = Self.contentScroll(in: host) else {
+                throw SidebarFixtureError.missingContentScroll
+            }
+            let frame = scroll.convert(scroll.bounds, to: host)
+            #expect(abs(frame.minX - SpendDashboardPeriodSidebar.width) < 2)
+            #expect(frame.maxX <= host.bounds.maxX + 1)
+            let before = scroll.contentView.bounds.origin
+            let maximum = try #require(scroll.documentView).bounds.maxY - scroll.contentView.bounds.height
+            try #require(maximum > before.y + 1, "The synthetic content must actually be scrollable")
+            scroll.contentView.scroll(to: CGPoint(x: before.x, y: min(maximum, before.y + 200)))
+            scroll.reflectScrolledClipView(scroll.contentView)
+            try await Self.settle(host)
+            #expect(scroll.contentView.bounds.origin.y > before.y)
+            #expect(scroll.convert(scroll.bounds, to: host) == frame)
             let examples: [(Int, CostReportingPeriod, Int, Double)] = [
                 (0, .rolling(days: 7), 7, 1),
                 (1, .rolling(days: 30), 30, 7),
@@ -85,14 +98,8 @@ struct SpendDashboardRangeInteractionTests {
                 (4, .allTime, 121, 31),
                 (0, .rolling(days: 7), 7, 1),
             ]
-            for (index, period, days, cost) in examples {
-                let control = try #require(Self.findRangePicker(in: host))
-                #expect(control.isEnabled(forSegment: index))
-                control.selectedSegment = index
-                let action = try #require(control.action)
-                let target = try #require(control.target)
-                let handled = control.sendAction(action, to: target)
-                #expect(handled)
+            for (_, period, days, cost) in examples {
+                sidebar.selection = period
                 try await Self.settle(host)
                 #expect(controller.selectedPeriod == period)
                 #expect(controller.model.requestedDays == days)
@@ -100,14 +107,13 @@ struct SpendDashboardRangeInteractionTests {
                 #expect(controller.model.groups.count == 1)
                 #expect(group.currencyCode == "USD")
                 #expect(group.totalCost == cost)
-                let selected = try #require(Self.findRangePicker(in: host))
-                #expect(selected.selectedSegment == index)
+                #expect(sidebar.selection == period)
             }
         }
     }
 
     @Test
-    func `whole dashboard range changes filter the displayed quota observation samples`() async throws {
+    func `sidebar binding filters quota samples and the selected calendar domain`() async throws {
         try await CodexBarLocalizationOverride.$appLanguage.withValue("en") {
             let settings = testSettingsStore(
                 suiteName: "SpendDashboardWholePaneRangeInteraction",
@@ -172,7 +178,9 @@ struct SpendDashboardRangeInteractionTests {
             controller.selectPeriod(.rolling(days: 7))
             controller.update(configuration: configuration)
             controller.refreshDateWindow(now: now)
-            let host = NSHostingView(rootView: SpendDashboardPane(settings: settings, store: store)
+            let pane = SpendDashboardPane(settings: settings, store: store)
+            let sidebar = pane.rangeSidebar
+            let host = NSHostingView(rootView: pane
                 .environment(\.cockpitPageActive, false)
                 .environment(\.locale, Locale(identifier: "en_US")))
             host.frame = CGRect(x: 0, y: 0, width: 900, height: 1250)
@@ -197,17 +205,10 @@ struct SpendDashboardRangeInteractionTests {
                 (4, .allTime, 5),
                 (0, .rolling(days: 7), 1),
             ]
-            for (index, period, sampleCount) in examples {
-                let control = try #require(Self.findRangePicker(in: host))
-                control.selectedSegment = index
-                let action = try #require(control.action)
-                let target = try #require(control.target)
-                let handled = control.sendAction(action, to: target)
-                #expect(handled)
+            for (_, period, sampleCount) in examples {
+                sidebar.selection = period
                 try await Self.settle(host)
                 #expect(controller.selectedPeriod == period)
-                let highlighted = try #require(Self.findRangePicker(in: host))
-                #expect(highlighted.selectedSegment == index)
                 let section = SpendPlanUsageSection(store: store)
                 let histories = section.displayedHistories(for: .antigravity)
                 #expect(histories.flatMap(\.entries).count == sampleCount)
@@ -259,11 +260,17 @@ struct SpendDashboardRangeInteractionTests {
         }
     }
 
-    private static func findRangePicker(in view: NSView) -> NSSegmentedControl? {
-        if let control = view as? NSSegmentedControl, control.segmentCount == 5 { return control }
-        for child in view.subviews {
-            if let control = Self.findRangePicker(in: child) { return control }
+    private enum SidebarFixtureError: Error {
+        case missingContentScroll
+    }
+
+    private static func contentScroll(in host: NSView) -> NSScrollView? {
+        func scrolls(in view: NSView) -> [NSScrollView] {
+            (view as? NSScrollView).map { [$0] } ?? view.subviews.flatMap { scrolls(in: $0) }
         }
-        return nil
+        return scrolls(in: host).filter { scroll in
+            let frame = scroll.convert(scroll.bounds, to: host)
+            return frame.minX >= SpendDashboardPeriodSidebar.width / 2 && scroll.documentView != nil
+        }.max { $0.bounds.width < $1.bounds.width }
     }
 }

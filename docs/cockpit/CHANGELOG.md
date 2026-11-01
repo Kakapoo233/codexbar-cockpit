@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.8.6 — Persistent statistics date controls
+
+- Move the reporting-range choices into a fixed left sidebar. Statistics scroll independently, keeping 7/30/90-day, month-to-date and all-history choices available at every scroll position.
+- Preserve the selected period and its shared quota/cost filtering, including custom periods already saved in settings.
+
 ## 0.8.5 — Date-based quota history
 
 - Give Statistics a quota-history timeline whose date axis follows the selected 7/30/90-day, month-to-date or all-history range, even when every observation falls within the most recent days.
