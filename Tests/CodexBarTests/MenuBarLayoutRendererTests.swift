@@ -1735,13 +1735,13 @@ struct MenuBarLayoutRendererTests {
         #expect(output.attributedTitle.string.isEmpty)
         #expect(output.accessibilityLabel.isEmpty)
 
-        // The debug marker has no line to attach to once everything collapsed.
+        // Debug identity remains accessible without adding a visible marker.
         let debug = renderer.render(
             layout: MenuBarLayout(lines: [[.conditional(id: conditional.id)]]),
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [conditional], isDebugApp: true))
-        #expect(debug.attributedTitle.string == " D")
+        #expect(debug.attributedTitle.string.isEmpty)
         #expect(debug.accessibilityLabel == L("Debug"))
     }
 
