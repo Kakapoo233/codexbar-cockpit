@@ -33,7 +33,7 @@ final class SessionUsageNavigation {
 
 @MainActor
 struct SessionUsageBrowser: View {
-    static let preferredHeight: CGFloat = 760
+    static let preferredHeight: CGFloat = 920
 
     let context: SessionUsageBrowserContext
     let hidePersonalInfo: Bool
@@ -97,7 +97,7 @@ struct SessionUsageBrowser: View {
         GeometryReader { geometry in
             if geometry.size.width < 600 {
                 VStack(spacing: 0) {
-                    self.sessionList.frame(height: min(320, geometry.size.height * 0.45))
+                    self.sessionList.frame(height: min(420, geometry.size.height * 0.5))
                     Divider()
                     self.detailPane
                 }
@@ -168,7 +168,16 @@ struct SessionUsageBrowser: View {
     private var detailPane: some View {
         Group {
             if let session = self.selectedSession {
-                self.details(session)
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        self.receiptButton(for: session)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    Divider()
+                    self.details(session)
+                }
             } else {
                 ContentUnavailableView(L("Select a session"), systemImage: "text.bubble")
             }
@@ -226,6 +235,20 @@ struct SessionUsageBrowser: View {
         .accessibilityElement(children: .combine)
     }
 
+    private func receiptButton(for session: CostUsageSessionBreakdown) -> some View {
+        Button {
+            self.receipt = CockpitReceiptModel.session(
+                context: self.context,
+                session: session,
+                hidePersonalInfo: self.hidePersonalInfo)
+        } label: {
+            Label(L("cockpit_ui_receipt"), systemImage: "receipt")
+        }
+        .buttonStyle(.bordered)
+        .help(L("cockpit_ui_session_receipt_scope"))
+        .accessibilityIdentifier("session-usage-receipt")
+    }
+
     private func details(_ session: CostUsageSessionBreakdown) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 22) {
@@ -251,18 +274,6 @@ struct SessionUsageBrowser: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-
-                Button {
-                    self.receipt = CockpitReceiptModel.session(
-                        context: self.context,
-                        session: session,
-                        hidePersonalInfo: self.hidePersonalInfo)
-                } label: {
-                    Label(L("cockpit_ui_receipt"), systemImage: "receipt")
-                }
-                .buttonStyle(.bordered)
-                .help(L("cockpit_ui_session_receipt_scope"))
-                .accessibilityIdentifier("session-usage-receipt")
 
                 Grid(alignment: .leading, horizontalSpacing: 32, verticalSpacing: 18) {
                     GridRow {

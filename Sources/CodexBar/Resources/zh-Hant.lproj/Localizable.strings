@@ -3182,3 +3182,7 @@
 "cockpit_about_license" = "MIT 授權條款 · © 2026 Peter Steinberger、Quota Float 與 CodexBar Cockpit 貢獻者。";
 
 "Automatic updates are not configured for CodexBar Cockpit." = "CodexBar Cockpit 尚未設定自動更新，可在專案更新記錄中查看進展。";
+
+/* Codex reset banner */
+"cockpit_reset_banner_title" = "Codex 重置已公告";
+"cockpit_reset_banner_countdown" = "剩餘 %@";

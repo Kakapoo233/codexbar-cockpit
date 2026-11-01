@@ -57,6 +57,11 @@ struct CockpitPanelView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            if self.navigation.page == .usage, let resetStore {
+                CockpitResetBannerView(store: resetStore, calendar: self.settings.costUsageBucketCalendar) {
+                    self.navigation.page = .calendar
+                }
+            }
             self.navigationBar
             Divider()
             ZStack(alignment: .top) {

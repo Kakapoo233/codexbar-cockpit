@@ -8,55 +8,83 @@ import Testing
 @MainActor
 struct CockpitCalendarPeriodScreenshotTests {
     @Test
-    func `render synthetic quarterly and yearly cost calendars with missing multi currency history`() async throws {
+    func `render calendar scales with missing multi currency history at wide and narrow widths`() async throws {
         guard let path = ProcessInfo.processInfo.environment["CODEXBAR_COCKPIT_PROOF_DIR"],
               !path.isEmpty else { return }
         let directory = URL(fileURLWithPath: path, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         var calendar = Calendar(identifier: .gregorian)
+        calendar.firstWeekday = 2
         calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
         let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 30, hour: 12)))
         let ledger = try Self.ledger(calendar: calendar, now: now)
         try await CodexBarLocalizationOverride.$appLanguage.withValue("zh-Hans") {
-            for scale in [CockpitCalendarScale.quarter, .year] {
-                let period = CockpitCalendarPeriod(containing: now, scale: scale, calendar: calendar)
-                let days = Dictionary(uniqueKeysWithValues: CockpitCalendarProjection.cells(
-                    month: now, calendar: calendar).compactMap(\.self).map { day in
-                    (day, CockpitCalendarDay(
-                        day: day,
-                        tokens: ledger.tokens(on: day).total,
-                        feeling: calendar.component(.day, from: day).isMultiple(of: 4) ? .comfortable : nil,
-                        resetKinds: calendar.component(.day, from: day) == 20 ? [.regular] : [],
-                        hasResetForecast: calendar.component(.day, from: day) == 31))
-                })
-                let view = VStack(alignment: .leading, spacing: 16) {
-                    Text("CodexBar Cockpit · 合成数据预览").font(.title2.weight(.semibold))
-                    Text(period.title(calendar: calendar)).font(.headline)
-                    CockpitCalendarPeriodSummaryView(ledger: ledger, period: period, metric: .cost)
-                    CockpitCalendarPeriodView(
-                        ledger: ledger, period: period, metric: .cost, selectedDay: now, select: { _ in })
-                    Text(L("cockpit_calendar_month")).font(.headline)
-                    CockpitMonthGridView(
-                        calendar: calendar,
-                        month: now,
-                        selectedDay: now,
-                        days: days,
-                        select: { _ in },
-                        compact: true,
-                        metricText: { ledger.text(on: $0, metric: .cost) })
-                    CockpitCalendarStatusEditor(
-                        selected: .comfortable,
-                        canRecord: true,
-                        onSelect: { _ in },
-                        onClear: {},
-                        compact: true)
-                    Spacer(minLength: 0)
+            for scale in CockpitCalendarScale.allCases {
+                for width in [CGFloat(600), 960] {
+                    let view = Self.preview(ledger: ledger, calendar: calendar, now: now, scale: scale)
+                    let png = try #require(await Self.pngData(view, size: CGSize(width: width, height: 1050)))
+                    let name = "cockpit-calendar-\(scale.rawValue)-cost-zh-\(Int(width)).png"
+                    try png.write(to: directory.appendingPathComponent(name))
                 }
-                .padding(24)
-                let png = try #require(await Self.pngData(view, size: CGSize(width: 960, height: 1050)))
-                try png.write(to: directory.appendingPathComponent("cockpit-calendar-\(scale.rawValue)-cost-zh.png"))
             }
         }
+    }
+
+    private static func preview(
+        ledger: CockpitCalendarLedger,
+        calendar: Calendar,
+        now: Date,
+        scale: CockpitCalendarScale) -> some View
+    {
+        let period = CockpitCalendarPeriod(containing: now, scale: scale, calendar: calendar)
+        let visibleDays = Set(CockpitCalendarProjection.cells(month: now, calendar: calendar).compactMap(\.self)
+            + period.days(calendar: calendar))
+        let days = Dictionary(uniqueKeysWithValues: visibleDays.map { day in
+            let number = calendar.component(.day, from: day)
+            return (day, CockpitCalendarDay(
+                day: day,
+                tokens: ledger.tokens(on: day).total,
+                feeling: number == 30 ? .overloaded : number.isMultiple(of: 4) ? .comfortable : nil,
+                resetKinds: number == 30 ? [.regular, .banked, .unknown("synthetic")]
+                    : number == 28 ? [.regular] : [],
+                hasResetForecast: number == 30 || number == 31,
+                hasScheduledReset: number == 30 || number == 1))
+        })
+        return VStack(alignment: .leading, spacing: 16) {
+            Text("CodexBar Cockpit · 合成数据预览").font(.caption).foregroundStyle(.secondary)
+            CockpitCalendarToolbar(
+                title: period.title(calendar: calendar),
+                scale: .constant(scale),
+                metric: .constant(.cost),
+                previous: {},
+                today: {},
+                next: {})
+            Divider()
+            if scale != .month {
+                CockpitCalendarPeriodView(
+                    ledger: ledger, period: period, metric: .cost, selectedDay: now, select: { _ in }, days: days)
+            }
+            if [.month, .quarter, .year].contains(scale) {
+                if scale != .month { Text(L("cockpit_calendar_month")).font(.headline) }
+                CockpitMonthGridView(
+                    calendar: calendar,
+                    month: now,
+                    selectedDay: now,
+                    days: days,
+                    select: { _ in },
+                    compact: true,
+                    metricText: { ledger.text(on: $0, metric: .cost) })
+            }
+            CockpitCalendarPeriodSummaryView(ledger: ledger, period: period, metric: .cost)
+            CockpitCalendarStatusEditor(
+                selected: .comfortable,
+                canRecord: true,
+                onSelect: { _ in },
+                onClear: {},
+                compact: true)
+            Spacer(minLength: 0)
+        }
+        .padding(24)
     }
 
     private static func ledger(calendar: Calendar, now: Date) throws -> CockpitCalendarLedger {

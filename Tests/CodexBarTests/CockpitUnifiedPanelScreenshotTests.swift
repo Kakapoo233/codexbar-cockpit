@@ -167,11 +167,19 @@ struct CockpitUnifiedPanelScreenshotTests {
                 sourceURL: CockpitResetHistoryClient.websiteURL)
         }
         let history = CockpitResetHistory(events: events, generatedAt: now)
+        let scheduled = try CockpitScheduledReset(
+            id: "synthetic-announcement",
+            announcedAt: now,
+            scheduledFor: now.addingTimeInterval(3600),
+            text: "Synthetic dated announcement for layout validation.",
+            sourceURL: CockpitResetHistoryClient.websiteURL)
+        let status = CockpitResetStatus(generatedAt: now, scheduledReset: scheduled)
         return CockpitResetHistoryStore(
             cacheURL: directory.appendingPathComponent("resets.json"),
             receiptsURL: directory.appendingPathComponent("reset-notices.json"),
             notificationsEnabled: { false },
             fetch: { history },
+            fetchStatus: { status },
             now: { now },
             post: { _ in Issue.record("Synthetic renders must not post notifications") },
             remove: { _ in })
