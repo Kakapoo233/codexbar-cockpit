@@ -1427,7 +1427,7 @@ extension MenuBarLayoutRenderer {
                 && remaining.weeklyPercent.isFinite && remaining.weeklyPercent >= 0 ? remaining : nil
         }
         let stale = value?.isStale == true || options.isStale
-        let qualifiers = (value != nil && stale ? "≈" : "") + (value?.isUpperBound == true ? "≤" : "")
+        let qualifiers = value != nil && stale ? "≈" : ""
         let percent = value.map { self.cockpitRemainingPercent($0.percent) } ?? "—"
         let label = L("cockpit_menu_remaining_short")
         var accessibility = value.map {

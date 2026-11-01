@@ -76,7 +76,7 @@ struct CockpitMenuBarRecommendationRenderingTests {
                 options: fixture.options(showUsed: showUsed))
             let percent = (value / 100).formatted(
                 .percent.precision(.fractionLength(0...1)).locale(Locale(identifier: "en")))
-            #expect(output.attributedTitle.string == "Daily \(percent)")
+            #expect(output.attributedTitle.string == "T \(percent)")
             #expect(output.accessibilityLabel == L("cockpit_menu_daily_recommendation_accessibility", percent))
         }
     }
@@ -148,7 +148,7 @@ struct CockpitMenuBarRecommendationRenderingTests {
                 renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
             }
             #expect(chinese.attributedTitle.string.hasPrefix("建议 "))
-            #expect(english.attributedTitle.string == "Daily 15%")
+            #expect(english.attributedTitle.string == "T 15%")
             #expect(english.accessibilityLabel != chinese.accessibilityLabel)
             #expect(codexBarLocalizationSignature() == "zh-Hans")
             let restored = renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
