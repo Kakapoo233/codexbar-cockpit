@@ -4,6 +4,8 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Adapt the application to Windows | Design prepared; additional toolchain confirmation pending | See WINDOWS_PORT.md. Deliver a real Windows tray application, verified installer, current advice semantics and explicitly tracked provider parity; scaffolding is not completion. |
+| Make personal iCloud synchronization work | Diagnosed; implementation route pending | Installed development bundle lacks CloudKit entitlements. Choose fork-owned Apple signing and container configuration or a separately designed iCloud Drive transport; do not claim the existing switch works. |
 | Add today’s available allowance to the menu-bar layout in three forms | Implemented and installed in 0.8.9 | Percentage, bar and filled circle agree with the homepage daily-allocation ratio, update while closed, preserve uncertainty and show the weekly equivalent accessibly. |
 | Restore calendar text to its size before the 50% enlargement | Implemented and installed in 0.8.8 | Original native type sizes, matching date-cell and badge dimensions, and working date selectors. |
 | Add Cockpit daily recommendation to the top menu-bar layout | Implemented and installed in 0.8.7 | Optional localized component matches full-day advice, updates while the menu is closed, preserves account boundaries and existing layouts, and follows the English status-text setting. |
