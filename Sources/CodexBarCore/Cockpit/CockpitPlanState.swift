@@ -311,7 +311,8 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
         accountID: String = "default",
         on date: Date = Date(),
         calendar: Calendar = .current,
-        planningResetWindow: CockpitPlanningResetWindow? = nil) -> CockpitDayStatus
+        planningResetWindow: CockpitPlanningResetWindow? = nil,
+        resetRisk: CockpitResetRisk = .assumed) -> CockpitDayStatus
     {
         let day = CockpitCalendar.dateKey(for: date, calendar: calendar)
         let zone = calendar.timeZone.identifier
@@ -331,16 +332,41 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             }
             return CockpitPlanningResetWindow(resetsAt: snapshot.resetsAt, source: .account)
         }
-        let suggested: Double?
+        let comfortAdvice: CockpitComfortAdvice?
         if let usable, let horizon, let interval = calendar.dateInterval(of: .day, for: date) {
             let untilReset = horizon.resetsAt.timeIntervalSince(date)
-            let dayRemaining = interval.end.timeIntervalSince(date)
-            let additional = usable.remainingPercent * min(1, dayRemaining / untilReset)
-            suggested = Self.round((usage.usedPercent ?? 0) + additional)
+            let currentCycleUsed = self.currentCycleUsage(
+                providerID: providerID, accountID: accountID, on: date, calendar: calendar)
+            let priorCycleUsed = max(0, (usage.usedPercent ?? 0) - currentCycleUsed)
+            // Allocate a full local day's share. Consuming quota moves it from the live balance
+            // into this cycle's observed use, without granting that consumption a second allowance.
+            // Earlier cycles remain spent; they cannot replenish the current cycle's budget.
+            let cycleBudget = min(100, usable.remainingPercent + currentCycleUsed)
+            let fullDayShare = cycleBudget * min(1, interval.duration / untilReset)
+            let risk: CockpitResetRisk = providerID == "codex" ? resetRisk : .none
+            let curve = CockpitQuotaComfortModel.build(
+                records: self.comfortRecords.filter { $0.recordedAt <= date },
+                providerID: providerID,
+                accountID: accountID,
+                now: date,
+                calendar: calendar)
+            let weekend = calendar.isDateInWeekend(date)
+            // Upstream's risk bonus and fatigue limit, with h=1 for a full-day target.
+            // Daily observed use is deducted only by remainingSuggestedPercent, never twice here.
+            comfortAdvice = CockpitComfortAdvice(
+                kneePercent: curve.kneePercent,
+                curveStatus: curve.status,
+                sampleCount: curve.sampleCount,
+                softCapPercent: curve.kneePercent * (1 + 1.5 * risk.probability) * (weekend ? 0.75 : 1),
+                baseDailyPercent: priorCycleUsed + fullDayShare,
+                riskBonusPercent: (cycleBudget - fullDayShare) * risk.probability * risk.probability,
+                risk: risk,
+                isWeekend: weekend)
         } else {
             // Passing a deadline is not evidence of a renewed balance.
-            suggested = nil
+            comfortAdvice = nil
         }
+        let suggested = comfortAdvice?.suggestedPercent
         let feeling = self.comfortRecords.last {
             $0.providerID == providerID && $0.accountID == accountID
                 && $0.localDateKey == day && $0.timeZoneIdentifier == zone
@@ -357,7 +383,8 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             feeling: feeling,
             isStale: stale,
             planningResetWindow: horizon,
-            suggestionIsPartial: suggested != nil && (usage.usedPercent == nil || usage.coverage != .complete))
+            suggestionIsPartial: suggested != nil && (usage.usedPercent == nil || usage.coverage != .complete),
+            comfortAdvice: comfortAdvice)
     }
 
     public func dailyUsage(
@@ -389,29 +416,52 @@ public struct CockpitPlanState: Codable, Equatable, Sendable {
             previous = sample.capturedAt
         }
         for segment in segments {
-            let points = segment.samples
-            guard let first = points.first,
-                  let maximum = points.map({ 100 - $0.remainingPercent }).max() else { continue }
             if segment.hasMetadataDrift { complete = false }
-            let baseline: Double
-            if segment.beginsWithObservedReset || (first.capturedAt > interval.start
-                && first.resetsAt.addingTimeInterval(-first.windowDuration) >= interval.start)
-            {
-                // A new, observed cycle begins during this day: its use starts at zero.
-                baseline = 0
-                hasObservation = true
-            } else {
-                // No midnight sample means pre-launch consumption is unknown, not zero.
-                baseline = 100 - first.remainingPercent
-                hasObservation = hasObservation || points.count > 1 || first.capturedAt == interval.start
-            }
-            used += max(0, maximum - baseline)
+            let observation = Self.observedUsage(in: segment, day: interval)
+            hasObservation = hasObservation || observation.isKnown
+            used += observation.percent
         }
         return CockpitDayUsage(
             localDateKey: day,
             usedPercent: hasObservation ? Self.round(used) : nil,
             coverage: complete ? .complete : .partial,
             sampleCount: today.count)
+    }
+
+    private func currentCycleUsage(
+        providerID: String,
+        accountID: String,
+        on date: Date,
+        calendar: Calendar) -> Double
+    {
+        guard let interval = calendar.dateInterval(of: .day, for: date) else { return 0 }
+        let today = self.samples(providerID: providerID, accountID: accountID, through: date).filter {
+            $0.capturedAt >= interval.start && $0.capturedAt < interval.end
+        }
+        guard let current = Self.quotaSegments(today).last else { return 0 }
+        return Self.round(Self.observedUsage(in: current, day: interval).percent)
+    }
+
+    private static func observedUsage(in segment: QuotaSegment, day: DateInterval)
+        -> (percent: Double, isKnown: Bool)
+    {
+        let points = segment.samples
+        guard let first = points.first,
+              let maximum = points.map({ 100 - $0.remainingPercent }).max() else { return (0, false) }
+        let baseline: Double
+        let known: Bool
+        if segment.beginsWithObservedReset || (first.capturedAt > day.start
+            && first.resetsAt.addingTimeInterval(-first.windowDuration) >= day.start)
+        {
+            // A new, observed cycle begins during this day: its use starts at zero.
+            baseline = 0
+            known = true
+        } else {
+            // No midnight sample means pre-launch consumption is unknown, not zero.
+            baseline = 100 - first.remainingPercent
+            known = points.count > 1 || first.capturedAt == day.start
+        }
+        return (max(0, maximum - baseline), known)
     }
 
     private struct QuotaSegment {

@@ -13,7 +13,11 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 - `CockpitPlanState` is a serializable Foundation module. It receives official quota observations and
   produces live daily recommendations, manual caps, observed use, and completeness.
   Advice uses the latest same-account balance and remaining time to an account reset or an earlier
-  valid announced/estimated reset. Predictions only change the planning horizon; they never create quota.
+  valid announced/estimated reset. Predictions never create quota.
+  The target is a full local day's share, not a fraction based on hours remaining until midnight.
+  Current-cycle observed use is added back before allocating that share, then deducted once from
+  today's available allowance. Earlier cycles stay consumed; manual caps and the actual remaining
+  balance bound the allowance. Missing/partial observation retains its uncertainty.
 - `CockpitPlanStore` adapts existing snapshots to the planning module and atomically persists local
   state. Provider/account identifiers scope each plan. Unknown accounts are not merged.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
@@ -36,7 +40,19 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Its samples use observed account quota changes, including labeled partial coverage and archived daily
   observations. Calendar quota feedback is scoped by provider/account/day/time zone; corrections preserve
   captured measurements. Token feedback is a separate calendar mode and is never converted into quota.
-  Missing samples show the 25% baseline curve; fitted output never rewrites automatic recommendations or personal caps.
+  Missing samples use the 25% baseline knee. Automatic advice uses the fitted knee as a comfort cap;
+  it never changes a user's manual cap. The personal planner adapts upstream `planRemainingQuota`,
+  not v0.3.4's shared-account override (which removes the comfort cap).
+  For current-cycle balance plus observed use P, the full-day allocation is A = P × min(1, day duration /
+  remaining horizon). Reset-risk boost is (P − A) × p². Earlier-cycle use is added once before applying
+  the full-day comfort cap K × (1 + 1.5p), multiplied by 0.75 on local weekends. Available allowance then
+  subtracts all observed use once and cannot exceed the actual balance. Partial observations remain bounds.
+  Codex's default p = 0.1 is explicitly a model assumption; fresh numeric community watch estimates may
+  replace it. A fresh dated regular announcement uses p = 1 only within the next 24 hours and before the
+  account reset. More distant announcements still shorten the planning horizon. Other providers use p = 0.
+  A history-derived estimated date is not treated as a probability. Stale public risk metadata falls back
+  to the explicit default, independently of notification settings.
+  Source: [upstream personal planner](https://github.com/HouSiyuan2001/codex-cockpit/blob/cefcbc9efe03071150431645b4ebb51e7faac574/src/lib/dynamicQuota.ts).
 - `CockpitTaskLineage` groups already-accounted sessions using bounded session metadata reads. Fork
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.

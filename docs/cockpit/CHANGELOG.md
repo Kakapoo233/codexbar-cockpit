@@ -1,5 +1,13 @@
 # Cockpit changes
 
+## 0.8.1 — Full-day comfort-aware advice
+
+- Show a full-day quota target separately from the amount still available today, instead of shrinking the target by the hours left until midnight.
+- Deduct observed use once, respect manual caps and the actual remaining balance, and retain uncertainty when usage is incomplete.
+- Continue recalculating against valid account, announced and estimated reset windows without inventing a renewed balance.
+- Use the original Cockpit quota comfort curve to cap automatic advice, with a personal fit from account-scoped quota feedback or the default 25% knee. Keep Token feedback separate.
+- Explain comfort limits and reset-risk sources; apply upstream risk boosts and weekend adjustment while preserving manual overrides.
+
 ## 0.8.0 — Unified calendar and usage navigation
 
 - Give day, week and month calendars a shared date, selection and grid style; preserve daily usage, personal feedback and reset markers.

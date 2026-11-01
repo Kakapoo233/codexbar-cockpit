@@ -26,7 +26,8 @@ public struct CockpitQuotaComfortPoint: Equatable, Sendable, Identifiable {
     }
 }
 
-/// Fits only the original curve's knee to fixed subjective scores. It does not change quota plans.
+/// Fits only the original curve's knee to fixed subjective scores; live advice uses it as a comfort limit.
+/// Historical calibration anchors and independent manual caps retain their own meaning.
 public struct CockpitQuotaComfortModel: Equatable, Sendable {
     public enum Status: String, Sendable {
         case baseline

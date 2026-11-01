@@ -43,13 +43,16 @@ final class CockpitPlanStore {
         let status = self.state.status(
             providerID: provider.rawValue, accountID: self.accountID(for: provider), on: date)
         guard provider == .codex, let reset = status.resetsAt,
-              let window = self.resetHistoryStore?.planningWindow(accountResetAt: reset, on: date),
-              window.source != .account else { return status }
+              let resets = self.resetHistoryStore else { return status }
+        let window = resets.planningWindow(accountResetAt: reset, on: date)
+        let risk = resets.planningRisk(accountResetAt: reset, on: date)
+        guard window?.source != .account || risk != .assumed else { return status }
         return self.state.status(
             providerID: provider.rawValue,
             accountID: self.accountID(for: provider),
             on: date,
-            planningResetWindow: window)
+            planningResetWindow: window,
+            resetRisk: risk)
     }
 
     func ingest(_ store: UsageStore) {

@@ -18,6 +18,31 @@ enum CockpitDailyAdviceProjection {
         }
         return L(key, date)
     }
+
+    static func comfortCeilingText(_ advice: CockpitComfortAdvice) -> String {
+        let key = advice.curveStatus == .fitted
+            ? "cockpit_advice_comfort_fitted" : "cockpit_advice_comfort_default"
+        return L(key, cockpitLocalizedPercent(advice.softCapPercent))
+    }
+
+    static func resetRiskText(_ risk: CockpitResetRisk) -> String {
+        switch risk.source {
+        case .assumed:
+            L("cockpit_advice_risk_default", cockpitLocalizedPercent(risk.probability * 100))
+        case .estimated:
+            L("cockpit_advice_risk_estimated", cockpitLocalizedPercent(risk.probability * 100))
+        case .announced:
+            L("cockpit_advice_risk_announced")
+        }
+    }
+
+    static func comfortLimitText(_ advice: CockpitComfortAdvice, manualCap: Double?) -> String? {
+        if manualCap != nil {
+            return L(advice.isComfortLimited
+                ? "cockpit_advice_comfort_limited_manual" : "cockpit_advice_manual_priority")
+        }
+        return advice.isComfortLimited ? L("cockpit_advice_comfort_limited") : nil
+    }
 }
 
 enum CockpitDailyAdviceLayout {
@@ -97,6 +122,7 @@ struct CockpitDailyAdviceRow: View {
                     .foregroundStyle(window.source == .estimated ? Color.orange : Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            CockpitComfortAdviceSummaryView(status: self.status)
             Text(L("cockpit_advice_live_note"))
                 .font(.caption2).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -116,10 +142,15 @@ struct CockpitDailyAdviceRow: View {
 
     private var inlineContent: some View {
         VStack(alignment: .leading, spacing: 10) {
+            self.providerTitle
             HStack(alignment: .firstTextBaseline, spacing: 12) {
-                self.providerTitle
-                Spacer(minLength: 8)
-                self.metric(L("cockpit_ui_suggestion"), self.status.suggestedPercent)
+                self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                self.metric(
+                    L("cockpit_advice_remaining_today"),
+                    self.status.remainingSuggestedPercent,
+                    partial: self.status.coverage != .complete,
+                    upperBound: true)
+                    .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.metric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.metric(
                     L("cockpit_ui_observed"),
@@ -140,7 +171,13 @@ struct CockpitDailyAdviceRow: View {
         VStack(alignment: .leading, spacing: 12) {
             self.providerTitle
             VStack(spacing: 8) {
-                self.sidebarMetric(L("cockpit_ui_suggestion"), self.status.suggestedPercent)
+                self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                self.sidebarMetric(
+                    L("cockpit_advice_remaining_today"),
+                    self.status.remainingSuggestedPercent,
+                    partial: self.status.coverage != .complete,
+                    upperBound: true)
+                    .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.sidebarMetric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.sidebarMetric(
                     L("cockpit_ui_observed"),
@@ -179,25 +216,29 @@ struct CockpitDailyAdviceRow: View {
             .disabled(self.status.manualCapPercent == nil)
     }
 
-    private func sidebarMetric(_ title: String, _ value: Double?, partial: Bool = false) -> some View {
+    private func sidebarMetric(
+        _ title: String, _ value: Double?, partial: Bool = false, upperBound: Bool = false) -> some View
+    {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(title).font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 8)
-            self.metricValue(value, partial: partial)
+            self.metricValue(value, partial: partial, upperBound: upperBound)
                 .fixedSize(horizontal: true, vertical: false)
         }
     }
 
-    private func metric(_ title: String, _ value: Double?, partial: Bool = false) -> some View {
+    private func metric(
+        _ title: String, _ value: Double?, partial: Bool = false, upperBound: Bool = false) -> some View
+    {
         VStack(alignment: .trailing, spacing: 3) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            self.metricValue(value, partial: partial)
+            self.metricValue(value, partial: partial, upperBound: upperBound)
         }
     }
 
-    private func metricValue(_ value: Double?, partial: Bool) -> some View {
-        Text((partial && value != nil ? "≥ " : "") + self.percent(value))
+    private func metricValue(_ value: Double?, partial: Bool, upperBound: Bool) -> some View {
+        Text((partial && value != nil ? (upperBound ? "≤ " : "≥ ") : "") + self.percent(value))
             .font(.system(size: 19, weight: .semibold, design: .rounded)).monospacedDigit()
     }
 
@@ -207,5 +248,37 @@ struct CockpitDailyAdviceRow: View {
 
     private var capBinding: Binding<Double> {
         Binding(get: { min(100, max(0, self.status.effectiveCapPercent ?? 0)) }, set: { self.setCap($0) })
+    }
+}
+
+struct CockpitComfortAdviceSummaryView: View {
+    let status: CockpitDayStatus
+
+    var body: some View {
+        if let advice = self.status.comfortAdvice {
+            VStack(alignment: .leading, spacing: 4) {
+                Label(CockpitDailyAdviceProjection.comfortCeilingText(advice), systemImage: "waveform.path")
+                    .help(self.curveHelp(advice))
+                    .accessibilityIdentifier("cockpit-advice-comfort-ceiling")
+                Text(CockpitDailyAdviceProjection.resetRiskText(advice.risk))
+                    .help(L("cockpit_advice_risk_help"))
+                    .accessibilityIdentifier("cockpit-advice-reset-risk")
+                if let limit = CockpitDailyAdviceProjection.comfortLimitText(
+                    advice, manualCap: self.status.manualCapPercent)
+                {
+                    Text(limit)
+                        .accessibilityIdentifier("cockpit-advice-comfort-limit-note")
+                }
+            }
+            .font(.caption2).foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func curveHelp(_ advice: CockpitComfortAdvice) -> String {
+        let source = advice.curveStatus == .fitted
+            ? L("cockpit_advice_comfort_samples", advice.sampleCount)
+            : L("cockpit_advice_comfort_default_help")
+        return source + " " + L("cockpit_advice_comfort_ceiling_help")
     }
 }

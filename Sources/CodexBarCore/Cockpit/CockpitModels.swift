@@ -142,14 +142,17 @@ public struct CockpitDayStatus: Equatable, Sendable {
     /// The selected planning horizon; public horizons never replace the observed account reset metadata.
     public var planningResetWindow: CockpitPlanningResetWindow?
     public var suggestionIsPartial = false
+    /// Live policy explanation only; archived plan anchors retain their original calibration meaning.
+    public var comfortAdvice: CockpitComfortAdvice?
 
     public var effectiveCapPercent: Double? {
         self.manualCapPercent ?? self.suggestedPercent
     }
 
     public var remainingSuggestedPercent: Double? {
-        guard let limit = self.effectiveCapPercent, let used = self.usedPercent else { return nil }
-        return max(0, limit - used)
+        guard let limit = self.effectiveCapPercent, let used = self.usedPercent,
+              let remaining = self.remainingPercent else { return nil }
+        return min(remaining, max(0, limit - used))
     }
 }
 

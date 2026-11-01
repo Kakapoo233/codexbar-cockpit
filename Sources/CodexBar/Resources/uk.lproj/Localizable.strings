@@ -3034,7 +3034,7 @@
 "cockpit_comfort_curve_x" = "Квота, використана сьогодні (%)";
 "cockpit_comfort_curve_y" = "Суб’єктивна оцінка (%)";
 "cockpit_comfort_curve_details" = "%@ спостережень · Про модель";
-"cockpit_comfort_curve_explanation" = "Легко = 100%, саме в міру = 80%, перевантаження = 25%. Це суб’єктивні оцінки, а не виміряна ефективність. Підбирається лише точка перегину початкової фіксованої кривої (0,1–100%); щоденний план не змінюється.";
+"cockpit_comfort_curve_explanation" = "Легко = 100%, саме в міру = 80%, перевантаження = 25%. Це суб’єктивні оцінки, а не виміряна ефективність. Підбирається лише точка перегину початкової фіксованої кривої (0,1–100%); крива впливає на автоматичні рекомендації; ручні ліміти не змінюються.";
 "cockpit_comfort_curve_weights" = "Новіші відгуки мають більшу вагу (період напіврозпаду — 14 днів); неповні дані використання отримують вагу 75%. Сукупне використання може перевищувати 100%, нижня межа оцінки — 20%.";
 "cockpit_comfort_curve_empty" = "Поки немає придатних відгуків про квоту. Показано типову точку перегину 25%; виберіть дату й запишіть відчуття.";
 "cockpit_comfort_quota_missing" = "Для цієї дати немає придатного спостереження квоти. Відчуття збережуться, але не братимуть участі в підборі кривої.";
@@ -3189,7 +3189,7 @@
 "cockpit_advice_reset_account" = "Planning window: account reset %@";
 "cockpit_advice_reset_announced" = "Planning window: announced reset %@; account reset still needs confirmation.";
 "cockpit_advice_reset_estimated" = "Planning window: estimated reset %@ — not an official commitment.";
-"cockpit_advice_live_note" = "Recalculated from the latest observed balance and time remaining. Your manual cap stays unchanged.";
+"cockpit_advice_live_note" = "The comfort curve informs the full-day target, without discounting hours already elapsed. Available today deducts recorded use; manual caps take priority.";
 "cockpit_advice_partial_note" = "Daily use has incomplete coverage; the suggestion is provisional.";
 
 /* About CodexBar Cockpit (English fallback) */
@@ -3205,3 +3205,21 @@
 /* Codex reset banner (English fallback) */
 "cockpit_reset_banner_title" = "Codex reset announced";
 "cockpit_reset_banner_countdown" = "In %@";
+
+/* Full-day target and remaining daily allowance (English fallback) */
+"cockpit_advice_full_day" = "Full-day target";
+"cockpit_advice_remaining_today" = "Available today";
+
+/* Comfort-informed daily advice (English fallback) */
+"cockpit_advice_comfort_default" = "Comfort ceiling: %@ · default curve";
+"cockpit_advice_comfort_fitted" = "Comfort ceiling: %@ · personal fit";
+"cockpit_advice_risk_default" = "Reset chance: %@ · model default";
+"cockpit_advice_risk_estimated" = "Reset chance: %@ · community estimate";
+"cockpit_advice_risk_announced" = "Reset announced within 24 hours; this account still needs confirmation.";
+"cockpit_advice_comfort_limited" = "The comfort ceiling reduced the automatic target.";
+"cockpit_advice_comfort_limited_manual" = "The curve limits the automatic target; your manual cap still takes priority.";
+"cockpit_advice_manual_priority" = "Your manual cap takes priority over the automatic target.";
+"cockpit_advice_risk_help" = "Public signals and model assumptions do not confirm that this account has reset.";
+"cockpit_advice_comfort_samples" = "Personal curve fitted from %d quota feedback records.";
+"cockpit_advice_comfort_default_help" = "Uses the default curve until personal quota feedback is available.";
+"cockpit_advice_comfort_ceiling_help" = "The ceiling adjusts for reset chance and weekends. It applies to automatic targets, not manual caps.";
