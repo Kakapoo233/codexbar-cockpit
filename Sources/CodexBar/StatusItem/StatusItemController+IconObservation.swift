@@ -127,9 +127,8 @@ extension StatusItemController {
         let resolution = self.renderedMenuBarLayoutResolution(for: provider)
         guard !resolution.usesLegacyRendering,
               resolution.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
-                  .contains(.cockpitDailyRecommendation) else { return nil }
-        return self.store.cockpitMenuBarRecommendation(provider: provider, snapshot: snapshot)
-            .map { String($0.hashValue) }
+                  .contains(where: \.readsCockpitPlan) else { return nil }
+        return String(self.store.cockpitMenuBarPlanValues(provider: provider, snapshot: snapshot).hashValue)
     }
 
     private func storedMenuBarLayoutResetSignature(for provider: UsageProvider, snapshot: UsageSnapshot?) -> String? {

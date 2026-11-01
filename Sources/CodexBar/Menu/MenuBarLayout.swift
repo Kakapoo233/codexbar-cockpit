@@ -442,6 +442,10 @@ struct MenuBarLayoutConditional: Codable, Hashable, Sendable {
             && self.v4Compatible.elseToken.hasV3Representation ? self.v4Compatible : nil
     }
 
+    var hasV7Representation: Bool {
+        self.thenToken.hasV7Representation && self.elseToken.hasV7Representation
+    }
+
     var hasV6Representation: Bool {
         self.thenToken.hasV6Representation && self.elseToken.hasV6Representation
     }
@@ -515,6 +519,10 @@ struct MenuBarLayoutLaneLabels: Hashable {
     }
 }
 
+enum CockpitDailyRemainingStyle: String, CaseIterable, Codable, Hashable, Sendable {
+    case percent, bar, circle
+}
+
 enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     case icon
     case providerName
@@ -540,6 +548,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     case costToday
     /// Cockpit full-day recommendation, expressed as a share of the weekly quota.
     case cockpitDailyRecommendation
+    case cockpitDailyRemaining(style: CockpitDailyRemainingStyle)
     case tokensPerMinute
     case tokensSparkline
     case costWindow
@@ -558,10 +567,23 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     private enum CodingKeys: String, CodingKey {
         case icon, providerName, accountLabel, percent, lanePercent, extraPercent, pace, usageBar, progressBar
         case resetCountdown, resetAbsolute, windowResetCountdown, windowResetAbsolute
-        case runsOut, runsOutCompact, balance, costToday, cockpitDailyRecommendation, tokensPerMinute, tokensSparkline
+        case runsOut, runsOutCompact, balance, costToday, cockpitDailyRecommendation, cockpitDailyRemaining,
+             tokensPerMinute, tokensSparkline
         case costWindow = "cost30d"
         case spendAmount, spendBudget
         case separatorDot, space, hidden, conditional
+    }
+
+    var readsCockpitPlan: Bool {
+        switch self {
+        case .cockpitDailyRecommendation, .cockpitDailyRemaining: true
+        default: false
+        }
+    }
+
+    var hasV7Representation: Bool {
+        if case .cockpitDailyRemaining = self { return false }
+        return true
     }
 
     /// The semantic window read by a reset token, including the historical automatic variants.
@@ -590,7 +612,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     var v4Compatible: MenuBarLayoutToken {
         switch self {
         case let .progressBar(window): .percent(window: window)
-        case .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation: .hidden
+        case .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation, .cockpitDailyRemaining: .hidden
         default: self
         }
     }
@@ -598,20 +620,20 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     /// V4 layouts drop tokens that postdate it instead of leaving hidden placeholders in a line.
     var hasV4Representation: Bool {
         switch self {
-        case .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation: false
+        case .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation, .cockpitDailyRemaining: false
         default: true
         }
     }
 
     /// Cockpit 0.8.6 reads V6 and does not understand the recommendation token.
     var hasV6Representation: Bool {
-        self != .cockpitDailyRecommendation
+        self != .cockpitDailyRecommendation && self.hasV7Representation
     }
 
     /// V5 layouts drop Spend tokens: 0.75.0 decodes V5 and has no Spend cases.
     var hasV5Representation: Bool {
         switch self {
-        case .spendAmount, .spendBudget, .cockpitDailyRecommendation: false
+        case .spendAmount, .spendBudget, .cockpitDailyRecommendation, .cockpitDailyRemaining: false
         case let .percent(window), let .pace(window), let .progressBar(window),
              let .windowResetCountdown(window), let .windowResetAbsolute(window): window != .spend
         default: true
@@ -622,14 +644,15 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     var hasReleasedRepresentation: Bool {
         switch self {
         case .extraPercent, .windowResetCountdown, .windowResetAbsolute, .progressBar, .tokensPerMinute,
-             .tokensSparkline, .cockpitDailyRecommendation: false
+             .tokensSparkline, .cockpitDailyRecommendation, .cockpitDailyRemaining: false
         default: true
         }
     }
 
     var hasV3Representation: Bool {
         switch self {
-        case .extraPercent, .progressBar, .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation: false
+        case .extraPercent, .progressBar, .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation,
+             .cockpitDailyRemaining: false
         default: true
         }
     }
@@ -637,7 +660,8 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     var hasLegacyRepresentation: Bool {
         switch self {
         case .conditional, .extraPercent, .hidden, .windowResetCountdown, .windowResetAbsolute,
-             .progressBar, .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation: false
+             .progressBar, .tokensPerMinute, .tokensSparkline, .cockpitDailyRecommendation,
+             .cockpitDailyRemaining: false
         default: true
         }
     }
@@ -842,6 +866,10 @@ struct MenuBarLayout: Codable, Hashable, Sendable {
         Set(self.lines.joined().compactMap(\.selectedLane))
     }
 
+    func v7Compatible() -> MenuBarLayout {
+        self.projected { $0.hasV7Representation ? $0 : nil }
+    }
+
     func v6Compatible() -> MenuBarLayout {
         self.projected { $0.hasV6Representation ? $0 : nil }
     }
@@ -896,21 +924,24 @@ enum MenuBarLayoutUserDefaultsKey {
     static let layoutV4 = "menuBarLayoutV4"
     static let layoutV5 = "menuBarLayoutV5"
     static let layoutV6 = "menuBarLayoutV6"
-    static let layoutCurrent = "menuBarLayoutCockpitV7"
+    static let layoutV7 = "menuBarLayoutCockpitV7"
+    static let layoutCurrent = "menuBarLayoutCockpitV8"
     static let overrides = "menuBarLayoutOverrides"
     static let overridesReleased = "menuBarLayoutOverridesV2"
     static let overridesV3 = "menuBarLayoutOverridesV3"
     static let overridesV4 = "menuBarLayoutOverridesV4"
     static let overridesV5 = "menuBarLayoutOverridesV5"
     static let overridesV6 = "menuBarLayoutOverridesV6"
-    static let overridesCurrent = "menuBarLayoutOverridesCockpitV7"
+    static let overridesV7 = "menuBarLayoutOverridesCockpitV7"
+    static let overridesCurrent = "menuBarLayoutOverridesCockpitV8"
     static let conditionals = "menuBarLayoutConditionals"
     static let conditionalsReleased = "menuBarLayoutConditionalsV2"
     static let conditionalsV3 = "menuBarLayoutConditionalsV3"
     static let conditionalsV4 = "menuBarLayoutConditionalsV4"
     static let conditionalsV5 = "menuBarLayoutConditionalsV5"
     static let conditionalsV6 = "menuBarLayoutConditionalsV6"
-    static let conditionalsCurrent = "menuBarLayoutConditionalsCockpitV7"
+    static let conditionalsV7 = "menuBarLayoutConditionalsCockpitV7"
+    static let conditionalsCurrent = "menuBarLayoutConditionalsCockpitV8"
 }
 
 enum MenuBarLayoutPreset: String, CaseIterable, Identifiable, Sendable {
@@ -1071,6 +1102,7 @@ extension MenuBarLayout {
 enum MenuBarLayoutPersistence {
     struct EncodedGenerations {
         let current: Data
+        let v7: Data
         let v6: Data
         let v5: Data
         let v4: Data
@@ -1079,9 +1111,10 @@ enum MenuBarLayoutPersistence {
         let legacy: Data
     }
 
-    /// Reconcile V2 against V1, then V3 against that result, and so on up to Cockpit V7 against V6.
+    /// Reconcile V2 against V1, then V3 against that result, and so on up to Cockpit V8 against V7.
     static func preferredLayout(
         current: MenuBarLayout?,
+        v7: MenuBarLayout? = nil,
         v6: MenuBarLayout? = nil,
         v5: MenuBarLayout? = nil,
         v4: MenuBarLayout? = nil,
@@ -1089,6 +1122,17 @@ enum MenuBarLayoutPersistence {
         released: MenuBarLayout? = nil,
         legacy: MenuBarLayout?) -> MenuBarLayout?
     {
+        if let v7 {
+            let older = self.preferredLayout(
+                current: v7,
+                v6: v6,
+                v5: v5,
+                v4: v4,
+                v3: v3,
+                released: released,
+                legacy: legacy)
+            return current?.v7Compatible() == older ? current : older
+        }
         if let v6 {
             let older = self.preferredLayout(current: v6, v5: v5, v4: v4, v3: v3, released: released, legacy: legacy)
             return current?.v6Compatible() == older ? current : older
@@ -1120,6 +1164,7 @@ enum MenuBarLayoutPersistence {
 
     static func preferredOverrides(
         current: [String: MenuBarLayout]?,
+        v7: [String: MenuBarLayout]? = nil,
         v6: [String: MenuBarLayout]? = nil,
         v5: [String: MenuBarLayout]? = nil,
         v4: [String: MenuBarLayout]? = nil,
@@ -1128,6 +1173,20 @@ enum MenuBarLayoutPersistence {
         legacy: [String: MenuBarLayout]?)
         -> [String: MenuBarLayout]
     {
+        if let v7 {
+            let older = self.preferredOverrides(
+                current: v7,
+                v6: v6,
+                v5: v5,
+                v4: v4,
+                v3: v3,
+                released: released,
+                legacy: legacy)
+            return Dictionary(uniqueKeysWithValues: older.map { key, layout in
+                let retained = current?[key].flatMap { $0.v7Compatible() == layout ? $0 : nil }
+                return (key, retained ?? layout)
+            })
+        }
         if let v6 {
             let older = self.preferredOverrides(current: v6, v5: v5, v4: v4, v3: v3, released: released, legacy: legacy)
             return Dictionary(uniqueKeysWithValues: older.map { key, layout in
@@ -1217,6 +1276,7 @@ enum MenuBarLayoutPersistence {
         let legacy = try encoder.encode(layout.legacyCompatible(for: provider))
         return try EncodedGenerations(
             current: current,
+            v7: encoder.encode(layout.v7Compatible()),
             v6: encoder.encode(layout.v6Compatible()),
             v5: encoder.encode(layout.v5Compatible()),
             v4: encoder.encode(layout.v4Compatible()),
@@ -1235,6 +1295,7 @@ enum MenuBarLayoutPersistence {
         })
         return try EncodedGenerations(
             current: encoder.encode(overrides),
+            v7: encoder.encode(overrides.mapValues { $0.v7Compatible() }),
             v6: encoder.encode(overrides.mapValues { $0.v6Compatible() }),
             v5: encoder.encode(overrides.mapValues { $0.v5Compatible() }),
             v4: encoder.encode(overrides.mapValues { $0.v4Compatible() }),
@@ -1245,6 +1306,7 @@ enum MenuBarLayoutPersistence {
 
     static func loadLayout(
         current: MenuBarLayout?,
+        v7: MenuBarLayout? = nil,
         v6: MenuBarLayout? = nil,
         v5: MenuBarLayout? = nil,
         v4: MenuBarLayout? = nil,
@@ -1256,6 +1318,7 @@ enum MenuBarLayoutPersistence {
     {
         let preferred = self.preferredLayout(
             current: current,
+            v7: v7,
             v6: v6,
             v5: v5,
             v4: v4,
@@ -1263,10 +1326,13 @@ enum MenuBarLayoutPersistence {
             released: released,
             legacy: legacy)
         if let preferred,
-           current == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil || legacy == nil,
+           current == nil || v7 == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil ||
+           legacy ==
+           nil,
            let blobs = try? self.encoded(preferred)
         {
             userDefaults.set(blobs.current, forKey: MenuBarLayoutUserDefaultsKey.layoutCurrent)
+            userDefaults.set(blobs.v7, forKey: MenuBarLayoutUserDefaultsKey.layoutV7)
             userDefaults.set(blobs.v6, forKey: MenuBarLayoutUserDefaultsKey.layoutV6)
             userDefaults.set(blobs.v5, forKey: MenuBarLayoutUserDefaultsKey.layoutV5)
             userDefaults.set(blobs.v4, forKey: MenuBarLayoutUserDefaultsKey.layoutV4)
@@ -1279,6 +1345,7 @@ enum MenuBarLayoutPersistence {
 
     static func loadOverrides(
         current: [String: MenuBarLayout]?,
+        v7: [String: MenuBarLayout]? = nil,
         v6: [String: MenuBarLayout]? = nil,
         v5: [String: MenuBarLayout]? = nil,
         v4: [String: MenuBarLayout]? = nil,
@@ -1290,17 +1357,23 @@ enum MenuBarLayoutPersistence {
     {
         let preferred = self.preferredOverrides(
             current: current,
+            v7: v7,
             v6: v6,
             v5: v5,
             v4: v4,
             v3: v3,
             released: released,
             legacy: legacy)
-        if current != nil || v6 != nil || v5 != nil || v4 != nil || v3 != nil || released != nil || legacy != nil,
-           current == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil || legacy == nil,
-           let blobs = try? self.encodedOverrides(preferred)
+        if current != nil || v7 != nil || v6 != nil || v5 != nil || v4 != nil || v3 != nil || released != nil ||
+            legacy !=
+            nil,
+            current == nil || v7 == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil ||
+            legacy ==
+            nil,
+            let blobs = try? self.encodedOverrides(preferred)
         {
             userDefaults.set(blobs.current, forKey: MenuBarLayoutUserDefaultsKey.overridesCurrent)
+            userDefaults.set(blobs.v7, forKey: MenuBarLayoutUserDefaultsKey.overridesV7)
             userDefaults.set(blobs.v6, forKey: MenuBarLayoutUserDefaultsKey.overridesV6)
             userDefaults.set(blobs.v5, forKey: MenuBarLayoutUserDefaultsKey.overridesV5)
             userDefaults.set(blobs.v4, forKey: MenuBarLayoutUserDefaultsKey.overridesV4)
@@ -1315,6 +1388,12 @@ enum MenuBarLayoutPersistence {
         _ conditionals: [MenuBarLayoutConditional]) -> [MenuBarLayoutConditional]
     {
         conditionals.compactMap(\.releasedCompatible)
+    }
+
+    static func v7CompatibleLibrary(
+        _ conditionals: [MenuBarLayoutConditional]) -> [MenuBarLayoutConditional]
+    {
+        conditionals.filter(\.hasV7Representation)
     }
 
     static func v6CompatibleLibrary(
@@ -1348,6 +1427,7 @@ enum MenuBarLayoutPersistence {
     /// edits, and deletions; changing a nonempty projection to an empty library means clear everything.
     static func preferredLibrary(
         current: [MenuBarLayoutConditional]?,
+        v7: [MenuBarLayoutConditional]? = nil,
         v6: [MenuBarLayoutConditional]? = nil,
         v5: [MenuBarLayoutConditional]? = nil,
         v4: [MenuBarLayoutConditional]? = nil,
@@ -1356,6 +1436,17 @@ enum MenuBarLayoutPersistence {
         legacy: [MenuBarLayoutConditional]?)
         -> [MenuBarLayoutConditional]?
     {
+        if let v7 {
+            let older = self.preferredLibrary(
+                current: v7,
+                v6: v6,
+                v5: v5,
+                v4: v4,
+                v3: v3,
+                released: released,
+                legacy: legacy)
+            return self.reconcileV7Library(current: current, older: older)
+        }
         if let v6 {
             let older = self.preferredLibrary(current: v6, v5: v5, v4: v4, v3: v3, released: released, legacy: legacy)
             guard let current, let older else { return older }
@@ -1409,6 +1500,18 @@ enum MenuBarLayoutPersistence {
         return legacy
     }
 
+    private static func reconcileV7Library(
+        current: [MenuBarLayoutConditional]?,
+        older: [MenuBarLayoutConditional]?) -> [MenuBarLayoutConditional]?
+    {
+        guard let current, let older else { return older }
+        if self.v7CompatibleLibrary(current) == older { return current }
+        guard !older.isEmpty else { return older }
+        let olderIDs = Set(older.map(\.id))
+        let invisible = current.filter { !$0.hasV7Representation && !olderIDs.contains($0.id) }
+        return older + invisible
+    }
+
     static func needsStartupDualWrite(
         current: [MenuBarLayoutConditional]?,
         legacy: [MenuBarLayoutConditional]?)
@@ -1430,6 +1533,7 @@ enum MenuBarLayoutPersistence {
         let released = self.releasedCompatibleLibrary(conditionals)
         return try EncodedGenerations(
             current: encoder.encode(conditionals),
+            v7: encoder.encode(self.v7CompatibleLibrary(conditionals)),
             v6: encoder.encode(self.v6CompatibleLibrary(conditionals)),
             v5: encoder.encode(v5),
             v4: encoder.encode(v5.map(\.v4Compatible)),
@@ -1442,6 +1546,7 @@ enum MenuBarLayoutPersistence {
     /// Once all layers exist, mismatches remain intact so edits from an older release keep winning.
     static func loadLibrary(
         current: [MenuBarLayoutConditional]?,
+        v7: [MenuBarLayoutConditional]? = nil,
         v6: [MenuBarLayoutConditional]? = nil,
         v5: [MenuBarLayoutConditional]? = nil,
         v4: [MenuBarLayoutConditional]? = nil,
@@ -1453,6 +1558,7 @@ enum MenuBarLayoutPersistence {
     {
         let preferred = self.preferredLibrary(
             current: current,
+            v7: v7,
             v6: v6,
             v5: v5,
             v4: v4,
@@ -1460,10 +1566,13 @@ enum MenuBarLayoutPersistence {
             released: released,
             legacy: legacy)
         if let preferred,
-           current == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil || legacy == nil,
+           current == nil || v7 == nil || v6 == nil || v5 == nil || v4 == nil || v3 == nil || released == nil ||
+           legacy ==
+           nil,
            let blobs = try? self.encodedLibrary(preferred)
         {
             userDefaults.set(blobs.current, forKey: MenuBarLayoutUserDefaultsKey.conditionalsCurrent)
+            userDefaults.set(blobs.v7, forKey: MenuBarLayoutUserDefaultsKey.conditionalsV7)
             userDefaults.set(blobs.v6, forKey: MenuBarLayoutUserDefaultsKey.conditionalsV6)
             userDefaults.set(blobs.v5, forKey: MenuBarLayoutUserDefaultsKey.conditionalsV5)
             userDefaults.set(blobs.v4, forKey: MenuBarLayoutUserDefaultsKey.conditionalsV4)

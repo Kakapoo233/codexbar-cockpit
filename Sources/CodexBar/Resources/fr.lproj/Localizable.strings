@@ -3237,3 +3237,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit calcule la recommandation pour la journée entière à partir de la courbe de confort et de la période de réinitialisation, en pourcentage du quota hebdomadaire total. Il ne s’agit pas du quota restant aujourd’hui. Affiche — sans données de compte locales valides et signale une estimation lorsque les observations sont incomplètes.";
 "cockpit_menu_daily_recommendation_accessibility" = "Utilisation quotidienne recommandée : %@ du quota hebdomadaire";
 "cockpit_menu_daily_recommendation_partial" = "%@ (estimation à partir d’observations incomplètes)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Aujourd’hui";
+"cockpit_menu_remaining_title" = "Disponible aujourd’hui";
+"cockpit_menu_remaining_percent" = "Disponible aujourd’hui : pourcentage";
+"cockpit_menu_remaining_bar" = "Disponible aujourd’hui : barre";
+"cockpit_menu_remaining_circle" = "Disponible aujourd’hui : cercle rempli";
+"cockpit_menu_remaining_accessibility" = "Disponible aujourd’hui : %@ de l’allocation du jour ; équivaut à %@ du quota hebdomadaire";
+"cockpit_menu_remaining_help" = "Affiche la part encore disponible de l’allocation du jour, dont le total représente 100 %. Respecte les plafonds personnels et le solde réel, et évolue selon la courbe de confort et la période de réinitialisation. ≤ indique une borne supérieure issue d’observations incomplètes ; ≈ des données anciennes ; — une valeur inconnue.";

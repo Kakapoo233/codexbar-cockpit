@@ -3243,3 +3243,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit oblicza zalecenie na cały dzień na podstawie krzywej komfortu i okresu resetowania, jako procent całkowitego limitu tygodniowego. Nie jest to pozostały limit na dziś. Wyświetla — bez prawidłowych danych konta lokalnego, a przy niepełnych obserwacjach oznacza wartość jako szacunkową.";
 "cockpit_menu_daily_recommendation_accessibility" = "Zalecane dzienne użycie: %@ limitu tygodniowego";
 "cockpit_menu_daily_recommendation_partial" = "%@ (oszacowanie na podstawie niepełnych obserwacji)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Dzisiaj";
+"cockpit_menu_remaining_title" = "Dostępne dzisiaj";
+"cockpit_menu_remaining_percent" = "Dostępne dzisiaj: procent";
+"cockpit_menu_remaining_bar" = "Dostępne dzisiaj: pasek";
+"cockpit_menu_remaining_circle" = "Dostępne dzisiaj: wypełnione koło";
+"cockpit_menu_remaining_accessibility" = "Dostępne dzisiaj: %@ dziennego przydziału; odpowiada %@ tygodniowego limitu";
+"cockpit_menu_remaining_help" = "Pokazuje pozostałą część dzisiejszego przydziału, którego całość stanowi 100%. Uwzględnia osobiste limity i rzeczywiste saldo oraz aktualizuje się według krzywej komfortu i okresu resetowania. ≤ oznacza górną granicę przy niepełnych obserwacjach; ≈ nieaktualne dane; — nieznaną wartość.";

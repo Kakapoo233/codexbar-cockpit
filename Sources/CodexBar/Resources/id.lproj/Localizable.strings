@@ -3244,3 +3244,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit menghitung saran untuk satu hari penuh berdasarkan kurva kenyamanan dan periode pengaturan ulang, sebagai persentase dari total kuota mingguan. Ini bukan sisa kuota hari ini. Menampilkan — jika tidak ada data akun lokal yang valid dan menandai nilai sebagai perkiraan saat pengamatan tidak lengkap.";
 "cockpit_menu_daily_recommendation_accessibility" = "Penggunaan harian yang disarankan: %@ dari kuota mingguan";
 "cockpit_menu_daily_recommendation_partial" = "%@ (perkiraan dari pengamatan yang tidak lengkap)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Hari ini";
+"cockpit_menu_remaining_title" = "Tersedia hari ini";
+"cockpit_menu_remaining_percent" = "Tersedia hari ini: persentase";
+"cockpit_menu_remaining_bar" = "Tersedia hari ini: batang";
+"cockpit_menu_remaining_circle" = "Tersedia hari ini: lingkaran terisi";
+"cockpit_menu_remaining_accessibility" = "Tersedia hari ini: %@ dari alokasi hari ini; setara dengan %@ dari kuota mingguan";
+"cockpit_menu_remaining_help" = "Menampilkan bagian alokasi hari ini yang masih tersedia, dengan total alokasi harian sebagai 100%. Mematuhi batas pribadi dan saldo aktual, serta diperbarui mengikuti kurva kenyamanan dan periode reset. ≤ menandai batas atas dari pengamatan yang tidak lengkap; ≈ data usang; — nilai tidak diketahui.";

@@ -3236,3 +3236,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit berechnet die Empfehlung für den ganzen Tag anhand der Komfortkurve und des Rücksetzungszeitraums, als Prozentsatz des gesamten Wochenkontingents. Sie entspricht nicht dem heute noch verfügbaren Kontingent. Ohne gültige lokale Kontodaten erscheint —; bei unvollständigen Beobachtungen wird der Wert als Schätzung gekennzeichnet.";
 "cockpit_menu_daily_recommendation_accessibility" = "Tägliche Nutzungsempfehlung: %@ des Wochenkontingents";
 "cockpit_menu_daily_recommendation_partial" = "%@ (aus unvollständigen Beobachtungen geschätzt)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Heute";
+"cockpit_menu_remaining_title" = "Heute verfügbar";
+"cockpit_menu_remaining_percent" = "Heute verfügbar: Prozent";
+"cockpit_menu_remaining_bar" = "Heute verfügbar: Balken";
+"cockpit_menu_remaining_circle" = "Heute verfügbar: gefüllter Kreis";
+"cockpit_menu_remaining_accessibility" = "Heute verfügbar: %@ des heutigen Kontingents; entspricht %@ des Wochenkontingents";
+"cockpit_menu_remaining_help" = "Zeigt den noch verfügbaren Anteil des heutigen Kontingents; das gesamte Tageskontingent entspricht 100%. Berücksichtigt persönliche Obergrenzen und den tatsächlichen Rest und wird anhand der Komfortkurve und des Rücksetzzeitraums aktualisiert. ≤ kennzeichnet eine Obergrenze bei unvollständigen Beobachtungen, ≈ veraltete Daten und — einen unbekannten Wert.";

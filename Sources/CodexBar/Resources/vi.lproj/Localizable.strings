@@ -3243,3 +3243,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit tính mức đề xuất cho cả ngày dựa trên đường cong thoải mái và khoảng thời gian đặt lại, theo phần trăm tổng hạn mức hằng tuần. Đây không phải hạn mức còn lại hôm nay. Hiển thị — khi không có dữ liệu tài khoản cục bộ hợp lệ và đánh dấu là ước tính nếu quan sát chưa đầy đủ.";
 "cockpit_menu_daily_recommendation_accessibility" = "Mức dùng hằng ngày được đề xuất: %@ hạn mức hằng tuần";
 "cockpit_menu_daily_recommendation_partial" = "%@ (ước tính từ các quan sát chưa đầy đủ)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Hôm nay";
+"cockpit_menu_remaining_title" = "Còn dùng được hôm nay";
+"cockpit_menu_remaining_percent" = "Còn dùng được hôm nay: phần trăm";
+"cockpit_menu_remaining_bar" = "Còn dùng được hôm nay: thanh";
+"cockpit_menu_remaining_circle" = "Còn dùng được hôm nay: hình tròn tô đầy";
+"cockpit_menu_remaining_accessibility" = "Còn dùng được hôm nay: %@ phân bổ trong ngày; tương đương %@ hạn mức tuần";
+"cockpit_menu_remaining_help" = "Hiển thị tỷ lệ phân bổ hôm nay vẫn còn dùng được, với tổng phân bổ trong ngày là 100%. Tuân theo giới hạn cá nhân và số dư thực tế, đồng thời cập nhật theo đường cong thoải mái và khoảng thời gian đặt lại. ≤ chỉ giới hạn trên khi quan sát chưa đầy đủ; ≈ chỉ dữ liệu cũ; — nghĩa là chưa biết.";

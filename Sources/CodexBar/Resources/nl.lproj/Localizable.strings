@@ -3235,3 +3235,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit berekent het advies voor de hele dag op basis van de comfortcurve en de resetperiode, als percentage van het totale weekquotum. Dit is niet het resterende quotum voor vandaag. Toont — zonder geldige lokale accountgegevens en markeert de waarde als schatting bij onvolledige waarnemingen.";
 "cockpit_menu_daily_recommendation_accessibility" = "Aanbevolen dagelijks gebruik: %@ van het weekquotum";
 "cockpit_menu_daily_recommendation_partial" = "%@ (geschat op basis van onvolledige waarnemingen)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Vandaag";
+"cockpit_menu_remaining_title" = "Vandaag beschikbaar";
+"cockpit_menu_remaining_percent" = "Vandaag beschikbaar: percentage";
+"cockpit_menu_remaining_bar" = "Vandaag beschikbaar: balk";
+"cockpit_menu_remaining_circle" = "Vandaag beschikbaar: gevulde cirkel";
+"cockpit_menu_remaining_accessibility" = "Vandaag beschikbaar: %@ van de dagtoewijzing; komt overeen met %@ van het weekquotum";
+"cockpit_menu_remaining_help" = "Toont welk deel van de toewijzing voor vandaag nog beschikbaar is, waarbij de volledige dagtoewijzing 100% is. Houdt rekening met persoonlijke limieten en het werkelijke saldo en wordt bijgewerkt op basis van de comfortcurve en het resetvenster. ≤ geeft een bovengrens bij onvolledige waarnemingen aan; ≈ verouderde gegevens; — een onbekende waarde.";

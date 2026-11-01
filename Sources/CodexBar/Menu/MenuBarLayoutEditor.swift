@@ -54,6 +54,9 @@ enum MenuBarLayoutPaletteTokens {
             + MenuBarLayoutNamedExtra.availableTokens(provider: provider, snapshot: snapshot) + [
                 .percent(window: .automatic),
                 .cockpitDailyRecommendation,
+                .cockpitDailyRemaining(style: .percent),
+                .cockpitDailyRemaining(style: .bar),
+                .cockpitDailyRemaining(style: .circle),
                 .usageBar,
                 .progressBar(window: .session),
                 .progressBar(window: .weekly),
@@ -91,6 +94,9 @@ enum MenuBarLayoutPaletteTokens {
         .percent(window: .spend),
         .percent(window: .automatic),
         .cockpitDailyRecommendation,
+        .cockpitDailyRemaining(style: .percent),
+        .cockpitDailyRemaining(style: .bar),
+        .cockpitDailyRemaining(style: .circle),
         .usageBar,
         .progressBar(window: .session),
         .progressBar(window: .weekly),
@@ -965,7 +971,7 @@ struct MenuBarLayoutPreview: View {
 
     var body: some View {
         if self.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
-            .contains(.cockpitDailyRecommendation)
+            .contains(where: \.readsCockpitPlan)
         {
             TimelineView(.periodic(from: .now, by: 60)) { context in
                 MenuBarTextLanguage.withEnglish(enabled: self.settings.menuBarEnglishText) {
@@ -1034,7 +1040,7 @@ struct MenuBarLayoutPreview: View {
                 last30DaysUSD: cost?.last30DaysCostUSD.flatMap(toUSD)),
             includeCockpitRecommendation: self.layout
                 .flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
-                .contains(.cockpitDailyRecommendation),
+                .contains(where: \.readsCockpitPlan),
             now: now)
     }
 
@@ -1116,7 +1122,8 @@ struct MenuBarLayoutPreview: View {
             spendPace: samplePace(spend),
             spendAmount: "$460",
             spendBudget: "$460 / $1,000",
-            cockpitDailyRecommendationPercent: 15)
+            cockpitDailyRecommendationPercent: 15,
+            cockpitDailyRemaining: .init(percent: 75, weeklyPercent: 15, isUpperBound: false, isStale: false))
     }
 }
 
@@ -1260,6 +1267,7 @@ extension MenuBarLayoutToken {
         case .tokensPerMinute: L("Tokens / min")
         case .tokensSparkline: L("Tokens / min graph")
         case .cockpitDailyRecommendation: L("cockpit_menu_daily_recommendation")
+        case let .cockpitDailyRemaining(style): L("cockpit_menu_remaining_\(style.rawValue)")
         case .costToday: L("menu_bar_layout_token_cost_today")
         case .costWindow: L("menu_bar_layout_token_cost_window")
         case .spendAmount: L("Spend")
@@ -1314,6 +1322,7 @@ extension MenuBarLayoutToken {
         case .tokensPerMinute: "speedometer"
         case .tokensSparkline: "chart.bar.xaxis"
         case .cockpitDailyRecommendation: "gauge.with.dots.needle.50percent"
+        case .cockpitDailyRemaining: "circle.bottomhalf.filled"
         case .costToday, .spendAmount, .spendBudget: "dollarsign.circle"
         case .costWindow: "calendar.badge.clock"
         case .separatorDot: "smallcircle.filled.circle"

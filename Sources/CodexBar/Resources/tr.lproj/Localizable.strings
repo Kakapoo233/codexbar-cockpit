@@ -3243,3 +3243,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit, konfor eğrisi ve sıfırlama dönemine göre tüm gün için öneriyi toplam haftalık kotanın yüzdesi olarak hesaplar. Bu, bugün kalan kota değildir. Geçerli yerel hesap verisi yoksa — gösterilir; gözlemler eksikse değer tahmin olarak işaretlenir.";
 "cockpit_menu_daily_recommendation_accessibility" = "Önerilen günlük kullanım: haftalık kotanın %@ kadarı";
 "cockpit_menu_daily_recommendation_partial" = "%@ (eksik gözlemlerden tahmin edilmiştir)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Bugün";
+"cockpit_menu_remaining_title" = "Bugün kullanılabilir";
+"cockpit_menu_remaining_percent" = "Bugün kullanılabilir: yüzde";
+"cockpit_menu_remaining_bar" = "Bugün kullanılabilir: çubuk";
+"cockpit_menu_remaining_circle" = "Bugün kullanılabilir: dolu daire";
+"cockpit_menu_remaining_accessibility" = "Bugün kullanılabilir: günlük payın %@ kadarı; haftalık kotanın %@ kadarına eşdeğer";
+"cockpit_menu_remaining_help" = "Bugünkü payın hâlâ kullanılabilir kısmını gösterir; günlük payın tamamı %100 kabul edilir. Kişisel sınırları ve gerçek bakiyeyi dikkate alır, konfor eğrisi ve sıfırlama aralığına göre güncellenir. ≤ eksik gözlemlere dayalı üst sınırı, ≈ eski verileri, — bilinmeyen değeri gösterir.";

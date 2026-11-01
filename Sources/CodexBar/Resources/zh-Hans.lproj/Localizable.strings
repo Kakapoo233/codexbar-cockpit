@@ -3234,3 +3234,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit 根据舒适曲线与重置窗口计算的全天建议，表示每周总额度的百分比；不是今日剩余额度。无有效本机账号数据时显示 —，观测不完整时标记为估算。";
 "cockpit_menu_daily_recommendation_accessibility" = "每日推荐用量：%@，占每周总额度";
 "cockpit_menu_daily_recommendation_partial" = "%@（观测不完整，估算）";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "今日";
+"cockpit_menu_remaining_title" = "今日还能用";
+"cockpit_menu_remaining_percent" = "今日还能用：数字";
+"cockpit_menu_remaining_bar" = "今日还能用：用量条";
+"cockpit_menu_remaining_circle" = "今日还能用：圆形填充";
+"cockpit_menu_remaining_accessibility" = "今日还能用：%@，占今日分配额度；相当于每周总额度的 %@";
+"cockpit_menu_remaining_help" = "以今天分配的额度为100%，显示今日还能用的比例。遵守个人上限与实际余额，随舒适曲线和重置窗口更新；≤表示观测不完整时的上界，≈表示数据陈旧，—表示未知。";

@@ -3210,3 +3210,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit이 편안함 곡선과 초기화 기간을 바탕으로 계산한 하루 전체 권장 사용량이며, 전체 주간 한도의 백분율로 표시됩니다. 오늘 남은 사용량이 아닙니다. 유효한 로컬 계정 데이터가 없으면 —를 표시하고, 관측이 불완전하면 추정치로 표시합니다.";
 "cockpit_menu_daily_recommendation_accessibility" = "일일 권장 사용량: 주간 한도의 %@";
 "cockpit_menu_daily_recommendation_partial" = "%@ (불완전한 관측에 따른 추정치)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "오늘";
+"cockpit_menu_remaining_title" = "오늘 사용 가능";
+"cockpit_menu_remaining_percent" = "오늘 사용 가능: 숫자";
+"cockpit_menu_remaining_bar" = "오늘 사용 가능: 막대";
+"cockpit_menu_remaining_circle" = "오늘 사용 가능: 원 채우기";
+"cockpit_menu_remaining_accessibility" = "오늘 사용 가능: 오늘 할당량의 %@, 주간 총할당량의 %@에 해당";
+"cockpit_menu_remaining_help" = "오늘 할당량 전체를 100%로 하여 아직 사용할 수 있는 비율을 표시합니다. 개인 한도와 실제 잔여량을 준수하며 편안함 곡선과 초기화 시점에 따라 갱신됩니다. ≤는 불완전한 관측에 따른 상한, ≈는 오래된 데이터, —는 알 수 없음을 뜻합니다.";

@@ -3245,3 +3245,12 @@
 "cockpit_menu_daily_recommendation_help" = "Full-day recommendation calculated by Cockpit from the comfort curve and reset window, as a percentage of the total weekly quota. This is not today's remaining allowance. Shows — without valid local account data and marks incomplete observations as an estimate.";
 "cockpit_menu_daily_recommendation_accessibility" = "Daily recommendation: %@ of the weekly quota";
 "cockpit_menu_daily_recommendation_partial" = "%@ (estimated from incomplete observations)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Today";
+"cockpit_menu_remaining_title" = "Available today";
+"cockpit_menu_remaining_percent" = "Available today: percentage";
+"cockpit_menu_remaining_bar" = "Available today: bar";
+"cockpit_menu_remaining_circle" = "Available today: filled circle";
+"cockpit_menu_remaining_accessibility" = "Available today: %@ of today's allocation; equivalent to %@ of the weekly quota";
+"cockpit_menu_remaining_help" = "Shows the share of today's allocation still available, where the full daily allocation is 100%. Respects personal caps and the actual balance, and updates with the comfort curve and reset window. ≤ marks an upper bound from incomplete observations; ≈ marks stale data; — means unknown.";

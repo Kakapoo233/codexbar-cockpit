@@ -33,6 +33,33 @@ struct CockpitMenuBarRecommendationTests {
     }
 
     @Test
+    func `daily availability shares the home ratio respects caps and excludes foreign data`() throws {
+        try self.withFixture { store, plans, _ in
+            let earlier = self.snapshot(used: 25, capturedAt: self.now.addingTimeInterval(-60))
+            let latest = self.snapshot(used: 30)
+            plans.ingest([.claude: earlier])
+            plans.ingest([.claude: latest])
+            plans.setPersonalCap(20, for: .claude)
+            let remaining = try #require(self.renderData(store, snapshot: latest).cockpitDailyRemaining)
+            #expect(remaining.percent == 75)
+            #expect(remaining.weeklyPercent == 15)
+            #expect(remaining.isUpperBound)
+            #expect(!remaining.isStale)
+            #expect(remaining.percent == plans.status(for: .claude, on: self.now).remainingDailyBudgetPercent)
+            #expect(self.renderData(store, snapshot: latest, local: false).cockpitDailyRemaining == nil)
+            #expect(self.renderData(store, snapshot: latest, included: false).cockpitDailyRemaining == nil)
+            #expect(self.renderData(store, snapshot: self.snapshot(account: "other")).cockpitDailyRemaining == nil)
+            let first = store.cockpitMenuBarPlanValues(provider: .claude, snapshot: latest, now: self.now)
+            plans.setPersonalCap(10, for: .claude)
+            let second = store.cockpitMenuBarPlanValues(provider: .claude, snapshot: latest, now: self.now)
+            #expect(second.remaining?.percent == 50)
+            #expect(first != second)
+            plans.setPersonalCap(0, for: .claude)
+            #expect(self.renderData(store, snapshot: latest).cockpitDailyRemaining?.percent == 0)
+        }
+    }
+
+    @Test
     func `account organization provider and unknown identities cannot borrow a recommendation`() throws {
         try self.withFixture { store, plans, _ in
             let original = self.snapshot()
@@ -123,6 +150,11 @@ struct CockpitMenuBarRecommendationTests {
             defer { controller.releaseStatusItemsForTesting() }
             controller.scheduleMenuBarCountdownRefreshIfNeeded(now: self.now)
             #expect(controller._test_isMenuBarCountdownRefreshScheduled())
+            for style in CockpitDailyRemainingStyle.allCases {
+                settings.menuBarLayout = MenuBarLayout(lines: [[.cockpitDailyRemaining(style: style)]])
+                controller.scheduleMenuBarCountdownRefreshIfNeeded(now: self.now)
+                #expect(controller._test_isMenuBarCountdownRefreshScheduled())
+            }
             settings.menuBarLayout = MenuBarLayout(lines: [[.percent(window: .automatic)]])
             controller.scheduleMenuBarCountdownRefreshIfNeeded(now: self.now)
             #expect(!controller._test_isMenuBarCountdownRefreshScheduled())
@@ -139,16 +171,18 @@ struct CockpitMenuBarRecommendationTests {
         account: String? = "synthetic-menu-account",
         organization: String = "synthetic-org",
         provider: UsageProvider = .claude,
-        minutes: Int = 10080) -> UsageSnapshot
+        minutes: Int = 10080,
+        used: Double = 30,
+        capturedAt: Date? = nil) -> UsageSnapshot
     {
         UsageSnapshot(
             primary: nil,
             secondary: RateWindow(
-                usedPercent: 30,
+                usedPercent: used,
                 windowMinutes: minutes,
                 resetsAt: self.now.addingTimeInterval(5 * 86400),
                 resetDescription: nil),
-            updatedAt: self.now,
+            updatedAt: capturedAt ?? self.now,
             identity: account.map { ProviderIdentitySnapshot(
                 providerID: provider.instanceID,
                 accountEmail: nil,

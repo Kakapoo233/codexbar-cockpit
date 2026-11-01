@@ -3244,3 +3244,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit پیشنهاد کل روز را بر اساس منحنی آسودگی و بازهٔ بازنشانی، به‌صورت درصدی از کل سهمیهٔ هفتگی محاسبه می‌کند. این مقدار سهمیهٔ باقی‌ماندهٔ امروز نیست. بدون داده‌های معتبر حساب محلی، — نمایش داده می‌شود و در صورت ناقص بودن مشاهدات، مقدار به‌عنوان تخمین مشخص می‌شود.";
 "cockpit_menu_daily_recommendation_accessibility" = "مصرف روزانهٔ پیشنهادی: %@ از سهمیهٔ هفتگی";
 "cockpit_menu_daily_recommendation_partial" = "%@ (تخمین بر اساس مشاهدات ناقص)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "امروز";
+"cockpit_menu_remaining_title" = "قابل استفاده امروز";
+"cockpit_menu_remaining_percent" = "قابل استفاده امروز: درصد";
+"cockpit_menu_remaining_bar" = "قابل استفاده امروز: نوار";
+"cockpit_menu_remaining_circle" = "قابل استفاده امروز: دایره پرشونده";
+"cockpit_menu_remaining_accessibility" = "قابل استفاده امروز: %@ از سهم امروز؛ معادل %@ از سهمیه هفتگی";
+"cockpit_menu_remaining_help" = "بخش باقی‌مانده از سهم امروز را نشان می‌دهد؛ کل سهم روزانه برابر با ۱۰۰٪ است. سقف شخصی و موجودی واقعی را رعایت می‌کند و بر پایه منحنی راحتی و بازه بازنشانی به‌روز می‌شود. ≤ حد بالای حاصل از مشاهدات ناقص، ≈ داده‌های قدیمی و — مقدار نامعلوم را نشان می‌دهد.";

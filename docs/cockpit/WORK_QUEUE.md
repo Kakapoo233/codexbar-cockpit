@@ -4,6 +4,7 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Add today’s available allowance to the menu-bar layout in three forms | Implemented and installed in 0.8.9 | Percentage, bar and filled circle agree with the homepage daily-allocation ratio, update while closed, preserve uncertainty and show the weekly equivalent accessibly. |
 | Restore calendar text to its size before the 50% enlargement | Implemented and installed in 0.8.8 | Original native type sizes, matching date-cell and badge dimensions, and working date selectors. |
 | Add Cockpit daily recommendation to the top menu-bar layout | Implemented and installed in 0.8.7 | Optional localized component matches full-day advice, updates while the menu is closed, preserves account boundaries and existing layouts, and follows the English status-text setting. |
 | Keep date-range choices reachable while scrolling Statistics | Implemented and installed in 0.8.6 | A fixed left sidebar remains visible and selectable while the statistics content scrolls independently. |
@@ -21,6 +22,8 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 | Integrate usage receipts into Usage & Spend | Implemented and installed in 0.8.0 | One action on the selected historical session, preview/export in context, no separate receipt navigation page. |
 | Diagnose Usage & Spend not working | Closed by user | User reports the problem is no longer present and requested skipping it; no speculative fix. |
 | Update Settings About | Delivered; live-verified | Correct fork identity, version, project/support/changelog links and upstream attribution. |
+
+0.8.9 validation: 194 focused tests across 12 suites passed, covering daily-allocation mapping, manual caps, missing/partial/stale data, account and remote-render isolation, all three render forms, English status-text override, refresh scheduling, layout editing and V8/V7/V6-and-earlier persistence. Synthetic light/dark previews were inspected locally. `make check` passed for 3,257 Swift files; the final test-helper fix passed targeted format/lint. Packaging, signatures and isolated startup passed. Developer 0.8.9 build 29 is installed and verified running, with its executable matching the final package and a 0.8.8 backup retained. Existing layouts remain unchanged until the user adds components. Live editor interaction remains unverified because the UI connection times out. Screenshots and account data remain local.
 
 0.8.8 validation: eight calendar picker/period tests passed, including original 13-point native selector text and binding updates. `make check` passed for 3,254 Swift files. Packaging, signatures and isolated startup passed. Developer 0.8.8 build 28 is installed and verified running, with the executable matching the package and a 0.8.7 backup retained. Live visual inspection remains unavailable because the UI connection times out.
 

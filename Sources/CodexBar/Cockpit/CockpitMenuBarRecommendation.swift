@@ -17,7 +17,52 @@ struct CockpitMenuBarRecommendation: Hashable {
     }
 }
 
+/// Both units come from the same plan status; partial observations provide an upper bound.
+struct CockpitMenuBarDailyRemaining: Hashable {
+    let percent: Double
+    let weeklyPercent: Double
+    let isUpperBound: Bool
+    let isStale: Bool
+
+    init(percent: Double, weeklyPercent: Double, isUpperBound: Bool, isStale: Bool) {
+        self.percent = percent
+        self.weeklyPercent = weeklyPercent
+        self.isUpperBound = isUpperBound
+        self.isStale = isStale
+    }
+
+    init?(status: CockpitDayStatus?) {
+        guard let status, let percent = status.remainingDailyBudgetPercent,
+              let weekly = status.remainingSuggestedPercent,
+              percent.isFinite, (0...100).contains(percent), weekly.isFinite, weekly >= 0 else { return nil }
+        self.init(
+            percent: percent,
+            weeklyPercent: weekly,
+            isUpperBound: status.coverage != .complete,
+            isStale: status.isStale)
+    }
+}
+
+struct CockpitMenuBarPlanValues: Hashable {
+    let recommendation: CockpitMenuBarRecommendation?
+    let remaining: CockpitMenuBarDailyRemaining?
+
+    init(status: CockpitDayStatus?) {
+        self.recommendation = CockpitMenuBarRecommendation(status: status)
+        self.remaining = CockpitMenuBarDailyRemaining(status: status)
+    }
+}
+
 extension UsageStore {
+    func cockpitMenuBarPlanValues(
+        provider: UsageProvider,
+        snapshot: UsageSnapshot?,
+        now: Date = Date()) -> CockpitMenuBarPlanValues
+    {
+        CockpitMenuBarPlanValues(status: self.cockpitPlanStore?.status(
+            for: provider, matching: snapshot, on: now))
+    }
+
     func cockpitMenuBarRecommendation(
         provider: UsageProvider,
         snapshot: UsageSnapshot?,

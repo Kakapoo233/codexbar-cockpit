@@ -3242,3 +3242,12 @@
 "cockpit_menu_daily_recommendation_help" = "快適度曲線とリセット期間に基づいて Cockpit が計算した1日全体の推奨使用量です。週の合計利用枠に対する割合を示し、今日の残り利用枠ではありません。有効なローカルアカウントデータがない場合は — を表示し、観測が不完全な場合は推定値として示します。";
 "cockpit_menu_daily_recommendation_accessibility" = "1日の推奨使用量：週間利用枠の %@";
 "cockpit_menu_daily_recommendation_partial" = "%@（不完全な観測に基づく推定値）";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "今日";
+"cockpit_menu_remaining_title" = "今日の利用可能量";
+"cockpit_menu_remaining_percent" = "今日の利用可能量：数値";
+"cockpit_menu_remaining_bar" = "今日の利用可能量：バー";
+"cockpit_menu_remaining_circle" = "今日の利用可能量：円の塗りつぶし";
+"cockpit_menu_remaining_accessibility" = "今日の利用可能量：今日の割り当ての %@、週間総割り当ての %@ に相当";
+"cockpit_menu_remaining_help" = "今日の割り当て全体を100%として、まだ利用できる割合を表示します。個人の上限と実際の残量を守り、快適さの曲線とリセット時期に応じて更新します。≤ は観測が不完全な場合の上限、≈ は古いデータ、— は不明を示します。";

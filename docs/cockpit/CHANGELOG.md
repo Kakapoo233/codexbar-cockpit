@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.9 — Today’s available allowance in the menu bar
+
+- Add percentage, continuous bar and bottom-up filled-circle components for today’s available allowance. All three use the effective daily allocation as 100%, respect manual caps and actual balance, and expose the weekly equivalent in accessibility text.
+- Preserve upper bounds for incomplete observations and distinguish stale or unknown values. Reuse the shared planner, account checks, minute refresh, localization and English status-text preference.
+- Store new components in Cockpit V8 while retaining older-readable layout projections. Existing layouts remain unchanged until edited.
+
 ## 0.8.8 — Restore original calendar text size
 
 - Restore calendar typography to its size before the 50% enlargement, including date cells, selectors, details and chart labels. Return the associated cell, badge and chart dimensions to their original sizes.

@@ -3237,3 +3237,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit beräknar rekommendationen för hela dagen utifrån komfortkurvan och återställningsperioden, som en procentandel av den totala veckokvoten. Det är inte dagens återstående kvot. Visar — utan giltiga lokala kontouppgifter och markerar värdet som en uppskattning vid ofullständiga observationer.";
 "cockpit_menu_daily_recommendation_accessibility" = "Rekommenderad daglig användning: %@ av veckokvoten";
 "cockpit_menu_daily_recommendation_partial" = "%@ (uppskattat utifrån ofullständiga observationer)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Idag";
+"cockpit_menu_remaining_title" = "Tillgängligt idag";
+"cockpit_menu_remaining_percent" = "Tillgängligt idag: procent";
+"cockpit_menu_remaining_bar" = "Tillgängligt idag: stapel";
+"cockpit_menu_remaining_circle" = "Tillgängligt idag: fylld cirkel";
+"cockpit_menu_remaining_accessibility" = "Tillgängligt idag: %@ av dagens tilldelning; motsvarar %@ av veckokvoten";
+"cockpit_menu_remaining_help" = "Visar den andel av dagens tilldelning som fortfarande är tillgänglig, där hela dagstilldelningen är 100 %. Tar hänsyn till personliga gränser och faktiskt saldo och uppdateras efter komfortkurvan och återställningsperioden. ≤ anger en övre gräns vid ofullständiga observationer; ≈ inaktuella data; — ett okänt värde.";

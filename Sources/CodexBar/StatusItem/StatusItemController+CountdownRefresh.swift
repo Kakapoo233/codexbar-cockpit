@@ -236,7 +236,7 @@ extension StatusItemController {
         let tokens = resolution.layout.flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
         guard metrics.contains(where: \.isClockDerivedRate)
             || tokens.contains(.runsOut) || tokens.contains(.runsOutCompact)
-            || tokens.contains(.cockpitDailyRecommendation) else { return [] }
+            || tokens.contains(where: \.readsCockpitPlan) else { return [] }
         let secondsIntoMinute = now.timeIntervalSince1970.truncatingRemainder(dividingBy: 60)
         return [max(
             Self.menuBarCountdownRefreshEpsilon,

@@ -3239,3 +3239,12 @@
 "cockpit_menu_daily_recommendation_help" = "Cockpit calcula a recomendación para todo o día a partir da curva de confort e do período de restablecemento, como porcentaxe da cota semanal total. Non é a cota restante de hoxe. Mostra — se non hai datos válidos da conta local e indica que é unha estimación cando as observacións son incompletas.";
 "cockpit_menu_daily_recommendation_accessibility" = "Uso diario recomendado: %@ da cota semanal";
 "cockpit_menu_daily_recommendation_partial" = "%@ (estimado a partir de observacións incompletas)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "Hoxe";
+"cockpit_menu_remaining_title" = "Dispoñible hoxe";
+"cockpit_menu_remaining_percent" = "Dispoñible hoxe: porcentaxe";
+"cockpit_menu_remaining_bar" = "Dispoñible hoxe: barra";
+"cockpit_menu_remaining_circle" = "Dispoñible hoxe: círculo cheo";
+"cockpit_menu_remaining_accessibility" = "Dispoñible hoxe: %@ da asignación diaria; equivale ao %@ da cota semanal";
+"cockpit_menu_remaining_help" = "Mostra a parte da asignación de hoxe aínda dispoñible; o total diario equivale ao 100%. Respecta os límites persoais e o saldo real e actualízase segundo a curva de comodidade e o período de reinicio. ≤ indica un límite superior con observacións incompletas; ≈ datos antigos; — un valor descoñecido.";

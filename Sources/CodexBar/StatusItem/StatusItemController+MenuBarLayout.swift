@@ -212,7 +212,7 @@ extension StatusItemController {
             includeLocalDerivedData: !self.menuBarUsageSource(for: provider).isFleet,
             includeCockpitRecommendation: self.renderedMenuBarLayoutResolution(for: provider).layout
                 .flattenedTokens(conditionals: self.settings.menuBarLayoutConditionals)
-                .contains(.cockpitDailyRecommendation),
+                .contains(where: \.readsCockpitPlan),
             now: now)
     }
 
@@ -379,8 +379,10 @@ extension UsageStore {
             ? self.menuBarLayoutSpend(provider: provider, snapshot: snapshot, now: now) : .unavailable
         let providerName = L(self.metadata(for: provider).displayName)
         let automatic = MenuBarLayoutRenderWindow(windows.automatic)
-        let recommendation = includeLocalDerivedData && includeCockpitRecommendation
-            ? self.cockpitMenuBarRecommendation(provider: provider, snapshot: snapshot, now: now) : nil
+        let plan = includeLocalDerivedData && includeCockpitRecommendation
+            ? self.cockpitMenuBarPlanValues(provider: provider, snapshot: snapshot, now: now)
+            : CockpitMenuBarPlanValues(status: nil)
+        let recommendation = plan.recommendation
 
         return MenuBarLayoutRenderData(
             provider: provider,
@@ -462,7 +464,8 @@ extension UsageStore {
             spendCurrencySymbol: spend.currencySymbol,
             cockpitDailyRecommendationPercent: recommendation?.percent,
             cockpitDailyRecommendationIsPartial: recommendation?.isPartial ?? false,
-            cockpitDailyRecommendationIsStale: recommendation?.isStale ?? false)
+            cockpitDailyRecommendationIsStale: recommendation?.isStale ?? false,
+            cockpitDailyRemaining: plan.remaining)
     }
 
     func menuBarLayoutWindows(

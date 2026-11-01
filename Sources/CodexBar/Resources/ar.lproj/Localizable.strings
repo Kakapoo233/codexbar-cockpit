@@ -3244,3 +3244,12 @@
 "cockpit_menu_daily_recommendation_help" = "يحسب Cockpit التوصية لليوم الكامل استنادًا إلى منحنى الراحة وفترة إعادة التعيين، كنسبة مئوية من إجمالي الحصة الأسبوعية. هذه ليست الحصة المتبقية اليوم. يعرض — عند عدم توفر بيانات صالحة للحساب المحلي، ويشير إلى أن القيمة تقديرية عندما تكون الملاحظات غير مكتملة.";
 "cockpit_menu_daily_recommendation_accessibility" = "الاستخدام اليومي الموصى به: %@ من الحصة الأسبوعية";
 "cockpit_menu_daily_recommendation_partial" = "%@ (تقدير يستند إلى ملاحظات غير مكتملة)";
+
+// Today's remaining daily allocation in menu-bar layouts.
+"cockpit_menu_remaining_short" = "اليوم";
+"cockpit_menu_remaining_title" = "المتاح اليوم";
+"cockpit_menu_remaining_percent" = "المتاح اليوم: نسبة مئوية";
+"cockpit_menu_remaining_bar" = "المتاح اليوم: شريط";
+"cockpit_menu_remaining_circle" = "المتاح اليوم: دائرة ممتلئة";
+"cockpit_menu_remaining_accessibility" = "المتاح اليوم: %@ من مخصصات اليوم؛ يعادل %@ من الحصة الأسبوعية";
+"cockpit_menu_remaining_help" = "يعرض الجزء الذي لا يزال متاحًا من مخصصات اليوم، حيث تمثل المخصصات اليومية الكاملة 100%. يراعي الحدود الشخصية والرصيد الفعلي ويتحدث وفق منحنى الراحة وفترة إعادة التعيين. يشير ≤ إلى حد أعلى عند عدم اكتمال الملاحظات، و≈ إلى بيانات قديمة، و— إلى قيمة غير معروفة.";
