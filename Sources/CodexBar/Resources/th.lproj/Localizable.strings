@@ -3230,3 +3230,10 @@
 /* Daily-allocation ratio and weekly equivalent (English fallback) */
 "cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
 "cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "ประวัติโควตา";
+"cockpit_plan_history_coverage" = "บันทึกไว้: %@ – %@ (%d ตัวอย่าง)";
+"cockpit_plan_history_partial" = "แสดงเฉพาะข้อมูลที่บันทึกไว้เท่านั้น วันที่ขาดหายไม่ได้หมายความว่าไม่มีการใช้งาน";
+"cockpit_plan_history_empty" = "ไม่มีข้อมูลการสังเกตโควตาที่บันทึกไว้ในช่วงเวลานี้";
+"cockpit_plan_cycle_details" = "รายละเอียดรอบการรีเซ็ต";

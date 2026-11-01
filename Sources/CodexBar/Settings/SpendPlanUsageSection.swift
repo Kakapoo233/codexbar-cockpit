@@ -57,27 +57,44 @@ struct SpendPlanUsageSection: View {
         }
     }
 
+    func timeline(for provider: UsageProvider) -> SpendPlanHistoryTimelineView {
+        let controller = self.store.sharedSpendDashboardController()
+        return SpendPlanHistoryTimelineView(
+            provider: provider,
+            histories: self.store.planUtilizationHistorySelection(for: provider, readOnly: true).histories,
+            snapshot: self.store.snapshot(for: provider.instanceID),
+            period: controller.selectedPeriod,
+            referenceDate: controller.reportingDate,
+            calendar: controller.configuration?.bucketCalendar ?? .current)
+    }
+
     private func history(for provider: UsageProvider) -> some View {
         let histories = self.displayedHistories(for: provider)
         let controller = self.store.sharedSpendDashboardController()
+        let detailWidth = max(1, self.chartWidth - 32)
         let burndown = QuotaBurndownChartMenuView(
-            provider: provider, histories: histories, width: self.chartWidth, referenceDate: controller.reportingDate)
+            provider: provider, histories: histories, width: detailWidth, referenceDate: controller.reportingDate)
         return VStack(alignment: .leading, spacing: 10) {
             Text(ProviderDescriptorRegistry.descriptor(for: provider).metadata.displayName)
                 .font(.subheadline.weight(.semibold))
                 .padding(.horizontal, 16)
                 .padding(.top, 12)
-            if [.codex, .claude, .kiro].contains(provider), burndown.hasSeries {
-                burndown
-                Divider()
+            self.timeline(for: provider)
+            DisclosureGroup(L("cockpit_plan_cycle_details")) {
+                if [.codex, .claude, .kiro].contains(provider), burndown.hasSeries {
+                    burndown
+                    Divider()
+                }
+                PlanUtilizationHistoryChartMenuView(
+                    provider: provider,
+                    histories: histories,
+                    snapshot: self.store.snapshot(for: provider.instanceID),
+                    width: detailWidth,
+                    referenceDate: controller.reportingDate,
+                    pointLimit: nil)
             }
-            PlanUtilizationHistoryChartMenuView(
-                provider: provider,
-                histories: histories,
-                snapshot: self.store.snapshot(for: provider.instanceID),
-                width: self.chartWidth,
-                referenceDate: controller.reportingDate,
-                pointLimit: nil)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 12)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .overlay {

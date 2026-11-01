@@ -208,8 +208,15 @@ struct SpendDashboardRangeInteractionTests {
                 #expect(controller.selectedPeriod == period)
                 let highlighted = try #require(Self.findRangePicker(in: host))
                 #expect(highlighted.selectedSegment == index)
-                let histories = SpendPlanUsageSection(store: store).displayedHistories(for: .antigravity)
+                let section = SpendPlanUsageSection(store: store)
+                let histories = section.displayedHistories(for: .antigravity)
                 #expect(histories.flatMap(\.entries).count == sampleCount)
+                let timeline = section.timeline(for: .antigravity).model
+                #expect(timeline.points.count == sampleCount)
+                let earliest = try #require(entries.map(\.capturedAt).min())
+                let expectedBounds = period.bounds(now: now, calendar: calendar, earliest: earliest)
+                let expectedEnd = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+                #expect(timeline.domain == expectedBounds.lowerBound...expectedEnd)
             }
         }
     }

@@ -3220,3 +3220,10 @@
 /* Daily-allocation ratio and weekly equivalent */
 "cockpit_advice_weekly_equivalent" = "相当于周额度 %@";
 "cockpit_advice_daily_ratio_help" = "今日还能用以当日有效分配为 100%，手动上限优先；副值显示相当于周额度的比例。";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "额度历史";
+"cockpit_plan_history_coverage" = "实际记录：%@ – %@（%d 个样本）";
+"cockpit_plan_history_partial" = "仅显示实际采集的记录，缺失日期不表示用量为零。";
+"cockpit_plan_history_empty" = "此时间范围内没有额度记录。";
+"cockpit_plan_cycle_details" = "重置周期详情";

@@ -3196,3 +3196,10 @@
 /* Daily-allocation ratio and weekly equivalent (English fallback) */
 "cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
 "cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "할당량 기록";
+"cockpit_plan_history_coverage" = "기록 기간: %@ – %@ (샘플 %d개)";
+"cockpit_plan_history_partial" = "실제로 기록된 관측값만 표시합니다. 누락된 날짜가 사용량 0을 의미하지는 않습니다.";
+"cockpit_plan_history_empty" = "이 기간에는 할당량 관측 기록이 없습니다.";
+"cockpit_plan_cycle_details" = "초기화 주기 세부 정보";

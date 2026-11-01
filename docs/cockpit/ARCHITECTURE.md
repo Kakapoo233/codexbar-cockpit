@@ -39,6 +39,10 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   Plan Usage charts are embedded in Statistics and retain the existing account-scoped history selectors.
   They filter captured observations using the shared statistics period, reporting date and bucket time zone;
   Statistics charts retain all selected points, while compact menu charts keep their 30-point limit.
+  The primary Statistics quota timeline uses observation timestamps on the complete selected date axis,
+  with actual observation coverage shown separately. Missing dates remain empty and reset cycles are
+  separated. The original current-cycle burndown and cycle-utilization views remain in expandable
+  reset-cycle details; their cycle-based axes are not presented as the global reporting-period timeline.
   They are available independently of local cost tracking.
 - `CockpitComfortModel` represents subjective experience against recorded Token use. Its output is
   descriptive and never converted into an official quota percentage. Local Token history belongs to

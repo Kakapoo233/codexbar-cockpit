@@ -411,11 +411,15 @@ struct CockpitResetHistoryStoreTests {
 
         func history(anchor: String, shift: TimeInterval = 0) throws -> CockpitResetHistory {
             let source = try #require(URL(string: "https://example.invalid/synthetic-reset"))
-            let events = try (0..<4).map { index in
-                try CockpitResetEvent(
-                    id: index == 0 ? anchor : "\(anchor)-\(index)",
+            let events: [CockpitResetEvent] = try (0..<4).map { index in
+                let eventID = index == 0 ? anchor : "\(anchor)-\(index)"
+                let daysAgo = Double(1 + 2 * index)
+                let offset: TimeInterval = shift - daysAgo * 86400
+                let announcedAt = self.now.addingTimeInterval(offset)
+                return try CockpitResetEvent(
+                    id: eventID,
                     kind: .regular,
-                    announcedAt: self.now.addingTimeInterval(shift - Double(1 + 2 * index) * 86400),
+                    announcedAt: announcedAt,
                     text: "Synthetic reset announcement",
                     sourceType: "observed",
                     sourceURL: source)

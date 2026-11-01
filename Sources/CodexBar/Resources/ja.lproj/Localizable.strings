@@ -3228,3 +3228,10 @@
 /* Daily-allocation ratio and weekly equivalent (English fallback) */
 "cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
 "cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "利用枠の履歴";
+"cockpit_plan_history_coverage" = "記録期間：%@ – %@（%d 件のサンプル）";
+"cockpit_plan_history_partial" = "実際に記録された観測値のみを表示します。日付が欠けていても、使用量がゼロとは限りません。";
+"cockpit_plan_history_empty" = "この期間には利用枠の観測記録がありません。";
+"cockpit_plan_cycle_details" = "リセット周期の詳細";

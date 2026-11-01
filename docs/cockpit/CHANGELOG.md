@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.5 — Date-based quota history
+
+- Give Statistics a quota-history timeline whose date axis follows the selected 7/30/90-day, month-to-date or all-history range, even when every observation falls within the most recent days.
+- Show the dates actually covered by quota observations. Leave unobserved dates empty and separate reset cycles instead of connecting unrelated balances.
+- Preserve the existing current-cycle burndown and cycle-utilization charts under expandable reset-cycle details.
+
 ## 0.8.4 — Statistics range synchronization
 
 - Make Plan Usage history follow the Statistics page's 7/30/90-day, month-to-date and all-history selection, using the configured reporting time zone and observation dates.

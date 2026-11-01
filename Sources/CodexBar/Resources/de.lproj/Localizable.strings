@@ -3222,3 +3222,10 @@
 /* Daily-allocation ratio and weekly equivalent (English fallback) */
 "cockpit_advice_weekly_equivalent" = "Weekly quota: %@";
 "cockpit_advice_daily_ratio_help" = "Available today treats the effective daily allocation as 100%. A manual cap takes priority; the secondary value is its weekly-quota equivalent.";
+
+/* Recorded quota history and reset-cycle details */
+"cockpit_plan_history_title" = "Kontingentverlauf";
+"cockpit_plan_history_coverage" = "Erfasst: %@ – %@ (%d Messwerte)";
+"cockpit_plan_history_partial" = "Es werden nur erfasste Beobachtungen angezeigt. Fehlende Tage bedeuten nicht, dass nichts genutzt wurde.";
+"cockpit_plan_history_empty" = "Für diesen Zeitraum wurden keine Kontingentbeobachtungen erfasst.";
+"cockpit_plan_cycle_details" = "Details zum Zurücksetzungszyklus";
