@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.17 — Select main pages on press
+
+- Switch Usage, Statistics, Calendar and Members & Devices when their navigation button is pressed.
+- Keep keyboard and accessibility activation, 44-point click targets and the compact icon-only layout.
+- Releasing the mouse over the same page does not publish another navigation change.
+
 ## 0.8.16 — Open the menu panel on press
 
 - Toggle the Mac menu-bar panel on left or right mouse-down, without waiting for mouse-up.

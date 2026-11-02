@@ -112,27 +112,7 @@ struct CockpitPanelView: View {
     private func navigationButtons(showsTitles: Bool) -> some View {
         HStack(spacing: 8) {
             ForEach(CockpitPanelPage.allCases) { page in
-                Button {
-                    self.navigation.page = page
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: page.symbol)
-                        if showsTitles { Text(page.title) }
-                    }
-                    .font(.system(size: 13, weight: self.navigation.page == page ? .semibold : .regular))
-                    .fixedSize(horizontal: true, vertical: false)
-                    .padding(.horizontal, 12)
-                    .frame(minWidth: 44, maxWidth: .infinity, minHeight: 44)
-                    .background(
-                        self.navigation.page == page ? Color.accentColor.opacity(0.15) : .clear,
-                        in: RoundedRectangle(cornerRadius: 7))
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .help(page.title)
-                .accessibilityLabel(page.title)
-                .accessibilityIdentifier("cockpit-panel-page-\(page.rawValue)")
-                .accessibilityAddTraits(self.navigation.page == page ? .isSelected : [])
+                CockpitPanelPageButton(page: page, navigation: self.navigation, showsTitle: showsTitles)
             }
             Divider().frame(height: 22)
             Button(action: self.onRefresh) {

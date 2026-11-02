@@ -12,6 +12,9 @@ hidden AppKit cards while preserving current provider/account selection and sett
 Closing the panel cancels pending work and tears down its hosted root and visibility subscriptions.
 While the first provider tree is being built, layout ownership already supplies the panel's column
 width; it must not fall back to measuring an unattached native menu before the bridge is attached.
+The status-item icon and four primary page controls respond on mouse-down. Page controls remain
+SwiftUI buttons for keyboard and accessibility activation; the navigation setter ignores selecting
+the same page again when the button's standard activation follows the initial press.
 
 ## Modules and interfaces
 
