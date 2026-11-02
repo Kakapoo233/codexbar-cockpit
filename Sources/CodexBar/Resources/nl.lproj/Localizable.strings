@@ -3279,3 +3279,5 @@
 "cockpit_pace_today_incomplete" = "Het tempo van vandaag vereist volledige gebruiksgegevens";
 "cockpit_pace_today_unavailable" = "Het aanbevolen tempo van vandaag is niet beschikbaar";
 "cockpit_pace_quota_forecast" = "Quotumprognose: %@";
+"cockpit_menu_pace_partial_color_help" = "De kleuren tonen het verschil tussen het geregistreerde gebruik en de aanbeveling voor vandaag. De gegevens zijn onvolledig en kunnen gebruik missen; groen bevestigt niet dat er een reserve beschikbaar is.";
+"cockpit_menu_pace_recorded_reference_help" = "Het tempo vergelijkt het vandaag geregistreerde gebruik met de dagaanbeveling vermenigvuldigd met het verstreken deel van de lokale dag, in procentpunten van het weekquotum. Het weergegeven teken volgt de instelling voor het tempoteken.";

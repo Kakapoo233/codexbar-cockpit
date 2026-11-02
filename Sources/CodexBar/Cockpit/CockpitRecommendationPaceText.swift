@@ -4,6 +4,33 @@ import Foundation
 /// The recommendation comparison is in weekly quota points, but its time basis is the local day.
 /// Keep it out of the cumulative weekly stripe and the account's exhaustion forecast.
 enum CockpitRecommendationPaceText {
+    /// Status numbers describe the recorded comparison, not a claim of complete account usage.
+    static func statusItemText(
+        pace: CockpitRecommendationPace?,
+        reservePositive: Bool = false) -> String?
+    {
+        guard let pace else { return nil }
+        let delta = pace.deltaPercent.rounded()
+        let displayed = reservePositive ? -delta : delta
+        guard abs(displayed) < Double(Int.max) else { return nil }
+        let sign = displayed > 0 ? "+" : displayed < 0 ? "-" : ""
+        return "\(sign)\(Int(abs(displayed)))%"
+    }
+
+    static func statusItemExplanation(
+        pace: CockpitRecommendationPace,
+        reservePositive: Bool = false) -> String
+    {
+        let displayed = reservePositive ? -pace.deltaPercent : pace.deltaPercent
+        let value = abs(displayed) < 0.005 ? 0 : displayed
+        let number = abs(value).formatted(.number.precision(.fractionLength(0...2))
+            .locale(codexBarLocalizedLocale()))
+        let sign = value > 0 ? "+" : value < 0 ? "-" : ""
+        var parts = [L("Pace: %@", "\(sign)\(number)%"), L("cockpit_menu_pace_recorded_reference_help")]
+        if pace.isLowerBound { parts.append(L("cockpit_menu_pace_partial_color_help")) }
+        return parts.joined(separator: "\n")
+    }
+
     static func menuBarText(
         pace: CockpitRecommendationPace?,
         reservePositive: Bool = false) -> String?

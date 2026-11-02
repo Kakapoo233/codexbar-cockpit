@@ -3254,3 +3254,5 @@
 "cockpit_pace_today_incomplete" = "오늘의 속도에는 완전한 사용량 데이터가 필요합니다";
 "cockpit_pace_today_unavailable" = "오늘의 권장 속도를 사용할 수 없습니다";
 "cockpit_pace_quota_forecast" = "주간 할당량 예측: %@";
+"cockpit_menu_pace_partial_color_help" = "색상은 기록된 사용량과 오늘의 권장량 간 차이를 나타냅니다. 기록이 불완전하여 일부 사용량이 누락될 수 있으며, 녹색이라고 해서 여유분이 확인된 것은 아닙니다.";
+"cockpit_menu_pace_recorded_reference_help" = "페이스는 오늘 기록된 사용량과 “일일 권장량 × 현지 날짜의 경과 비율”을 주간 할당량의 퍼센트포인트 단위로 비교합니다. 표시되는 부호는 페이스 부호 설정을 따릅니다.";

@@ -3281,3 +3281,5 @@
 "cockpit_pace_today_incomplete" = "Le rythme du jour nécessite des données d’utilisation complètes";
 "cockpit_pace_today_unavailable" = "Le rythme recommandé du jour est indisponible";
 "cockpit_pace_quota_forecast" = "Prévision du quota : %@";
+"cockpit_menu_pace_partial_color_help" = "Les couleurs reflètent l’écart entre l’utilisation enregistrée et la recommandation du jour. Les relevés sont incomplets et peuvent omettre de l’utilisation ; le vert ne confirme pas qu’une réserve est disponible.";
+"cockpit_menu_pace_recorded_reference_help" = "Le rythme compare l’utilisation enregistrée aujourd’hui à la recommandation quotidienne multipliée par la fraction écoulée de la journée locale, en points de pourcentage du quota hebdomadaire. Le signe affiché suit le réglage du signe du rythme.";

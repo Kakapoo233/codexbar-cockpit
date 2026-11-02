@@ -3289,3 +3289,5 @@
 "cockpit_pace_today_incomplete" = "Today's pace needs complete usage data";
 "cockpit_pace_today_unavailable" = "Today's recommendation pace is unavailable";
 "cockpit_pace_quota_forecast" = "Quota forecast: %@";
+"cockpit_menu_pace_partial_color_help" = "Colors reflect the recorded difference from today's recommendation. Records are incomplete and may miss usage; green does not confirm a reserve.";
+"cockpit_menu_pace_recorded_reference_help" = "Pace compares recorded use today with the daily recommendation multiplied by elapsed local-day progress, in weekly-quota percentage points. The displayed sign follows the Pace sign setting.";

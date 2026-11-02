@@ -2,6 +2,22 @@ import CodexBarCore
 import Foundation
 
 extension UsageStore {
+    func menuBarLayoutPacePresentation(
+        provider: UsageProvider,
+        window: RateWindow?,
+        snapshot: UsageSnapshot?,
+        now: Date = Date()) -> MenuBarLayoutPacePresentation?
+    {
+        guard self.usesCockpitRecommendationPace(provider: provider, window: window, snapshot: snapshot),
+              let pace = self.cockpitRecommendationPace(provider: provider, snapshot: snapshot, now: now),
+              CockpitRecommendationPaceText.statusItemText(pace: pace) != nil else { return nil }
+        return MenuBarLayoutPacePresentation(
+            roundedObservedDelta: pace.deltaPercent.rounded(),
+            isLowerBound: pace.isLowerBound,
+            explanation: CockpitRecommendationPaceText.statusItemExplanation(
+                pace: pace, reservePositive: self.settings.menuBarPaceReservePositive))
+    }
+
     /// Only the local account's weekly lane uses the daily recommendation comparison.
     /// Session and additional quota pools keep their own window-based pace.
     func usesCockpitRecommendationPace(

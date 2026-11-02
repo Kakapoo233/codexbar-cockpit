@@ -77,7 +77,7 @@ extension UsageStore {
         -> String?
     {
         if self.usesCockpitRecommendationPace(provider: provider, window: window, snapshot: snapshot) {
-            return CockpitRecommendationPaceText.menuBarText(
+            return CockpitRecommendationPaceText.statusItemText(
                 pace: self.cockpitRecommendationPace(provider: provider, snapshot: snapshot, now: now),
                 reservePositive: self.settings.menuBarPaceReservePositive)
         }
@@ -95,7 +95,7 @@ extension UsageStore {
             }
     }
 
-    /// Rounded usage-ahead delta for colors and conditional predicates, independent of the display sign.
+    /// Exact rounded delta for conditional predicates; partial presentation is kept separate.
     func menuBarLayoutPaceDelta(
         provider: UsageProvider,
         window: RateWindow?,

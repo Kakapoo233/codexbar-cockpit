@@ -3286,3 +3286,5 @@
 "cockpit_pace_today_incomplete" = "今日のペースには完全な使用量データが必要です";
 "cockpit_pace_today_unavailable" = "今日の推奨ペースは利用できません";
 "cockpit_pace_quota_forecast" = "週間枠の予測：%@";
+"cockpit_menu_pace_partial_color_help" = "色は、記録された使用量と今日の推奨値との差を示します。記録は不完全で、使用量が記録されていない場合があります。緑色でも余裕があると確認されたわけではありません。";
+"cockpit_menu_pace_recorded_reference_help" = "ペースは、今日記録された使用量と「1日の推奨量 × 現地時間での当日の経過割合」を比較し、週間割り当てに対するパーセントポイントで示します。表示される正負の符号は「ペースの符号」設定に従います。";

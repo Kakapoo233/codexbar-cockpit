@@ -49,14 +49,20 @@ the same page again when the button's standard activation follows the initial pr
   fraction of the local natural day (including DST); the target itself is not reduced. Deviation is
   today's observed use minus that reference, in weekly quota percentage points. Manual caps remain
   independent. Incomplete observations yield a one-sided lower bound and do not drive exact numeric
-  conditions or colors; missing/stale/account-or-cycle-mismatched plans remain unavailable. Session
+  conditions; missing/stale/account-or-cycle-mismatched plans remain unavailable. Session
   lanes and other providers retain their window pace. The daily comparison never supplies a cumulative
   weekly progress stripe or an account exhaustion ETA; the latter remains separately labeled as a quota
   forecast. Placed pace components and their editor preview observe planner changes and minute ticks.
   Display uses CodexBar's native integer deficit/reserve labels and two-point neutral presentation
-  band, while preserving the daily calculation's original values. Complete menu-bar readings retain
-  the native signed-number style. Daily comparison units and the separately sourced quota forecast
-  are explained in hover help; incomplete bounds remain marked and cannot establish a reserve.
+  band, while preserving the daily calculation's original values. Stored menu-bar layout pace tokens
+  separately present the rounded recorded difference as native signed numbers, with red for positive
+  observed deviation and green for negative. Partial observations use 0.65 color opacity and hover/AX
+  help that explains missing usage and that green does not confirm a reserve; stale uses 0.5 opacity,
+  high contrast uses full opacity, and zero/missing values remain neutral. Sign preference flips text
+  only. Presentation metadata never fills exact conditional metrics. Cache and observation signatures
+  include coverage and precise help, and hidden tokens or legacy/icon-only transitions clear stale help.
+  Expanded panel and legacy bound text remain unchanged. Daily comparison units and the separately
+  sourced quota forecast are explained in hover help; incomplete bounds cannot establish a reserve.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

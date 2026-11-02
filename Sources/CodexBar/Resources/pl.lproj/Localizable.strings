@@ -3287,3 +3287,5 @@
 "cockpit_pace_today_incomplete" = "Dzisiejsze tempo wymaga pełnych danych użycia";
 "cockpit_pace_today_unavailable" = "Dzisiejsze zalecane tempo jest niedostępne";
 "cockpit_pace_quota_forecast" = "Prognoza limitu: %@";
+"cockpit_menu_pace_partial_color_help" = "Kolory odzwierciedlają różnicę między zarejestrowanym zużyciem a dzisiejszym zaleceniem. Dane są niepełne i mogą pomijać część zużycia; zielony kolor nie potwierdza dostępnego zapasu.";
+"cockpit_menu_pace_recorded_reference_help" = "Tempo porównuje dzisiejsze zarejestrowane zużycie z dziennym zaleceniem pomnożonym przez część lokalnego dnia, która już upłynęła, w punktach procentowych tygodniowego limitu. Wyświetlany znak jest zgodny z ustawieniem znaku tempa.";

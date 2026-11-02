@@ -3288,3 +3288,5 @@
 "cockpit_pace_today_incomplete" = "Laju hari ini memerlukan data penggunaan lengkap";
 "cockpit_pace_today_unavailable" = "Laju rekomendasi hari ini tidak tersedia";
 "cockpit_pace_quota_forecast" = "Perkiraan kuota: %@";
+"cockpit_menu_pace_partial_color_help" = "Warna menunjukkan selisih antara penggunaan yang tercatat dan rekomendasi hari ini. Catatan belum lengkap dan mungkin melewatkan penggunaan; warna hijau tidak memastikan adanya cadangan.";
+"cockpit_menu_pace_recorded_reference_help" = "Laju membandingkan penggunaan yang tercatat hari ini dengan rekomendasi harian dikalikan proporsi hari lokal yang telah berlalu, dalam poin persentase kuota mingguan. Tanda yang ditampilkan mengikuti pengaturan tanda laju.";

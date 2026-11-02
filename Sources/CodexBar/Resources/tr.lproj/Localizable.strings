@@ -3287,3 +3287,5 @@
 "cockpit_pace_today_incomplete" = "Bugünün hızı için eksiksiz kullanım verisi gerekir";
 "cockpit_pace_today_unavailable" = "Bugünün önerilen hızı kullanılamıyor";
 "cockpit_pace_quota_forecast" = "Kota tahmini: %@";
+"cockpit_menu_pace_partial_color_help" = "Renkler, kaydedilen kullanım ile bugünkü öneri arasındaki farkı yansıtır. Kayıtlar eksiktir ve bazı kullanımlar kaydedilmemiş olabilir; yeşil renk, kullanılabilir bir rezerv olduğunu doğrulamaz.";
+"cockpit_menu_pace_recorded_reference_help" = "Tempo, bugün kaydedilen kullanımı günlük önerinin yerel günün geçen oranıyla çarpımıyla, haftalık kotanın yüzde puanı cinsinden karşılaştırır. Gösterilen işaret, Tempo işareti ayarına göre belirlenir.";
