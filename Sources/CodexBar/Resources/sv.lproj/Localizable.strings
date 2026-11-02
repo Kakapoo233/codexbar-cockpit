@@ -3281,3 +3281,5 @@
 "cockpit_pace_today_incomplete" = "Dagens takt kräver fullständiga användningsdata";
 "cockpit_pace_today_unavailable" = "Dagens rekommenderade takt är inte tillgänglig";
 "cockpit_pace_quota_forecast" = "Kvotprognos: %@";
+"cockpit_menu_pace_partial_color_help" = "Färgerna visar skillnaden mellan registrerad användning och dagens rekommendation. Uppgifterna är ofullständiga och kan sakna användning; grönt bekräftar inte att det finns en reserv.";
+"cockpit_menu_pace_recorded_reference_help" = "Tempot jämför dagens registrerade användning med dagsrekommendationen multiplicerad med den andel av det lokala dygnet som har gått, i procentenheter av veckokvoten. Det visade tecknet följer inställningen för tempots tecken.";

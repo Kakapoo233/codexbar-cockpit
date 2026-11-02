@@ -291,7 +291,11 @@ extension StatusItemController {
                     dataConfidence: snapshot?.dataConfidence ?? .unknown,
                     now: now,
                     minimumElapsedPercent: percentWindow == .weekly ? 1 : nil)
+                let presentation = self.store.menuBarLayoutPacePresentation(
+                    provider: provider, window: window, snapshot: snapshot, now: now)
                 return "\(percentWindow.rawValue)=\(pace ?? "nil")"
+                    + ":\(presentation?.isLowerBound.description ?? "nil")"
+                    + ":\(presentation?.explanation ?? "")"
             }
         if needsRunsOut {
             let runsOutMinutes = (windows.weekly ?? windows.automatic)

@@ -57,6 +57,12 @@ struct MenuBarLayoutRenderMetrics: Hashable {
         cost30dUSD: nil)
 }
 
+struct MenuBarLayoutPacePresentation: Hashable {
+    let roundedObservedDelta: Double
+    let isLowerBound: Bool
+    let explanation: String
+}
+
 struct MenuBarLayoutRenderData: Hashable {
     let provider: UsageProvider
     var quotaIsEstimated = false
@@ -106,6 +112,8 @@ struct MenuBarLayoutRenderData: Hashable {
     var cockpitDailyRecommendationIsStale = false
     /// Remaining share of today's effective allocation; never complements the used/remaining setting.
     var cockpitDailyRemaining: CockpitMenuBarDailyRemaining?
+    /// Recorded comparisons used only for decoration/help, never for exact conditional predicates.
+    var pacePresentations: [PercentWindow: MenuBarLayoutPacePresentation] = [:]
 
     func extraTitle(_ id: String) -> String? {
         ProviderDescriptorRegistry.descriptor(for: self.provider).menuBarMetrics.namedExtras[id].map { title in
@@ -247,6 +255,7 @@ struct MenuBarLayoutRenderedTitle {
     let attributedTitle: NSAttributedString
     let accessibilityLabel: String
     let statusImage: NSImage?
+    let toolTip: String?
     /// When the layout begins with an icon token, the raw template image is surfaced here so
     /// the status item can assign it to `button.image`. Template images are the only menu bar
     /// content AppKit automatically dims on inactive displays; attributed-title attachments are
@@ -257,12 +266,14 @@ struct MenuBarLayoutRenderedTitle {
         attributedTitle: NSAttributedString,
         accessibilityLabel: String,
         leadingIcon: NSImage?,
-        statusImage: NSImage? = nil)
+        statusImage: NSImage? = nil,
+        toolTip: String? = nil)
     {
         self.attributedTitle = attributedTitle
         self.accessibilityLabel = accessibilityLabel
         self.leadingIcon = leadingIcon
         self.statusImage = statusImage
+        self.toolTip = toolTip
     }
 
     func statusItemWidth(gap: MenuBarLayoutGap) -> CGFloat {
@@ -409,7 +420,8 @@ final class MenuBarLayoutRenderer {
                 attributedTitle: row.attributedTitle,
                 accessibilityLabel: "\(providerName), \(row.accessibilityLabel)",
                 leadingIcon: row.leadingIcon,
-                statusImage: row.statusImage)
+                statusImage: row.statusImage,
+                toolTip: row.toolTip)
         }
 
         let result = NSMutableAttributedString(attributedString: top.attributedTitle)
@@ -424,7 +436,8 @@ final class MenuBarLayoutRenderer {
             attributedTitle: result,
             accessibilityLabel: accessibilityLabel,
             leadingIcon: nil,
-            statusImage: Self.statusImage(title: result, foregroundColor: .controlTextColor))
+            statusImage: Self.statusImage(title: result, foregroundColor: .controlTextColor),
+            toolTip: Self.joinedToolTips([top.toolTip, bottom.toolTip]))
     }
 
     private static func renderUncached(
@@ -565,7 +578,17 @@ final class MenuBarLayoutRenderer {
             statusImage: !options.highContrast && !options.isStale && !isTintActive && leadingIcon == nil
                 && result.string.filter(\.isNewline).count == max(0, renderedLines.count - 1)
                 ? Self.statusImage(title: result, foregroundColor: foregroundColor)
-                : nil)
+                : nil,
+            toolTip: Self.joinedToolTips(renderedLines.joined().map { token in
+                guard case let .pace(window) = token else { return nil }
+                return data.pacePresentations[window]?.explanation
+            }))
+    }
+
+    private static func joinedToolTips(_ values: [String?]) -> String? {
+        var seen = Set<String>()
+        let parts = values.compactMap(\.self).filter { seen.insert($0).inserted }
+        return parts.isEmpty ? nil : parts.joined(separator: "\n\n")
     }
 
     private static func removeDuplicateBalanceResets(
@@ -784,20 +807,7 @@ final class MenuBarLayoutRenderer {
         case let .percent(window):
             return self.renderPercent(window, data: data, style: style, options: options)
         case let .pace(window):
-            let accessibilityPrefix = item.editorLabel(provider: data.provider)
-            var attributes = style.attributes
-            attributes[.foregroundColor] = Self.neutralForegroundColor(options)
-            if options.colorPace, let delta = Self.paceDelta(window, data: data), delta.isFinite, delta != 0 {
-                // Use the same rounded numeric delta as the displayed text, never its localized sign.
-                let color: NSColor = delta < 0 ? .systemGreen : .systemRed
-                attributes[.foregroundColor] = options.isStale && !options.highContrast ? color
-                    .withAlphaComponent(0.5) : color
-            }
-            return self.optionalTextToken(
-                Self.pace(window, data: data),
-                unavailableLabel: L("%@ unavailable", accessibilityPrefix),
-                accessibilityPrefix: accessibilityPrefix,
-                attributes: attributes)
+            return Self.renderPace(window, data: data, style: style, options: options)
         case .resetCountdown, .resetAbsolute, .windowResetCountdown, .windowResetAbsolute:
             let window = item.resetWindow ?? .automatic
             let qualified = item != .resetCountdown && item != .resetAbsolute
@@ -892,6 +902,39 @@ final class MenuBarLayoutRenderer {
         default:
             return nil
         }
+    }
+
+    private static func renderPace(
+        _ window: PercentWindow,
+        data: MenuBarLayoutRenderData,
+        style: TokenStyle,
+        options: MenuBarLayoutRenderOptions)
+        -> (value: NSAttributedString, accessibilityText: String?)
+    {
+        let accessibilityPrefix = MenuBarLayoutToken.pace(window: window).editorLabel(provider: data.provider)
+        var attributes = style.attributes
+        attributes[.foregroundColor] = Self.neutralForegroundColor(options)
+        let presentation = data.pacePresentations[window]
+        if options.colorPace,
+           let delta = presentation?.roundedObservedDelta ?? Self.paceDelta(window, data: data),
+           delta.isFinite, delta != 0
+        {
+            // Use the same rounded numeric delta as the displayed text, never its localized sign.
+            let color: NSColor = delta < 0 ? .systemGreen : .systemRed
+            let opacity: CGFloat = options.highContrast ? 1 : options.isStale ? 0.5
+                : presentation?.isLowerBound == true ? 0.65 : 1
+            attributes[.foregroundColor] = opacity == 1 ? color : color.withAlphaComponent(opacity)
+        }
+        let rendered = self.optionalTextToken(
+            Self.pace(window, data: data),
+            unavailableLabel: L("%@ unavailable", accessibilityPrefix),
+            accessibilityPrefix: accessibilityPrefix,
+            attributes: attributes)
+        guard let presentation else { return rendered }
+        return (
+            rendered.value,
+            [rendered.accessibilityText, presentation.explanation]
+                .compactMap(\.self).joined(separator: ". "))
     }
 
     private static func renderPercent(

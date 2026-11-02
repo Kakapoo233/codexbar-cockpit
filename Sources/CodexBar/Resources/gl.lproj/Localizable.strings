@@ -3283,3 +3283,5 @@
 "cockpit_pace_today_incomplete" = "O ritmo de hoxe precisa datos de uso completos";
 "cockpit_pace_today_unavailable" = "O ritmo recomendado de hoxe non está dispoñible";
 "cockpit_pace_quota_forecast" = "Previsión de cota: %@";
+"cockpit_menu_pace_partial_color_help" = "As cores reflicten a diferenza entre o uso rexistrado e a recomendación de hoxe. Os rexistros están incompletos e poden omitir uso; o verde non confirma que haxa marxe dispoñible.";
+"cockpit_menu_pace_recorded_reference_help" = "O ritmo compara o uso rexistrado hoxe coa recomendación diaria multiplicada pola fracción transcorrida do día local, en puntos porcentuais da cota semanal. O signo amosado segue a configuración do signo do ritmo.";

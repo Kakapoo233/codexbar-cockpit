@@ -3278,3 +3278,5 @@
 "cockpit_pace_today_incomplete" = "今日节奏需要完整的用量数据";
 "cockpit_pace_today_unavailable" = "今日推荐节奏暂不可用";
 "cockpit_pace_quota_forecast" = "周额度预测：%@";
+"cockpit_menu_pace_partial_color_help" = "颜色反映已记录用量与今日推荐的差值。记录不完整，可能漏记用量；绿色不代表已确认有余量。";
+"cockpit_menu_pace_recorded_reference_help" = "节奏比较今日已记录用量与“全天推荐 × 本地当天进度”的差值，单位为周额度百分点。显示正负号遵循“节奏符号”设置。";

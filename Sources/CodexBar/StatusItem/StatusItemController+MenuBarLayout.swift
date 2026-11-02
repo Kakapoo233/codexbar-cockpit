@@ -313,6 +313,8 @@ extension StatusItemController {
         if button.accessibilityTitle() != rendered.accessibilityLabel {
             button.setAccessibilityTitle(rendered.accessibilityLabel)
         }
+        if button.toolTip != rendered.toolTip { button.toolTip = rendered.toolTip }
+        button.setAccessibilityHelp(rendered.toolTip)
 
         // AppKit exposes no content-inset API on NSStatusBarButton. Explicit item length is the actual
         // status-item padding mechanism: tight removes most edge space; regular keeps the native breathing room.
@@ -384,7 +386,7 @@ extension UsageStore {
             : CockpitMenuBarPlanValues(status: nil)
         let recommendation = plan.recommendation
 
-        return MenuBarLayoutRenderData(
+        var result = MenuBarLayoutRenderData(
             provider: provider,
             quotaIsEstimated: snapshot?.dataConfidence == .estimated,
             iconKey: iconKey,
@@ -472,6 +474,15 @@ extension UsageStore {
             cockpitDailyRecommendationIsPartial: recommendation?.isPartial ?? false,
             cockpitDailyRecommendationIsStale: recommendation?.isStale ?? false,
             cockpitDailyRemaining: plan.remaining)
+        if includeLocalDerivedData {
+            for (selection, window) in [
+                (PercentWindow.session, windows.session), (.weekly, windows.weekly), (.automatic, windows.automatic),
+            ] {
+                result.pacePresentations[selection] = self.menuBarLayoutPacePresentation(
+                    provider: provider, window: window, snapshot: snapshot, now: now)
+            }
+        }
+        return result
     }
 
     func menuBarLayoutWindows(

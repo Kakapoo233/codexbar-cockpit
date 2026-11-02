@@ -3286,3 +3286,5 @@
 "cockpit_pace_today_incomplete" = "El ritme d’avui necessita dades d’ús completes";
 "cockpit_pace_today_unavailable" = "El ritme recomanat d’avui no està disponible";
 "cockpit_pace_quota_forecast" = "Previsió de quota: %@";
+"cockpit_menu_pace_partial_color_help" = "Els colors reflecteixen la diferència entre l’ús registrat i la recomanació d’avui. Els registres són incomplets i poden ometre ús; el verd no confirma que hi hagi marge disponible.";
+"cockpit_menu_pace_recorded_reference_help" = "El ritme compara l’ús registrat avui amb la recomanació diària multiplicada per la fracció transcorreguda del dia local, en punts percentuals de la quota setmanal. El signe mostrat segueix la configuració del signe del ritme.";

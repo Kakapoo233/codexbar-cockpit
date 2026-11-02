@@ -3266,3 +3266,5 @@
 "cockpit_pace_today_incomplete" = "今日節奏需要完整的用量資料";
 "cockpit_pace_today_unavailable" = "今日推薦節奏暫不可用";
 "cockpit_pace_quota_forecast" = "週額度預測：%@";
+"cockpit_menu_pace_partial_color_help" = "顏色反映已記錄用量與今日建議的差值。記錄不完整，可能漏記用量；綠色不代表已確認有餘量。";
+"cockpit_menu_pace_recorded_reference_help" = "節奏比較今日已記錄用量與「全天建議 × 本地當天進度」的差值，單位為週額度百分點。顯示的正負號遵循「節奏符號」設定。";

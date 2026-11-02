@@ -5,7 +5,7 @@ import Testing
 
 @MainActor
 struct CockpitRecommendationPaceIntegrationTests {
-    private let now = Calendar.current.startOfDay(for: Date()).addingTimeInterval(12 * 3600)
+    let now = Calendar.current.startOfDay(for: Date()).addingTimeInterval(12 * 3600)
 
     @Test
     func `layout text metrics and card share daily recommendation while quota forecast stays independent`() throws {
@@ -18,7 +18,7 @@ struct CockpitRecommendationPaceIntegrationTests {
             #expect(!pace.isLowerBound)
             #expect(pace.suggestedPercent == plans.status(for: .codex, on: self.now).suggestedPercent)
             let rendered = self.render(store, snapshot: snapshot)
-            #expect(rendered.weeklyPace == CockpitRecommendationPaceText.menuBarText(pace: pace))
+            #expect(rendered.weeklyPace == CockpitRecommendationPaceText.statusItemText(pace: pace))
             #expect(rendered.metrics.weeklyPaceDelta == pace.deltaPercent.rounded())
             let weekly = try #require(snapshot.secondary)
             let official = store.weeklyPace(
@@ -36,13 +36,13 @@ struct CockpitRecommendationPaceIntegrationTests {
             #expect(remote.cockpitRecommendationPace == nil)
             settings.menuBarPaceReservePositive = true
             #expect(self.render(store, snapshot: snapshot).weeklyPace ==
-                CockpitRecommendationPaceText.menuBarText(pace: pace, reservePositive: true))
+                CockpitRecommendationPaceText.statusItemText(pace: pace, reservePositive: true))
             #expect(self.render(store, snapshot: snapshot).metrics.weeklyPaceDelta == pace.deltaPercent.rounded())
         }
     }
 
     @Test
-    func `partial observations show a bound and cannot drive exact numeric rules`() throws {
+    func `partial status text uses native signed integers while exact numeric rules stay unavailable`() throws {
         try self.withFixture { store, plans, _ in
             let snapshot = self.ingestDay(plans, complete: false)
             let pace = try #require(store.cockpitRecommendationPace(
@@ -51,7 +51,12 @@ struct CockpitRecommendationPaceIntegrationTests {
                 now: self.now))
             #expect(pace.isLowerBound)
             let rendered = self.render(store, snapshot: snapshot)
-            #expect(rendered.weeklyPace?.hasPrefix("≥") == true)
+            #expect(rendered.weeklyPace == CockpitRecommendationPaceText.statusItemText(pace: pace))
+            #expect(rendered.weeklyPace?.contains("≥") == false)
+            #expect(rendered.weeklyPace?.contains("≤") == false)
+            #expect(CockpitRecommendationPaceText.menuBarText(pace: pace)?.hasPrefix("≥") == true)
+            #expect(CockpitRecommendationPaceText.detailLabel(pace) ==
+                CockpitRecommendationPaceText.menuBarText(pace: pace))
             #expect(rendered.metrics.weeklyPaceDelta == nil)
             #expect(self.render(store, snapshot: snapshot, local: false).weeklyPace == nil)
         }
@@ -117,7 +122,7 @@ struct CockpitRecommendationPaceIntegrationTests {
                 recommendationPace: pace,
                 usesRecommendationPace: true,
                 showUsed: true)
-            #expect(text == self.render(store, snapshot: snapshot).weeklyPace)
+            #expect(text == CockpitRecommendationPaceText.menuBarText(pace: pace))
             let missing = MenuBarDisplayText.displayText(
                 mode: .both,
                 percentWindow: snapshot.secondary,
@@ -128,24 +133,28 @@ struct CockpitRecommendationPaceIntegrationTests {
         }
     }
 
-    private func ingestDay(_ plans: CockpitPlanStore, complete: Bool = true) -> UsageSnapshot {
+    func ingestDay(
+        _ plans: CockpitPlanStore,
+        complete: Bool = true,
+        observedUse: Double = 10) -> UsageSnapshot
+    {
         let start = Calendar.current.startOfDay(for: self.now)
         if complete {
             let count = Int(self.now.timeIntervalSince(start) / 1800)
             for index in 0...count {
                 plans.ingest([.codex: self.snapshot(
-                    used: 40 + 10 * Double(index) / Double(count),
+                    used: 50 - observedUse + observedUse * Double(index) / Double(count),
                     at: start.addingTimeInterval(Double(index) * 1800))])
             }
         } else {
-            plans.ingest([.codex: self.snapshot(used: 40, at: self.now.addingTimeInterval(-60))])
+            plans.ingest([.codex: self.snapshot(used: 50 - observedUse, at: self.now.addingTimeInterval(-60))])
         }
         let snapshot = self.snapshot(used: 50, at: self.now)
         plans.ingest([.codex: snapshot])
         return snapshot
     }
 
-    private func snapshot(
+    func snapshot(
         used: Double,
         at date: Date,
         owner: String = "synthetic-owner",
@@ -172,7 +181,7 @@ struct CockpitRecommendationPaceIntegrationTests {
                 accountID: owner))
     }
 
-    private func render(_ store: UsageStore, snapshot: UsageSnapshot, local: Bool = true) -> MenuBarLayoutRenderData {
+    func render(_ store: UsageStore, snapshot: UsageSnapshot, local: Bool = true) -> MenuBarLayoutRenderData {
         store.menuBarLayoutRenderData(
             provider: .codex,
             snapshot: snapshot,
@@ -183,7 +192,7 @@ struct CockpitRecommendationPaceIntegrationTests {
             now: self.now)
     }
 
-    private func withFixture(_ body: (UsageStore, CockpitPlanStore, SettingsStore) throws -> Void) throws {
+    func withFixture(_ body: (UsageStore, CockpitPlanStore, SettingsStore) throws -> Void) throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: folder) }
         let settings = testSettingsStore(suiteName: "recommendation-pace-\(UUID().uuidString)")

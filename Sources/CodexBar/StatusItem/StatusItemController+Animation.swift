@@ -275,6 +275,7 @@ extension StatusItemController {
         }
         let selected = self.primaryProviderForUnifiedIcon()
         guard let provider = selected.firstPartyProvider else {
+            self.resetLegacyStatusItemAccessibility(for: button)
             guard let plugin = UserProviderPluginRegistry.plugin(for: selected) else { return false }
             let snapshot = self.store.menuBarSnapshot(for: selected)
             let showUsed = self.settings.usageBarsShowUsed
@@ -361,8 +362,8 @@ extension StatusItemController {
         merged: Bool) -> Bool
     {
         guard let button = statusItem.button else { return false }
-        if !merged {
-            self.updateMenuBarSourceDescription(for: button, providers: [provider])
+        defer {
+            if !merged { self.updateMenuBarSourceDescription(for: button, providers: [provider]) }
         }
         let shouldSkipRender: (String) -> Bool = { signature in
             merged ? self.shouldSkipMergedIconRender(signature)
@@ -392,6 +393,7 @@ extension StatusItemController {
             return wasCached
         }
 
+        self.resetLegacyStatusItemAccessibility(for: button)
         if showBrandPercent,
            let brand = self.brandIcon(provider)
         {
@@ -702,6 +704,7 @@ extension StatusItemController {
     }
 
     private func setButtonContent(image: NSImage, title: String?, tint: NSColor?, for button: NSStatusBarButton) {
+        self.resetLegacyStatusItemAccessibility(for: button)
         let image = tint.map { MenuBarLayoutRenderer.attachmentImage(image, tint: $0, isMonochrome: false) } ?? image
         let isDebugApp = Self.isDebugApp(bundleIdentifier: Bundle.main.bundleIdentifier)
         let value = Self.buttonTitle(
@@ -726,6 +729,13 @@ extension StatusItemController {
         if button.imagePosition != position {
             button.imagePosition = position
         }
+    }
+
+    private func resetLegacyStatusItemAccessibility(for button: NSStatusBarButton) {
+        button.toolTip = nil
+        button.setAccessibilityHelp(nil)
+        button.setAccessibilityTitle(Self.statusItemAccessibilityTitle(
+            isDebugApp: Self.isDebugApp(bundleIdentifier: Bundle.main.bundleIdentifier)))
     }
 
     static func highContrastButtonTitle(image: NSImage, title: String) -> NSAttributedString {

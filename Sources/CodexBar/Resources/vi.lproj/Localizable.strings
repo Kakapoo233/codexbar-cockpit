@@ -3287,3 +3287,5 @@
 "cockpit_pace_today_incomplete" = "Nhịp hôm nay cần dữ liệu sử dụng đầy đủ";
 "cockpit_pace_today_unavailable" = "Nhịp đề xuất hôm nay không khả dụng";
 "cockpit_pace_quota_forecast" = "Dự báo hạn mức: %@";
+"cockpit_menu_pace_partial_color_help" = "Màu sắc thể hiện chênh lệch giữa mức sử dụng đã ghi nhận và mức khuyến nghị hôm nay. Dữ liệu ghi nhận chưa đầy đủ và có thể bỏ sót mức sử dụng; màu xanh lá không xác nhận còn mức dự phòng.";
+"cockpit_menu_pace_recorded_reference_help" = "Nhịp độ so sánh mức sử dụng đã ghi nhận hôm nay với mức khuyến nghị hằng ngày nhân với tỷ lệ thời gian đã trôi qua trong ngày theo giờ địa phương, tính bằng điểm phần trăm của hạn mức tuần. Dấu hiển thị tuân theo cài đặt dấu của nhịp độ.";

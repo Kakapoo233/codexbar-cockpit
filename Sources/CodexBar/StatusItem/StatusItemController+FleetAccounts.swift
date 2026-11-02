@@ -56,7 +56,9 @@ extension StatusItemController {
 
     func updateMenuBarSourceDescription(for button: NSButton, providers: [UsageProvider]) {
         let descriptions = providers.compactMap { self.menuBarFleetSourceDescription(for: $0) }
-        let description = descriptions.isEmpty ? nil : descriptions.joined(separator: "\n")
+        let parts = [button.toolTip] + descriptions.map(Optional.some)
+        let combined = parts.compactMap(\.self).joined(separator: "\n")
+        let description = combined.isEmpty ? nil : combined
         button.setAccessibilityHelp(description)
     }
 

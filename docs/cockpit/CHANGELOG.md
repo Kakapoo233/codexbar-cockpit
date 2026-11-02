@@ -1,5 +1,12 @@
 # Cockpit changes
 
+## 0.8.19 — Status-bar pace signs and colors
+
+- Show native signed daily-pace numbers in the top menu bar, using red and green for the recorded difference from the daily recommendation.
+- Dim incomplete observations and explain their uncertainty in hover and accessibility help; retain unknown exact conditional values.
+- Refresh help and colors when observation coverage changes, and clear daily explanations when switching to layouts without pace.
+- Keep the existing daily calculation, expanded panel and legacy bound text unchanged.
+
 ## 0.8.18 — Native pace presentation
 
 - Restore CodexBar's concise deficit, reserve and on-pace labels while retaining the daily-recommendation comparison.
