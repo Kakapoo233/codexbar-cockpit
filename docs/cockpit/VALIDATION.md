@@ -120,6 +120,27 @@ Native overview, month-grid, and Chinese multi-currency receipt renders were vis
 The committed preview images contain only synthetic data. The full upstream Swift test suite was
 not run; focused coverage and the repository checks are the handoff gates.
 
+## Mac panel latency probe
+
+The opt-in Mac panel latency probe uses a synthetic 44-day ledger with 506 sessions and 28,000 events,
+521 quota observations and 3 comfort records. It exercises actual provider-menu population, hosted
+panel rendering, retained page switching and hidden-page invalidation without contacting providers.
+Run it separately from other builds or profiling tools:
+
+```sh
+CODEXBAR_COCKPIT_LATENCY_PROBE=1 CODEXBAR_COCKPIT_LATENCY_MAX_MS=250 make test-fast FILTER='CockpitPanelLatencyTests'
+```
+
+The optional threshold is a local diagnostic budget, not a universal CI timing promise. The probe
+prints named durations and asserts refresh coalescing even when no timing threshold is supplied.
+
+A local synthetic sample measured backing-tree preparation at 112.90 ms with the legacy unattached
+menu-sizing path and 88.59 ms through the panel preparation path. Ten hidden invalidations took
+0.006 ms to record and did not rebuild; returning to Usage rebuilt once before page publication.
+Initial panel rendering (173 ms) and first Statistics/Calendar rendering (166/150 ms) remain separate
+initialization work. These are local samples, not a reproduction or proof of elimination of the full
+886 ms live main-thread stall. Live interaction still needs direct acceptance.
+
 ## Manual acceptance still required
 
 - Save a PNG and copy/paste it into another application.

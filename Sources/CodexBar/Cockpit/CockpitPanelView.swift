@@ -32,7 +32,18 @@ enum CockpitPanelPage: String, CaseIterable, Identifiable {
 @MainActor
 @Observable
 final class CockpitPanelNavigation {
-    var page: CockpitPanelPage = .usage
+    private var selectedPage: CockpitPanelPage = .usage
+    @ObservationIgnored var beforePageChange: ((CockpitPanelPage) -> Void)?
+
+    var page: CockpitPanelPage {
+        get { self.selectedPage }
+        set {
+            guard newValue != self.selectedPage else { return }
+            self.beforePageChange?(newValue)
+            self.selectedPage = newValue
+        }
+    }
+
     var planningProviders: [UsageProvider] = []
 }
 

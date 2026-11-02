@@ -6,6 +6,13 @@ CodexBar remains the native menu-bar shell and provider collector. One transient
 to the status item hosts Usage, Statistics, Calendar, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
+The panel retains visited pages while open. Provider-menu invalidations accumulate while Usage is
+hidden, then rebuild once before the page selection publishes Usage again. This avoids rebuilding
+hidden AppKit cards while preserving current provider/account selection and settings before display.
+Closing the panel cancels pending work and tears down its hosted root and visibility subscriptions.
+While the first provider tree is being built, layout ownership already supplies the panel's column
+width; it must not fall back to measuring an unattached native menu before the bridge is attached.
+
 ## Modules and interfaces
 
 - `UsageStore` and `SpendDashboardController` remain the authoritative provider and cost interfaces.

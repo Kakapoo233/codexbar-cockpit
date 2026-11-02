@@ -11,8 +11,10 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
     private weak var owner: StatusItemController?
     private weak var anchor: NSStatusBarButton?
     private var pinnedProvider: UsageProvider?
+    private var buildingMenu: NSMenu?
     private var rebuildTask: Task<Void, Never>?
     private var keyMonitor: Any?
+    private var needsRebuild = false
     private var needsRootNavigation = false
     private let presentationIsVisible: (() -> Bool)?
 
@@ -42,6 +44,10 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
             }
         }
         self.bridge.dispatch = { [weak self] item in self?.perform(item) }
+        self.navigation.beforePageChange = { [weak self] page in
+            // Refresh the hidden provider tree before observers can reveal its previous account.
+            if page == .usage { self?.flushPendingRebuild() }
+        }
     }
 
     func toggle(relativeTo button: NSStatusBarButton, provider: UsageProvider?) {
@@ -55,12 +61,11 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
     func show(relativeTo button: NSStatusBarButton, provider: UsageProvider?, page: CockpitPanelPage) {
         guard let owner = self.owner else { return }
         self.anchor = button
-        self.pinnedProvider = provider
-        self.navigation.page = page
         let visibleFrame = button.window?.screen?.visibleFrame ?? NSScreen.main?.visibleFrame
-        let size = Self.contentSize(available: visibleFrame?.size ?? NSSize(width: 1024, height: 768))
-        self.bridge.width = CockpitPanelLayout(width: size.width).menuCardWidth
-        self.rebuild(preservingPath: false)
+        let size = self.preparePresentation(
+            provider: provider,
+            page: page,
+            availableSize: visibleFrame?.size ?? NSSize(width: 1024, height: 768))
         if self.popover.contentViewController == nil {
             self.popover.contentViewController = NSHostingController(rootView: CockpitPanelView(
                 settings: owner.settings,
@@ -91,6 +96,16 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
         }
     }
 
+    func preparePresentation(provider: UsageProvider?, page: CockpitPanelPage, availableSize: NSSize) -> NSSize {
+        self.clearPendingRebuild()
+        self.pinnedProvider = provider
+        self.navigation.page = page
+        let size = Self.contentSize(available: availableSize)
+        self.bridge.width = CockpitPanelLayout(width: size.width).menuCardWidth
+        self.rebuild(preservingPath: false)
+        return size
+    }
+
     static func contentSize(available: NSSize) -> NSSize {
         CockpitPanelLayout.boundedSize(available: available)
     }
@@ -99,19 +114,42 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
         self.isShown && self.bridge.owns(menu)
     }
 
+    func menuLayoutWidth(for menu: NSMenu) -> CGFloat? {
+        if self.bridge.owns(menu) { return self.bridge.width }
+        guard let buildingMenu = self.buildingMenu else { return nil }
+        var root = menu
+        while let parent = root.supermenu {
+            root = parent
+        }
+        return root === buildingMenu ? self.bridge.width : nil
+    }
+
     func invalidate(resetNavigation: Bool = false) {
         guard self.isShown else { return }
+        self.needsRebuild = true
         self.needsRootNavigation = self.needsRootNavigation || resetNavigation
-        guard self.rebuildTask == nil else { return }
+        guard self.navigation.page == .usage, self.rebuildTask == nil else { return }
         self.rebuildTask = Task { @MainActor [weak self] in
             await Task.yield()
             guard !Task.isCancelled, let self else { return }
             self.rebuildTask = nil
-            guard self.isShown else { return }
-            let preservesPath = !self.needsRootNavigation
-            self.needsRootNavigation = false
-            self.rebuild(preservingPath: preservesPath)
+            guard self.navigation.page == .usage else { return }
+            self.flushPendingRebuild()
         }
+    }
+
+    private func flushPendingRebuild() {
+        guard self.isShown, self.needsRebuild else { return }
+        let preservesPath = !self.needsRootNavigation
+        self.clearPendingRebuild()
+        self.rebuild(preservingPath: preservesPath)
+    }
+
+    private func clearPendingRebuild() {
+        self.rebuildTask?.cancel()
+        self.rebuildTask = nil
+        self.needsRebuild = false
+        self.needsRootNavigation = false
     }
 
     func close() {
@@ -133,8 +171,7 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
     }
 
     private func cleanUpClosedPresentation() {
-        self.rebuildTask?.cancel()
-        self.rebuildTask = nil
+        self.clearPendingRebuild()
         if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
         self.keyMonitor = nil
         // Tear down the hosted root so page onDisappear callbacks release visibility subscriptions.
@@ -142,13 +179,16 @@ final class CockpitMenuPanelController: NSObject, NSPopoverDelegate {
         self.owner?.cockpitPanelDidClose(menu: self.backingMenu)
         self.bridge.clear()
         self.anchor = nil
-        self.needsRootNavigation = false
     }
 
     private func rebuild(preservingPath: Bool) {
         guard let owner = self.owner,
               let menu = owner.cockpitBackingMenu(provider: self.pinnedProvider)
         else { return }
+        // First presentation has no bridge root yet; its cards already belong to the panel column.
+        let previousBuildingMenu = self.buildingMenu
+        self.buildingMenu = menu
+        defer { self.buildingMenu = previousBuildingMenu }
         let provider = owner.resolveProviderForMenuPresentation(menu)
         owner.populateMenu(menu, provider: provider)
         self.navigation.planningProviders = owner.cockpitPlanningProviders(provider: self.pinnedProvider)

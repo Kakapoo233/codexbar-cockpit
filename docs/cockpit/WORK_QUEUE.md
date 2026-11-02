@@ -4,6 +4,7 @@ Updated 2026-11-01. These items are one ongoing local developer-app iteration; s
 
 | Request | Status | Acceptance |
 | --- | --- | --- |
+| Improve Mac menu opening, page switching and data-loading responsiveness | Hidden provider-menu refresh coalescing and first-open layout ownership implemented; final validation and delivery in progress | No hidden Usage rebuilds; one current rebuild before returning; account/settings/width freshness; measured synthetic menu and retained-page timings. |
 | Enlarge the four top-level page click targets | Implemented and installed in Mac 0.8.14; Windows alpha.6 source validated | Minimum 44-point/pixel targets include button whitespace; equal-width tabs and narrow/larger-text navigation remain usable. |
 | Sync recommendation-linked Pace to Windows | Implemented in Windows alpha.5; installer/native acceptance in progress | Compact footer, Usage panel and tray tooltip share the automatic plan; scoped main-pool observations, partial bounds, DST, independent caps and minute updates match Mac 0.8.13. |
 | Link Codex Pace to the daily recommendation curve | Implemented and installed in 0.8.13 | Same automatic target and local-day progress across menu text and card; account/cycle isolation, explicit partial bounds, separate quota exhaustion forecast, and minute updates. |
