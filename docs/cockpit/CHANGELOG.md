@@ -1,5 +1,9 @@
 # Cockpit changes
 
+## 0.8.16 — Open the menu panel on press
+
+- Toggle the Mac menu-bar panel on left or right mouse-down, without waiting for mouse-up.
+
 ## 0.8.15 — Mac panel responsiveness
 
 - Coalesce provider-menu updates while Usage is hidden; refresh once before returning to the current provider and settings.
