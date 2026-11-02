@@ -68,7 +68,7 @@ extension UsageMenuCardView.Model {
                 []
             }
 
-            return Metric(
+            var metric = Metric(
                 id: id,
                 title: title,
                 percent: Self.clamped(input.usageBarsShowUsed ? window.usedPercent : window.remainingPercent),
@@ -89,6 +89,13 @@ extension UsageMenuCardView.Model {
                     ? Self.sessionEquivalentDetail(input: input, weeklyWindow: window, weeklyWindowID: nil)
                     : nil,
                 isSyntheticCreditLane: lane == .monthly && window.windowMinutes == nil)
+            if lane == .weekly, input.usesCockpitRecommendationPace {
+                metric.paceHelpText = CockpitRecommendationPaceText.detailHelp(
+                    pace: input.cockpitRecommendationPace,
+                    officialPace: input.weeklyPace,
+                    now: input.now)
+            }
+            return metric
         }
     }
 

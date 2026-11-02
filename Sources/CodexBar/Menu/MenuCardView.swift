@@ -52,6 +52,7 @@ struct UsageMenuCardView: View {
             var sessionEquivalentDetail: UsagePaceText.SessionEquivalentDetail?
             let isSyntheticCreditLane: Bool
             var helpText: String?
+            var paceHelpText: String?
 
             init(
                 id: String,

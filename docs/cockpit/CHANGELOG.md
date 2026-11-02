@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.18 — Native pace presentation
+
+- Restore CodexBar's concise deficit, reserve and on-pace labels while retaining the daily-recommendation comparison.
+- Keep the original signed menu-bar numbers and independent quota forecast. Move detailed daily units and reference explanations to hover help.
+- Preserve partial-data bounds and unknown readings; hiding pace also hides its explanation without removing provider-owned help.
+
 ## 0.8.17 — Select main pages on press
 
 - Switch Usage, Statistics, Calendar and Members & Devices when their navigation button is pressed.

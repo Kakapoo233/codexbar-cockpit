@@ -53,6 +53,10 @@ the same page again when the button's standard activation follows the initial pr
   lanes and other providers retain their window pace. The daily comparison never supplies a cumulative
   weekly progress stripe or an account exhaustion ETA; the latter remains separately labeled as a quota
   forecast. Placed pace components and their editor preview observe planner changes and minute ticks.
+  Display uses CodexBar's native integer deficit/reserve labels and two-point neutral presentation
+  band, while preserving the daily calculation's original values. Complete menu-bar readings retain
+  the native signed-number style. Daily comparison units and the separately sourced quota forecast
+  are explained in hover help; incomplete bounds remain marked and cannot establish a reserve.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.
