@@ -4,6 +4,31 @@ import Testing
 @testable import CodexBar
 
 struct PaceVisibilityTests {
+    @Test
+    func `hiding pace removes recommendation help while keeping provider help`() throws {
+        var metric = UsageMenuCardView.Model.Metric(
+            id: "secondary",
+            title: "Weekly",
+            percent: 40,
+            percentStyle: .used,
+            resetText: nil,
+            detailText: nil,
+            detailLeftText: "5% in deficit",
+            detailRightText: nil,
+            pacePercent: nil,
+            detailIsPaceDerived: true,
+            paceOnTop: true)
+        metric.helpText = "Synthetic provider explanation"
+        metric.paceHelpText = "Synthetic daily recommendation explanation"
+
+        let visible = try #require(UsageMenuCardView.Model.paceGatedMetrics([metric], paceVisible: true).first)
+        #expect(visible.paceHelpText == metric.paceHelpText)
+        let hidden = try #require(UsageMenuCardView.Model.paceGatedMetrics([metric], paceVisible: false).first)
+        #expect(hidden.paceHelpText == nil)
+        #expect(hidden.helpText == metric.helpText)
+        #expect(hidden.detailLeftText == nil)
+    }
+
     /// Claude session window that is well ahead of the sustainable rate, so the
     /// pace stripe and the forecast text both have something to render.
     private static func offPaceInput(

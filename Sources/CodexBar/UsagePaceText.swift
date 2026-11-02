@@ -96,11 +96,17 @@ enum UsagePaceText {
     }
 
     private static func detailLeftLabel(for pace: UsagePace) -> String {
-        let deltaValue = Int(abs(pace.deltaPercent).rounded())
+        self.deviationLabel(deltaPercent: pace.deltaPercent, stage: pace.stage)
+    }
+
+    /// Shared native presentation; the caller supplies the comparison's own deviation and stage.
+    static func deviationLabel(deltaPercent: Double, stage: UsagePace.Stage) -> String {
+        guard deltaPercent.isFinite, abs(deltaPercent) < Double(Int.max) else { return L("unavailable") }
+        let deltaValue = Int(abs(deltaPercent).rounded())
         if deltaValue == 0 {
             return L("On pace")
         }
-        switch pace.stage {
+        switch stage {
         case .onTrack:
             return L("On pace")
         case .slightlyAhead, .ahead, .farAhead:

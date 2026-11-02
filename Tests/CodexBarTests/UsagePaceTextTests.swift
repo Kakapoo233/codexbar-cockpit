@@ -29,6 +29,41 @@ struct UsagePaceTextTests {
     ]
 
     @Test
+    func `shared deviation label preserves stage rounding and localization`() {
+        let cases: [(delta: Double, stage: UsagePace.Stage, english: String, chinese: String)] = [
+            (0.4, .ahead, "On pace", "节奏正常"),
+            (-0.4, .behind, "On pace", "节奏正常"),
+            (0.5, .slightlyAhead, "1% in deficit", "超额 1%"),
+            (-0.5, .slightlyBehind, "1% in reserve", "余量 1%"),
+            (2.5, .ahead, "3% in deficit", "超额 3%"),
+            (-2.5, .behind, "3% in reserve", "余量 3%"),
+            (5, .farAhead, "5% in deficit", "超额 5%"),
+            (-5, .farBehind, "5% in reserve", "余量 5%"),
+            (2, .onTrack, "On pace", "节奏正常"),
+            (-2, .onTrack, "On pace", "节奏正常"),
+        ]
+        for testCase in cases {
+            let pace = UsagePace(
+                stage: testCase.stage,
+                deltaPercent: testCase.delta,
+                expectedUsedPercent: 50,
+                actualUsedPercent: 50 + testCase.delta,
+                etaSeconds: nil,
+                willLastToReset: true)
+            for language in ["en", "zh-Hans"] {
+                CodexBarLocalizationOverride.$appLanguage.withValue(language) {
+                    let label = UsagePaceText.deviationLabel(deltaPercent: testCase.delta, stage: testCase.stage)
+                    #expect(label == (language == "en" ? testCase.english : testCase.chinese))
+                    for provider in [UsageProvider.codex, .claude] {
+                        #expect(UsagePaceText.weeklyDetail(
+                            provider: provider, pace: pace, now: Date(timeIntervalSince1970: 0)).leftLabel == label)
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
     func `weekly pace detail provides left right labels`() throws {
         let now = Date(timeIntervalSince1970: 0)
         let window = RateWindow(

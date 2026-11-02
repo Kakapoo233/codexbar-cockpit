@@ -23,18 +23,38 @@ enum CockpitRecommendationPaceText {
         officialPace: UsagePace?,
         now: Date) -> UsageMenuCardView.Model.PaceDetail
     {
-        let forecast = officialPace.flatMap {
-            UsagePaceText.weeklyDetail(provider: .codex, pace: $0, now: now).rightLabel
-        }.map { L("cockpit_pace_quota_forecast", $0) }
-        return UsageMenuCardView.Model.PaceDetail(
+        UsageMenuCardView.Model.PaceDetail(
             leftLabel: self.detailLabel(pace),
-            rightLabel: forecast,
+            rightLabel: self.quotaForecast(officialPace, now: now),
             pacePercent: nil,
             paceOnTop: true,
             isPaceDerived: true)
     }
 
     static func detailLabel(_ pace: CockpitRecommendationPace?) -> String {
+        guard let pace else { return "—" }
+        if pace.isLowerBound {
+            // A negative lower bound does not establish a reserve or an on-pace result.
+            return pace.deltaPercent > 0 ? self.menuBarText(pace: pace) ?? "—" : "—"
+        }
+        // Match CodexBar's native neutral band without changing the daily comparison itself.
+        let stage: UsagePace.Stage = abs(pace.deltaPercent) <= 2
+            ? .onTrack : pace.deltaPercent > 0 ? .ahead : .behind
+        return UsagePaceText.deviationLabel(deltaPercent: pace.deltaPercent, stage: stage)
+    }
+
+    static func detailHelp(
+        pace: CockpitRecommendationPace?,
+        officialPace: UsagePace?,
+        now: Date) -> String
+    {
+        let forecast = self.quotaForecast(officialPace, now: now).map { L("cockpit_pace_quota_forecast", $0) }
+        return [L("menu_bar_help_pace"), self.explanationLabel(pace), forecast]
+            .compactMap(\.self)
+            .joined(separator: "\n")
+    }
+
+    static func explanationLabel(_ pace: CockpitRecommendationPace?) -> String {
         guard let pace else { return L("cockpit_pace_today_unavailable") }
         if pace.isLowerBound {
             guard pace.deltaPercent > 0 else { return L("cockpit_pace_today_incomplete") }
@@ -50,5 +70,9 @@ enum CockpitRecommendationPaceText {
 
     private static func points(_ value: Double) -> String {
         value.formatted(.number.precision(.fractionLength(0...2)).locale(codexBarLocalizedLocale()))
+    }
+
+    private static func quotaForecast(_ pace: UsagePace?, now: Date) -> String? {
+        pace.flatMap { UsagePaceText.weeklyDetail(provider: .codex, pace: $0, now: now).rightLabel }
     }
 }

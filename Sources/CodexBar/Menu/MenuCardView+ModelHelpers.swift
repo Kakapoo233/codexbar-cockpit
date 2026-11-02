@@ -268,6 +268,7 @@ extension UsageMenuCardView.Model {
             if metric.detailIsPaceDerived {
                 result.detailLeftText = nil
                 result.detailRightText = nil
+                result.paceHelpText = nil
             }
             result.pacePercent = nil
             result.sessionEquivalentDetail = nil
