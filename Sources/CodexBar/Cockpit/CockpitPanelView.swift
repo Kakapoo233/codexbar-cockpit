@@ -110,11 +110,12 @@ struct CockpitPanelView: View {
                     }
                     .font(.system(size: 13, weight: self.navigation.page == page ? .semibold : .regular))
                     .fixedSize(horizontal: true, vertical: false)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .frame(minWidth: 44, maxWidth: .infinity, minHeight: 44)
                     .background(
                         self.navigation.page == page ? Color.accentColor.opacity(0.15) : .clear,
                         in: RoundedRectangle(cornerRadius: 7))
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .help(page.title)

@@ -88,6 +88,9 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
   baseline deduplication remains owned by CodexBar's scanner. Subagents belong to their root task;
   independent forks remain independent work.
 - `CockpitMenuPanelController` owns the menu-bar popover; `CockpitPanelView` owns its peer pages.
+  The four primary page buttons have at least 44-point targets with rectangular hit regions covering
+  the label's entire padded area, including the icon-only narrow layout. Windows peer tabs likewise
+  have at least 44 CSS-pixel targets, retaining equal widths and wrapping at larger text scales.
   The existing provider menu builders remain the source for provider cards and actions.
 - Statistics keeps its reporting-period choices in a fixed sidebar outside the scrolling content.
   The sidebar uses the same controller binding as cost and quota history; direct session-detail
