@@ -47,6 +47,10 @@ struct CockpitStatusItemPanelTests {
             #expect(controller.statusItems[.claude]?.button?.action ==
                 #selector(StatusItemController.toggleCockpitPanel(_:)))
         }
+        let item = merged ? controller.statusItem : try #require(controller.statusItems[.claude])
+        let button = try #require(item.button)
+        let pressEvents: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown]
+        #expect(button.sendAction(on: pressEvents) == Int(pressEvents.rawValue))
     }
 
     @Test

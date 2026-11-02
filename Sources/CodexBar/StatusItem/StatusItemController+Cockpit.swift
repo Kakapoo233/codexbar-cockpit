@@ -19,7 +19,7 @@ extension StatusItemController {
         item.menu = nil
         item.button?.target = self
         item.button?.action = #selector(self.toggleCockpitPanel(_:))
-        item.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        item.button?.sendAction(on: [.leftMouseDown, .rightMouseDown])
     }
 
     @objc func toggleCockpitPanel(_ sender: NSStatusBarButton) {
