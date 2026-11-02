@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.15 — Mac panel responsiveness
+
+- Coalesce provider-menu updates while Usage is hidden; refresh once before returning to the current provider and settings.
+- Apply the panel's column width before its first menu attaches, avoiding an extra native menu measurement and oversized cards.
+- Cancel pending refreshes on close and reopen. Keep the existing provider collectors and retained page controls.
+
 ## 0.8.10
 
 - Replace the unavailable personal CloudKit settings pane with iCloud Drive file synchronization for allowlisted preferences, menu-bar layouts, personal caps and calendar feedback.
