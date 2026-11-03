@@ -53,6 +53,8 @@ struct UsageMenuCardView: View {
             let isSyntheticCreditLane: Bool
             var helpText: String?
             var paceHelpText: String?
+            /// The automatic full-day share of weekly quota; never complements used/remaining display.
+            var cockpitDailyRecommendation: CockpitMenuBarRecommendation?
 
             init(
                 id: String,
@@ -746,8 +748,20 @@ struct UsageMenuCardUsageSectionView: View {
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
     var body: some View {
+        if self.model.usesLiveSubtitle,
+           self.model.metrics.contains(where: { $0.cockpitDailyRecommendation != nil })
+        {
+            TimelineView(.periodic(from: .now, by: 60)) { _ in
+                self.content
+            }
+        } else {
+            self.content
+        }
+    }
+
+    private var content: some View {
         let liveModel = self.liveModel
-        UsageMenuCardUsageContentView(
+        return UsageMenuCardUsageContentView(
             model: liveModel,
             layoutModel: self.layoutModel,
             showBottomDivider: self.showBottomDivider,
@@ -891,12 +905,13 @@ extension UsageMenuCardView.Model {
         let paceVisible = input.paceVisible && ProviderDescriptorRegistry.descriptor(for: input.provider).pace
             .allowsPace(dataConfidence: input.snapshot?.dataConfidence ?? .unknown)
         let rawMetrics = Self.metrics(input: input)
-        let metrics = Self.redactedMetrics(
+        let visibleMetrics = Self.redactedMetrics(
             Self.paceGatedMetrics(
                 paceVisible ? Self.monthlyTargetMetrics(rawMetrics, input: input, calendar: calendar) : rawMetrics,
                 paceVisible: paceVisible),
             provider: input.provider,
             hidePersonalInfo: input.hidePersonalInfo)
+        let metrics = Self.cockpitRecommendationMetrics(visibleMetrics, input: input)
         let openAIAPIUsage = input.snapshot?.openAIAPIUsage
         let inlineUsageDashboard = Self.inlineUsageDashboard(input: input)
         let usageNotes = Self.usageNotes(input: input)

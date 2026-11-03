@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.24 — Recommendation beside weekly usage
+
+- Replace the large top summary with a progress row directly below the main weekly quota, using the same bar style and color.
+- Show the automatic full-day recommendation as a share of weekly quota, independently of the used/remaining switch and personal caps.
+- Preserve account and allowance boundaries, uncertainty, native layout caching and live minute updates.
+
 ## 0.8.23 — Daily recommendation at the top of Usage
 
 - Pin a prominent Daily recommendation summary above the Usage page's scrolling content, with provider names, large percentages and full-day weekly-quota units.

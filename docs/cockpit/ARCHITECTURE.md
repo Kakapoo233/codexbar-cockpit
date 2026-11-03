@@ -6,13 +6,17 @@ CodexBar remains the native menu-bar shell and provider collector. One transient
 to the status item hosts Usage, Statistics, Calendar, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
-Usage pins a compact Daily recommendation header above its scrolling columns at every panel width.
-It reads the same automatic full-day `suggestedPercent`, matched to the current local snapshot's
-provider and account; missing or mismatched data stays unknown. Partial/stale values retain their
-qualification, and the displayed percentage remains a share of weekly quota, independent of personal
-caps or today's remaining allocation. The existing advice card retains its detailed controls and
-remaining values without repeating the header's recommendation. Existing localization and planner
-observations/minute updates supply the header; it starts no collector or synchronization task.
+Usage displays Daily recommendation as a native-style progress row directly below its main weekly
+quota row, without a separate top summary. An optional app-level metric decoration carries the same
+automatic full-day `suggestedPercent`, matched to the current local snapshot's provider and account.
+Settings, remote accounts and unmatched plans never borrow that local recommendation. The weekly
+window is matched by its complete measured rate window, including Codex's normalized weekly slot;
+Spark and other allowances do not receive it. The new row reuses the weekly progress view and color,
+but its fill always means the recommended share of weekly quota, independently of used/remaining
+display, personal caps and today's remaining allowance. Partial/stale values retain their meaning.
+Its presence participates in layout compatibility and height caching; live cards refresh their model
+on minute ticks without fetching. Detailed advice retains caps and remaining values without repeating
+the recommendation. No collector, stored-plan schema or synchronization task is added.
 
 The panel retains visited pages while open. Provider-menu invalidations accumulate while Usage is
 hidden, then rebuild once before the page selection publishes Usage again. This avoids rebuilding

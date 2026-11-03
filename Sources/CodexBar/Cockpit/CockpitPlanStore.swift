@@ -220,7 +220,7 @@ final class CockpitPlanStore {
         self.save()
     }
 
-    static func weeklyWindow(in snapshot: UsageSnapshot) -> RateWindow? {
+    nonisolated static func weeklyWindow(in snapshot: UsageSnapshot) -> RateWindow? {
         [snapshot.secondary, snapshot.primary, snapshot.tertiary].compactMap(\.self).first { window in
             guard let minutes = window.windowMinutes, let reset = window.resetsAt else { return false }
             return minutes == 10080 && !window.isSyntheticPlaceholder && window.usedPercent.isFinite

@@ -37,6 +37,7 @@ struct MetricRow: View {
                     warningMarkerPercents: self.metric.warningMarkerPercents,
                     workdayMarkerPercents: self.metric.workdayMarkerPercents,
                     workdayTickAppearance: self.metric.workdayTickAppearance)
+                    .accessibilityIdentifier("usage-metric-\(self.metric.id)-progress")
                 if !self.compact, let layoutMetaText = layoutPresentation.metaText {
                     self.layoutPreservingText(
                         presentation.metaText,
@@ -52,8 +53,16 @@ struct MetricRow: View {
                 if !self.compact, let layoutTarget = self.layoutMetric.dailyTargetText {
                     self.layoutPreservingText(self.metric.dailyTargetText, layoutText: layoutTarget, lineLimit: 2)
                 }
+                if let recommendation = self.metric.cockpitDailyRecommendation {
+                    CockpitUsageRecommendationBar(
+                        recommendation: recommendation,
+                        progressColor: self.progressColor,
+                        compact: self.compact)
+                        .padding(.top, 6)
+                }
             }
         }
+        .accessibilityElement(children: .contain)
         .help(self.metric.helpText ?? self.metric.paceHelpText ?? "")
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(self.metric.cardStyle ? 10 : 0)
