@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.25 — Stable low-quota warnings
+
+- Keep the already-delivered threshold record when a quota reading temporarily disappears, preventing repeated 50% alerts during continuous use.
+- Ignore older observations for the same warning episode, while retaining real recovery, lower-threshold and confirmed next-cycle notifications.
+- Preserve independent provider, account and quota-window warning state.
+
 ## 0.8.24 — Recommendation beside weekly usage
 
 - Replace the large top summary with a progress row directly below the main weekly quota, using the same bar style and color.
