@@ -3202,6 +3202,7 @@
 /* Full-day target and remaining daily allowance */
 "cockpit_advice_full_day" = "全天建议（周额度）";
 "cockpit_advice_remaining_today" = "今日还能用（占今日分配）";
+"cockpit_advice_remaining_weekly" = "今日还能用（占每周额度）";
 
 /* Comfort-informed daily advice */
 "cockpit_advice_comfort_default" = "舒适上限：%@ · 默认曲线";

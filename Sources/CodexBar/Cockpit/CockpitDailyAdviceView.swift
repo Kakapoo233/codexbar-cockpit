@@ -165,16 +165,10 @@ struct CockpitDailyAdviceRow: View {
         VStack(alignment: .leading, spacing: 10) {
             self.providerTitle
             self.dailyAllowance
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
-                if self.showsRecommendation {
-                    self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
-                }
-                self.metric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
-                self.metric(
-                    L("cockpit_ui_observed"),
-                    self.status.usedPercent,
-                    partial: self.status.coverage != .complete)
+            if self.showsRecommendation {
+                self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
             }
+            self.weeklyAllowance
             HStack(spacing: 12) {
                 Text(L("cockpit_ui_personal_cap")).font(.caption)
                 self.capSlider
@@ -193,11 +187,7 @@ struct CockpitDailyAdviceRow: View {
                 if self.showsRecommendation {
                     self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
                 }
-                self.sidebarMetric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
-                self.sidebarMetric(
-                    L("cockpit_ui_observed"),
-                    self.status.usedPercent,
-                    partial: self.status.coverage != .complete)
+                self.weeklyAllowance
             }
             Divider()
             VStack(spacing: 6) {
@@ -220,6 +210,21 @@ struct CockpitDailyAdviceRow: View {
         CockpitDailyAllowanceBar(
             status: self.status,
             progressColor: UsageMenuCardView.Model.progressColor(for: self.provider))
+    }
+
+    private var weeklyAllowance: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Text(L("cockpit_advice_remaining_weekly"))
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Text(CockpitDailyAdviceProjection.remainingWeeklyText(self.status))
+                .font(.system(size: 19, weight: .semibold, design: .rounded)).monospacedDigit()
+                .fixedSize(horizontal: true, vertical: false)
+                .accessibilityIdentifier("cockpit-advice-remaining-weekly-equivalent")
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("cockpit-advice-weekly-allowance")
     }
 
     private var capValue: some View {
@@ -308,16 +313,19 @@ struct CockpitDailyBudgetRemainingValue: View {
     let status: CockpitDayStatus
     var alignment: HorizontalAlignment = .trailing
     var fontSize: CGFloat = 19
+    var showsWeeklyEquivalent = true
 
     var body: some View {
         VStack(alignment: self.alignment, spacing: 3) {
             Text(CockpitDailyAdviceProjection.remainingDailyText(self.status))
                 .font(.system(size: self.fontSize, weight: .semibold, design: .rounded)).monospacedDigit()
                 .accessibilityIdentifier("cockpit-advice-remaining-daily-ratio")
-            Text(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(self.status))
-                .font(.caption2).foregroundStyle(.secondary).monospacedDigit()
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityIdentifier("cockpit-advice-remaining-weekly-equivalent")
+            if self.showsWeeklyEquivalent {
+                Text(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(self.status))
+                    .font(.caption2).foregroundStyle(.secondary).monospacedDigit()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("cockpit-advice-remaining-weekly-equivalent")
+            }
         }
         .help(L("cockpit_advice_daily_ratio_help"))
     }

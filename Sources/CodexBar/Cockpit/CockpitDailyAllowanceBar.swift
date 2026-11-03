@@ -13,7 +13,7 @@ struct CockpitDailyAllowanceBar: View {
                     .font(.caption).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 8)
-                CockpitDailyBudgetRemainingValue(status: self.status)
+                CockpitDailyBudgetRemainingValue(status: self.status, showsWeeklyEquivalent: false)
             }
             if let remaining = CockpitMenuBarDailyRemaining(status: self.status) {
                 UsageProgressBar(

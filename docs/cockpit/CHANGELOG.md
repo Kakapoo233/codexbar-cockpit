@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.8.28 — Clear daily allowance units
+
+- Replace Daily advice's Weekly remaining metric with Available today as a share of the weekly quota, and remove Observed today from that card.
+- Keep the daily-allocation progress bar, show its weekly equivalent once in the separate row, and localize the new label in all 23 supported languages.
+
 ## 0.8.27 — Codex weekly warnings persist across restarts
 
 - Keep a local, account-scoped weekly warning ledger so the same threshold cannot repeat after quota rebounds, provider cleanup or application updates.

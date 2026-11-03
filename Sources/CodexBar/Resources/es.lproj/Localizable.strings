@@ -3204,6 +3204,7 @@
 /* Full-day target and remaining daily allowance (English fallback) */
 "cockpit_advice_full_day" = "Full-day target · weekly quota";
 "cockpit_advice_remaining_today" = "Available today · of daily allocation";
+"cockpit_advice_remaining_weekly" = "Disponible hoy · de la cuota semanal";
 
 /* Comfort-informed daily advice (English fallback) */
 "cockpit_advice_comfort_default" = "Comfort ceiling: %@ · default curve";

@@ -9,8 +9,9 @@ personal caps appear directly on Usage. There is no independent Cockpit window o
 Usage displays Available today as a progress row inside each provider's Daily advice card in the
 right column. Compact panels retain the same row in their inline advice card. Its fill is the share
 of today's effective allocation still available (`remainingDailyBudgetPercent`), with manual caps
-and actual remaining quota applied by the existing planner. The secondary value retains the weekly
-quota equivalent. This replaces the automatic weekly-share bar beneath the native provider quota;
+and actual remaining quota applied by the existing planner. A separate Available today row beneath
+the bar shows its weekly-quota equivalent once. The advice card omits total weekly balance and
+Observed today metrics. This replaces the automatic weekly-share bar beneath the native provider quota;
 the native quota card has no recommendation decoration. Partial readings keep their upper-bound
 label, stale readings retain their warning, and missing measurements do not draw an empty allowance.
 The existing advice minute refresh and provider color are reused. The automatic recommendation and
