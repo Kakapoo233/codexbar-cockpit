@@ -26,7 +26,7 @@ struct CockpitUnifiedPanelScreenshotTests {
             let settings = try Self.makeSettings(in: temporary)
             let store = UsageStore(
                 fetcher: UsageFetcher(environment: [:]),
-                browserDetection: BrowserDetection(cacheTTL: 0),
+                browserDetection: BrowserDetection(homeDirectory: temporary.path, cacheTTL: 0),
                 settings: settings,
                 historicalUsageHistoryStore: HistoricalUsageHistoryStore(
                     fileURL: temporary.appendingPathComponent("history.json")),
@@ -74,6 +74,8 @@ struct CockpitUnifiedPanelScreenshotTests {
             plan.ingest([.claude: Self.quota(at: midnight, now: now, usedPercent: 0)])
             let quota = Self.quota(at: now, now: now, usedPercent: 12)
             plan.ingest([.claude: quota])
+            store._test_providerRefreshOverride = { _ in Issue.record("Unexpected provider transport") }
+            store._setSnapshotForTesting(quota, provider: .claude)
             plan.setPersonalCap(18, for: .claude)
             plan.recordLocalComfort(.comfortable, for: .codex, totalTokens: nil)
             #expect(plan.availableProviders == [.claude])
@@ -104,6 +106,7 @@ struct CockpitUnifiedPanelScreenshotTests {
                     onRefresh: {})
                 let host = NSHostingView(rootView: root
                     .codexBarLocalized()
+                    .environment(\.accessibilityEnabled, true)
                     .environment(\.colorScheme, .light))
                 host.appearance = NSAppearance(named: .aqua)
                 host.frame = CGRect(origin: .zero, size: size)
@@ -121,6 +124,8 @@ struct CockpitUnifiedPanelScreenshotTests {
                 }
 
                 try await Self.settle(host, controller: controller)
+                #expect(MenuLayoutScreenshotRenderTests.accessibilityText(host)
+                    .contains(L("cockpit_menu_daily_recommendation")))
                 #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
                 #expect(menu.items.contains { $0.view === card })
                 let cardFrame = card.convert(card.bounds, to: host)

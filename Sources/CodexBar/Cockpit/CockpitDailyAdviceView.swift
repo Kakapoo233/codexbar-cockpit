@@ -72,6 +72,7 @@ struct CockpitDailyAdviceView: View {
     @Bindable var planStore: CockpitPlanStore
     let providers: [UsageProvider]
     var layout: CockpitDailyAdviceLayout = .inline
+    var showsRecommendation = true
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 60)) { _ in
@@ -93,7 +94,8 @@ struct CockpitDailyAdviceView: View {
                         provider: provider,
                         status: self.planStore.status(for: provider, on: date),
                         setCap: { self.planStore.setPersonalCap($0, for: provider) },
-                        layout: self.layout)
+                        layout: self.layout,
+                        showsRecommendation: self.showsRecommendation)
                     CockpitPersonalInsightsView(
                         model: CockpitPersonalUsageModel.build(
                             state: self.planStore.state,
@@ -123,6 +125,7 @@ struct CockpitDailyAdviceRow: View {
     let status: CockpitDayStatus
     let setCap: (Double?) -> Void
     var layout: CockpitDailyAdviceLayout = .inline
+    var showsRecommendation = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -162,7 +165,9 @@ struct CockpitDailyAdviceRow: View {
         VStack(alignment: .leading, spacing: 10) {
             self.providerTitle
             HStack(alignment: .firstTextBaseline, spacing: 12) {
-                self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                if self.showsRecommendation {
+                    self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                }
                 VStack(alignment: .trailing, spacing: 3) {
                     Text(L("cockpit_advice_remaining_today")).font(.caption).foregroundStyle(.secondary)
                     CockpitDailyBudgetRemainingValue(status: self.status)
@@ -188,7 +193,9 @@ struct CockpitDailyAdviceRow: View {
         VStack(alignment: .leading, spacing: 12) {
             self.providerTitle
             VStack(spacing: 8) {
-                self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                if self.showsRecommendation {
+                    self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
+                }
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(L("cockpit_advice_remaining_today"))
                         .font(.caption).foregroundStyle(.secondary)
