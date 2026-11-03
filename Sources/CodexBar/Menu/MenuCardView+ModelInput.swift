@@ -44,7 +44,6 @@ extension UsageMenuCardView.Model {
         let weeklyPace: UsagePace?
         let cockpitRecommendationPace: CockpitRecommendationPace?
         let usesCockpitRecommendationPace: Bool
-        let cockpitDailyRecommendation: CockpitMenuBarRecommendation?
         let sessionEquivalentForecast: SessionEquivalentForecast?
         let quotaWarningThresholds: [QuotaWarningWindow: [Int]]
         let workDaysPerWeek: Int?
@@ -96,7 +95,6 @@ extension UsageMenuCardView.Model {
             weeklyPace: UsagePace? = nil,
             cockpitRecommendationPace: CockpitRecommendationPace? = nil,
             usesCockpitRecommendationPace: Bool = false,
-            cockpitDailyRecommendation: CockpitMenuBarRecommendation? = nil,
             sessionEquivalentForecast: SessionEquivalentForecast? = nil,
             quotaWarningThresholds: [QuotaWarningWindow: [Int]] = [:],
             workDaysPerWeek: Int? = nil,
@@ -147,7 +145,6 @@ extension UsageMenuCardView.Model {
             self.weeklyPace = weeklyPace
             self.cockpitRecommendationPace = cockpitRecommendationPace
             self.usesCockpitRecommendationPace = usesCockpitRecommendationPace
-            self.cockpitDailyRecommendation = cockpitDailyRecommendation
             self.sessionEquivalentForecast = sessionEquivalentForecast
             self.quotaWarningThresholds = quotaWarningThresholds
             self.workDaysPerWeek = workDaysPerWeek

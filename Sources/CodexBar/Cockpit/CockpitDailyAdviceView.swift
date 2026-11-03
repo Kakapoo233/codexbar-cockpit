@@ -164,15 +164,11 @@ struct CockpitDailyAdviceRow: View {
     private var inlineContent: some View {
         VStack(alignment: .leading, spacing: 10) {
             self.providerTitle
+            self.dailyAllowance
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 if self.showsRecommendation {
                     self.metric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
                 }
-                VStack(alignment: .trailing, spacing: 3) {
-                    Text(L("cockpit_advice_remaining_today")).font(.caption).foregroundStyle(.secondary)
-                    CockpitDailyBudgetRemainingValue(status: self.status)
-                }
-                .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.metric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.metric(
                     L("cockpit_ui_observed"),
@@ -192,18 +188,11 @@ struct CockpitDailyAdviceRow: View {
     private var sidebarContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             self.providerTitle
+            self.dailyAllowance
             VStack(spacing: 8) {
                 if self.showsRecommendation {
                     self.sidebarMetric(L("cockpit_advice_full_day"), self.status.suggestedPercent)
                 }
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(L("cockpit_advice_remaining_today"))
-                        .font(.caption).foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Spacer(minLength: 8)
-                    CockpitDailyBudgetRemainingValue(status: self.status)
-                }
-                .accessibilityIdentifier("cockpit-advice-remaining-today")
                 self.sidebarMetric(L("cockpit_ui_weekly_remaining"), self.status.remainingPercent)
                 self.sidebarMetric(
                     L("cockpit_ui_observed"),
@@ -225,6 +214,12 @@ struct CockpitDailyAdviceRow: View {
 
     private var providerTitle: some View {
         Text(ProviderDescriptorRegistry.descriptor(for: self.provider).metadata.displayName).font(.headline)
+    }
+
+    private var dailyAllowance: some View {
+        CockpitDailyAllowanceBar(
+            status: self.status,
+            progressColor: UsageMenuCardView.Model.progressColor(for: self.provider))
     }
 
     private var capValue: some View {

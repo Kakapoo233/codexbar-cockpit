@@ -131,7 +131,6 @@ extension UsageMenuCardView.Model.Metric {
             self.pacePercent == nil ? "pace=0" : "pace=1",
             self.paceOnTop ? "paceTop=1" : "paceTop=0",
             self.cardStyle ? "card=1" : "card=0",
-            self.cockpitDailyRecommendation == nil ? "cockpitRecommendation=0" : "cockpitRecommendation=1",
             "warningMarkers=\(self.warningMarkerPercents.count)",
             "workdayMarkers=\(self.workdayMarkerPercents.count)",
         ])

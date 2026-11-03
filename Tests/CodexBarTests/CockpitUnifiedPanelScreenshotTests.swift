@@ -93,7 +93,6 @@ struct CockpitUnifiedPanelScreenshotTests {
                 let card = try Self.makeCard(
                     quota: quota,
                     tokens: tokens,
-                    recommendation: store.cockpitMenuBarRecommendation(provider: .claude, snapshot: quota, now: now),
                     now: now,
                     width: bridge.width)
                 let menu = Self.makeMenu(card: card)
@@ -129,7 +128,9 @@ struct CockpitUnifiedPanelScreenshotTests {
                 }
 
                 try await Self.settle(host, controller: controller)
-                #expect(MenuLayoutScreenshotRenderTests.accessibilityText(host)
+                // Headless panel AX exposes the native menu; advice semantics are verified directly
+                // in CockpitDailyAllowanceBarTests. Capture both columns for visual inspection here.
+                #expect(!MenuLayoutScreenshotRenderTests.accessibilityText(card)
                     .contains(L("cockpit_menu_daily_recommendation")))
                 #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
                 #expect(menu.items.contains { $0.view === card })
@@ -277,7 +278,6 @@ struct CockpitUnifiedPanelScreenshotTests {
     private static func makeCard(
         quota: UsageSnapshot,
         tokens: CostUsageTokenSnapshot,
-        recommendation: CockpitMenuBarRecommendation?,
         now: Date,
         width: CGFloat) throws -> NSHostingView<AnyView>
     {
@@ -301,7 +301,6 @@ struct CockpitUnifiedPanelScreenshotTests {
             sourceLabel: "synthetic",
             subtitleOverride: "合成额度与 Token 用量 · 未连接真实账号",
             hidePersonalInfo: false,
-            cockpitDailyRecommendation: recommendation,
             preferredCurrencyCode: "USD",
             now: now))
         let card = NSHostingView(rootView: AnyView(UsageMenuCardView(model: model, width: width)

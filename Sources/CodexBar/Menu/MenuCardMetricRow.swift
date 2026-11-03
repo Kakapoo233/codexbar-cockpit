@@ -53,13 +53,6 @@ struct MetricRow: View {
                 if !self.compact, let layoutTarget = self.layoutMetric.dailyTargetText {
                     self.layoutPreservingText(self.metric.dailyTargetText, layoutText: layoutTarget, lineLimit: 2)
                 }
-                if let recommendation = self.metric.cockpitDailyRecommendation {
-                    CockpitUsageRecommendationBar(
-                        recommendation: recommendation,
-                        progressColor: self.progressColor,
-                        compact: self.compact)
-                        .padding(.top, 6)
-                }
             }
         }
         .accessibilityElement(children: .contain)

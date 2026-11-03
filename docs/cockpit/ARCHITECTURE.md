@@ -6,17 +6,15 @@ CodexBar remains the native menu-bar shell and provider collector. One transient
 to the status item hosts Usage, Statistics, Calendar, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
-Usage displays Daily recommendation as a native-style progress row directly below its main weekly
-quota row, without a separate top summary. An optional app-level metric decoration carries the same
-automatic full-day `suggestedPercent`, matched to the current local snapshot's provider and account.
-Settings, remote accounts and unmatched plans never borrow that local recommendation. The weekly
-window is matched by its complete measured rate window, including Codex's normalized weekly slot;
-Spark and other allowances do not receive it. The new row reuses the weekly progress view and color,
-but its fill always means the recommended share of weekly quota, independently of used/remaining
-display, personal caps and today's remaining allowance. Partial/stale values retain their meaning.
-Its presence participates in layout compatibility and height caching; live cards refresh their model
-on minute ticks without fetching. Detailed advice retains caps and remaining values without repeating
-the recommendation. No collector, stored-plan schema or synchronization task is added.
+Usage displays Available today as a progress row inside each provider's Daily advice card in the
+right column. Compact panels retain the same row in their inline advice card. Its fill is the share
+of today's effective allocation still available (`remainingDailyBudgetPercent`), with manual caps
+and actual remaining quota applied by the existing planner. The secondary value retains the weekly
+quota equivalent. This replaces the automatic weekly-share bar beneath the native provider quota;
+the native quota card has no recommendation decoration. Partial readings keep their upper-bound
+label, stale readings retain their warning, and missing measurements do not draw an empty allowance.
+The existing advice minute refresh and provider color are reused. The automatic recommendation and
+top menu-bar components keep their existing calculations. No collector or stored-plan schema changes.
 
 The panel retains visited pages while open. Provider-menu invalidations accumulate while Usage is
 hidden, then rebuild once before the page selection publishes Usage again. This avoids rebuilding
@@ -61,8 +59,8 @@ the same page again when the button's standard activation follows the initial pr
   missing values are never drawn as zero. Bars and bottom-up filled circles represent remaining daily
   allowance independently of the global used/remaining switch. Cockpit V8 layout keys
   retain V7-and-earlier projections so rolling back does not invalidate the existing layout.
-- Codex's main weekly menu-bar Pace comparison reads the same account-matched automatic daily
-  recommendation as the homepage. Expected use is that full-day target multiplied by the elapsed
+- Codex's main weekly menu-bar Pace comparison reads the account-matched automatic daily
+  recommendation from the planner. Expected use is that full-day target multiplied by the elapsed
   fraction of the local natural day (including DST); the target itself is not reduced. Deviation is
   today's observed use minus that reference, in weekly quota percentage points. Manual caps remain
   independent. Incomplete observations yield a one-sided lower bound and do not drive exact numeric

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.26 — Daily allowance in the advice card
+
+- Move the progress row from beneath weekly quota into the right-side Daily advice card, replacing its duplicate remaining-value presentation.
+- Fill it with available-today allowance divided by today's effective allocation; keep the weekly-quota equivalent as a secondary value.
+- Reuse provider color, minute updates, manual-cap handling and partial/stale/missing states without changing the automatic recommendation or top menu-bar components.
+
 ## 0.8.25 — Stable low-quota warnings
 
 - Keep the already-delivered threshold record when a quota reading temporarily disappears, preventing repeated 50% alerts during continuous use.
