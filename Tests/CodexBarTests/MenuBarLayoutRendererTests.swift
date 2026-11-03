@@ -112,7 +112,7 @@ struct MenuBarLayoutRendererTests {
             (.pace(window: .weekly), "P W\u{200A}+11%"),
             (.pace(window: .automatic), "P S\u{200A}0%"),
             (.usageBar, "S\u{200A}▮▮▯"),
-            (.resetCountdown, "R S\u{200A}in 2h"),
+            (.resetCountdown, "R S\u{200A}2h"),
             (.runsOut, "E\u{200A}Runs out in 1d 16h"),
             (.runsOutCompact, "E\u{200A}1d 16h"),
             (.balance, "$12.34"),
@@ -421,7 +421,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
         #expect(result.attributedTitle.string.contains("¥100.00"))
-        #expect(result.attributedTitle.string.contains("in 2h"))
+        #expect(result.attributedTitle.string.contains("R\u{200A}2h"))
     }
 
     @Test
@@ -955,7 +955,9 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options())
-        let resetIndex = (stacked.attributedTitle.string as NSString).range(of: "in 2h").location
+        let resetRange = (stacked.attributedTitle.string as NSString).range(of: "2h")
+        try #require(resetRange.location != NSNotFound)
+        let resetIndex = resetRange.location
         let singleLine = renderer.render(
             layout: MenuBarLayout(lines: [[.percent(window: .automatic), .resetCountdown]]),
             data: self.data(),
@@ -1252,7 +1254,7 @@ struct MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: now))
-        #expect(first.attributedTitle.string == "R S\u{200A}in 6m")
+        #expect(first.attributedTitle.string == "R S\u{200A}6m")
 
         // A different exact instant with the same visible value still hits the attributed-title cache.
         let sameMinute = renderer.render(
@@ -1267,7 +1269,7 @@ struct MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: now.addingTimeInterval(60)))
-        #expect(nextMinute.attributedTitle.string == "R S\u{200A}in 5m")
+        #expect(nextMinute.attributedTitle.string == "R S\u{200A}5m")
         #expect(first.attributedTitle !== nextMinute.attributedTitle)
     }
 
@@ -1476,7 +1478,7 @@ struct MenuBarLayoutRendererTests {
 
     @Test(arguments: [
         (0.0, MenuBarLayoutToken.percent(window: .session), "S\u{200A}25%"),
-        (50.0, MenuBarLayoutToken.resetCountdown, "R S\u{200A}in 2h"),
+        (50.0, MenuBarLayoutToken.resetCountdown, "R S\u{200A}2h"),
     ])
     func `conditional renders the matching branch`(threshold: Double, token: MenuBarLayoutToken, expected: String) {
         let renderer = MenuBarLayoutRenderer()
@@ -1829,7 +1831,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options(conditionals: [conditionFalse]))
         #expect(second.attributedTitle.string != first.attributedTitle.string)
-        #expect(second.attributedTitle.string == "R S\u{200A}in 2h")
+        #expect(second.attributedTitle.string == "R S\u{200A}2h")
     }
 
     @Test
@@ -1859,7 +1861,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options())
 
         #expect(output.attributedTitle.string == control.attributedTitle.string)
-        #expect(output.attributedTitle.string == "R S\u{200A}in 2h")
+        #expect(output.attributedTitle.string == "R S\u{200A}2h")
     }
 
     /// The fixture's session resets one hour out, so a `< 2h` countdown predicate holds. Rewinding the
@@ -1887,7 +1889,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options(
                 now: self.now.addingTimeInterval(-4 * 60 * 60),
                 conditionals: [conditional]))
-        #expect(outside.attributedTitle.string == "R S\u{200A}in 6h")
+        #expect(outside.attributedTitle.string == "R S\u{200A}6h")
     }
 
     @Test
@@ -1931,7 +1933,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [failing]))
-        #expect(otherwise.attributedTitle.string == "R S\u{200A}in 2h")
+        #expect(otherwise.attributedTitle.string == "R S\u{200A}2h")
     }
 
     /// Session is 25% used, so 75% remains: the same threshold must flip with the direction.
@@ -1946,7 +1948,7 @@ struct MenuBarLayoutRendererTests {
             metric: .session,
             comparison: .greaterThan,
             threshold: 50,
-            direction: .used)) == "R S\u{200A}in 2h")
+            direction: .used)) == "R S\u{200A}2h")
     }
 
     @Test
@@ -1960,7 +1962,7 @@ struct MenuBarLayoutRendererTests {
             metric: .balance,
             comparison: .greaterThan,
             threshold: 10,
-            direction: .used)) == "R S\u{200A}in 2h")
+            direction: .used)) == "R S\u{200A}2h")
     }
 
     @Test
@@ -1977,7 +1979,7 @@ struct MenuBarLayoutRendererTests {
         #expect(self.branchText(self.clause(
             metric: .runsOutIn,
             comparison: .lessThan,
-            threshold: 12)) == "R S\u{200A}in 2h")
+            threshold: 12)) == "R S\u{200A}2h")
         #expect(self.branchText(self.clause(
             metric: .costToday,
             comparison: .greaterThanOrEqual,
@@ -2000,7 +2002,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(metrics: .unavailable),
             icon: nil,
             options: self.options(conditionals: [conditional]))
-        #expect(output.attributedTitle.string == "R S\u{200A}in 2h")
+        #expect(output.attributedTitle.string == "R S\u{200A}2h")
     }
 
     /// Regression guard for the title cache: a countdown predicate flips with nothing but the clock, and
@@ -2076,7 +2078,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(automaticUsedPercent: 100),
             icon: nil,
             options: self.options(conditionals: [auto]))
-        #expect(spent.attributedTitle.string == "R S\u{200A}in 2h")
+        #expect(spent.attributedTitle.string == "R S\u{200A}2h")
     }
 
     @Test
@@ -2345,7 +2347,8 @@ struct MenuBarLayoutRendererTests {
         let reset = self.now.addingTimeInterval(12 * 24 * 60 * 60)
         let countdown = self.renderToken(.windowResetCountdown(window: .spend)).attributedTitle.string
         let absolute = self.renderToken(.windowResetAbsolute(window: .spend)).attributedTitle.string
-        #expect(countdown == "R\u{200A}" + UsageFormatter.resetCountdownDescription(from: reset, now: self.now))
+        let fullCountdown = UsageFormatter.resetCountdownDescription(from: reset, now: self.now)
+        #expect(countdown == "R\u{200A}" + String(fullCountdown.dropFirst(3)))
         #expect(absolute == "R\u{200A}" + UsageFormatter.resetDescription(from: reset, now: self.now))
         #expect(countdown != self.renderToken(.windowResetCountdown(window: .weekly)).attributedTitle.string)
     }
@@ -2371,9 +2374,9 @@ struct MenuBarLayoutRendererTests {
                 direction: direction))
         }
         #expect(usedAbove(40, .used) == "S\u{200A}25%")
-        #expect(usedAbove(50, .used) == "R S\u{200A}in 2h")
+        #expect(usedAbove(50, .used) == "R S\u{200A}2h")
         #expect(usedAbove(50, .remaining) == "S\u{200A}25%")
-        #expect(usedAbove(60, .remaining) == "R S\u{200A}in 2h")
+        #expect(usedAbove(60, .remaining) == "R S\u{200A}2h")
     }
 
     @Test
@@ -2382,12 +2385,12 @@ struct MenuBarLayoutRendererTests {
             metric: .spendResetsIn, comparison: .greaterThan, threshold: 200)) == "S\u{200A}25%")
         // The weekly window resets in 72h; borrowing it would make this branch true.
         #expect(self.branchText(self.clause(
-            metric: .spendResetsIn, comparison: .lessThan, threshold: 100)) == "R S\u{200A}in 2h")
+            metric: .spendResetsIn, comparison: .lessThan, threshold: 100)) == "R S\u{200A}2h")
         #expect(self.branchText(self.clause(
             metric: .spendPace, comparison: .greaterThan, threshold: 5)) == "S\u{200A}25%")
         // Weekly pace is +11; borrowing it would make this branch true.
         #expect(self.branchText(self.clause(
-            metric: .spendPace, comparison: .greaterThan, threshold: 8)) == "R S\u{200A}in 2h")
+            metric: .spendPace, comparison: .greaterThan, threshold: 8)) == "R S\u{200A}2h")
     }
 
     @Test
@@ -2398,17 +2401,17 @@ struct MenuBarLayoutRendererTests {
             metric: .spendAmount, comparison: .greaterThan, threshold: 500, direction: .remaining)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
             metric: .spendAmount, comparison: .greaterThan, threshold: 550, direction: .remaining)) ==
-            "R S\u{200A}in 2h")
+            "R S\u{200A}2h")
         // Balance and cost amounts never answer for the budget.
         #expect(self.branchText(self.clause(
-            metric: .spendAmount, comparison: .lessThan, threshold: 10)) == "R S\u{200A}in 2h")
+            metric: .spendAmount, comparison: .lessThan, threshold: 10)) == "R S\u{200A}2h")
 
         // Without a USD figure the datum is missing, even though the money token still renders.
         var unrated = self.data(metrics: .unavailable)
         unrated.spendAmount = "€390"
         #expect(self.branchText(
             self.clause(metric: .spendAmount, comparison: .greaterThanOrEqual, threshold: 0),
-            data: unrated) == "R S\u{200A}in 2h")
+            data: unrated) == "R S\u{200A}2h")
     }
 
     @Test
@@ -2617,6 +2620,7 @@ struct MenuBarLayoutRendererTests {
     }
 
     private func baselineOffset(in title: NSAttributedString, at index: Int) -> CGFloat? {
+        guard index >= 0, index < title.length else { return nil }
         let value = title.attribute(.baselineOffset, at: index, effectiveRange: nil)
         if let value = value as? CGFloat {
             return value

@@ -11,6 +11,10 @@ enum MenuBarDisplayText {
         "\(prefix)\(self.prefixSeparator(for: prefix))\(value)"
     }
 
+    static func compactResetCountdown(_ text: String) -> String {
+        text.hasPrefix("in ") ? String(text.dropFirst(3)) : text
+    }
+
     static func prefixedValue(
         from text: String?,
         prefix: String,
@@ -221,11 +225,13 @@ enum MenuBarDisplayText {
             case .absolute:
                 UsageFormatter.resetDescription(from: resetsAt, now: now)
             }
-            return showPrefixes ? self.prefixedStatusValue(prefix, value: description) : "\(prefix) \(description)"
+            let value = showPrefixes && style == .countdown ? self.compactResetCountdown(description) : description
+            return showPrefixes ? self.prefixedStatusValue(prefix, value: value) : "\(prefix) \(description)"
         }
         if let resetDescription = self.resetMetadataText(window.resetDescription) {
-            return showPrefixes
-                ? self.prefixedStatusValue(prefix, value: resetDescription) : "\(prefix) \(resetDescription)"
+            let value = showPrefixes && style == .countdown
+                ? self.compactResetCountdown(resetDescription) : resetDescription
+            return showPrefixes ? self.prefixedStatusValue(prefix, value: value) : "\(prefix) \(resetDescription)"
         }
         return nil
     }
