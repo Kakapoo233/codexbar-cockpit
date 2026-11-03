@@ -76,7 +76,7 @@ struct CockpitMenuBarRecommendationRenderingTests {
                 options: fixture.options(showUsed: showUsed))
             let percent = (value / 100).formatted(
                 .percent.precision(.fractionLength(0...1)).locale(Locale(identifier: "en")))
-            #expect(output.attributedTitle.string == "T \(percent)")
+            #expect(output.attributedTitle.string == "T\u{200A}\(percent)")
             #expect(output.accessibilityLabel == L("cockpit_menu_daily_recommendation_accessibility", percent))
         }
     }
@@ -91,7 +91,7 @@ struct CockpitMenuBarRecommendationRenderingTests {
         data.cockpitDailyRecommendationPercent = value
         let invalid = renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
         #expect(invalid.attributedTitle.string == unavailable.attributedTitle.string)
-        #expect(invalid.attributedTitle.string == "\(L("cockpit_menu_daily_recommendation_short")) —")
+        #expect(invalid.attributedTitle.string == "\(L("cockpit_menu_daily_recommendation_short"))\u{200A}—")
         #expect(invalid.accessibilityLabel == L("%@ unavailable", L("cockpit_menu_daily_recommendation")))
     }
 
@@ -148,7 +148,7 @@ struct CockpitMenuBarRecommendationRenderingTests {
                 renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
             }
             #expect(chinese.attributedTitle.string.hasPrefix("建议 "))
-            #expect(english.attributedTitle.string == "T 15%")
+            #expect(english.attributedTitle.string == "T\u{200A}15%")
             #expect(english.accessibilityLabel != chinese.accessibilityLabel)
             #expect(codexBarLocalizationSignature() == "zh-Hans")
             let restored = renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())

@@ -17,7 +17,7 @@ struct CockpitDailyRemainingRendererTests {
                 data: data,
                 icon: nil,
                 options: fixture.options(showUsed: showUsed))
-            #expect(output.attributedTitle.string == "T \(Int(percent))%")
+            #expect(output.attributedTitle.string == "T\u{200A}\(Int(percent))%")
             #expect(output.accessibilityLabel == L(
                 "cockpit_menu_remaining_accessibility", "\(Int(percent))%", "\(Int(percent / 5))%"))
         }
@@ -88,7 +88,7 @@ struct CockpitDailyRemainingRendererTests {
                     renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
                 }
                 #expect(chinese.attributedTitle.string.hasPrefix("今日 "))
-                #expect(english.attributedTitle.string.hasPrefix("T "))
+                #expect(english.attributedTitle.string.hasPrefix("T\u{200A}"))
                 #expect(chinese.accessibilityLabel != english.accessibilityLabel)
                 #expect(renderer.render(layout: layout, data: data, icon: nil, options: fixture.options())
                     .attributedTitle === chinese.attributedTitle)

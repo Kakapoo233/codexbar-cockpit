@@ -146,7 +146,7 @@ struct CodexConsumerProjectionCharacterizationTests {
 
         let displayText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(displayText == "100%")
+        #expect(displayText == "U\u{200A}100%")
     }
 
     @Test
@@ -176,7 +176,7 @@ struct CodexConsumerProjectionCharacterizationTests {
 
         let displayText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(displayText == "5h 93% · W 82%")
+        #expect(displayText == "S\u{200A}93% · W\u{200A}82%")
     }
 
     @Test
@@ -206,7 +206,7 @@ struct CodexConsumerProjectionCharacterizationTests {
 
         let displayText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(displayText == "W 82%")
+        #expect(displayText == "W\u{200A}82%")
     }
 
     @Test
@@ -295,7 +295,7 @@ struct CodexConsumerProjectionCharacterizationTests {
         settings.setMenuBarMetricPreference(.secondary, for: .codex)
         let secondaryText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(primaryText == "93%")
-        #expect(secondaryText == "82%")
+        #expect(primaryText == "S\u{200A}93%")
+        #expect(secondaryText == "W\u{200A}82%")
     }
 }

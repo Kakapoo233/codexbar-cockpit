@@ -2,6 +2,15 @@ import CodexBarCore
 import Foundation
 
 enum MenuBarDisplayText {
+    static func prefixSeparator(for prefix: String) -> String {
+        guard let last = prefix.last, last.isASCII, last.isLetter else { return " " }
+        return "\u{200A}"
+    }
+
+    static func prefixedStatusValue(_ prefix: String, value: String) -> String {
+        "\(prefix)\(self.prefixSeparator(for: prefix))\(value)"
+    }
+
     static func prefixedValue(
         from text: String?,
         prefix: String,
@@ -127,7 +136,8 @@ enum MenuBarDisplayText {
         showPrefixes: Bool) -> String?
     {
         guard let value = self.percentText(window: window, showUsed: showUsed, estimated: estimated) else { return nil }
-        return showPrefixes ? "\(self.periodPrefix(windowMinutes: window?.windowMinutes)) \(value)" : value
+        return showPrefixes
+            ? self.prefixedStatusValue(self.periodPrefix(windowMinutes: window?.windowMinutes), value: value) : value
     }
 
     private static func sessionWindowLabel(window: RateWindow) -> String {
@@ -173,7 +183,7 @@ enum MenuBarDisplayText {
         let rawPaceText = usesRecommendationPace
             ? CockpitRecommendationPaceText.menuBarText(pace: recommendationPace, reservePositive: paceReservePositive)
             : self.paceText(pace: pace, reservePositive: paceReservePositive)
-        let resolvedPaceText = rawPaceText.map { showPrefixes ? "P \($0)" : $0 }
+        let resolvedPaceText = rawPaceText.map { showPrefixes ? self.prefixedStatusValue("P", value: $0) : $0 }
         let percent = self.quotaText(
             window: percentWindow, showUsed: showUsed, estimated: estimated, showPrefixes: showPrefixes)
         switch mode {
@@ -202,7 +212,8 @@ enum MenuBarDisplayText {
         showPrefixes: Bool = false,
         now: Date) -> String?
     {
-        let prefix = showPrefixes ? "R \(self.periodPrefix(windowMinutes: window.windowMinutes))" : "↻"
+        let period = self.periodPrefix(windowMinutes: window.windowMinutes)
+        let prefix = showPrefixes ? (period == "W" ? "R" : "R \(period)") : "↻"
         if let resetsAt = window.resetsAt {
             let description = switch style {
             case .countdown:
@@ -210,10 +221,11 @@ enum MenuBarDisplayText {
             case .absolute:
                 UsageFormatter.resetDescription(from: resetsAt, now: now)
             }
-            return "\(prefix) \(description)"
+            return showPrefixes ? self.prefixedStatusValue(prefix, value: description) : "\(prefix) \(description)"
         }
         if let resetDescription = self.resetMetadataText(window.resetDescription) {
-            return "\(prefix) \(resetDescription)"
+            return showPrefixes
+                ? self.prefixedStatusValue(prefix, value: resetDescription) : "\(prefix) \(resetDescription)"
         }
         return nil
     }

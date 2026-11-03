@@ -70,6 +70,8 @@ the same page again when the button's standard activation follows the initial pr
   Daily recommendation and available-today components retain T. The existing window-label preference
   controls optional identifiers, and spoken descriptions retain full localized names. Number, meter,
   conditional and legacy text paths share this presentation without changing calculations or layouts.
+  English prefixes use a hair space before their value or meter, including daily T. Weekly reset
+  fields use R alone; other reset periods retain their window qualifier and spoken names stay complete.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

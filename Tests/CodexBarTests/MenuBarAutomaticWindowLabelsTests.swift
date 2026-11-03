@@ -16,7 +16,7 @@ struct MenuBarAutomaticWindowLabelsTests {
             let data = self.data(weekly: weekly)
             let prefix = weekly ? "W" : "S"
             let visible = renderer.render(layout: layout, data: data, icon: nil, options: self.options())
-            #expect(visible.attributedTitle.string == "\(prefix) 84%\nP \(prefix) +7%")
+            #expect(visible.attributedTitle.string == "\(prefix)\u{200A}84%\nP \(prefix)\u{200A}+7%")
             let hidden = renderer.render(
                 layout: layout, data: data, icon: nil, options: self.options(showLabels: false))
             #expect(hidden.attributedTitle.string == "84%\n+7%")
@@ -42,10 +42,11 @@ struct MenuBarAutomaticWindowLabelsTests {
                 data: self.data(weekly: weekly),
                 icon: nil,
                 options: options)
-            #expect(available.attributedTitle.string == "\(prefix) 84%")
+            #expect(available.attributedTitle.string == "\(prefix)\u{200A}84%")
             let exhausted = self.data(weekly: weekly, used: 100)
             let reset = renderer.render(layout: layout, data: exhausted, icon: nil, options: options)
-            #expect(reset.attributedTitle.string == "R \(prefix) in 2h")
+            let resetPrefix = weekly ? "R" : "R S"
+            #expect(reset.attributedTitle.string == "\(resetPrefix)\u{200A}in 2h")
             let hidden = renderer.render(
                 layout: layout,
                 data: exhausted,
@@ -54,7 +55,7 @@ struct MenuBarAutomaticWindowLabelsTests {
             #expect(hidden.attributedTitle.string == "in 2h")
             let absolute = renderer.render(
                 layout: MenuBarLayout(lines: [[.resetAbsolute]]), data: exhausted, icon: nil, options: options)
-            #expect(absolute.attributedTitle.string.hasPrefix("R \(prefix) "))
+            #expect(absolute.attributedTitle.string.hasPrefix("\(resetPrefix)\u{200A}"))
         }
     }
 
@@ -63,7 +64,7 @@ struct MenuBarAutomaticWindowLabelsTests {
         let renderer = MenuBarLayoutRenderer()
         let layout = MenuBarLayout(lines: [[.percent(window: .automatic)]])
         let single = renderer.render(layout: layout, data: self.data(single: true), icon: nil, options: self.options())
-        #expect(single.attributedTitle.string == "S 84%")
+        #expect(single.attributedTitle.string == "S\u{200A}84%")
         let balance = renderer.render(
             layout: layout, data: self.data(automaticText: "$12"), icon: nil, options: self.options())
         #expect(balance.attributedTitle.string == "$12")
@@ -75,7 +76,7 @@ struct MenuBarAutomaticWindowLabelsTests {
         let layout = MenuBarLayout(lines: [[.percent(window: .automatic)], [.pace(window: .automatic)]])
         for (data, label) in [(self.data(monthly: true), "M"), (self.data(namedAllowance: true), "GB")] {
             let output = renderer.render(layout: layout, data: data, icon: nil, options: self.options())
-            #expect(output.attributedTitle.string == "\(label) 84%\nP \(label) +7%")
+            #expect(output.attributedTitle.string == "\(label)\u{200A}84%\nP \(label)\u{200A}+7%")
         }
     }
 

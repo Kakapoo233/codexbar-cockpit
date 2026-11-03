@@ -83,8 +83,8 @@ struct StatusItemCombinedMetricPlaceholderTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Weekly lane only — the placeholder session is dropped (no "5h" component).
-        #expect(displayText == "W 42%")
-        #expect(displayText?.hasPrefix("S ") == false)
+        #expect(displayText == "W\u{200A}42%")
+        #expect(displayText?.hasPrefix("S\u{200A}") == false)
     }
 
     @Test
@@ -115,10 +115,10 @@ struct StatusItemCombinedMetricPlaceholderTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Percent comes from the weekly lane (58% remaining), not the placeholder session's 100%.
-        #expect(displayText?.hasPrefix("W 58%") == true)
-        #expect(displayText?.hasPrefix("S 100%") == false)
+        #expect(displayText?.hasPrefix("W\u{200A}58%") == true)
+        #expect(displayText?.hasPrefix("S\u{200A}100%") == false)
         // The placeholder session lane never surfaces, so no "5h" label appears.
-        #expect(displayText?.hasPrefix("S ") == false)
+        #expect(displayText?.hasPrefix("S\u{200A}") == false)
     }
 
     @Test
@@ -149,7 +149,7 @@ struct StatusItemCombinedMetricPlaceholderTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // The real session lane survives the filter, so both lanes render.
-        #expect(displayText == "S 0% · W 42%")
+        #expect(displayText == "S\u{200A}0% · W\u{200A}42%")
     }
 
     @Test
@@ -179,6 +179,6 @@ struct StatusItemCombinedMetricPlaceholderTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Unflagged session is real, so it renders despite matching the placeholder shape.
-        #expect(displayText == "S 0% · W 42%")
+        #expect(displayText == "S\u{200A}0% · W\u{200A}42%")
     }
 }
