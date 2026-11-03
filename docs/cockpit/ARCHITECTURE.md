@@ -30,6 +30,11 @@ the same page again when the button's standard activation follows the initial pr
 
 ## Modules and interfaces
 
+- Quota-warning episodes remain scoped by provider, account and quota lane. Missing readings preserve
+  fired thresholds, and older observations cannot re-arm a newer episode. A measured recovery above
+  a threshold re-arms it; a passed reset boundary followed by an advanced future boundary starts a new
+  cycle. Missing reset metadata retains the previous boundary, while a future boundary change alone
+  does not start another episode. More severe thresholds remain eligible independently.
 - `UsageStore` and `SpendDashboardController` remain the authoritative provider and cost interfaces.
   Cockpit consumes their published snapshots rather than starting a second collector.
 - `CockpitPlanState` is a serializable Foundation module. It receives official quota observations and

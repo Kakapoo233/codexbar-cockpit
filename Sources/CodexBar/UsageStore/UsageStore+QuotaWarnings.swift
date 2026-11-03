@@ -153,10 +153,9 @@ extension UsageStore {
             self.clearQuotaWarningState(provider: provider, window: window)
             return
         }
-        guard let rateWindow else {
-            self.quotaWarningState.removeValue(forKey: key)
-            return
-        }
+        // A temporarily missing window is not a quota recovery. Keep its threshold episode so
+        // the next low reading cannot repeat an already delivered warning.
+        guard let rateWindow else { return }
         // Claude promotes weekly usage to primary when its session payload is missing.
         guard provider != .claude || window != .session || Self.isSessionWindow(rateWindow) else { return }
         guard !rateWindow.isSyntheticPlaceholder else { return }
@@ -180,14 +179,26 @@ extension UsageStore {
             }
         }
         let previousState = self.quotaWarningState[key]
+        // Late snapshots must not look like a recovery and re-arm an already fired threshold.
+        if let previousState, accountContext.observedAt < previousState.observedAt { return }
         if let previousState, previousState.source != source {
             self.quotaWarningState[key] = QuotaWarningState(
                 lastRemaining: currentRemaining,
                 observedAt: accountContext.observedAt,
-                source: source)
+                source: source,
+                resetsAt: rateWindow.resetsAt)
             return
         }
         var state = previousState ?? QuotaWarningState(source: source)
+        // A gap can span a real reset. Only a passed prior boundary followed by a future,
+        // advanced boundary starts a new cycle; sliding or missing metadata alone cannot.
+        if let previousReset = state.resetsAt, previousReset <= accountContext.observedAt,
+           let currentReset = rateWindow.resetsAt, currentReset > accountContext.observedAt,
+           Self.limitResetBoundaryAdvanced(previous: previousReset, current: currentReset)
+        {
+            state.lastRemaining = nil
+            state.firedThresholds.removeAll()
+        }
         let cleared = QuotaWarningNotificationLogic.thresholdsToClear(
             currentRemaining: currentRemaining,
             alreadyFired: state.firedThresholds)
@@ -214,7 +225,7 @@ extension UsageStore {
         }
 
         state.observedAt = accountContext.observedAt
-        state.resetsAt = rateWindow.resetsAt
+        state.resetsAt = rateWindow.resetsAt ?? state.resetsAt
         state.lastRemaining = currentRemaining
         self.quotaWarningState[key] = state
     }
