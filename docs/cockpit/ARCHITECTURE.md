@@ -63,6 +63,13 @@ the same page again when the button's standard activation follows the initial pr
   include coverage and precise help, and hidden tokens or legacy/icon-only transitions clear stale help.
   Expanded panel and legacy bound text remain unchanged. Daily comparison units and the separately
   sourced quota forecast are explained in hover help; incomplete bounds cannot establish a reserve.
+- Status-item window labels use English identifiers: S for a session, D for a day, W for a week,
+  M for a month and U for an unknown period. Provider-declared allowance tags remain authoritative.
+  Automatic fields identify their selected window even when it is the only quota; balance overrides
+  retain their money text. R identifies reset times, P pace and E the separate exhaustion estimate.
+  Daily recommendation and available-today components retain T. The existing window-label preference
+  controls optional identifiers, and spoken descriptions retain full localized names. Number, meter,
+  conditional and legacy text paths share this presentation without changing calculations or layouts.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

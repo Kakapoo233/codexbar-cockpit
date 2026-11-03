@@ -852,6 +852,7 @@ extension StatusItemController {
                 showUsed: self.settings.usageBarsShowUsed,
                 estimated: snapshot?.dataConfidence == .estimated,
                 resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,
+                showPrefixes: self.settings.menuBarLayoutShowWindowLabels,
                 now: now)
         }
         if mode == .percent,
@@ -872,6 +873,7 @@ extension StatusItemController {
                 showUsed: self.settings.usageBarsShowUsed,
                 resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,
                 showsResetTimeWhenExhausted: self.settings.menuBarShowsResetTimeWhenExhausted,
+                showPrefixes: self.settings.menuBarLayoutShowWindowLabels,
                 now: now)
             {
                 return combinedText
@@ -895,6 +897,7 @@ extension StatusItemController {
             estimated: snapshot?.dataConfidence == .estimated,
             resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,
             showsResetTimeWhenExhausted: self.settings.menuBarShowsResetTimeWhenExhausted,
+            showPrefixes: self.settings.menuBarLayoutShowWindowLabels,
             now: now)
     }
 

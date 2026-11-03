@@ -30,7 +30,8 @@ struct CockpitStatusPacePresentationTests {
             #expect(data.metrics.automaticPaceDelta == (complete ? pace.deltaPercent.rounded() : nil))
             let renderer = MenuBarLayoutRenderer()
             let output = self.render(renderer, data: data)
-            #expect(output.attributedTitle.string == CockpitRecommendationPaceText.statusItemText(pace: pace))
+            #expect(output.attributedTitle
+                .string == "P W " + (CockpitRecommendationPaceText.statusItemText(pace: pace) ?? ""))
             #expect(!output.attributedTitle.string.contains("≥"))
             #expect(!output.attributedTitle.string.contains("≤"))
             #expect(output.accessibilityLabel.contains(presentation.explanation))
@@ -45,7 +46,7 @@ struct CockpitStatusPacePresentationTests {
             settings.menuBarPaceReservePositive = true
             let flipped = self.render(renderer, data: self.fixture.render(store, snapshot: snapshot))
             #expect(flipped.attributedTitle.string ==
-                CockpitRecommendationPaceText.statusItemText(pace: pace, reservePositive: true))
+                "P W " + (CockpitRecommendationPaceText.statusItemText(pace: pace, reservePositive: true) ?? ""))
             #expect(flipped.attributedTitle.string != output.attributedTitle.string)
             #expect(self.color(flipped) == self.color(output))
             _ = StatusItemController.applyMenuBarLayoutContent(flipped, for: button, gap: .regular)
@@ -89,7 +90,7 @@ struct CockpitStatusPacePresentationTests {
             #expect(data.pacePresentations[.weekly]?.roundedObservedDelta == 0)
             let renderer = MenuBarLayoutRenderer()
             let zero = self.render(renderer, data: data)
-            #expect(zero.attributedTitle.string == "0%")
+            #expect(zero.attributedTitle.string == "P W 0%")
             #expect(self.color(zero) == NSColor.controlTextColor)
             let button = NSButton()
             _ = StatusItemController.applyMenuBarLayoutContent(zero, for: button, gap: .regular)
@@ -98,7 +99,7 @@ struct CockpitStatusPacePresentationTests {
             #expect(missingData.pacePresentations.isEmpty)
             #expect(missingData.metrics.weeklyPaceDelta == nil)
             let missing = self.render(renderer, data: missingData)
-            #expect(missing.attributedTitle.string == "–")
+            #expect(missing.attributedTitle.string == "P W –")
             #expect(self.color(missing) == NSColor.controlTextColor)
             #expect(missing.toolTip == nil)
             _ = StatusItemController.applyMenuBarLayoutContent(missing, for: button, gap: .regular)
@@ -272,6 +273,9 @@ struct CockpitStatusPacePresentationTests {
 
     private func color(_ output: MenuBarLayoutRenderedTitle) -> NSColor? {
         guard output.attributedTitle.length > 0 else { return nil }
-        return output.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
+        let range = (output.attributedTitle.string as NSString).range(of: "[+-]?[0-9]+%|–", options: .regularExpression)
+        guard range.location != NSNotFound else { return nil }
+        return output.attributedTitle.attribute(
+            .foregroundColor, at: range.location, effectiveRange: nil) as? NSColor
     }
 }

@@ -1092,7 +1092,7 @@ struct StatusItemAnimationTests {
 
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
-        #expect(displayText == "20% · +60%")
+        #expect(displayText == "S 20% · P +60%")
     }
 
     @Test
@@ -1144,7 +1144,7 @@ struct StatusItemAnimationTests {
 
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
-        #expect(displayText == "5h 12% · W 45%")
+        #expect(displayText == "S 12% · W 45%")
     }
 
     @Test
@@ -1248,7 +1248,7 @@ struct StatusItemAnimationTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // "0% · ±N%": percent from the session lane (here exhausted), pace from the weekly lane.
-        #expect(displayText?.hasPrefix("0% · ") == true)
+        #expect(displayText?.hasPrefix("S 0% · P ") == true)
     }
 
     @Test
@@ -1305,8 +1305,8 @@ struct StatusItemAnimationTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Usage is the session lane (12% used), not the most-constrained weekly lane (45%).
-        #expect(displayText?.hasPrefix("12% · ") == true)
-        #expect(displayText?.hasPrefix("45%") == false)
+        #expect(displayText?.hasPrefix("S 12% · P ") == true)
+        #expect(displayText?.hasPrefix("W 45%") == false)
     }
 
     @Test
@@ -1362,8 +1362,8 @@ struct StatusItemAnimationTests {
 
         let displayText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(displayText?.hasPrefix("12% · ") == true)
-        #expect(displayText?.hasPrefix("91%") == false)
+        #expect(displayText?.hasPrefix("S 12% · P ") == true)
+        #expect(displayText?.hasPrefix("W 91%") == false)
     }
 
     @Test
@@ -1419,8 +1419,8 @@ struct StatusItemAnimationTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Shows the exhausted weekly lane (0% remaining), not the roomy session lane (88%).
-        #expect(displayText == "0%")
-        #expect(displayText?.hasPrefix("88%") == false)
+        #expect(displayText == "W 0%")
+        #expect(displayText?.hasPrefix("S 88%") == false)
     }
 
     @Test
@@ -1469,7 +1469,7 @@ struct StatusItemAnimationTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Usage lands on the weekly lane (42% used) rather than collapsing to nil.
-        #expect(displayText?.hasPrefix("42%") == true)
+        #expect(displayText?.hasPrefix("W 42%") == true)
     }
 
     @Test
@@ -1527,8 +1527,8 @@ struct StatusItemAnimationTests {
         let displayText = controller.menuBarDisplayText(for: .claude, snapshot: snapshot)
 
         // Spend-limit usage (45% of the cap), not the "5h 0%" placeholder lane.
-        #expect(displayText == "45%")
-        #expect(displayText?.contains("5h") == false)
+        #expect(displayText == "M 45%")
+        #expect(displayText?.hasPrefix("S ") == false)
     }
 
     @Test
@@ -1575,7 +1575,7 @@ struct StatusItemAnimationTests {
 
         let displayText = controller.menuBarDisplayText(for: .codex, snapshot: snapshot)
 
-        #expect(displayText == "20%")
+        #expect(displayText == "S 20%")
     }
 
     @Test
@@ -1713,7 +1713,7 @@ struct StatusItemAnimationTests {
 
         let displayText = controller.menuBarDisplayText(for: .kilo, snapshot: snapshot)
 
-        #expect(displayText == "0%")
+        #expect(displayText == "U 0%")
     }
 
     @Test

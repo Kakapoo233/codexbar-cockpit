@@ -59,6 +59,7 @@ enum MenuBarDisplayText {
         showUsed: Bool,
         resetTimeDisplayStyle: ResetTimeDisplayStyle = .countdown,
         showsResetTimeWhenExhausted: Bool = false,
+        showPrefixes: Bool = false,
         now: Date = .init())
         -> String?
     {
@@ -69,9 +70,10 @@ enum MenuBarDisplayText {
                showUsed: showUsed,
                resetTimeDisplayStyle: resetTimeDisplayStyle,
                showsResetTimeWhenExhausted: showsResetTimeWhenExhausted,
+               showPrefixes: showPrefixes,
                now: now)
         {
-            parts.append("\(self.sessionWindowLabel(window: sessionWindow)) \(session)")
+            parts.append(showPrefixes ? session : "\(self.sessionWindowLabel(window: sessionWindow)) \(session)")
         }
         if let weeklyWindow,
            let weekly = self.laneValueText(
@@ -79,9 +81,10 @@ enum MenuBarDisplayText {
                showUsed: showUsed,
                resetTimeDisplayStyle: resetTimeDisplayStyle,
                showsResetTimeWhenExhausted: showsResetTimeWhenExhausted,
+               showPrefixes: showPrefixes,
                now: now)
         {
-            parts.append("W \(weekly)")
+            parts.append(showPrefixes ? weekly : "W \(weekly)")
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
@@ -91,17 +94,40 @@ enum MenuBarDisplayText {
         showUsed: Bool,
         resetTimeDisplayStyle: ResetTimeDisplayStyle,
         showsResetTimeWhenExhausted: Bool,
+        showPrefixes: Bool = false,
         now: Date) -> String?
     {
         if let resetText = self.exhaustedResetText(
             window: window,
             enabled: showsResetTimeWhenExhausted,
             style: resetTimeDisplayStyle,
+            showPrefixes: showPrefixes,
             now: now)
         {
             return resetText
         }
-        return self.percentText(window: window, showUsed: showUsed)
+        return self.quotaText(window: window, showUsed: showUsed, showPrefixes: showPrefixes)
+    }
+
+    static func periodPrefix(windowMinutes: Int?) -> String {
+        guard let minutes = windowMinutes, minutes > 0 else { return "U" }
+        switch minutes {
+        case 1..<1440: return "S"
+        case 1440: return "D"
+        case 10080: return "W"
+        case 40320...44640: return "M"
+        default: return "U"
+        }
+    }
+
+    private static func quotaText(
+        window: RateWindow?,
+        showUsed: Bool,
+        estimated: Bool = false,
+        showPrefixes: Bool) -> String?
+    {
+        guard let value = self.percentText(window: window, showUsed: showUsed, estimated: estimated) else { return nil }
+        return showPrefixes ? "\(self.periodPrefix(windowMinutes: window?.windowMinutes)) \(value)" : value
     }
 
     private static func sessionWindowLabel(window: RateWindow) -> String {
@@ -121,6 +147,7 @@ enum MenuBarDisplayText {
         estimated: Bool = false,
         resetTimeDisplayStyle: ResetTimeDisplayStyle = .countdown,
         showsResetTimeWhenExhausted: Bool = false,
+        showPrefixes: Bool = false,
         now: Date = .init()) -> String?
     {
         if mode != .resetTime,
@@ -132,6 +159,7 @@ enum MenuBarDisplayText {
                 window: percentWindow,
                 enabled: true,
                 style: resetTimeDisplayStyle,
+                showPrefixes: showPrefixes,
                 now: now)
             {
                 return resetText
@@ -139,38 +167,42 @@ enum MenuBarDisplayText {
             // Smart mode cannot replace an exhausted percentage unless the reset is concrete, future,
             // and schedulable. Preserve the quota signal in pace/both modes too; a pace from another
             // combined lane must not hide that this displayed lane is already exhausted.
-            return self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
+            return self.quotaText(
+                window: percentWindow, showUsed: showUsed, estimated: estimated, showPrefixes: showPrefixes)
         }
-        let resolvedPaceText = usesRecommendationPace
+        let rawPaceText = usesRecommendationPace
             ? CockpitRecommendationPaceText.menuBarText(pace: recommendationPace, reservePositive: paceReservePositive)
             : self.paceText(pace: pace, reservePositive: paceReservePositive)
+        let resolvedPaceText = rawPaceText.map { showPrefixes ? "P \($0)" : $0 }
+        let percent = self.quotaText(
+            window: percentWindow, showUsed: showUsed, estimated: estimated, showPrefixes: showPrefixes)
         switch mode {
         case .percent:
-            return self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
+            return percent
         case .pace:
             // Pace can be temporarily unavailable near a reset or when a provider omits window metadata.
             // Keep the selected quota visible instead of collapsing the status item to an icon-only state.
-            return resolvedPaceText
-                ?? self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
+            return resolvedPaceText ?? percent
         case .both:
-            guard let percent = percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
-            else { return nil }
+            guard let percent else { return nil }
             // Fall back to percent-only when pace is unavailable (e.g. Copilot)
             guard let paceText = resolvedPaceText else { return percent }
             return "\(percent) · \(paceText)"
         case .resetTime:
             guard let percentWindow else { return nil }
-            return self.resetTimeText(window: percentWindow, style: resetTimeDisplayStyle, now: now)
-                ?? self.percentText(window: percentWindow, showUsed: showUsed, estimated: estimated)
+            return self.resetTimeText(
+                window: percentWindow, style: resetTimeDisplayStyle, showPrefixes: showPrefixes, now: now) ?? percent
         }
     }
 
-    /// "↻ …" reset text for a window, or nil when it carries no usable reset metadata.
+    /// Reset text for a window, or nil when it carries no usable reset metadata.
     static func resetTimeText(
         window: RateWindow,
         style: ResetTimeDisplayStyle,
+        showPrefixes: Bool = false,
         now: Date) -> String?
     {
+        let prefix = showPrefixes ? "R \(self.periodPrefix(windowMinutes: window.windowMinutes))" : "↻"
         if let resetsAt = window.resetsAt {
             let description = switch style {
             case .countdown:
@@ -178,10 +210,10 @@ enum MenuBarDisplayText {
             case .absolute:
                 UsageFormatter.resetDescription(from: resetsAt, now: now)
             }
-            return "↻ \(description)"
+            return "\(prefix) \(description)"
         }
         if let resetDescription = self.resetMetadataText(window.resetDescription) {
-            return "↻ \(resetDescription)"
+            return "\(prefix) \(resetDescription)"
         }
         return nil
     }
@@ -198,11 +230,12 @@ enum MenuBarDisplayText {
         window: RateWindow?,
         enabled: Bool,
         style: ResetTimeDisplayStyle,
+        showPrefixes: Bool = false,
         now: Date) -> String?
     {
         guard enabled, let window, window.remainingPercent <= 0 else { return nil }
         guard let resetsAt = window.resetsAt, resetsAt > now else { return nil }
-        return self.resetTimeText(window: window, style: style, now: now)
+        return self.resetTimeText(window: window, style: style, showPrefixes: showPrefixes, now: now)
     }
 
     private static func resetMetadataText(_ description: String?) -> String? {

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.20 — Compact menu-bar identifiers
+
+- Identify weekly quota with W, session quota with S, resets with R, pace with P and exhaustion estimates with E; retain T for today's components.
+- Resolve automatic and direct-lane quota labels from their actual period, including single-window and missing readings, while preserving named provider allowances and balance text.
+- Apply labels consistently to numbers and meters, keep full spoken descriptions, and retain the existing label preference.
+
 ## 0.8.19 — Status-bar pace signs and colors
 
 - Show native signed daily-pace numbers in the top menu bar, using red and green for the recorded difference from the daily recommendation.

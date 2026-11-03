@@ -14,9 +14,9 @@ struct MenuBarAutomaticWindowLabelsTests {
         let layout = MenuBarLayout(lines: [[.percent(window: .automatic)], [.pace(window: .automatic)]])
         for weekly in [false, true] {
             let data = self.data(weekly: weekly)
-            let prefix = weekly ? "W" : "5h"
+            let prefix = weekly ? "W" : "S"
             let visible = renderer.render(layout: layout, data: data, icon: nil, options: self.options())
-            #expect(visible.attributedTitle.string == "\(prefix) 84%\n\(prefix) +7%")
+            #expect(visible.attributedTitle.string == "\(prefix) 84%\nP \(prefix) +7%")
             let hidden = renderer.render(
                 layout: layout, data: data, icon: nil, options: self.options(showLabels: false))
             #expect(hidden.attributedTitle.string == "84%\n+7%")
@@ -35,7 +35,7 @@ struct MenuBarAutomaticWindowLabelsTests {
         let layout = MenuBarLayout(lines: [[.conditional(id: conditional.id)]])
         let renderer = MenuBarLayoutRenderer()
         for weekly in [false, true] {
-            let prefix = weekly ? "W" : "5h"
+            let prefix = weekly ? "W" : "S"
             let options = self.options(conditionals: [conditional])
             let available = renderer.render(
                 layout: layout,
@@ -45,7 +45,7 @@ struct MenuBarAutomaticWindowLabelsTests {
             #expect(available.attributedTitle.string == "\(prefix) 84%")
             let exhausted = self.data(weekly: weekly, used: 100)
             let reset = renderer.render(layout: layout, data: exhausted, icon: nil, options: options)
-            #expect(reset.attributedTitle.string == "\(prefix) in 2h")
+            #expect(reset.attributedTitle.string == "R \(prefix) in 2h")
             let hidden = renderer.render(
                 layout: layout,
                 data: exhausted,
@@ -54,16 +54,16 @@ struct MenuBarAutomaticWindowLabelsTests {
             #expect(hidden.attributedTitle.string == "in 2h")
             let absolute = renderer.render(
                 layout: MenuBarLayout(lines: [[.resetAbsolute]]), data: exhausted, icon: nil, options: options)
-            #expect(absolute.attributedTitle.string.hasPrefix("\(prefix) "))
+            #expect(absolute.attributedTitle.string.hasPrefix("R \(prefix) "))
         }
     }
 
     @Test
-    func `single quota and automatic balance text remain bare`() {
+    func `single quota keeps its period prefix while automatic balance text remains bare`() {
         let renderer = MenuBarLayoutRenderer()
         let layout = MenuBarLayout(lines: [[.percent(window: .automatic)]])
         let single = renderer.render(layout: layout, data: self.data(single: true), icon: nil, options: self.options())
-        #expect(single.attributedTitle.string == "84%")
+        #expect(single.attributedTitle.string == "S 84%")
         let balance = renderer.render(
             layout: layout, data: self.data(automaticText: "$12"), icon: nil, options: self.options())
         #expect(balance.attributedTitle.string == "$12")
@@ -75,7 +75,7 @@ struct MenuBarAutomaticWindowLabelsTests {
         let layout = MenuBarLayout(lines: [[.percent(window: .automatic)], [.pace(window: .automatic)]])
         for (data, label) in [(self.data(monthly: true), "M"), (self.data(namedAllowance: true), "GB")] {
             let output = renderer.render(layout: layout, data: data, icon: nil, options: self.options())
-            #expect(output.attributedTitle.string == "\(label) 84%\n\(label) +7%")
+            #expect(output.attributedTitle.string == "\(label) 84%\nP \(label) +7%")
         }
     }
 

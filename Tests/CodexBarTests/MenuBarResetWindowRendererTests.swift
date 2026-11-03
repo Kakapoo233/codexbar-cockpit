@@ -19,7 +19,9 @@ extension MenuBarLayoutRendererTests {
                     ? .windowResetAbsolute(window: window) : .windowResetCountdown(window: window)
                 let output = MenuBarLayoutRenderer().render(
                     layout: MenuBarLayout(lines: [[token]]), data: data, icon: nil, options: self.options())
-                #expect(output.accessibilityLabel == "\(label): \(output.attributedTitle.string)")
+                let prefix = window == .session ? "S" : window == .weekly ? "W" : "F"
+                let value = String(output.attributedTitle.string.dropFirst("R \(prefix) ".count))
+                #expect(output.accessibilityLabel == "\(label): \(value)")
             }
         }
         let text = "Friday at 10:00"
@@ -61,7 +63,8 @@ extension MenuBarLayoutRendererTests {
                     : UsageFormatter.resetCountdownDescription(
                         from: reset,
                         now: self.now)
-                #expect(output.attributedTitle.string == expected)
+                #expect(output.attributedTitle
+                    .string == "R \(window == .session ? "S" : window == .weekly ? "W" : "F") \(expected)")
             }
         }
     }
@@ -84,7 +87,7 @@ extension MenuBarLayoutRendererTests {
                     data: self.resetData(weekly: weekly),
                     icon: nil,
                     options: self.options())
-                #expect(output.attributedTitle.string == "–")
+                #expect(output.attributedTitle.string == "R W –")
             }
         }
     }
@@ -102,7 +105,7 @@ extension MenuBarLayoutRendererTests {
                 data: self.resetData(weekly: weekly),
                 icon: nil,
                 options: self.options())
-            #expect(output.attributedTitle.string == "Friday at 10:00")
+            #expect(output.attributedTitle.string == "R W Friday at 10:00")
         }
     }
 
@@ -131,9 +134,9 @@ extension MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: self.now.addingTimeInterval(51)))
-        #expect(first.attributedTitle.string == "in 7m")
+        #expect(first.attributedTitle.string == "R W in 7m")
         #expect(first.attributedTitle === same.attributedTitle)
-        #expect(next.attributedTitle.string == "in 6m")
+        #expect(next.attributedTitle.string == "R W in 6m")
         #expect(first.attributedTitle !== next.attributedTitle)
     }
 
@@ -164,10 +167,10 @@ extension MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: after))
-        #expect(first.attributedTitle.string == UsageFormatter.resetDescription(
+        #expect(first.attributedTitle.string == "R W " + UsageFormatter.resetDescription(
             from: reset,
             now: before))
-        #expect(next.attributedTitle.string == UsageFormatter.resetDescription(
+        #expect(next.attributedTitle.string == "R W " + UsageFormatter.resetDescription(
             from: reset,
             now: after))
         #expect(first.attributedTitle.string != next.attributedTitle.string)
