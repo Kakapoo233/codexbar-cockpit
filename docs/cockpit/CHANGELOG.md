@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.27 — Codex weekly warnings persist across restarts
+
+- Keep a local, account-scoped weekly warning ledger so the same threshold cannot repeat after quota rebounds, provider cleanup or application updates.
+- Treat an already-low first reading as a quiet baseline; retain lower-threshold alerts and reopen warnings only after a confirmed new weekly reset.
+- Cover ordinary and selected-account refresh entry points, reject unproven owners, and record receipts before sound, overlays or OS notifications.
+
 ## 0.8.26 — Daily allowance in the advice card
 
 - Move the progress row from beneath weekly quota into the right-side Daily advice card, replacing its duplicate remaining-value presentation.

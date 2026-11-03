@@ -1413,7 +1413,8 @@ extension UsageStore {
             self.handleQuotaWarningTransitions(
                 provider: .codex,
                 snapshot: snapshot,
-                accountDiscriminator: codexOwnerKey?.rawValue)
+                accountDiscriminator: codexOwnerKey?.rawValue,
+                requiresKnownAccount: true)
             let sessionRestored = self.handleSessionQuotaTransition(
                 provider: .codex,
                 snapshot: snapshot,
@@ -1499,7 +1500,8 @@ extension UsageStore {
             self.handleQuotaWarningTransitions(
                 provider: provider,
                 snapshot: backfilled,
-                accountDiscriminator: warningAccountDiscriminator)
+                accountDiscriminator: warningAccountDiscriminator,
+                requiresKnownAccount: provider == .codex)
             let sessionRestored = self.handleSessionQuotaTransition(
                 provider: provider, snapshot: backfilled, accountDiscriminator: warningAccountDiscriminator)
             self.handlePredictivePaceWarningTransitions(

@@ -37,13 +37,13 @@ struct QuotaWarningRepeatTests {
     }
 
     @Test(arguments: [true, false])
-    func `gaps preserve genuine recovery and lower threshold warnings`(recovers: Bool) {
+    func `other providers preserve recovery and lower threshold warnings through gaps`(recovers: Bool) {
         let notifier = NotifierSpy()
         let store = self.makeStore(notifier: notifier)
         let readings: [Double?] = recovers ? [60, 49, nil, 55, 49] : [60, 49, nil, 19, 18]
         for (step, remaining) in readings.enumerated() {
             store.handleQuotaWarningTransitions(
-                provider: .codex,
+                provider: .claude,
                 snapshot: self.snapshot(remaining: remaining, lane: .weekly, step: step),
                 accountDiscriminator: "fixture-account-a")
         }
@@ -67,6 +67,10 @@ struct QuotaWarningRepeatTests {
     func `a real reset after a gap can warn in the new cycle`(missingResetMetadata: Bool) {
         let notifier = NotifierSpy()
         let store = self.makeStore(notifier: notifier)
+        store.handleQuotaWarningTransitions(
+            provider: .codex,
+            snapshot: self.snapshot(remaining: 60, lane: .weekly, step: -1, resetOffset: 60),
+            accountDiscriminator: "fixture-account-a")
         let samples: [(Double?, Int, Double?)] = [
             (49, 0, 60),
             (missingResetMetadata ? 48 : nil, 1, nil),
@@ -86,6 +90,10 @@ struct QuotaWarningRepeatTests {
     func `moving or elapsed reset metadata alone cannot repeat a warning`() {
         let notifier = NotifierSpy()
         let store = self.makeStore(notifier: notifier)
+        store.handleQuotaWarningTransitions(
+            provider: .codex,
+            snapshot: self.snapshot(remaining: 60, lane: .weekly, step: -1, resetOffset: 60),
+            accountDiscriminator: "fixture-account-a")
         for (step, resetOffset) in [(0, 60.0), (1, 600), (2, 60), (61, 60), (62, 30)] {
             store.handleQuotaWarningTransitions(
                 provider: .codex,
@@ -101,7 +109,7 @@ struct QuotaWarningRepeatTests {
         let store = self.makeStore(notifier: notifier)
         let samples: [(String, QuotaWarningWindow, Double?)] = [
             ("a", .session, 49), ("a", .session, nil), ("b", .session, 49),
-            ("a", .weekly, 49), ("a", .session, 48), ("b", .session, nil),
+            ("a", .weekly, 60), ("a", .weekly, 49), ("a", .session, 48), ("b", .session, nil),
             ("a", .weekly, nil), ("b", .session, 48), ("a", .weekly, 48),
         ]
         for (step, sample) in samples.enumerated() {
@@ -112,7 +120,8 @@ struct QuotaWarningRepeatTests {
         }
         #expect(notifier.warnings.map(\.threshold) == [50, 50, 50])
         #expect(notifier.warnings.map(\.window) == [.session, .session, .weekly])
-        #expect(store.quotaWarningState.count == 3)
+        // Codex weekly state is persisted separately; session episodes retain their original scope.
+        #expect(store.quotaWarningState.count == 2)
         #expect(store.quotaWarningState.values.allSatisfy { $0.firedThresholds == [50] })
     }
 
