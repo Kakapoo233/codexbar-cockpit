@@ -323,7 +323,7 @@ final class MenuBarLayoutTitleCache {
 final class MenuBarLayoutRenderer {
     private static let missingValue = "–"
     private static let stackedBaselineOffset: CGFloat = -3 // Center multi-line NSStatusBarButton titles.
-    private static let windowPrefixKey = NSAttributedString.Key("CodexBarWindowPrefix")
+    static let windowPrefixKey = NSAttributedString.Key("CodexBarWindowPrefix")
     private static let singleLineBaselineOffset: CGFloat = -1 // Drop single-line titles slightly for optical centering.
 
     private struct TokenStyle {
@@ -547,7 +547,7 @@ final class MenuBarLayoutRenderer {
                         attributes: attributes),
                     options: options,
                     providerTintColor: providerTintColor)
-                renderedItem = Self.labelAutomaticItem(
+                renderedItem = Self.labelStatusItem(
                     renderedItem, token: token, data: data, options: options, attributes: attributes)
                 result.append(renderedItem.value)
                 if let accessibilityText = renderedItem.accessibilityText {
@@ -700,58 +700,6 @@ final class MenuBarLayoutRenderer {
                 depth: depth + 1)
         default: return token
         }
-    }
-
-    private static func labelAutomaticItem(
-        _ rendered: (value: NSAttributedString, accessibilityText: String?),
-        token: MenuBarLayoutToken,
-        data: MenuBarLayoutRenderData,
-        options: MenuBarLayoutRenderOptions,
-        attributes: [NSAttributedString.Key: Any])
-        -> (value: NSAttributedString, accessibilityText: String?)
-    {
-        switch token {
-        case .percent(window: .automatic), .pace(window: .automatic), .resetCountdown, .resetAbsolute,
-             .windowResetCountdown(window: .automatic), .windowResetAbsolute(window: .automatic): break
-        default: return rendered
-        }
-        guard let label = self.automaticWindowLabel(data: data) else { return rendered }
-        return (
-            self.prefixedValue(
-                options.showWindowLabels ? label.short : "",
-                value: rendered.value,
-                attributes: attributes),
-            rendered.accessibilityText.map { L("%@: %@", label.full, $0) })
-    }
-
-    private static func automaticWindowLabel(data: MenuBarLayoutRenderData) -> (short: String, full: String)? {
-        guard let automatic = data.automatic, data.automaticText == nil else { return nil }
-        let semantic: [PercentWindow] = [.session, .weekly, .scopedWeekly]
-        let lanes: [MenuBarLayoutLane] = [.primary, .secondary, .tertiary]
-        let extras = data.extraRateWindows.filter { data.extraTitle($0.id) != nil }
-        let windows = semantic.compactMap { self.window($0, data: data) }
-            + lanes.compactMap { self.laneWindow($0, data: data) } + extras.compactMap(\.window)
-        // Semantic aliases must not make a single quota look like multiple windows.
-        guard Set(windows).count > 1 else { return nil }
-        // Match the complete selected window, never its percentage or formatted pace alone.
-        let matches = semantic.filter { self.window($0, data: data) == automatic }
-        let laneMatches = lanes.filter { self.laneWindow($0, data: data) == automatic }
-        let extraMatches = extras.filter { $0.window == automatic }
-        guard laneMatches.count + extraMatches.count <= 1 else { return nil }
-        if matches.count == 1, let selected = matches.first {
-            return (self.windowPrefix(selected, data: data), self.windowAccessibilityLabel(selected, data: data))
-        }
-        guard matches.isEmpty else { return nil }
-        if laneMatches.count == 1, let lane = laneMatches.first {
-            let title = data.laneLabels.label(for: lane)
-            return (self.laneShortLabel(lane, data: data) ?? String(title.prefix(1)).uppercased(), title)
-        }
-        guard laneMatches.isEmpty else { return nil }
-        guard extraMatches.count == 1, let extra = extraMatches.first, let title = data.extraTitle(extra.id)
-        else { return nil }
-        let short = ProviderDescriptorRegistry.descriptor(for: data.provider).menuBarMetrics
-            .namedExtraShortLabels[extra.id] ?? title
-        return (short, title)
     }
 
     private static func renderItem(
@@ -962,18 +910,6 @@ final class MenuBarLayoutRenderer {
             attributes: style.attributes), accessibility)
     }
 
-    private static func prefixedValue(
-        _ prefix: String,
-        value: NSAttributedString,
-        attributes: [NSAttributedString.Key: Any]) -> NSAttributedString
-    {
-        guard !prefix.isEmpty else { return value }
-        let result = NSMutableAttributedString(string: "\(prefix) ", attributes: attributes)
-        result.addAttribute(self.windowPrefixKey, value: true, range: NSRange(location: 0, length: result.length))
-        result.append(value)
-        return result
-    }
-
     private static func alignWindowPrefixes(in title: NSMutableAttributedString, promotedIcon: Bool = false) {
         let text = title.string as NSString
         var prefixes: [(range: NSRange, width: CGFloat)] = []
@@ -998,46 +934,6 @@ final class MenuBarLayoutRenderer {
               let width = prefixes.map(\.width).max() else { return }
         for prefix in prefixes {
             title.addAttribute(.kern, value: width - prefix.width, range: prefix.range)
-        }
-    }
-
-    private static func windowPrefix(
-        _ window: PercentWindow,
-        data: MenuBarLayoutRenderData,
-        showWindowLabels: Bool = true) -> String
-    {
-        let taggedPrefix = Self.taggedSemanticLane(window, data: data)
-            .flatMap { Self.laneShortLabel($0, data: data) }
-        // Named lanes identify distinct allowances; Spend's currency is not a window label.
-        if let taggedPrefix { return taggedPrefix }
-        guard showWindowLabels || window == .spend else { return "" }
-        return switch window {
-        case .session:
-            self.primaryLabel(data: data).flatMap(\.first).map { String($0).uppercased() }
-                ?? Self.sessionPrefix(self.window(window, data: data))
-        case .weekly:
-            PercentWindow.weekly.providerLabel(provider: data.provider)
-                .flatMap(\.first).map { String($0).uppercased() } ?? "W"
-        case .scopedWeekly:
-            data.scopedWeeklyTitle.map { String($0.prefix(1)).uppercased() } ?? "F"
-        case .automatic:
-            ""
-        case .spend:
-            data.spendCurrencySymbol
-        }
-    }
-
-    /// A tagged lane announces its own title, so a monthly lane is never read out as "Weekly".
-    private static func windowAccessibilityLabel(_ window: PercentWindow, data: MenuBarLayoutRenderData) -> String {
-        if let lane = self.taggedSemanticLane(window, data: data) {
-            return data.laneLabels.label(for: lane)
-        }
-        return switch window {
-        case .session: self.primaryLabel(data: data) ?? L("Session")
-        case .weekly: PercentWindow.weekly.providerLabel(provider: data.provider) ?? L("Weekly")
-        case .scopedWeekly: data.scopedWeeklyTitle ?? L("Scoped weekly")
-        case .automatic: L("Usage")
-        case .spend: L("Spend")
         }
     }
 
@@ -1069,6 +965,7 @@ final class MenuBarLayoutRenderer {
                 lane,
                 data: data,
                 showUsed: options.showUsed,
+                showWindowLabels: options.showWindowLabels,
                 attributes: attributes)
         case let .extraPercent(id):
             self.extraPercentToken(id, data: data, showUsed: options.showUsed, attributes: attributes)
@@ -1094,6 +991,7 @@ final class MenuBarLayoutRenderer {
         _ lane: MenuBarLayoutLane,
         data: MenuBarLayoutRenderData,
         showUsed: Bool,
+        showWindowLabels: Bool,
         attributes: [NSAttributedString.Key: Any])
         -> (value: NSAttributedString, accessibilityText: String?)
     {
@@ -1108,9 +1006,12 @@ final class MenuBarLayoutRenderer {
         let accessibility = resolvedValue.isAvailable
             ? L("%@ %@", label, resolvedValue.text)
             : L("%@ unavailable", label)
-        let display = Self.laneShortLabel(lane, data: data)
-            .map { "\($0) \(resolvedValue.text)" } ?? resolvedValue.text
-        return self.textToken(display, accessibilityText: accessibility, attributes: attributes)
+        let prefix = Self.laneShortLabel(lane, data: data)
+            ?? (showWindowLabels ? MenuBarDisplayText.periodPrefix(windowMinutes: rateWindow?.windowMinutes) : "")
+        return (self.prefixedValue(
+            prefix,
+            value: NSAttributedString(string: resolvedValue.text, attributes: attributes),
+            attributes: attributes), accessibility)
     }
 
     private static func extraPercentToken(
@@ -1308,7 +1209,7 @@ final class MenuBarLayoutRenderer {
         (NSAttributedString(string: value, attributes: attributes), accessibilityText)
     }
 
-    private static func window(
+    static func window(
         _ percentWindow: PercentWindow,
         data: MenuBarLayoutRenderData)
         -> MenuBarLayoutRenderWindow?
@@ -1322,7 +1223,7 @@ final class MenuBarLayoutRenderer {
         }
     }
 
-    private static func laneWindow(
+    static func laneWindow(
         _ lane: MenuBarLayoutLane,
         data: MenuBarLayoutRenderData)
         -> MenuBarLayoutRenderWindow?
@@ -1359,24 +1260,6 @@ final class MenuBarLayoutRenderer {
         case .spend: data.metrics.spendPaceDelta
         case .scopedWeekly: nil
         }
-    }
-
-    private static func primaryLabel(data: MenuBarLayoutRenderData) -> String? {
-        let descriptor = ProviderDescriptorRegistry.descriptor(for: data.provider)
-        if let label = descriptor.presentation.menuBarLayoutPrimaryLabel { return L(label) }
-        let lane: MenuBarLayoutLane = descriptor.presentation.primarySemanticWindow == .session ? .primary : .secondary
-        let label = data.laneLabels.label(for: lane)
-        let renamedTaggedLane = !descriptor.menuBarMetrics.laneShortLabels.isEmpty
-            && label != MenuBarLayoutLaneLabels(provider: data.provider, snapshot: nil).label(for: lane)
-        guard (descriptor.metadata.usesDetailBackedWindow && data.session?.windowMinutes == nil) || renamedTaggedLane
-        else { return nil }
-        return label
-    }
-
-    private static func sessionPrefix(_ window: MenuBarLayoutRenderWindow?) -> String {
-        guard let minutes = window?.windowMinutes, minutes > 0 else { return "S" }
-        guard minutes.isMultiple(of: 60) else { return "\(minutes)m" }
-        return "\(minutes / 60)h"
     }
 }
 
@@ -1420,39 +1303,6 @@ extension MenuBarLayoutRenderer {
         let value = NSMutableAttributedString(attachment: attachment)
         value.addAttributes(style.attributes, range: NSRange(location: 0, length: value.length))
         return (value, L("Tokens per minute, latest %@", graph.latest.map(ProviderThroughputSection.count) ?? "—"))
-    }
-
-    /// Provider-declared menu bar tag for a lane; nil keeps the lane's percentage bare. A snapshot-dependent
-    /// lane label (Cursor's X Subscription "Weekly" pool) means the static tag no longer names that lane.
-    private static func laneShortLabel(_ lane: MenuBarLayoutLane, data: MenuBarLayoutRenderData) -> String? {
-        let labels = ProviderDescriptorRegistry.descriptor(for: data.provider).menuBarMetrics.laneShortLabels
-        guard !labels.isEmpty else { return nil }
-        let staticLabels = MenuBarLayoutLaneLabels(provider: data.provider, snapshot: nil)
-        guard data.laneLabels.label(for: lane) == staticLabels.label(for: lane) else { return nil }
-        return switch lane {
-        case .primary: labels[.primary]
-        case .secondary: labels[.secondary]
-        case .tertiary: labels[.tertiary]
-        }
-    }
-
-    /// The tagged lane backing a session/weekly percentage, so a provider with explicit lane tags never falls
-    /// back to colliding first-letter prefixes; nil when the window maps to no tagged lane.
-    private static func taggedSemanticLane(
-        _ window: PercentWindow,
-        data: MenuBarLayoutRenderData) -> MenuBarLayoutLane?
-    {
-        let presentation = ProviderDescriptorRegistry.descriptor(for: data.provider).presentation
-        let primaryWindow = PercentWindow.forSemanticWindow(presentation.primarySemanticWindow)
-        let lane: MenuBarLayoutLane? = if window == primaryWindow {
-            .primary
-        } else if window == PercentWindow.forSemanticWindow(presentation.secondarySemanticWindow) {
-            .secondary
-        } else {
-            nil
-        }
-        guard let lane, self.laneShortLabel(lane, data: data) != nil else { return nil }
-        return lane
     }
 }
 
@@ -1531,10 +1381,14 @@ extension MenuBarLayoutRenderer {
                 attributes: style.attributes)
         }
         guard let rateWindow = self.window(window, data: data) else {
-            return self.textToken(
+            let missing = self.textToken(
                 self.missingValue,
                 accessibilityText: L("%@ unavailable", accessibilityPrefix),
                 attributes: style.attributes)
+            return (self.prefixedValue(
+                self.windowPrefix(window, data: data, showWindowLabels: options.showWindowLabels),
+                value: missing.value,
+                attributes: style.attributes), missing.accessibilityText)
         }
         let percent = options.showUsed ? rateWindow.usedPercent : rateWindow.remainingPercent
         let clamped = percent.clamped(to: 0...100)
@@ -1552,8 +1406,8 @@ extension MenuBarLayoutRenderer {
             width: barSize.width,
             height: barSize.height)
 
-        // Keep the window label ("5h" / "W") beside the bar so stacked rows stay unambiguous.
-        let prefix = self.windowPrefix(window, data: data)
+        // Keep the same English window prefix beside numbers and meters.
+        let prefix = self.windowPrefix(window, data: data, showWindowLabels: options.showWindowLabels)
 
         let result = self.prefixedValue(
             prefix, value: self.attachmentText(attachment, style: style), attributes: style.attributes)
