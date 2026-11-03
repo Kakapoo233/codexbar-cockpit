@@ -28,7 +28,7 @@ struct CockpitDailyAllowanceBarTests {
         #expect(spoken.contains(CockpitDailyAdviceProjection.remainingDailyText(status)))
         #expect(spoken.contains(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(status)))
         #expect(Self.nodes(host.host).contains { Self.identifier($0) == "cockpit-advice-remaining-daily-ratio" })
-        #expect(Self.nodes(host.host).contains { Self.identifier($0) == "cockpit-advice-remaining-weekly-equivalent" })
+        #expect(!Self.nodes(host.host).contains { Self.identifier($0) == "cockpit-advice-remaining-weekly-equivalent" })
     }
 
     @Test(arguments: ["allocation", "usage", "balance"])
@@ -45,7 +45,29 @@ struct CockpitDailyAllowanceBarTests {
         #expect(!Self.nodes(host.host).contains { Self.identifier($0) == "cockpit-advice-daily-remaining-progress" })
         let text = MenuLayoutScreenshotRenderTests.accessibilityText(host.host)
         #expect(text.contains("—"))
-        #expect(text.contains(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(status)))
+        #expect(!Self.nodes(host.host).contains { Self.identifier($0) == "cockpit-advice-remaining-weekly-equivalent" })
+    }
+
+    @Test(arguments: ["complete", "partial", "unknown", "zero"])
+    func `advice replaces weekly balance with available today in weekly units`(state: String) async throws {
+        let status = Self.status(
+            manual: state == "zero" ? 0 : nil,
+            used: state == "unknown" ? nil : 5,
+            coverage: state == "partial" ? .partial : .complete)
+        let host = DailyAllowanceBarHost(content: AnyView(CockpitDailyAdviceRow(
+            provider: .codex, status: status, setCap: { _ in }, layout: .sidebar, showsRecommendation: false)))
+        defer { host.close() }
+        try await host.settle()
+        let value = try Self.requireNode("cockpit-advice-remaining-weekly-equivalent", in: host.host)
+        #expect(MenuLayoutScreenshotRenderTests.accessibilityText(value)
+            .contains(CockpitDailyAdviceProjection.remainingWeeklyText(status)))
+        let text = MenuLayoutScreenshotRenderTests.accessibilityText(host.host)
+        #expect(text.contains(L("cockpit_advice_remaining_weekly")))
+        #expect(!text.contains(L("cockpit_ui_weekly_remaining")))
+        #expect(!text.contains(L("cockpit_ui_observed")))
+        #expect(Self.nodes(host.host).filter {
+            Self.identifier($0) == "cockpit-advice-remaining-weekly-equivalent"
+        }.count == 1)
     }
 
     @Test(arguments: [false, true])
@@ -118,8 +140,14 @@ struct CockpitDailyAllowanceBarTests {
             }
             let text = MenuLayoutScreenshotRenderTests.accessibilityText(host.host)
             #expect(text.contains(L("cockpit_advice_remaining_today")))
+            #expect(text.contains(L("cockpit_advice_remaining_weekly")))
             #expect(text.contains(CockpitDailyAdviceProjection.remainingDailyText(status)))
             #expect(text.contains(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(status)))
+            #expect(!text.contains(L("cockpit_ui_weekly_remaining")))
+            #expect(!text.contains(L("cockpit_ui_observed")))
+            let weeklyValue = try Self.requireNode("cockpit-advice-remaining-weekly-equivalent", in: host.host)
+            #expect(MenuLayoutScreenshotRenderTests.accessibilityText(weeklyValue)
+                .contains(CockpitDailyAdviceProjection.remainingWeeklyText(status)))
             #expect(!text.contains(L("cockpit_advice_full_day")))
             #expect(!nodes.contains { Self.identifier($0) == "cockpit-usage-daily-recommendation-progress" })
             try host.exportIfRequested(name: "daily-allowance-\(name)-\(Int(width))-\(dark ? "dark" : "light")")

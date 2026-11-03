@@ -3178,6 +3178,7 @@
 /* Full-day target and remaining daily allowance (English fallback) */
 "cockpit_advice_full_day" = "Full-day target · weekly quota";
 "cockpit_advice_remaining_today" = "Available today · of daily allocation";
+"cockpit_advice_remaining_weekly" = "오늘 사용 가능 · 주간 할당량 대비";
 
 /* Comfort-informed daily advice (English fallback) */
 "cockpit_advice_comfort_default" = "Comfort ceiling: %@ · default curve";
