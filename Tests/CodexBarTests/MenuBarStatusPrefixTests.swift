@@ -8,6 +8,42 @@ import Testing
 struct MenuBarStatusPrefixTests {
     private let fixture = MenuBarLayoutRendererTests()
 
+    @Test
+    func `prefixed reset countdown omits in while unprefixed text and spoken time remain complete`() {
+        CodexBarLocalizationOverride.$appLanguage.withValue("en") {
+            let data = self.fixture.data()
+            let renderer = MenuBarLayoutRenderer()
+            let layout = MenuBarLayout(lines: [[.windowResetCountdown(window: .weekly)]])
+            let visible = renderer.render(layout: layout, data: data, icon: nil, options: self.fixture.options())
+            #expect(visible.attributedTitle.string == "R\u{200A}3d")
+            #expect(visible.accessibilityLabel == "Weekly: in 3d")
+            let hidden = renderer.render(
+                layout: layout, data: data, icon: nil, options: self.fixture.options(showWindowLabels: false))
+            #expect(hidden.attributedTitle.string == "in 3d")
+            #expect(hidden.accessibilityLabel == visible.accessibilityLabel)
+
+            let date = self.fixture.now.addingTimeInterval(3 * 24 * 60 * 60)
+            let absolute = renderer.render(
+                layout: .init(lines: [[.windowResetAbsolute(window: .weekly)]]),
+                data: data,
+                icon: nil,
+                options: self.fixture.options())
+            let fullDate = UsageFormatter.resetDescription(from: date, now: self.fixture.now)
+            #expect(absolute.attributedTitle.string == "R\u{200A}\(fullDate)")
+            #expect(absolute.accessibilityLabel == "Weekly: \(fullDate)")
+
+            let week = RateWindow(
+                usedPercent: 50,
+                windowMinutes: 10080,
+                resetsAt: self.fixture.now.addingTimeInterval(7200),
+                resetDescription: nil)
+            #expect(MenuBarDisplayText.resetTimeText(
+                window: week, style: .countdown, showPrefixes: true, now: self.fixture.now) == "R\u{200A}2h")
+            #expect(MenuBarDisplayText.resetTimeText(
+                window: week, style: .countdown, now: self.fixture.now) == "↻ in 2h")
+        }
+    }
+
     @Test(arguments: [
         MenuBarLayoutToken.resetCountdown, .resetAbsolute,
         .windowResetCountdown(window: .weekly), .windowResetAbsolute(window: .weekly),
@@ -89,8 +125,9 @@ struct MenuBarStatusPrefixTests {
             layout: layout, data: data, icon: nil, options: self.fixture.options())
         let reset = UsageFormatter.resetCountdownDescription(
             from: self.fixture.now.addingTimeInterval(3 * 24 * 60 * 60), now: self.fixture.now)
+        let visibleReset = String(reset.dropFirst(3))
         #expect(output.attributedTitle
-            .string == "W\u{200A}50%\u{2009}T\u{200A}\u{FFFC}\nR\u{200A}\(reset)\u{2009}E\u{200A}1d 16h")
+            .string == "W\u{200A}50%\u{2009}T\u{200A}\u{FFFC}\nR\u{200A}\(visibleReset)\u{2009}E\u{200A}1d 16h")
         #expect(output.accessibilityLabel.contains("Weekly"))
         #expect(output.accessibilityLabel.contains("Runs out in 1d 16h"))
     }
@@ -179,7 +216,7 @@ struct MenuBarStatusPrefixTests {
             showUsed: true,
             showsResetTimeWhenExhausted: true,
             showPrefixes: true,
-            now: now) == "R\u{200A}in 2h")
+            now: now) == "R\u{200A}2h")
         let noReset = RateWindow(usedPercent: 100, windowMinutes: 10080, resetsAt: nil, resetDescription: nil)
         #expect(MenuBarDisplayText.displayText(
             mode: .both,

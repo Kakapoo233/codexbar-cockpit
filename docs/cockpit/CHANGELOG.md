@@ -1,5 +1,9 @@
 # Cockpit changes
 
+## 0.8.22 — Reset duration without filler
+
+- Omit the leading English "in" after R in menu-bar countdowns, keeping the duration and full spoken description.
+
 ## 0.8.21 — Tighter status-item labels
 
 - Reduce the gap between English prefixes and their numbers or meters, including daily T components.

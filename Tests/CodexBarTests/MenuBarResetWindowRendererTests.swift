@@ -6,7 +6,7 @@ import Testing
 
 extension MenuBarLayoutRendererTests {
     @Test
-    func `selected reset accessibility composes the window and value without repeated prepositions`() {
+    func `selected reset accessibility composes the window and value without repeated prepositions`() throws {
         let data = self.data()
         for window in [PercentWindow.session, .weekly, .scopedWeekly] {
             let label = switch window {
@@ -19,8 +19,10 @@ extension MenuBarLayoutRendererTests {
                     ? .windowResetAbsolute(window: window) : .windowResetCountdown(window: window)
                 let output = MenuBarLayoutRenderer().render(
                     layout: MenuBarLayout(lines: [[token]]), data: data, icon: nil, options: self.options())
-                let prefix = window == .session ? "R S" : "R"
-                let value = String(output.attributedTitle.string.dropFirst("\(prefix)\u{200A}".count))
+                let reset = try #require(MenuBarLayoutRenderer.window(window, data: data)?.resetsAt)
+                let value = absolute
+                    ? UsageFormatter.resetDescription(from: reset, now: self.now)
+                    : UsageFormatter.resetCountdownDescription(from: reset, now: self.now)
                 #expect(output.accessibilityLabel == "\(label): \(value)")
             }
         }
@@ -64,7 +66,8 @@ extension MenuBarLayoutRendererTests {
                         from: reset,
                         now: self.now)
                 let prefix = window == .session ? "R S" : "R"
-                #expect(output.attributedTitle.string == "\(prefix)\u{200A}\(expected)")
+                let visible = absolute ? expected : String(expected.dropFirst(3))
+                #expect(output.attributedTitle.string == "\(prefix)\u{200A}\(visible)")
             }
         }
     }
@@ -134,9 +137,9 @@ extension MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: self.now.addingTimeInterval(51)))
-        #expect(first.attributedTitle.string == "R\u{200A}in 7m")
+        #expect(first.attributedTitle.string == "R\u{200A}7m")
         #expect(first.attributedTitle === same.attributedTitle)
-        #expect(next.attributedTitle.string == "R\u{200A}in 6m")
+        #expect(next.attributedTitle.string == "R\u{200A}6m")
         #expect(first.attributedTitle !== next.attributedTitle)
     }
 

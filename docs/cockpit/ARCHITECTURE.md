@@ -72,6 +72,8 @@ the same page again when the button's standard activation follows the initial pr
   conditional and legacy text paths share this presentation without changing calculations or layouts.
   English prefixes use a hair space before their value or meter, including daily T. Weekly reset
   fields use R alone; other reset periods retain their window qualifier and spoken names stay complete.
+  R-prefixed countdowns omit the leading English "in" visually; the raw countdown remains available
+  to the cache and full accessibility description. Absolute reset times keep their existing wording.
 - `CockpitPersonalUsageModel` provides an optional weekday reference from qualified observed periods.
   Closed-day summaries survive raw-snapshot retention, preserve partial coverage, and remain scoped by
   provider/account/time zone. A separate seven-day holdout gates display; missing periods are not zero.

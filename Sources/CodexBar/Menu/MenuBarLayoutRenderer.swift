@@ -765,8 +765,10 @@ final class MenuBarLayoutRenderer {
                 provider: data.provider,
                 now: options.now,
                 absolute: item.resetIsAbsolute).value
+            let visibleValue = options.showWindowLabels && !item.resetIsAbsolute
+                ? value.map(MenuBarDisplayText.compactResetCountdown) : value
             return self.optionalTextToken(
-                value,
+                visibleValue,
                 unavailableLabel: qualified ? L("%@ unavailable", item.editorLabel(provider: data.provider))
                     : (item.resetIsAbsolute ? L("Reset time unavailable") : L("Reset countdown unavailable")),
                 accessibilityText: value.map { qualified ? L("%@: %@", label, $0) : "\(label) \($0)" },

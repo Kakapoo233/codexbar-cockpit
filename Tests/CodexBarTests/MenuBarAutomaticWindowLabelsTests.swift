@@ -46,7 +46,7 @@ struct MenuBarAutomaticWindowLabelsTests {
             let exhausted = self.data(weekly: weekly, used: 100)
             let reset = renderer.render(layout: layout, data: exhausted, icon: nil, options: options)
             let resetPrefix = weekly ? "R" : "R S"
-            #expect(reset.attributedTitle.string == "\(resetPrefix)\u{200A}in 2h")
+            #expect(reset.attributedTitle.string == "\(resetPrefix)\u{200A}2h")
             let hidden = renderer.render(
                 layout: layout,
                 data: exhausted,
