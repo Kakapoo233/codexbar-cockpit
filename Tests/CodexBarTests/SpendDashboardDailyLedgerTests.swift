@@ -360,12 +360,12 @@ struct SpendDashboardDailyLedgerTests {
         let last = try #require(group.dailySummaries.last)
         #expect(first.providers.map(\.requestCount) == [nil, 2])
         #expect(last.providers.map(\.requestCount) == [nil, 4])
-        #expect(spendDashboardLedgerRequestText(first) == "≥2")
+        #expect(spendDashboardLedgerRequestText(first) == "2")
         #expect(spendDashboardLedgerTokenText(first) == "40")
         #expect(spendDashboardLedgerCostText(first, currencyCode: "USD") == (partialCost ? "~$4.00" : "$4.00"))
-        #expect(spendDashboardLedgerRequestText(middle) == "≥0")
+        #expect(spendDashboardLedgerRequestText(middle) == "0")
         #expect(spendDashboardLedgerTokenText(middle) == "0")
-        #expect(spendDashboardLedgerRequestText(last) == "≥4")
+        #expect(spendDashboardLedgerRequestText(last) == "4")
         #expect(spendDashboardLedgerTokenText(last) == "60")
     }
 

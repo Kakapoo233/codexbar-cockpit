@@ -103,7 +103,7 @@ export function TrayPanel(props: Props) {
   const dateRange = useMemo(() => rangeFor(range, now), [range, now]);
   const reset = confirmedReset(forecast, now);
   const partial = plan.coverage !== "complete";
-  const qualifier = `${plan.isStale ? "≈" : ""}${partial ? "≤" : ""}`;
+  const qualifier = plan.isStale ? "≈" : "";
   const patch = (value: Partial<WidgetPreferences>) => onPreferences({ ...preferences, ...value });
   useEffect(() => { if (props.pageRequest) setPage(props.pageRequest.page); }, [props.pageRequest]);
   return <div className="tray-panel" onKeyDown={event => { if (event.key === "Escape" && !(event.target instanceof HTMLSelectElement)) props.onHide(); }}>
@@ -134,7 +134,7 @@ export function TrayPanel(props: Props) {
             <label className="tray-cap-control"><span>{zh ? "个人上限（占周额度）" : "Personal cap (weekly quota)"}</span><input type="number" min="0" max="100" step="0.1" value={plan.manualCapPercent ?? ""} placeholder={zh ? "自动建议" : "Automatic"} disabled={!props.canRecordFeedback || !props.settingsWritable} onChange={event => props.onPersonalCap(event.target.value === "" ? null : Number(event.target.value))} /></label>
             <button type="button" className="usage-text-button" disabled={plan.manualCapPercent === null} onClick={() => props.onPersonalCap(null)}>{zh ? "恢复自动建议" : "Restore automatic advice"}</button>
             {plan.remainingDailyBudgetPercent === null && <p className="usage-note">{zh ? "需要可识别账户的官方周额度观测；暂无数据不会当作 0%。" : "Official weekly observations with an identified account are required; unavailable values are not zero."}</p>}
-            {partial && plan.remainingDailyBudgetPercent !== null && <p className="usage-note">{zh ? "≤ 表示观测不完整，今日实际可用额度可能更少。" : "≤ marks incomplete observations; actual available allowance may be lower."}</p>}
+            {partial && plan.remainingDailyBudgetPercent !== null && <p className="usage-note">{zh ? "观测不完整，今日实际可用额度可能更少。" : "Observations are incomplete; actual available allowance may be lower."}</p>}
             {plan.planningResetWindow && <small>{zh ? "计算窗口" : "Planning horizon"} · {new Date(plan.planningResetWindow.resetsAt).toLocaleString()} · {plan.planningResetWindow.source}</small>}
           </section>
           <div className="tray-provider-grid">{props.snapshots.filter(value => !preferences.hiddenProviders.includes(value.provider)).map(snapshot => <section key={snapshot.provider} className="tray-card" aria-label={`${snapshot.displayName} ${zh ? "额度" : "quota"}`}><h2>{snapshot.displayName}<small>{snapshot.plan ?? ""}</small></h2><WindowMeter label={zh ? "短期剩余" : "Short-term remaining"} value={snapshot.shortWindow?.remainingPercent ?? null} /><WindowMeter label={zh ? "周额度剩余" : "Weekly remaining"} value={snapshot.weeklyWindow?.remainingPercent ?? null} /><small>{snapshot.status}{snapshot.message ? ` · ${snapshot.message}` : ""}</small></section>)}</div>

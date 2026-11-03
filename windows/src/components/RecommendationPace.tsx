@@ -13,10 +13,10 @@ function number(value: number, language: Language): string {
 }
 
 function compactDelta(pace: CockpitRecommendationPace): string {
-  // Partial observations give a lower bound: ≥4.6 may become ≥4, never ≥5.
+  // Preserve conservative partial-observation rounding; completeness is explained in the tooltip.
   const value = pace.isLowerBound ? Math.floor(pace.deltaPercent)
     : Math.sign(pace.deltaPercent) * Math.round(Math.abs(pace.deltaPercent));
-  return `${pace.isLowerBound ? "≥" : ""}${value > 0 ? "+" : value < 0 ? "-" : ""}${Math.abs(value)}%`;
+  return `${value > 0 ? "+" : value < 0 ? "-" : ""}${Math.abs(value)}%`;
 }
 
 function comparison(pace: CockpitRecommendationPace | null, language: Language): string {

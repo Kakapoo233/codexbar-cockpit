@@ -36,13 +36,12 @@ enum CockpitRecommendationPaceText {
         reservePositive: Bool = false) -> String?
     {
         guard let pace else { return nil }
-        // A lower bound must round outward: ≥4.6 is safely displayed as ≥4, never as ≥5.
+        // Retain the existing partial-observation rounding; only its visible qualifier is hidden.
         let delta = pace.isLowerBound ? floor(pace.deltaPercent) : pace.deltaPercent.rounded()
         let displayed = reservePositive ? -delta : delta
         guard abs(displayed) < Double(Int.max) else { return nil }
         let sign = displayed > 0 ? "+" : displayed < 0 ? "-" : ""
-        let bound = pace.isLowerBound ? (reservePositive ? "≤" : "≥") : ""
-        return "\(bound)\(sign)\(Int(abs(displayed)))%"
+        return "\(sign)\(Int(abs(displayed)))%"
     }
 
     static func weeklyDetail(

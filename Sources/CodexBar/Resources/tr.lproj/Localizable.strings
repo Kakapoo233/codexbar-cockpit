@@ -590,7 +590,7 @@
 "hooks_event" = "Olay";
 "hooks_provider" = "Sağlayıcı";
 "hooks_any_provider" = "Herhangi bir sağlayıcı";
-"hooks_threshold" = "Şu kullanım düzeyinde tetikle: ≥";
+"hooks_threshold" = "Kullanım şu değere ulaştığında tetikle";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Çalıştırılabilir dosya";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2497,7 +2497,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2825,7 +2825,7 @@
 "cockpit_ui_observed" = "Bugün Gözlenen";
 "cockpit_ui_ok" = "Tamam";
 "cockpit_ui_overloaded" = "Aşırı yük";
-"cockpit_ui_partial_cost_note" = "Bazı kayıtlar eksik veya fiyatlandırılmamış. ≥ doğrulanabilen bilinen kısmı gösterir.";
+"cockpit_ui_partial_cost_note" = "Bazı kayıtlar eksik veya fiyatlandırılmamış. Yalnızca doğrulanabilen bilinen kısım gösterilir.";
 "cockpit_ui_partial_lineage" = "Görev sahipliği eksik; bilinen oturumlar korundu";
 "cockpit_ui_partial_task_note" = "Bazı görevlerin sahipliği eksik; doğrulanmış oturum kayıtları korunur.";
 "cockpit_ui_period" = "Rapor Dönemi";
@@ -3003,7 +3003,7 @@
 "cockpit_calendar_previous" = "Önceki dönem";
 "cockpit_calendar_next" = "Sonraki dönem";
 "cockpit_calendar_period_total" = "Bu dönem için kaydedilen kullanım";
-"cockpit_calendar_partial" = "Geçmiş eksik olabilir: ≥ kaydedilmiş alt sınırı, — ise kullanılamayan veriyi belirtir. Gelecek tarihler toplamlara dahil edilmez.";
+"cockpit_calendar_partial" = "Geçmiş eksik olabilir: toplamlar yalnızca kaydedilmiş verileri içerir; — kullanılamayan veriyi belirtir. Gelecek tarihler toplamlara dahil edilmez.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · %@. çeyrek";
 "cockpit_calendar_select_day" = "Sağlayıcı ayrıntılarını, kişisel durumu ve sıfırlanma olaylarını görmek için bir gün seçin.";
@@ -3252,7 +3252,7 @@
 "cockpit_menu_remaining_bar" = "Bugün kullanılabilir: çubuk";
 "cockpit_menu_remaining_circle" = "Bugün kullanılabilir: dolu daire";
 "cockpit_menu_remaining_accessibility" = "Bugün kullanılabilir: günlük payın %@ kadarı; haftalık kotanın %@ kadarına eşdeğer";
-"cockpit_menu_remaining_help" = "Bugünkü payın hâlâ kullanılabilir kısmını gösterir; günlük payın tamamı %100 kabul edilir. Kişisel sınırları ve gerçek bakiyeyi dikkate alır, konfor eğrisi ve sıfırlama aralığına göre güncellenir. ≤ eksik gözlemlere dayalı üst sınırı, ≈ eski verileri, — bilinmeyen değeri gösterir.";
+"cockpit_menu_remaining_help" = "Bugünkü payın hâlâ kullanılabilir kısmını gösterir; günlük payın tamamı %100 kabul edilir. Kişisel sınırları ve gerçek bakiyeyi dikkate alır, konfor eğrisi ve sıfırlama aralığına göre güncellenir. Gözlemler eksik olduğunda gerçekte kullanılabilir miktar daha düşük olabilir; ≈ eski verileri, — bilinmeyen değeri gösterir.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Ayarları, takvim değerlendirmelerini ve kişisel sınırları eşzamanla";

@@ -31,6 +31,6 @@ export function TokenComfortCurvePanel({ records, personId, language }: {
     </svg>
     {model.sampleCount === 0 && <p className="comfort-person-note">{personId ? (zh ? "还没有这位用户的 Token 体验记录。记录后会显示散点。" : "No token feedback for this person yet. Check-ins will appear as points.") : (zh ? "旧记录没有所属用户或 Token 快照，保留在下方日历，不参与拟合。" : "Legacy entries remain in the calendar; no person or token usage is inferred.")}</p>}
     <footer><span><i className="token-comfort-key" />{zh ? "完整日账" : "Complete day"}</span><span><i className="token-comfort-key is-partial" />{zh ? "部分记录" : "Partial day"}</span><span>{zh ? `完整样本 ${model.completeSampleCount} 天` : `${model.completeSampleCount} complete days`}</span></footer>
-    <details className="comfort-person-note"><summary>{zh ? "说明" : "About"}</summary><p>{model.trend ? (zh ? "虚线仅描述本人反馈，不代表效率或因果。" : "The trend describes feedback, not productivity or causation.") : (zh ? "趋势需要至少 7 个完整日、3 档用量且跨度 ≥10万；部分记录不参与。" : "A trend needs 7 complete days, 3 usage levels and a span of 0.1M. Partial days are excluded.")}</p></details>
+    <details className="comfort-person-note"><summary>{zh ? "说明" : "About"}</summary><p>{model.trend ? (zh ? "虚线仅描述本人反馈，不代表效率或因果。" : "The trend describes feedback, not productivity or causation.") : (zh ? "趋势需要至少 7 个完整日、3 档用量且跨度至少10万；部分记录不参与。" : "A trend needs 7 complete days, 3 usage levels and a span of 0.1M. Partial days are excluded.")}</p></details>
   </section>;
 }

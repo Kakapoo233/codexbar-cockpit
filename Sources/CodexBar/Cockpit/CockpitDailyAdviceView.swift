@@ -32,9 +32,16 @@ enum CockpitDailyAdviceProjection {
         L("cockpit_advice_weekly_equivalent", self.remainingWeeklyText(status))
     }
 
-    private static func remainingText(_ value: Double?, coverage: CockpitCoverage) -> String {
+    private static func remainingText(_ value: Double?, coverage _: CockpitCoverage) -> String {
         guard let value else { return "—" }
-        return (coverage == .complete ? "" : "≤ ") + cockpitLocalizedPercent(value)
+        return cockpitLocalizedPercent(value)
+    }
+
+    static func remainingHelpText(_ status: CockpitDayStatus) -> String {
+        var parts = [L("cockpit_advice_daily_ratio_help")]
+        if status.coverage != .complete { parts.append(L("cockpit_advice_partial_note")) }
+        if status.isStale { parts.append(L("cockpit_ui_stale")) }
+        return parts.joined(separator: "\n")
     }
 
     static func comfortCeilingText(_ advice: CockpitComfortAdvice) -> String {
@@ -147,7 +154,7 @@ struct CockpitDailyAdviceRow: View {
             Text(L("cockpit_advice_live_note"))
                 .font(.caption2).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            if self.status.suggestionIsPartial {
+            if self.status.suggestionIsPartial || self.status.coverage != .complete {
                 Text(L("cockpit_advice_partial_note"))
                     .font(.caption2).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -225,6 +232,7 @@ struct CockpitDailyAdviceRow: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cockpit-advice-weekly-allowance")
+        .help(CockpitDailyAdviceProjection.remainingHelpText(self.status))
     }
 
     private var capValue: some View {
@@ -263,9 +271,10 @@ struct CockpitDailyAdviceRow: View {
         }
     }
 
-    private func metricValue(_ value: Double?, partial: Bool, upperBound: Bool) -> some View {
-        Text((partial && value != nil ? (upperBound ? "≤ " : "≥ ") : "") + self.percent(value))
+    private func metricValue(_ value: Double?, partial: Bool, upperBound _: Bool) -> some View {
+        Text(self.percent(value))
             .font(.system(size: 19, weight: .semibold, design: .rounded)).monospacedDigit()
+            .help(partial ? L("cockpit_advice_partial_note") : "")
     }
 
     private func percent(_ value: Double?) -> String {
@@ -327,6 +336,6 @@ struct CockpitDailyBudgetRemainingValue: View {
                     .accessibilityIdentifier("cockpit-advice-remaining-weekly-equivalent")
             }
         }
-        .help(L("cockpit_advice_daily_ratio_help"))
+        .help(CockpitDailyAdviceProjection.remainingHelpText(self.status))
     }
 }

@@ -43,7 +43,7 @@
 "hooks_event" = "Événement";
 "hooks_provider" = "Fournisseur";
 "hooks_any_provider" = "Tout fournisseur";
-"hooks_threshold" = "Déclencher à l’utilisation ≥";
+"hooks_threshold" = "Déclencher lorsque l’utilisation atteint";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Exécutable";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2493,7 +2493,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2821,7 +2821,7 @@
 "cockpit_ui_observed" = "Observé aujourd’hui";
 "cockpit_ui_ok" = "OK";
 "cockpit_ui_overloaded" = "Surchargé";
-"cockpit_ui_partial_cost_note" = "Certains enregistrements sont absents ou sans tarif. ≥ indique la partie connue et vérifiable.";
+"cockpit_ui_partial_cost_note" = "Certains enregistrements sont absents ou sans tarif. Seule la partie connue et vérifiable est affichée.";
 "cockpit_ui_partial_lineage" = "Attribution des tâches incomplète ; sessions connues conservées";
 "cockpit_ui_partial_task_note" = "L’attribution de certaines tâches est incomplète ; les enregistrements de sessions confirmés sont conservés.";
 "cockpit_ui_period" = "Période du rapport";
@@ -2997,7 +2997,7 @@
 "cockpit_calendar_previous" = "Période précédente";
 "cockpit_calendar_next" = "Période suivante";
 "cockpit_calendar_period_total" = "Utilisation enregistrée sur cette période";
-"cockpit_calendar_partial" = "Historique partiel : ≥ indique les valeurs minimales enregistrées ; — signifie indisponible. Les dates futures sont exclues des totaux.";
+"cockpit_calendar_partial" = "Historique partiel : les totaux incluent uniquement les données enregistrées ; — signifie indisponible. Les dates futures sont exclues des totaux.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · T%@";
 "cockpit_calendar_select_day" = "Sélectionnez un jour pour voir les détails des fournisseurs, le statut personnel et les événements de réinitialisation.";
@@ -3246,7 +3246,7 @@
 "cockpit_menu_remaining_bar" = "Disponible aujourd’hui : barre";
 "cockpit_menu_remaining_circle" = "Disponible aujourd’hui : cercle rempli";
 "cockpit_menu_remaining_accessibility" = "Disponible aujourd’hui : %@ de l’allocation du jour ; équivaut à %@ du quota hebdomadaire";
-"cockpit_menu_remaining_help" = "Affiche la part encore disponible de l’allocation du jour, dont le total représente 100 %. Respecte les plafonds personnels et le solde réel, et évolue selon la courbe de confort et la période de réinitialisation. ≤ indique une borne supérieure issue d’observations incomplètes ; ≈ des données anciennes ; — une valeur inconnue.";
+"cockpit_menu_remaining_help" = "Affiche la part encore disponible de l’allocation du jour, dont le total représente 100 %. Respecte les plafonds personnels et le solde réel, et évolue selon la courbe de confort et la période de réinitialisation. Lorsque les observations sont incomplètes, le montant réellement disponible peut être inférieur ; ≈ indique des données anciennes ; — une valeur inconnue.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Synchroniser les réglages, les retours du calendrier et les plafonds personnels";

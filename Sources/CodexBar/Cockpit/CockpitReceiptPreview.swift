@@ -160,14 +160,14 @@ struct CockpitReceiptCardView: View {
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private func costText(_ cost: Double?, currency: String, partial: Bool) -> String {
+    private func costText(_ cost: Double?, currency: String, partial _: Bool) -> String {
         guard let cost else { return L("cockpit_ui_unknown") }
-        return (partial ? "≥ " : "") + UsageFormatter.currencyString(cost, currencyCode: currency)
+        return UsageFormatter.currencyString(cost, currencyCode: currency)
     }
 
-    private func tokenText(_ tokens: Int?, partial: Bool) -> String {
+    private func tokenText(_ tokens: Int?, partial _: Bool) -> String {
         guard let tokens else { return L("cockpit_ui_unknown") }
-        return (partial ? "≥ " : "") + UsageFormatter.tokenCountString(tokens)
+        return UsageFormatter.tokenCountString(tokens)
     }
 }
 

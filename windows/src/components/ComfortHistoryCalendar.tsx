@@ -76,9 +76,9 @@ function formatWeekRange(days: readonly Date[], language: Language): string {
   return `${start}–${end}`;
 }
 
-function formatUsagePercent(value: number, language: Language, coverage: CodexDailyUsage["coverage"] | "legacy" = "complete"): string {
+function formatUsagePercent(value: number, language: Language): string {
   const formatted = new Intl.NumberFormat(language === "en" ? "en-US" : "zh-CN", { maximumFractionDigits: 1 }).format(value);
-  return `${coverage === "partial" ? "≥" : ""}${formatted}%`;
+  return `${formatted}%`;
 }
 
 export function ComfortHistoryCalendar({ personalLocalDay = false, records, dailyUsage = [], dailyUsageHistory = [], language, onChange, tokenMode = false, personPercentMode = false, percentByDate = {}, personId = null, usageData = null, saving = false, onRefreshSnapshot }: ComfortHistoryCalendarProps) {
@@ -153,9 +153,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
   const selectedRecord = selectedDate ? recordsByDate.get(selectedDate) : undefined;
   const selectedIsFuture = selectedDate > today;
   const snapshotFor = (date: string) => recordsByDate.get(date)?.tokenSnapshot ?? (personId && usageData ? buildTokenComfortSnapshot(usageData, personId, date) : null);
-  const tokenText = (date: string) => {
-    const snapshot = snapshotFor(date);
-    return snapshot && snapshot.coverage !== "unavailable" ? `${snapshot.coverage === "partial" ? "≥" : ""}${formatTokens(snapshot.totalTokens, language !== "en")}` : null;
+  const tokenText = (date: string, snapshot = snapshotFor(date)) => {
+    return snapshot && snapshot.coverage !== "unavailable" ? formatTokens(snapshot.totalTokens, language !== "en") : null;
   };
   const allocationFor = (date: string) => recordsByDate.get(date)?.quotaAllocation ?? percentByDate[date] ?? null;
   const percentText = (date: string) => {
@@ -219,7 +218,10 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
           const dateKey = localDateKey(date);
           const record = recordsByDate.get(dateKey);
           const usage = dailyUsageByDate.get(dateKey);
-          const usagePercent = personPercentMode ? percentText(dateKey) : tokenMode ? tokenText(dateKey) : usage ? formatUsagePercent(usage.observedUsedPercent, language, usage.coverage) : null;
+          const tokenSnapshot = tokenMode && !personPercentMode ? snapshotFor(dateKey) : null;
+          const usagePercent = personPercentMode ? percentText(dateKey) : tokenMode ? tokenText(dateKey, tokenSnapshot) : usage ? formatUsagePercent(usage.observedUsedPercent, language) : null;
+          const usageCoverage = personPercentMode ? allocationFor(dateKey)?.coverage : tokenMode ? tokenSnapshot?.coverage : usage?.coverage;
+          const coverageNote = usageCoverage === "partial" ? (language === "en" ? " · Partial observations" : " · 部分观测") : "";
           const usageLabel = tokenMode ? "Token" : labels.weeklyUsage;
           const isOutside = view === "month" && date.getUTCMonth() !== visibleMonth.getUTCMonth();
           const isFuture = dateKey > today;
@@ -230,8 +232,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
               type="button"
               role="gridcell"
               className={`comfort-history-day${tokenMode || personPercentMode ? " is-token-day" : ""}${isOutside ? " is-outside" : ""}${isSelected ? " is-selected" : ""}${dateKey === today ? " is-today" : ""}${isFuture ? " is-future" : ""}`}
-              aria-label={`${formatSelectedDate(dateKey, language)} · ${record ? labels.options[record.comfort] : labels.noRecord}${usagePercent !== null ? ` · ${usageLabel} ${usagePercent}` : ""}`}
-              title={usagePercent !== null ? `${usageLabel} ${usagePercent}` : undefined}
+              aria-label={`${formatSelectedDate(dateKey, language)} · ${record ? labels.options[record.comfort] : labels.noRecord}${usagePercent !== null ? ` · ${usageLabel} ${usagePercent}${coverageNote}` : ""}`}
+              title={usagePercent !== null ? `${usageLabel} ${usagePercent}${coverageNote}` : undefined}
               aria-selected={isSelected}
               disabled={isFuture}
               onMouseDown={(event) => event.stopPropagation()}

@@ -78,6 +78,15 @@ it("keeps unavailable allowance unknown and hides an absent confirmed reset", ()
   expect(screen.queryByText("Codex reset announcement")).not.toBeInTheDocument();
   expect(screen.getByText(/unavailable values are not zero/)).toBeInTheDocument();
 });
+it("shows direct daily allowance values with incomplete observations explained in words", () => {
+  const fixture = props();
+  fixture.plan = { ...fixture.plan, remainingDailyBudgetPercent: 75, remainingSuggestedPercent: 15, coverage: "partial", isStale: false };
+  const { container } = render(<TrayPanel {...fixture} />);
+  expect(screen.getByText("75%")).toBeInTheDocument();
+  expect(screen.getByText("Daily allocation = 100% · Weekly 15%")).toBeInTheDocument();
+  expect(screen.getByText("Observations are incomplete; actual available allowance may be lower.")).toBeInTheDocument();
+  expect(container.outerHTML).not.toMatch(/[≤≥]/);
+});
 it("only accepts a fresh future dated announcement for the homepage", () => {
   const forecast: ResetForecast = { score: 0, windowHours: 24, fetchedAt: now.toISOString(), resetAnnounced: true,
     resetAt: new Date(now.getTime() + 3_600_000).toISOString(), sourceUrl: "https://codex-resets.com/" };

@@ -43,7 +43,7 @@
 "hooks_event" = "Sự kiện";
 "hooks_provider" = "Nhà cung cấp";
 "hooks_any_provider" = "Nhà cung cấp bất kỳ";
-"hooks_threshold" = "Chạy khi mức sử dụng ≥";
+"hooks_threshold" = "Chạy khi mức sử dụng đạt";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Tệp thực thi";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2495,7 +2495,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2823,7 +2823,7 @@
 "cockpit_ui_observed" = "Đã quan sát hôm nay";
 "cockpit_ui_ok" = "Đồng ý";
 "cockpit_ui_overloaded" = "Quá tải";
-"cockpit_ui_partial_cost_note" = "Một số bản ghi bị thiếu hoặc chưa có giá. ≥ chỉ phần đã biết có thể xác minh.";
+"cockpit_ui_partial_cost_note" = "Một số bản ghi bị thiếu hoặc chưa có giá. Chỉ hiển thị phần đã biết có thể xác minh.";
 "cockpit_ui_partial_lineage" = "Quan hệ sở hữu tác vụ chưa đầy đủ; giữ lại các phiên đã biết";
 "cockpit_ui_partial_task_note" = "Quan hệ sở hữu của một số tác vụ chưa đầy đủ; giữ lại các bản ghi phiên đã xác nhận.";
 "cockpit_ui_period" = "Kỳ báo cáo";
@@ -3003,7 +3003,7 @@
 "cockpit_calendar_previous" = "Kỳ trước";
 "cockpit_calendar_next" = "Kỳ sau";
 "cockpit_calendar_period_total" = "Mức sử dụng đã ghi nhận trong kỳ này";
-"cockpit_calendar_partial" = "Lịch sử có thể chưa đầy đủ: ≥ là cận dưới đã ghi nhận; — là không khả dụng. Ngày trong tương lai không được tính vào tổng.";
+"cockpit_calendar_partial" = "Lịch sử có thể chưa đầy đủ: tổng chỉ gồm dữ liệu đã ghi nhận; — nghĩa là không khả dụng. Ngày trong tương lai không được tính vào tổng.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · Quý %@";
 "cockpit_calendar_select_day" = "Chọn một ngày để xem chi tiết nhà cung cấp, trạng thái cá nhân và sự kiện đặt lại.";
@@ -3252,7 +3252,7 @@
 "cockpit_menu_remaining_bar" = "Còn dùng được hôm nay: thanh";
 "cockpit_menu_remaining_circle" = "Còn dùng được hôm nay: hình tròn tô đầy";
 "cockpit_menu_remaining_accessibility" = "Còn dùng được hôm nay: %@ phân bổ trong ngày; tương đương %@ hạn mức tuần";
-"cockpit_menu_remaining_help" = "Hiển thị tỷ lệ phân bổ hôm nay vẫn còn dùng được, với tổng phân bổ trong ngày là 100%. Tuân theo giới hạn cá nhân và số dư thực tế, đồng thời cập nhật theo đường cong thoải mái và khoảng thời gian đặt lại. ≤ chỉ giới hạn trên khi quan sát chưa đầy đủ; ≈ chỉ dữ liệu cũ; — nghĩa là chưa biết.";
+"cockpit_menu_remaining_help" = "Hiển thị tỷ lệ phân bổ hôm nay vẫn còn dùng được, với tổng phân bổ trong ngày là 100%. Tuân theo giới hạn cá nhân và số dư thực tế, đồng thời cập nhật theo đường cong thoải mái và khoảng thời gian đặt lại. Khi quan sát chưa đầy đủ, hạn mức thực tế còn dùng được có thể ít hơn; ≈ chỉ dữ liệu cũ và — nghĩa là chưa biết.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Đồng bộ cài đặt, đánh giá trên lịch và giới hạn cá nhân";

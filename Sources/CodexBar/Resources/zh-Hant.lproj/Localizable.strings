@@ -43,7 +43,7 @@
 "hooks_event" = "事件";
 "hooks_provider" = "提供者";
 "hooks_any_provider" = "任何提供者";
-"hooks_threshold" = "使用率 ≥ 時執行";
+"hooks_threshold" = "使用率達到時執行";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "執行檔";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2472,7 +2472,7 @@
 "spend_tools_filter" = "篩選操作";
 "spend_tools_filter_all" = "全部";
 "spend_tools_filter_attention" = "需留意";
-"spend_tools_filter_slow" = "較慢（≥10 秒）";
+"spend_tools_filter_slow" = "較慢（10 秒以上）";
 "spend_tools_empty" = "所選日期沒有已記錄的原生工具操作。";
 "spend_tools_no_matches" = "沒有符合篩選條件的操作。";
 "spend_tools_more" = "顯示更多操作";
@@ -2800,7 +2800,7 @@
 "cockpit_ui_observed" = "今日已觀察使用";
 "cockpit_ui_ok" = "好";
 "cockpit_ui_overloaded" = "超載";
-"cockpit_ui_partial_cost_note" = "部分紀錄遺漏或尚無定價。≥ 表示可驗證的已知部分。";
+"cockpit_ui_partial_cost_note" = "部分紀錄遺漏或尚無定價，目前僅顯示可驗證的已知部分。";
 "cockpit_ui_partial_lineage" = "任務歸屬不完整，已保留已知工作階段";
 "cockpit_ui_partial_task_note" = "部分任務歸屬不完整，已保留確認的工作階段紀錄。";
 "cockpit_ui_period" = "報告期間";
@@ -2980,7 +2980,7 @@
 "cockpit_calendar_previous" = "上一個週期";
 "cockpit_calendar_next" = "下一個週期";
 "cockpit_calendar_period_total" = "此週期已記錄用量";
-"cockpit_calendar_partial" = "歷史可能不完整：≥ 表示已記錄的下限，— 表示無法取得。彙總不包含未來日期。";
+"cockpit_calendar_partial" = "歷史可能不完整：彙總僅包含已記錄的資料，— 表示無法取得。彙總不包含未來日期。";
 "cockpit_calendar_range" = "%@ 至 %@";
 "cockpit_calendar_quarter_title" = "%@ 年 · 第 %@ 季度";
 "cockpit_calendar_select_day" = "選擇某一天，查看服務商明細、個人狀態與重設事件。";
@@ -3231,7 +3231,7 @@
 "cockpit_menu_remaining_bar" = "今日還能用：用量條";
 "cockpit_menu_remaining_circle" = "今日還能用：圓形填充";
 "cockpit_menu_remaining_accessibility" = "今日還能用：%@，占今日分配額度；相當於每週總額度的 %@";
-"cockpit_menu_remaining_help" = "以今天分配的額度為100%，顯示今日還能用的比例。遵守個人上限與實際餘額，隨舒適曲線和重設時段更新；≤表示觀測不完整時的上界，≈表示資料過時，—表示未知。";
+"cockpit_menu_remaining_help" = "以今天分配的額度為100%，顯示今日還能用的比例。遵守個人上限與實際餘額，隨舒適曲線和重設時段更新；觀測不完整時，實際可用額度可能更少；≈表示資料過時，—表示未知。";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "同步設定、行事曆回饋與個人上限";

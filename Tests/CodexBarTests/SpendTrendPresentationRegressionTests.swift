@@ -14,7 +14,7 @@ struct SpendTrendPresentationRegressionTests {
     }
 
     @Test(arguments: [nil, "partial"] as [String?])
-    func `incomplete requests mark both account inspectors and isolated totals as lower bounds`(
+    func `incomplete request metadata survives plain account inspector totals`(
         selectedSource: String?) throws
     {
         let providers = [
@@ -50,9 +50,9 @@ struct SpendTrendPresentationRegressionTests {
         #expect(group.hasPartialCost)
         #expect(!providers[0].costIsLowerBound)
         let view = SpendTrendChart(group: group, section: .daily, day: nil, sourceID: selectedSource)
-        #expect(view.costText(4).hasPrefix("≥ "))
-        #expect(view.costText(4, sourceID: "partial").hasPrefix("≥ "))
-        #expect(!view.costText(3, sourceID: "complete").hasPrefix("≥ "))
+        #expect(view.costText(4) == UsageFormatter.currencyString(4, currencyCode: "USD"))
+        #expect(view.costText(4, sourceID: "partial") == UsageFormatter.currencyString(4, currencyCode: "USD"))
+        #expect(view.costText(3, sourceID: "complete") == UsageFormatter.currencyString(3, currencyCode: "USD"))
     }
 
     @Test(arguments: ["idle", "week", "idle-week"])

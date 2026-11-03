@@ -23,7 +23,7 @@ struct QuotaWindowPresentationTests {
     }
 
     @Test
-    func `partial price is visible without qualifying complete tokens`() {
+    func `partial quota costs display directly with an estimate note`() {
         let start = Date(timeIntervalSince1970: 1_700_000_000)
         let row = UsageMenuCardView.Model.quotaWindowRow(
             week: .init(
@@ -38,7 +38,7 @@ struct QuotaWindowPresentationTests {
                 boundariesAreEstimated: false),
             cost: "$4.00",
             calendar: .current)
-        #expect(row.value == "≥ $4.00 · 600")
+        #expect(row.value == "$4.00 · 600")
         #expect(row.note == "Partial estimate")
     }
 
@@ -58,7 +58,7 @@ struct QuotaWindowPresentationTests {
                 boundariesAreEstimated: true),
             cost: "$4.00",
             calendar: .current)
-        #expect(row.value == "$4.00 · ≥ 600")
+        #expect(row.value == "$4.00 · 600")
         #expect(row.note == "Partial estimate")
         #expect(row.range.hasPrefix("Est. "))
         #expect(UsageMenuCardView.Model.quotaMetricValue(nil, complete: false) == "—")
@@ -112,7 +112,7 @@ struct QuotaWindowPresentationTests {
             preferredCurrencyCode: "USD",
             now: now))
         let dashboard = try #require(model.inlineUsageDashboard)
-        #expect(dashboard.quotaWindows.first?.value == "≥ $4.00 · 600")
+        #expect(dashboard.quotaWindows.first?.value == "$4.00 · 600")
         #expect(dashboard.quotaWindows.first?.note == "Partial estimate")
         #expect(!dashboard.detailLines.contains { $0.contains("Top model") })
     }

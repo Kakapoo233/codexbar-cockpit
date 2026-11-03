@@ -31,7 +31,7 @@ struct CockpitPlanSummaryView: View {
             }
             CockpitComfortAdviceSummaryView(status: self.status)
             Text(L("cockpit_advice_live_note")).font(.caption).foregroundStyle(.secondary)
-            if self.status.suggestionIsPartial {
+            if self.status.suggestionIsPartial || self.status.coverage != .complete {
                 Text(L("cockpit_advice_partial_note")).font(.caption).foregroundStyle(.secondary)
             }
             Text(L("cockpit_ui_observation_note"))
@@ -49,8 +49,8 @@ struct CockpitPlanSummaryView: View {
         .background(Color.primary.opacity(0.035), in: RoundedRectangle(cornerRadius: 12))
     }
 
-    private func percent(_ value: Double?, partial: Bool = false, upperBound: Bool = false) -> String {
+    private func percent(_ value: Double?, partial _: Bool = false, upperBound _: Bool = false) -> String {
         guard let value else { return "—" }
-        return (partial ? (upperBound ? "≤ " : "≥ ") : "") + cockpitLocalizedPercent(value)
+        return cockpitLocalizedPercent(value)
     }
 }

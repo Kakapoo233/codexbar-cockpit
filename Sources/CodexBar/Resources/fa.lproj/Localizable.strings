@@ -591,7 +591,7 @@
 "hooks_event" = "رویداد";
 "hooks_provider" = "ارائه‌دهنده";
 "hooks_any_provider" = "هر ارائه‌دهنده";
-"hooks_threshold" = "اجرا در مصرف ≥";
+"hooks_threshold" = "اجرا وقتی مصرف به این مقدار برسد";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "فایل اجرایی";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2498,7 +2498,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2826,7 +2826,7 @@
 "cockpit_ui_observed" = "مشاهده‌شدهٔ امروز";
 "cockpit_ui_ok" = "تأیید";
 "cockpit_ui_overloaded" = "فشار بیش از حد";
-"cockpit_ui_partial_cost_note" = "برخی رکوردها ناقص یا بدون قیمت‌اند. ≥ بخش معلوم و قابل تأیید را نشان می‌دهد.";
+"cockpit_ui_partial_cost_note" = "برخی رکوردها ناقص یا بدون قیمت‌اند. فقط بخش معلوم و قابل تأیید نمایش داده می‌شود.";
 "cockpit_ui_partial_lineage" = "مالکیت کارها ناقص است؛ نشست‌های معلوم حفظ شدند";
 "cockpit_ui_partial_task_note" = "مالکیت برخی کارها ناقص است؛ رکوردهای تأییدشدهٔ نشست حفظ می‌شوند.";
 "cockpit_ui_period" = "دورهٔ گزارش";
@@ -3004,7 +3004,7 @@
 "cockpit_calendar_previous" = "دورهٔ قبل";
 "cockpit_calendar_next" = "دورهٔ بعد";
 "cockpit_calendar_period_total" = "مصرف ثبت‌شده در این دوره";
-"cockpit_calendar_partial" = "سابقه ممکن است ناقص باشد: ≥ حد پایین ثبت‌شده را نشان می‌دهد؛ — یعنی داده موجود نیست. تاریخ‌های آینده در مجموع محاسبه نمی‌شوند.";
+"cockpit_calendar_partial" = "سابقه ممکن است ناقص باشد: مجموع فقط شامل داده‌های ثبت‌شده است؛ — یعنی داده موجود نیست. تاریخ‌های آینده در مجموع محاسبه نمی‌شوند.";
 "cockpit_calendar_range" = "%@ تا %@";
 "cockpit_calendar_quarter_title" = "%@ · فصل %@";
 "cockpit_calendar_select_day" = "برای دیدن جزئیات ارائه‌دهندگان، وضعیت شخصی و رویدادهای بازنشانی، یک روز را انتخاب کنید.";
@@ -3253,7 +3253,7 @@
 "cockpit_menu_remaining_bar" = "قابل استفاده امروز: نوار";
 "cockpit_menu_remaining_circle" = "قابل استفاده امروز: دایره پرشونده";
 "cockpit_menu_remaining_accessibility" = "قابل استفاده امروز: %@ از سهم امروز؛ معادل %@ از سهمیه هفتگی";
-"cockpit_menu_remaining_help" = "بخش باقی‌مانده از سهم امروز را نشان می‌دهد؛ کل سهم روزانه برابر با ۱۰۰٪ است. سقف شخصی و موجودی واقعی را رعایت می‌کند و بر پایه منحنی راحتی و بازه بازنشانی به‌روز می‌شود. ≤ حد بالای حاصل از مشاهدات ناقص، ≈ داده‌های قدیمی و — مقدار نامعلوم را نشان می‌دهد.";
+"cockpit_menu_remaining_help" = "بخش باقی‌مانده از سهم امروز را نشان می‌دهد؛ کل سهم روزانه برابر با ۱۰۰٪ است. سقف شخصی و موجودی واقعی را رعایت می‌کند و بر پایه منحنی راحتی و بازه بازنشانی به‌روز می‌شود. وقتی مشاهدات ناقص باشند، مقدار واقعاً در دسترس ممکن است کمتر باشد؛ ≈ داده‌های قدیمی و — مقدار نامعلوم را نشان می‌دهد.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "همگام‌سازی تنظیمات، بازخورد تقویم و سقف‌های شخصی";

@@ -3,20 +3,20 @@ import Foundation
 import Testing
 @testable import CodexBar
 
-/// A partial or partly unpriced scan must stay marked as a floor everywhere it is shown or exported.
-/// The header used to say "partial estimate" while the subscription row and the exported JSON
-/// presented the same totals as exact values.
+/// Partial scans retain lower-bound metadata while numeric readouts omit inequality prefixes.
 struct SpendDashboardLowerBoundPropagationTests {
     @Test
-    func `metric text marks lower bound cost and tokens`() {
+    func `metric text displays lower bound subtotals directly`() {
         let both = spendDashboardMetricText(
             cost: 74.15,
             tokens: 431_000_000,
             currencyCode: "USD",
             costIsLowerBound: true,
             tokensAreLowerBound: true)
-        #expect(both.contains("≥"))
-        #expect(both.components(separatedBy: "≥").count == 3)
+        let expected = spendDashboardMetricText(cost: 74.15, tokens: 431_000_000, currencyCode: "USD")
+        #expect(both == expected)
+        #expect(!both.contains("≥"))
+        #expect(!both.contains("≤"))
 
         let costOnly = spendDashboardMetricText(
             cost: 74.15,
@@ -24,7 +24,7 @@ struct SpendDashboardLowerBoundPropagationTests {
             currencyCode: "USD",
             costIsLowerBound: true,
             tokensAreLowerBound: false)
-        #expect(costOnly.components(separatedBy: "≥").count == 2)
+        #expect(costOnly == expected)
     }
 
     @Test
@@ -120,7 +120,8 @@ struct SpendDashboardLowerBoundPropagationTests {
             costIsLowerBound: provider.costIsLowerBound,
             tokensAreLowerBound: provider.tokensAreLowerBound)
         #expect(!text.contains("~"))
-        #expect(text.filter { $0 == "≥" }.count == (costIsLowerBound ? 1 : 0) + (partial ? 1 : 0))
+        #expect(!text.contains("≥"))
+        #expect(!text.contains("≤"))
         let exported = try #require(SpendDashboardExportPayload.make(model: model, hiddenSourceIDs: []).groups.first)
         #expect(exported.costIsLowerBound == costIsLowerBound)
         #expect(exported.tokensAreLowerBound == partial)

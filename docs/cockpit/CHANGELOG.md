@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.29 — Plain numeric readouts
+
+- Remove comparison-sign prefixes from allowance, pace, statistics, calendar and receipt values across Mac and Windows UI.
+- Keep original numbers, rounding, signs/colors, missing/stale states and completeness flags; retain partial-data explanations in prose and hover/accessibility help.
+- Update all 23 Mac language catalogs to explain incomplete data without referring to removed symbols; hook and tool-filter comparisons keep their original logic.
+
 ## 0.8.28 — Clear daily allowance units
 
 - Replace Daily advice's Weekly remaining metric with Available today as a share of the weekly quota, and remove Observed today from that card.

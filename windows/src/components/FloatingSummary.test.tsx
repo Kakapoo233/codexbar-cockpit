@@ -47,7 +47,7 @@ it.each(["percent", "bar", "circle"] as const)("shows the shared recommendation 
   expect(screen.getByText("Pace +6%")).toHaveAccessibleName(/expected by now 10%/);
   expect(container.querySelector(".floating-summary-footer")).toHaveTextContent("T 20% recommended / weekPace +6%");
   rerender(<FloatingSummary {...props} pace={{ ...recommendationPace, deltaPercent: -5.6, isLowerBound: true }} />);
-  expect(screen.getByText("Pace ≥-6%")).toHaveAccessibleName(/needs complete usage data/);
+  expect(screen.getByText("Pace -6%")).toHaveAccessibleName(/needs complete usage data/);
   rerender(<FloatingSummary {...props} pace={recommendationPace} snapshots={[{ ...codex, status: "stale" }]} />);
   expect(screen.getByText("Pace —")).toBeInTheDocument();
   expect(screen.queryByText("Pace +6%")).not.toBeInTheDocument();
@@ -108,14 +108,14 @@ it.each(["hidden", "disabled", "absent", "signed_out", "loading"] as const)("sup
   expect(screen.getByText("Pace —")).toBeInTheDocument();
 });
 
-it("keeps uncertainty accessible while omitting visible upper-bound glyphs", () => {
+it("keeps uncertainty accessible while omitting bound glyphs from visible and accessible values", () => {
   const props = fixture();
   props.snapshots = [{ ...codex, status: "stale" }]; props.plan.coverage = "partial";
   const { container } = render(<FloatingSummary {...props} />);
   expect(screen.getByText("≈65%")).toBeInTheDocument();
   expect(screen.getByText("≈74%")).toBeInTheDocument();
-  expect(screen.getByLabelText("Available today: ≤75% of today's allocation; weekly equivalent ≤15%; data may be stale")).toHaveTextContent("≈75%");
-  expect(container.textContent).not.toContain("≤");
+  expect(screen.getByLabelText("Available today: 75% of today's allocation; weekly equivalent 15%; observations are incomplete; actual available allowance may be lower; data may be stale")).toHaveTextContent("≈75%");
+  expect(container.outerHTML).not.toMatch(/[≤≥]/);
 });
 
 it("opens details/settings, hides, retries and drags only from the primary-pointer header background", () => {

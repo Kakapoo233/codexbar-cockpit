@@ -27,11 +27,13 @@ struct CockpitDailyBudgetRatioProjectionTests {
     }
 
     @Test
-    func `partial daily use makes both displayed remaining values upper bounds`() {
+    func `partial observations keep their coverage while both remaining values display directly`() {
         CodexBarLocalizationOverride.$appLanguage.withValue("en") {
             let partial = Self.status(suggestion: 20, used: 5, coverage: .partial)
-            #expect(CockpitDailyAdviceProjection.remainingDailyText(partial) == "≤ 75.0%")
-            #expect(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(partial) == "Weekly quota: ≤ 15.0%")
+            #expect(partial.coverage == .partial)
+            #expect(CockpitDailyAdviceProjection.remainingHelpText(partial).contains(L("cockpit_advice_partial_note")))
+            #expect(CockpitDailyAdviceProjection.remainingDailyText(partial) == "75.0%")
+            #expect(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(partial) == "Weekly quota: 15.0%")
         }
     }
 

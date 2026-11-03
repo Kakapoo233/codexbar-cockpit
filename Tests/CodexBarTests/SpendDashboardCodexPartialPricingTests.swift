@@ -40,7 +40,7 @@ struct SpendDashboardCodexPartialPricingTests {
         #expect(group.models.first?.totalCost == 2)
         #expect(spendDashboardMetricText(
             cost: group.totalCost, tokens: nil, currencyCode: "USD", costIsLowerBound: group.hasPartialCost)
-            == (partial ? "≥ $2.00" : "$2.00"))
+            == "$2.00")
         #expect(spendDashboardCoverageChipText(group.coverage).contains("Unpriced \(partial ? 1 : 0)"))
 
         let widget = try #require(UsageStore.widgetTokenUsageSummary(from: snapshot, provider: .codex))

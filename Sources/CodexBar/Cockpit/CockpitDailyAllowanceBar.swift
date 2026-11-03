@@ -28,12 +28,13 @@ struct CockpitDailyAllowanceBar: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cockpit-advice-remaining-today")
-        .help(L("cockpit_advice_daily_ratio_help"))
+        .help(CockpitDailyAdviceProjection.remainingHelpText(self.status))
     }
 
     private var accessibilityValue: String {
         var value = CockpitDailyAdviceProjection.remainingDailyText(self.status) + ", "
             + CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(self.status)
+        if self.status.coverage != .complete { value += ", " + L("cockpit_advice_partial_note") }
         if self.status.isStale { value += ", " + L("cockpit_ui_stale") }
         return value
     }

@@ -12,10 +12,17 @@ of today's effective allocation still available (`remainingDailyBudgetPercent`),
 and actual remaining quota applied by the existing planner. A separate Available today row beneath
 the bar shows its weekly-quota equivalent once. The advice card omits total weekly balance and
 Observed today metrics. This replaces the automatic weekly-share bar beneath the native provider quota;
-the native quota card has no recommendation decoration. Partial readings keep their upper-bound
-label, stale readings retain their warning, and missing measurements do not draw an empty allowance.
+the native quota card has no recommendation decoration. Partial readings keep their completeness
+metadata and explanations, stale readings retain their warning, and missing measurements do not draw an empty allowance.
 The existing advice minute refresh and provider color are reused. The automatic recommendation and
 top menu-bar components keep their existing calculations. No collector or stored-plan schema changes.
+
+Mac and Windows numeric readouts display values without comparison-sign prefixes. This applies to
+allowance, pace, recorded cost/Token totals, quota-window details, calendars and receipt images.
+Completeness and bound flags remain in the models, exports and conditional-availability rules;
+partial/stale context remains in prose, hover help and accessibility descriptions. Existing values,
+rounding, pace signs/colors, unavailable dashes and stale approximations retain their meanings.
+Filter and hook criteria keep their existing comparisons, with plain-language labels.
 
 The panel retains visited pages while open. Provider-menu invalidations accumulate while Usage is
 hidden, then rebuild once before the page selection publishes Usage again. This avoids rebuilding
@@ -63,7 +70,7 @@ the same page again when the button's standard activation follows the initial pr
   of manual caps and the used/remaining presentation switch. Matching provider/account/organization is
   required; remote fleet sources do not use the local plan. Planner and reset metadata participate in icon
   observation, and a placed component uses the existing minute refresh scheduler. The three Available today components read `remainingDailyBudgetPercent` and retain
-  `remainingSuggestedPercent` as their weekly equivalent. Incomplete observations remain upper bounds;
+  `remainingSuggestedPercent` as their weekly equivalent. Incomplete observations remain upper bounds internally;
   missing values are never drawn as zero. Bars and bottom-up filled circles represent remaining daily
   allowance independently of the global used/remaining switch. Cockpit V8 layout keys
   retain V7-and-earlier projections so rolling back does not invalidate the existing layout.
