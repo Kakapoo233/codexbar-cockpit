@@ -153,8 +153,24 @@ struct CockpitPanelView: View {
         }
     }
 
-    @ViewBuilder
     private func usagePage(layout: CockpitPanelLayout) -> some View {
+        VStack(spacing: 12) {
+            if !CockpitDailyAdviceProjection.providers(
+                in: self.navigation.planningProviders, available: self.planStore.availableProviders).isEmpty
+            {
+                CockpitUsageRecommendationHeader(
+                    planStore: self.planStore,
+                    store: self.store,
+                    providers: self.navigation.planningProviders)
+                    .padding(.horizontal, CockpitPanelLayout.contentInset)
+            }
+            self.usageColumns(layout: layout)
+        }
+        .padding(.top, 14)
+    }
+
+    @ViewBuilder
+    private func usageColumns(layout: CockpitPanelLayout) -> some View {
         if layout.usesSidebar {
             HStack(alignment: .top, spacing: CockpitPanelLayout.columnSpacing) {
                 ScrollView {
@@ -167,24 +183,26 @@ struct CockpitPanelView: View {
                     CockpitDailyAdviceView(
                         planStore: self.planStore,
                         providers: self.navigation.planningProviders,
-                        layout: .sidebar)
+                        layout: .sidebar,
+                        showsRecommendation: false)
                         .padding(.bottom, 12)
                 }
                 .frame(width: CockpitPanelLayout.sidebarWidth)
                 .accessibilityIdentifier("cockpit-usage-advice-column")
             }
             .padding(.horizontal, CockpitPanelLayout.contentInset)
-            .padding(.top, 14)
             .accessibilityIdentifier("cockpit-usage-wide-layout")
         } else {
             ScrollView {
                 VStack(spacing: 12) {
                     if let teamStore { CockpitTeamBudgetSummary(teamStore: teamStore) }
-                    CockpitDailyAdviceView(planStore: self.planStore, providers: self.navigation.planningProviders)
+                    CockpitDailyAdviceView(
+                        planStore: self.planStore,
+                        providers: self.navigation.planningProviders,
+                        showsRecommendation: false)
                     self.usageContent
                 }
                 .padding(.horizontal, CockpitPanelLayout.contentInset)
-                .padding(.top, 14)
                 .padding(.bottom, 12)
             }
             .accessibilityIdentifier("cockpit-usage-compact-layout")

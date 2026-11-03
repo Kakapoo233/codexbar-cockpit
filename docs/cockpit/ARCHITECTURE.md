@@ -6,6 +6,14 @@ CodexBar remains the native menu-bar shell and provider collector. One transient
 to the status item hosts Usage, Statistics, Calendar, and Members & Devices as peer pages. Daily advice and
 personal caps appear directly on Usage. There is no independent Cockpit window or second Tauri process.
 
+Usage pins a compact Daily recommendation header above its scrolling columns at every panel width.
+It reads the same automatic full-day `suggestedPercent`, matched to the current local snapshot's
+provider and account; missing or mismatched data stays unknown. Partial/stale values retain their
+qualification, and the displayed percentage remains a share of weekly quota, independent of personal
+caps or today's remaining allocation. The existing advice card retains its detailed controls and
+remaining values without repeating the header's recommendation. Existing localization and planner
+observations/minute updates supply the header; it starts no collector or synchronization task.
+
 The panel retains visited pages while open. Provider-menu invalidations accumulate while Usage is
 hidden, then rebuild once before the page selection publishes Usage again. This avoids rebuilding
 hidden AppKit cards while preserving current provider/account selection and settings before display.

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.23 — Daily recommendation at the top of Usage
+
+- Pin a prominent Daily recommendation summary above the Usage page's scrolling content, with provider names, large percentages and full-day weekly-quota units.
+- Reuse the current account's automatic plan, preserving uncertainty and distinguishing it from personal caps and today's remaining allowance.
+- Keep detailed planning controls in the existing advice card without repeating the recommendation value.
+
 ## 0.8.22 — Reset duration without filler
 
 - Omit the leading English "in" after R in menu-bar countdowns, keeping the duration and full spoken description.
