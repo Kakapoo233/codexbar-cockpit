@@ -29,10 +29,17 @@ the same page again when the button's standard activation follows the initial pr
 ## Modules and interfaces
 
 - Quota-warning episodes remain scoped by provider, account and quota lane. Missing readings preserve
-  fired thresholds, and older observations cannot re-arm a newer episode. A measured recovery above
-  a threshold re-arms it; a passed reset boundary followed by an advanced future boundary starts a new
-  cycle. Missing reset metadata retains the previous boundary, while a future boundary change alone
-  does not start another episode. More severe thresholds remain eligible independently.
+  fired thresholds, and older observations cannot re-arm a newer episode. Account-scoped Codex weekly
+  warnings use a bounded local `CodexWeeklyQuotaWarningLedger` in app-owned defaults. Each threshold
+  stays latched through quota rebounds, provider cleanup and application restarts until the known
+  reset has passed and an advanced future boundary confirms the next cycle. Missing metadata retains
+  the trusted boundary; future corrections alone never re-arm it. A first reading establishes a quiet
+  baseline and marks already-crossed thresholds, avoiding upgrade/startup repeats or an unproven
+  email-only credential rotation being treated as another downward crossing. More severe thresholds
+  remain eligible. Real Codex callers require a known owner; distinct workspaces and uncertain
+  credential scopes are never merged. Hashed scope keys and receipts stay device-local, outside sync
+  projections, and are recorded before notification sound, overlays and OS delivery. Other providers
+  and session warnings retain their existing measured-recovery behavior.
 - `UsageStore` and `SpendDashboardController` remain the authoritative provider and cost interfaces.
   Cockpit consumes their published snapshots rather than starting a second collector.
 - `CockpitPlanState` is a serializable Foundation module. It receives official quota observations and

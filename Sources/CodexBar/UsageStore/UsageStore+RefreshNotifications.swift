@@ -40,7 +40,8 @@ extension UsageStore {
         context: ProviderRefreshOutcomeContext) -> (quota: String?, source: String?, requiresKnownAccount: Bool)
     {
         // Provider-specific by design: warning scopes follow Codex owners and verified Claude account bindings.
-        let requiresKnownAccount = provider == .claude && [.oauth, .cli].contains(result.strategyKind)
+        let requiresKnownAccount = provider == .codex ||
+            (provider == .claude && [.oauth, .cli].contains(result.strategyKind))
         if let tokenAccount = context.tokenAccount {
             let key = Self.warningTokenAccountDiscriminator(tokenAccount)
             return (key, key, requiresKnownAccount)

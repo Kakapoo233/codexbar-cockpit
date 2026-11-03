@@ -160,6 +160,11 @@ extension UsageStore {
         guard provider != .claude || window != .session || Self.isSessionWindow(rateWindow) else { return }
         guard !rateWindow.isSyntheticPlaceholder else { return }
 
+        if provider == .codex, window == .weekly, let owner = accountContext.discriminator {
+            self.handleCodexWeeklyQuotaWarning(window: rateWindow, owner: owner, account: accountContext)
+            return
+        }
+
         let thresholds = self.settings.resolvedQuotaWarningThresholds(provider: provider.instanceID, window: window)
         let currentRemaining = rateWindow.remainingPercent
         if provider == .claude, key.accountDiscriminator == "claude-account:unknown",
@@ -234,6 +239,23 @@ extension UsageStore {
         self.quotaWarningState = self.quotaWarningState.filter {
             $0.key.provider != provider.instanceID || $0.key.window != window
         }
+    }
+
+    private func handleCodexWeeklyQuotaWarning(
+        window: RateWindow, owner: String, account: QuotaWarningAccountContext)
+    {
+        let thresholds = self.settings.resolvedQuotaWarningThresholds(provider: .codex, window: .weekly)
+        guard let threshold = self.codexWeeklyQuotaWarningLedger.observe(
+            owner: owner, window: window, observedAt: account.observedAt, thresholds: thresholds)
+        else { return }
+        // The ledger reserves and persists this threshold before sound, overlay or OS delivery.
+        self.postQuotaWarning(
+            QuotaWarningEvent(
+                window: .weekly,
+                threshold: threshold,
+                currentRemaining: window.remainingPercent,
+                accountDisplayName: account.displayName),
+            provider: .codex)
     }
 
     func warningAccountDisplayName(provider: UsageProvider, snapshot: UsageSnapshot) -> String? {

@@ -440,6 +440,8 @@ final class UsageStore {
     }
 
     @ObservationIgnored var quotaWarningState: [QuotaWarningStateKey: QuotaWarningState] = [:]
+    @ObservationIgnored lazy var codexWeeklyQuotaWarningLedger = CodexWeeklyQuotaWarningLedger(
+        defaults: self.settings.userDefaults)
     @ObservationIgnored var lastClaudeQuotaWarningAccount: String?
     @ObservationIgnored let hookRateLimiter = HookRateLimiter()
     @ObservationIgnored var providerStatusHadIssue: [ProviderInstanceID: Bool] = [:]
