@@ -575,7 +575,7 @@
 "hooks_event" = "Event";
 "hooks_provider" = "Provider";
 "hooks_any_provider" = "Any provider";
-"hooks_threshold" = "Fire at usage ≥";
+"hooks_threshold" = "Fire when usage reaches";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Executable";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2499,7 +2499,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2827,7 +2827,7 @@
 "cockpit_ui_observed" = "Observed Today";
 "cockpit_ui_ok" = "OK";
 "cockpit_ui_overloaded" = "Overloaded";
-"cockpit_ui_partial_cost_note" = "Some records are missing or unpriced. ≥ marks the verifiable known portion.";
+"cockpit_ui_partial_cost_note" = "Some records are missing or unpriced. Only the verifiable known portion is shown.";
 "cockpit_ui_partial_lineage" = "Incomplete task ownership; known sessions retained";
 "cockpit_ui_partial_task_note" = "Some task ownership is incomplete; confirmed session records are retained.";
 "cockpit_ui_period" = "Reporting Period";
@@ -3005,7 +3005,7 @@
 "cockpit_calendar_previous" = "Previous period";
 "cockpit_calendar_next" = "Next period";
 "cockpit_calendar_period_total" = "Recorded usage for this period";
-"cockpit_calendar_partial" = "Partial history: ≥ marks recorded lower bounds; — means unavailable. Future dates are excluded from totals.";
+"cockpit_calendar_partial" = "Partial history: totals include recorded data only; — means unavailable. Future dates are excluded from totals.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · Q%@";
 "cockpit_calendar_select_day" = "Select a day to view provider details, personal status, and reset events.";
@@ -3254,7 +3254,7 @@
 "cockpit_menu_remaining_bar" = "Available today: bar";
 "cockpit_menu_remaining_circle" = "Available today: filled circle";
 "cockpit_menu_remaining_accessibility" = "Available today: %@ of today's allocation; equivalent to %@ of the weekly quota";
-"cockpit_menu_remaining_help" = "Shows the share of today's allocation still available, where the full daily allocation is 100%. Respects personal caps and the actual balance, and updates with the comfort curve and reset window. ≤ marks an upper bound from incomplete observations; ≈ marks stale data; — means unknown.";
+"cockpit_menu_remaining_help" = "Shows the share of today's allocation still available, where the full daily allocation is 100%. Respects personal caps and the actual balance, and updates with the comfort curve and reset window. With incomplete observations, actual availability may be lower. ≈ marks stale data; — means unknown.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Sync settings, calendar feedback, and personal caps";

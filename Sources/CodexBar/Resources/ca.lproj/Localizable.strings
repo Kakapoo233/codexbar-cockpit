@@ -570,7 +570,7 @@
 "hooks_event" = "Esdeveniment";
 "hooks_provider" = "Proveïdor";
 "hooks_any_provider" = "Qualsevol proveïdor";
-"hooks_threshold" = "Activa amb ús ≥";
+"hooks_threshold" = "Activa quan l’ús arribi a";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Executable";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2498,7 +2498,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2824,7 +2824,7 @@
 "cockpit_ui_observed" = "Observat avui";
 "cockpit_ui_ok" = "D'acord";
 "cockpit_ui_overloaded" = "Sobrecàrrega";
-"cockpit_ui_partial_cost_note" = "Falten registres o preus. ≥ indica la part coneguda verificable.";
+"cockpit_ui_partial_cost_note" = "Falten registres o preus. Només es mostra la part coneguda verificable.";
 "cockpit_ui_partial_lineage" = "Titularitat incompleta; es conserven les sessions conegudes";
 "cockpit_ui_partial_task_note" = "La titularitat d'algunes tasques és incompleta; es conserven els registres de sessions confirmats.";
 "cockpit_ui_period" = "Període de l'informe";
@@ -3002,7 +3002,7 @@
 "cockpit_calendar_previous" = "Període anterior";
 "cockpit_calendar_next" = "Període següent";
 "cockpit_calendar_period_total" = "Ús registrat en aquest període";
-"cockpit_calendar_partial" = "Historial parcial: ≥ indica els límits inferiors registrats; — vol dir no disponible. Les dates futures s’exclouen dels totals.";
+"cockpit_calendar_partial" = "Historial parcial: els totals només inclouen dades registrades; — vol dir no disponible. Les dates futures s’exclouen dels totals.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · T%@";
 "cockpit_calendar_select_day" = "Selecciona un dia per veure els detalls dels proveïdors, l’estat personal i els esdeveniments de restabliment.";
@@ -3251,7 +3251,7 @@
 "cockpit_menu_remaining_bar" = "Disponible avui: barra";
 "cockpit_menu_remaining_circle" = "Disponible avui: cercle ple";
 "cockpit_menu_remaining_accessibility" = "Disponible avui: %@ de l’assignació diària; equival al %@ de la quota setmanal";
-"cockpit_menu_remaining_help" = "Mostra la part de l’assignació d’avui encara disponible; el total diari equival al 100%. Respecta els límits personals i el saldo real i s’actualitza segons la corba de comoditat i el període de reinici. ≤ indica un límit superior amb observacions incompletes; ≈ dades antigues; — un valor desconegut.";
+"cockpit_menu_remaining_help" = "Mostra la part de l’assignació d’avui encara disponible; el total diari equival al 100%. Respecta els límits personals i el saldo real i s’actualitza segons la corba de comoditat i el període de reinici. Amb observacions incompletes, la disponibilitat real pot ser menor; ≈ indica dades antigues i — un valor desconegut.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Sincronitza la configuració, les valoracions del calendari i els límits personals";

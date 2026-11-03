@@ -44,11 +44,11 @@ export function FloatingSummary(props: FloatingSummaryProps) {
   const recommendation = usable && typeof plan.suggestedPercent === "number" && Number.isFinite(plan.suggestedPercent)
     && plan.suggestedPercent >= 0 ? plan.suggestedPercent : null;
   const approximate = Boolean(stale || plan.isStale);
-  const bound = plan.coverage !== "complete" ? "≤" : "";
+  const incomplete = plan.coverage !== "complete";
   const remainingDescription = remaining === null
     ? zh ? "今日还能用：暂无数据" : "Available today: unavailable"
-    : zh ? `今日还能用：${bound}${formatPercent(remaining, zh)}，占今日分配；相当于周额度 ${bound}${formatPercent(weeklyEquivalent, zh)}${approximate ? "，数据可能陈旧" : ""}`
-      : `Available today: ${bound}${formatPercent(remaining, zh)} of today's allocation; weekly equivalent ${bound}${formatPercent(weeklyEquivalent, zh)}${approximate ? "; data may be stale" : ""}`;
+    : zh ? `今日还能用：${formatPercent(remaining, zh)}，占今日分配；相当于周额度 ${formatPercent(weeklyEquivalent, zh)}${incomplete ? "，观测不完整，实际可用额度可能更少" : ""}${approximate ? "，数据可能陈旧" : ""}`
+      : `Available today: ${formatPercent(remaining, zh)} of today's allocation; weekly equivalent ${formatPercent(weeklyEquivalent, zh)}${incomplete ? "; observations are incomplete; actual available allowance may be lower" : ""}${approximate ? "; data may be stale" : ""}`;
   const status = !props.startupReady ? zh ? "加载中" : "Loading"
     : props.refreshing ? zh ? "刷新中" : "Refreshing"
       : props.error ? zh ? "需要刷新" : "Needs attention"

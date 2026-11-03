@@ -54,7 +54,7 @@ struct CockpitRecommendationPaceIntegrationTests {
             #expect(rendered.weeklyPace == CockpitRecommendationPaceText.statusItemText(pace: pace))
             #expect(rendered.weeklyPace?.contains("≥") == false)
             #expect(rendered.weeklyPace?.contains("≤") == false)
-            #expect(CockpitRecommendationPaceText.menuBarText(pace: pace)?.hasPrefix("≥") == true)
+            #expect(CockpitRecommendationPaceText.menuBarText(pace: pace)?.hasPrefix("≥") == false)
             #expect(CockpitRecommendationPaceText.detailLabel(pace) ==
                 CockpitRecommendationPaceText.menuBarText(pace: pace))
             #expect(rendered.metrics.weeklyPaceDelta == nil)

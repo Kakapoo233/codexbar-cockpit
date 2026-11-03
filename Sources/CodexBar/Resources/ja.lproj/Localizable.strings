@@ -43,7 +43,7 @@
 "hooks_event" = "イベント";
 "hooks_provider" = "プロバイダー";
 "hooks_any_provider" = "すべてのプロバイダー";
-"hooks_threshold" = "使用率 ≥ で実行";
+"hooks_threshold" = "使用率が次の値に達したら実行";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "実行ファイル";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2494,7 +2494,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2822,7 +2822,7 @@
 "cockpit_ui_observed" = "今日観測した使用量";
 "cockpit_ui_ok" = "確認";
 "cockpit_ui_overloaded" = "使いすぎ";
-"cockpit_ui_partial_cost_note" = "一部の記録が欠落しているか、価格が不明です。≥ は検証可能な判明分を示します。";
+"cockpit_ui_partial_cost_note" = "一部の記録が欠落しているか、価格が不明です。検証可能な判明分のみを表示しています。";
 "cockpit_ui_partial_lineage" = "タスクの帰属先が不完全です。判明したセッションは保持しています";
 "cockpit_ui_partial_task_note" = "一部のタスクの帰属先が不完全です。確認済みのセッション記録は保持しています。";
 "cockpit_ui_period" = "集計期間";
@@ -3002,7 +3002,7 @@
 "cockpit_calendar_previous" = "前の期間";
 "cockpit_calendar_next" = "次の期間";
 "cockpit_calendar_period_total" = "この期間の記録済み使用量";
-"cockpit_calendar_partial" = "履歴が不完全な場合があります。≥ は記録された下限、— は取得不可を示します。将来の日付は合計に含めません。";
+"cockpit_calendar_partial" = "履歴が不完全な場合があります。合計には記録されたデータのみを含み、— は取得不可を示します。将来の日付は合計に含めません。";
 "cockpit_calendar_range" = "%@ ～ %@";
 "cockpit_calendar_quarter_title" = "%@年 · 第%@四半期";
 "cockpit_calendar_select_day" = "日付を選ぶと、プロバイダー別の詳細、個人の状態、リセットイベントを確認できます。";
@@ -3251,7 +3251,7 @@
 "cockpit_menu_remaining_bar" = "今日の利用可能量：バー";
 "cockpit_menu_remaining_circle" = "今日の利用可能量：円の塗りつぶし";
 "cockpit_menu_remaining_accessibility" = "今日の利用可能量：今日の割り当ての %@、週間総割り当ての %@ に相当";
-"cockpit_menu_remaining_help" = "今日の割り当て全体を100%として、まだ利用できる割合を表示します。個人の上限と実際の残量を守り、快適さの曲線とリセット時期に応じて更新します。≤ は観測が不完全な場合の上限、≈ は古いデータ、— は不明を示します。";
+"cockpit_menu_remaining_help" = "今日の割り当て全体を100%として、まだ利用できる割合を表示します。個人の上限と実際の残量を守り、快適さの曲線とリセット時期に応じて更新します。観測が不完全な場合、実際に利用できる量は少ない可能性があります。≈ は古いデータ、— は不明を示します。";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "設定、カレンダーのフィードバック、個人の上限を同期";

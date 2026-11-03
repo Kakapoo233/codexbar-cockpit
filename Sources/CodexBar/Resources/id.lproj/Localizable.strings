@@ -592,7 +592,7 @@
 "hooks_event" = "Peristiwa";
 "hooks_provider" = "Penyedia";
 "hooks_any_provider" = "Penyedia apa pun";
-"hooks_threshold" = "Picu saat penggunaan ≥";
+"hooks_threshold" = "Picu saat penggunaan mencapai";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Berkas yang dapat dijalankan";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2498,7 +2498,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2824,7 +2824,7 @@
 "cockpit_ui_observed" = "Diamati hari ini";
 "cockpit_ui_ok" = "Oke";
 "cockpit_ui_overloaded" = "Berlebihan";
-"cockpit_ui_partial_cost_note" = "Beberapa catatan hilang atau belum memiliki harga. ≥ menandai bagian yang diketahui dan dapat diverifikasi.";
+"cockpit_ui_partial_cost_note" = "Beberapa catatan hilang atau belum memiliki harga. Hanya bagian yang diketahui dan dapat diverifikasi yang ditampilkan.";
 "cockpit_ui_partial_lineage" = "Kepemilikan tugas tidak lengkap; sesi yang diketahui dipertahankan";
 "cockpit_ui_partial_task_note" = "Kepemilikan beberapa tugas tidak lengkap; catatan sesi yang dikonfirmasi dipertahankan.";
 "cockpit_ui_period" = "Periode laporan";
@@ -3004,7 +3004,7 @@
 "cockpit_calendar_previous" = "Periode sebelumnya";
 "cockpit_calendar_next" = "Periode berikutnya";
 "cockpit_calendar_period_total" = "Penggunaan tercatat untuk periode ini";
-"cockpit_calendar_partial" = "Riwayat mungkin tidak lengkap: ≥ menandai batas bawah tercatat; — berarti tidak tersedia. Tanggal mendatang tidak dihitung dalam total.";
+"cockpit_calendar_partial" = "Riwayat mungkin tidak lengkap: total hanya mencakup data tercatat; — berarti tidak tersedia. Tanggal mendatang tidak dihitung dalam total.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · Kuartal %@";
 "cockpit_calendar_select_day" = "Pilih hari untuk melihat rincian penyedia, status pribadi, dan peristiwa reset.";
@@ -3253,7 +3253,7 @@
 "cockpit_menu_remaining_bar" = "Tersedia hari ini: batang";
 "cockpit_menu_remaining_circle" = "Tersedia hari ini: lingkaran terisi";
 "cockpit_menu_remaining_accessibility" = "Tersedia hari ini: %@ dari alokasi hari ini; setara dengan %@ dari kuota mingguan";
-"cockpit_menu_remaining_help" = "Menampilkan bagian alokasi hari ini yang masih tersedia, dengan total alokasi harian sebagai 100%. Mematuhi batas pribadi dan saldo aktual, serta diperbarui mengikuti kurva kenyamanan dan periode reset. ≤ menandai batas atas dari pengamatan yang tidak lengkap; ≈ data usang; — nilai tidak diketahui.";
+"cockpit_menu_remaining_help" = "Menampilkan bagian alokasi hari ini yang masih tersedia, dengan total alokasi harian sebagai 100%. Mematuhi batas pribadi dan saldo aktual, serta diperbarui mengikuti kurva kenyamanan dan periode reset. Jika pengamatan tidak lengkap, jumlah yang benar-benar tersedia mungkin lebih kecil; ≈ menandai data usang dan — nilai tidak diketahui.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Sinkronkan pengaturan, penilaian kalender, dan batas pribadi";

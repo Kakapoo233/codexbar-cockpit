@@ -591,7 +591,7 @@
 "hooks_event" = "الحدث";
 "hooks_provider" = "المزود";
 "hooks_any_provider" = "أي مزود";
-"hooks_threshold" = "التشغيل عند الاستخدام ≥";
+"hooks_threshold" = "التشغيل عندما يصل الاستخدام إلى";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "الملف التنفيذي";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2498,7 +2498,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2826,7 +2826,7 @@
 "cockpit_ui_observed" = "المرصود اليوم";
 "cockpit_ui_ok" = "موافق";
 "cockpit_ui_overloaded" = "ضغط زائد";
-"cockpit_ui_partial_cost_note" = "بعض السجلات مفقودة أو بلا سعر. تشير ≥ إلى الجزء المعروف القابل للتحقق.";
+"cockpit_ui_partial_cost_note" = "بعض السجلات مفقودة أو بلا سعر. يُعرض الجزء المعروف القابل للتحقق فقط.";
 "cockpit_ui_partial_lineage" = "ملكية المهام غير مكتملة؛ حُفظت الجلسات المعروفة";
 "cockpit_ui_partial_task_note" = "ملكية بعض المهام غير مكتملة؛ حُفظت سجلات الجلسات المؤكدة.";
 "cockpit_ui_period" = "فترة التقرير";
@@ -3004,7 +3004,7 @@
 "cockpit_calendar_previous" = "الفترة السابقة";
 "cockpit_calendar_next" = "الفترة التالية";
 "cockpit_calendar_period_total" = "الاستخدام المسجل لهذه الفترة";
-"cockpit_calendar_partial" = "قد يكون السجل غير مكتمل: تشير ≥ إلى الحد الأدنى المسجل، وتعني — أن البيانات غير متاحة. لا تُحتسب التواريخ المستقبلية في الإجماليات.";
+"cockpit_calendar_partial" = "قد يكون السجل غير مكتمل: تشمل الإجماليات البيانات المسجلة فقط؛ وتعني — أن البيانات غير متاحة. لا تُحتسب التواريخ المستقبلية في الإجماليات.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · الربع %@";
 "cockpit_calendar_select_day" = "اختر يومًا لعرض تفاصيل الموفّرين والحالة الشخصية وأحداث إعادة التعيين.";
@@ -3253,7 +3253,7 @@
 "cockpit_menu_remaining_bar" = "المتاح اليوم: شريط";
 "cockpit_menu_remaining_circle" = "المتاح اليوم: دائرة ممتلئة";
 "cockpit_menu_remaining_accessibility" = "المتاح اليوم: %@ من مخصصات اليوم؛ يعادل %@ من الحصة الأسبوعية";
-"cockpit_menu_remaining_help" = "يعرض الجزء الذي لا يزال متاحًا من مخصصات اليوم، حيث تمثل المخصصات اليومية الكاملة 100%. يراعي الحدود الشخصية والرصيد الفعلي ويتحدث وفق منحنى الراحة وفترة إعادة التعيين. يشير ≤ إلى حد أعلى عند عدم اكتمال الملاحظات، و≈ إلى بيانات قديمة، و— إلى قيمة غير معروفة.";
+"cockpit_menu_remaining_help" = "يعرض الجزء الذي لا يزال متاحًا من مخصصات اليوم، حيث تمثل المخصصات اليومية الكاملة 100%. يراعي الحدود الشخصية والرصيد الفعلي ويتحدث وفق منحنى الراحة وفترة إعادة التعيين. يشير عندما تكون الملاحظات غير مكتملة، قد تكون الكمية المتاحة فعليًا أقل؛ تشير ≈ إلى بيانات قديمة و— إلى قيمة غير معروفة.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "مزامنة الإعدادات وتقييمات التقويم والحدود الشخصية";

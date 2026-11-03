@@ -591,7 +591,7 @@
 "hooks_event" = "เหตุการณ์";
 "hooks_provider" = "ผู้ให้บริการ";
 "hooks_any_provider" = "ผู้ให้บริการใดก็ได้";
-"hooks_threshold" = "เรียกใช้เมื่อการใช้งาน ≥";
+"hooks_threshold" = "เรียกใช้เมื่อการใช้งานถึง";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "ไฟล์ปฏิบัติการ";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2498,7 +2498,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2824,7 +2824,7 @@
 "cockpit_ui_observed" = "การใช้งานที่สังเกตพบวันนี้";
 "cockpit_ui_ok" = "ตกลง";
 "cockpit_ui_overloaded" = "หนักเกินไป";
-"cockpit_ui_partial_cost_note" = "บางบันทึกขาดหายหรือยังไม่มีราคา เครื่องหมาย ≥ แสดงส่วนที่ทราบและยืนยันได้";
+"cockpit_ui_partial_cost_note" = "บางบันทึกขาดหายหรือยังไม่มีราคา แสดงเฉพาะส่วนที่ทราบและยืนยันได้เท่านั้น";
 "cockpit_ui_partial_lineage" = "ความสัมพันธ์ของงานไม่ครบถ้วน โดยเก็บเซสชันที่ทราบไว้แล้ว";
 "cockpit_ui_partial_task_note" = "ความสัมพันธ์ของบางงานไม่ครบถ้วน โดยเก็บบันทึกเซสชันที่ยืนยันได้ไว้แล้ว";
 "cockpit_ui_period" = "ช่วงรายงาน";
@@ -3004,7 +3004,7 @@
 "cockpit_calendar_previous" = "ช่วงก่อนหน้า";
 "cockpit_calendar_next" = "ช่วงถัดไป";
 "cockpit_calendar_period_total" = "การใช้งานที่บันทึกไว้ในช่วงนี้";
-"cockpit_calendar_partial" = "ประวัติอาจไม่ครบถ้วน: ≥ หมายถึงค่าต่ำสุดที่บันทึกไว้ ส่วน — หมายถึงไม่มีข้อมูล ไม่รวมวันที่ในอนาคตในยอดรวม";
+"cockpit_calendar_partial" = "ประวัติอาจไม่ครบถ้วน: ยอดรวมมีเฉพาะข้อมูลที่บันทึกไว้ ส่วน — หมายถึงไม่มีข้อมูล ไม่รวมวันที่ในอนาคตในยอดรวม";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · ไตรมาส %@";
 "cockpit_calendar_select_day" = "เลือกวันเพื่อดูรายละเอียดผู้ให้บริการ สถานะส่วนตัว และเหตุการณ์รีเซ็ต";
@@ -3253,7 +3253,7 @@
 "cockpit_menu_remaining_bar" = "ยังใช้ได้วันนี้: แถบ";
 "cockpit_menu_remaining_circle" = "ยังใช้ได้วันนี้: วงกลมเติมเต็ม";
 "cockpit_menu_remaining_accessibility" = "ยังใช้ได้วันนี้: %@ ของส่วนที่จัดสรรวันนี้ เทียบเท่า %@ ของโควตารายสัปดาห์";
-"cockpit_menu_remaining_help" = "แสดงสัดส่วนที่ยังใช้ได้จากส่วนที่จัดสรรวันนี้ โดยยอดรวมรายวันเท่ากับ 100% เคารพขีดจำกัดส่วนตัวและยอดคงเหลือจริง และปรับตามเส้นโค้งความสบายกับช่วงรีเซ็ต ≤ หมายถึงขอบเขตบนจากข้อมูลสังเกตที่ไม่ครบ ≈ หมายถึงข้อมูลเก่า และ — หมายถึงไม่ทราบ";
+"cockpit_menu_remaining_help" = "แสดงสัดส่วนที่ยังใช้ได้จากส่วนที่จัดสรรวันนี้ โดยยอดรวมรายวันเท่ากับ 100% เคารพขีดจำกัดส่วนตัวและยอดคงเหลือจริง และปรับตามเส้นโค้งความสบายกับช่วงรีเซ็ต เมื่อข้อมูลสังเกตไม่ครบ ปริมาณที่ใช้ได้จริงอาจน้อยกว่า ≈ หมายถึงข้อมูลเก่า และ — หมายถึงไม่ทราบ";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "ซิงค์การตั้งค่า ความเห็นในปฏิทิน และขีดจำกัดส่วนตัว";

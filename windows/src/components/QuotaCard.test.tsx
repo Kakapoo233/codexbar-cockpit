@@ -1082,7 +1082,7 @@ describe("QuotaCard platform ledger", () => {
       expect(screen.getByText("On track")).toBeInTheDocument();
       expect(screen.getByText("Used since reset: 26%")).toBeInTheDocument();
       expect(screen.getByText(/Today's plan: [\d.]+% left/)).toBeInTheDocument();
-      expect(screen.getByText("Daily suggestion ≤ 14.8%/day")).toBeInTheDocument();
+      expect(screen.getByText("Daily suggestion 14.8%/day")).toBeInTheDocument();
       expect(screen.queryByText("5 hours")).not.toBeInTheDocument();
     } finally {
       vi.useRealTimers();
@@ -1161,7 +1161,7 @@ describe("QuotaCard platform ledger", () => {
       expect(screen.getByRole("region", { name: "Quota windows" })).toHaveTextContent("Weekly");
       expect(screen.getByRole("region", { name: "Quota windows" })).toHaveTextContent("Monthly");
       expect(screen.getAllByText(/Today's plan: [\d.]+% left/)).toHaveLength(3);
-      expect(screen.getByText("Daily suggestion ≤ 30%/hour")).toBeInTheDocument();
+      expect(screen.getByText("Daily suggestion 30%/hour")).toBeInTheDocument();
       expect(screen.getByText(/Over pace \+[\d.]+%/)).toBeInTheDocument();
     } finally {
       vi.useRealTimers();

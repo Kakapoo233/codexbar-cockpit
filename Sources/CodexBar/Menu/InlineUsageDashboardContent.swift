@@ -411,9 +411,9 @@ extension UsageMenuCardView.Model {
         } ?? []
     }
 
-    static func quotaMetricValue(_ value: String?, complete: Bool) -> String {
+    static func quotaMetricValue(_ value: String?, complete _: Bool) -> String {
         guard let value else { return "—" }
-        return complete ? value : "≥ \(value)"
+        return value
     }
 
     static func quotaWindowRow(

@@ -48,8 +48,7 @@ func spendDashboardMetricText(
     costIsLowerBound: Bool = false,
     tokensAreLowerBound: Bool = false) -> String
 {
-    // A truncated scan or an unpriced request makes the subtotal a floor, not an exact value.
-    // The row must say so with the same `≥` marker the header and menu card already use.
+    // Display subtotal values directly; completeness stays in the model, exports and coverage explanations.
     let parts = [
         cost.map {
             spendDashboardLowerBoundText(
@@ -66,8 +65,8 @@ func spendDashboardMetricText(
         + UsageFormatter.incompleteUsageSuffix(incompleteRequestCount)
 }
 
-func spendDashboardLowerBoundText(_ value: String, isLowerBound: Bool) -> String {
-    isLowerBound ? "≥ \(value)" : value
+func spendDashboardLowerBoundText(_ value: String, isLowerBound _: Bool) -> String {
+    value
 }
 
 func spendDashboardCoverageChipText(_ coverage: CostUsageCoverageCounts) -> String {
@@ -1428,12 +1427,11 @@ func spendDashboardLedgerRequestText(_ summary: SpendDashboardModel.DailySummary
 
 func spendDashboardLedgerCountText(
     _ count: Int?,
-    isLowerBound: Bool,
+    isLowerBound _: Bool,
     format: (Int) -> String) -> String
 {
     guard let count else { return "—" }
-    let text = format(count)
-    return isLowerBound ? "≥\(text)" : text
+    return format(count)
 }
 
 func spendDashboardGroupTokenText(_ group: SpendDashboardModel.CurrencyGroup) -> String {

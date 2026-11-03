@@ -43,7 +43,7 @@
 "hooks_event" = "Ereignis";
 "hooks_provider" = "Anbieter";
 "hooks_any_provider" = "Beliebiger Anbieter";
-"hooks_threshold" = "Auslösen bei Nutzung ≥";
+"hooks_threshold" = "Auslösen, wenn die Nutzung diesen Wert erreicht";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Ausführbare Datei";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2492,7 +2492,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2820,7 +2820,7 @@
 "cockpit_ui_observed" = "Heute beobachtet";
 "cockpit_ui_ok" = "OK";
 "cockpit_ui_overloaded" = "Überlastet";
-"cockpit_ui_partial_cost_note" = "Einige Einträge fehlen oder haben keinen Preis. ≥ kennzeichnet den nachprüfbaren bekannten Anteil.";
+"cockpit_ui_partial_cost_note" = "Einige Einträge fehlen oder haben keinen Preis. Angezeigt wird nur der nachprüfbare bekannte Anteil.";
 "cockpit_ui_partial_lineage" = "Unvollständige Aufgabenzuordnung; bekannte Sitzungen beibehalten";
 "cockpit_ui_partial_task_note" = "Einige Aufgabenzuordnungen sind unvollständig; bestätigte Sitzungsdaten werden beibehalten.";
 "cockpit_ui_period" = "Berichtszeitraum";
@@ -2996,7 +2996,7 @@
 "cockpit_calendar_previous" = "Vorheriger Zeitraum";
 "cockpit_calendar_next" = "Nächster Zeitraum";
 "cockpit_calendar_period_total" = "Erfasste Nutzung in diesem Zeitraum";
-"cockpit_calendar_partial" = "Unvollständiger Verlauf: ≥ kennzeichnet erfasste Untergrenzen; — bedeutet nicht verfügbar. Zukünftige Daten werden nicht in Summen einbezogen.";
+"cockpit_calendar_partial" = "Unvollständiger Verlauf: Summen enthalten nur erfasste Daten; — bedeutet nicht verfügbar. Zukünftige Daten werden nicht einbezogen.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · Q%@";
 "cockpit_calendar_select_day" = "Einen Tag auswählen, um Anbieterdetails, persönlichen Status und Zurücksetzungsereignisse anzuzeigen.";
@@ -3245,7 +3245,7 @@
 "cockpit_menu_remaining_bar" = "Heute verfügbar: Balken";
 "cockpit_menu_remaining_circle" = "Heute verfügbar: gefüllter Kreis";
 "cockpit_menu_remaining_accessibility" = "Heute verfügbar: %@ des heutigen Kontingents; entspricht %@ des Wochenkontingents";
-"cockpit_menu_remaining_help" = "Zeigt den noch verfügbaren Anteil des heutigen Kontingents; das gesamte Tageskontingent entspricht 100%. Berücksichtigt persönliche Obergrenzen und den tatsächlichen Rest und wird anhand der Komfortkurve und des Rücksetzzeitraums aktualisiert. ≤ kennzeichnet eine Obergrenze bei unvollständigen Beobachtungen, ≈ veraltete Daten und — einen unbekannten Wert.";
+"cockpit_menu_remaining_help" = "Zeigt den noch verfügbaren Anteil des heutigen Kontingents; das gesamte Tageskontingent entspricht 100%. Berücksichtigt persönliche Obergrenzen und den tatsächlichen Rest und wird anhand der Komfortkurve und des Rücksetzzeitraums aktualisiert. Bei unvollständigen Beobachtungen kann tatsächlich weniger verfügbar sein; ≈ kennzeichnet veraltete Daten, — einen unbekannten Wert.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Einstellungen, Kalenderfeedback und persönliche Limits synchronisieren";

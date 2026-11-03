@@ -132,6 +132,8 @@ struct CockpitUnifiedPanelScreenshotTests {
                 // in CockpitDailyAllowanceBarTests. Capture both columns for visual inspection here.
                 #expect(!MenuLayoutScreenshotRenderTests.accessibilityText(card)
                     .contains(L("cockpit_menu_daily_recommendation")))
+                let nativeValues = MenuLayoutScreenshotRenderTests.accessibilityText(card)
+                #expect(!nativeValues.contains("≥") && !nativeValues.contains("≤"))
                 #expect(card.superview != nil, "The real bridge must mount the custom NSMenuItem view")
                 #expect(menu.items.contains { $0.view === card })
                 let cardFrame = card.convert(card.bounds, to: host)

@@ -86,7 +86,7 @@ struct CockpitDailyAllowanceBarTests {
     }
 
     @Test(arguments: [false, true], [false, true])
-    func `partial and stale allowance bars retain upper bounds and spoken uncertainty`(
+    func `partial and stale allowance bars display plain values and retain spoken uncertainty`(
         partial: Bool, stale: Bool) async throws
     {
         var status = Self.status(coverage: partial ? .partial : .complete, stale: stale)
@@ -102,7 +102,9 @@ struct CockpitDailyAllowanceBarTests {
         try await host.settle()
         let bar = try Self.requireNode("cockpit-advice-daily-remaining-progress", in: host.host)
         let spoken = Self.spokenValue(bar)
-        #expect(spoken.contains("≤") == partial)
+        #expect(!spoken.contains("≤"))
+        #expect(!spoken.contains("≥"))
+        #expect(spoken.contains(L("cockpit_advice_partial_note")) == partial)
         #expect(spoken.contains(CockpitDailyAdviceProjection.remainingDailyText(status)))
         #expect(spoken.contains(CockpitDailyAdviceProjection.remainingWeeklyEquivalentText(status)))
         #expect(spoken.contains(L("cockpit_ui_stale")) == stale)

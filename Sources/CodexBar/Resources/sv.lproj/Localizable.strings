@@ -43,7 +43,7 @@
 "hooks_event" = "Händelse";
 "hooks_provider" = "Leverantör";
 "hooks_any_provider" = "Valfri leverantör";
-"hooks_threshold" = "Kör vid användning ≥";
+"hooks_threshold" = "Kör när användningen når";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Körbar fil";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2493,7 +2493,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2821,7 +2821,7 @@
 "cockpit_ui_observed" = "Observerat i dag";
 "cockpit_ui_ok" = "OK";
 "cockpit_ui_overloaded" = "Överbelastad";
-"cockpit_ui_partial_cost_note" = "Vissa poster saknas eller saknar pris. ≥ markerar den kända och verifierbara delen.";
+"cockpit_ui_partial_cost_note" = "Vissa poster saknas eller saknar pris. Endast den kända och verifierbara delen visas.";
 "cockpit_ui_partial_lineage" = "Ofullständig uppgiftstillhörighet; kända sessioner bevarade";
 "cockpit_ui_partial_task_note" = "Viss uppgiftstillhörighet är ofullständig; bekräftade sessionsposter bevaras.";
 "cockpit_ui_period" = "Rapportperiod";
@@ -2997,7 +2997,7 @@
 "cockpit_calendar_previous" = "Föregående period";
 "cockpit_calendar_next" = "Nästa period";
 "cockpit_calendar_period_total" = "Registrerad användning för denna period";
-"cockpit_calendar_partial" = "Ofullständig historik: ≥ markerar registrerade nedre gränser; — betyder otillgängligt. Framtida datum ingår inte i summorna.";
+"cockpit_calendar_partial" = "Ofullständig historik: summorna innehåller endast registrerade data; — betyder otillgängligt. Framtida datum ingår inte i summorna.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · K%@";
 "cockpit_calendar_select_day" = "Välj en dag för att visa leverantörsdetaljer, personlig status och återställningshändelser.";
@@ -3246,7 +3246,7 @@
 "cockpit_menu_remaining_bar" = "Tillgängligt idag: stapel";
 "cockpit_menu_remaining_circle" = "Tillgängligt idag: fylld cirkel";
 "cockpit_menu_remaining_accessibility" = "Tillgängligt idag: %@ av dagens tilldelning; motsvarar %@ av veckokvoten";
-"cockpit_menu_remaining_help" = "Visar den andel av dagens tilldelning som fortfarande är tillgänglig, där hela dagstilldelningen är 100 %. Tar hänsyn till personliga gränser och faktiskt saldo och uppdateras efter komfortkurvan och återställningsperioden. ≤ anger en övre gräns vid ofullständiga observationer; ≈ inaktuella data; — ett okänt värde.";
+"cockpit_menu_remaining_help" = "Visar den andel av dagens tilldelning som fortfarande är tillgänglig, där hela dagstilldelningen är 100 %. Tar hänsyn till personliga gränser och faktiskt saldo och uppdateras efter komfortkurvan och återställningsperioden. Vid ofullständiga observationer kan den faktiska tillgången vara lägre; ≈ anger inaktuella data och — ett okänt värde.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Synkronisera inställningar, kalenderomdömen och personliga gränser";

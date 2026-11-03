@@ -43,7 +43,7 @@
 "hooks_event" = "Событие";
 "hooks_provider" = "Провайдер";
 "hooks_any_provider" = "Любой провайдер";
-"hooks_threshold" = "Запускать при использовании ≥";
+"hooks_threshold" = "Запускать, когда использование достигнет";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Исполняемый файл";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2495,7 +2495,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2823,7 +2823,7 @@
 "cockpit_ui_observed" = "Наблюдалось сегодня";
 "cockpit_ui_ok" = "ОК";
 "cockpit_ui_overloaded" = "Перегрузка";
-"cockpit_ui_partial_cost_note" = "Часть записей отсутствует или не имеет цены. ≥ обозначает подтверждаемую известную часть.";
+"cockpit_ui_partial_cost_note" = "Часть записей отсутствует или не имеет цены. Показана только подтверждаемая известная часть.";
 "cockpit_ui_partial_lineage" = "Принадлежность задач неполна; известные сеансы сохранены";
 "cockpit_ui_partial_task_note" = "Принадлежность некоторых задач неполна; подтверждённые записи сеансов сохранены.";
 "cockpit_ui_period" = "Отчётный период";
@@ -3001,7 +3001,7 @@
 "cockpit_calendar_previous" = "Предыдущий период";
 "cockpit_calendar_next" = "Следующий период";
 "cockpit_calendar_period_total" = "Записанное использование за этот период";
-"cockpit_calendar_partial" = "История может быть неполной: ≥ обозначает записанную нижнюю границу, — означает недоступность. Будущие даты не входят в итоги.";
+"cockpit_calendar_partial" = "История может быть неполной: итоги включают только записанные данные; — означает недоступность. Будущие даты не входят в итоги.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · %@-й квартал";
 "cockpit_calendar_select_day" = "Выберите день для просмотра данных провайдеров, личного состояния и событий сброса.";
@@ -3250,7 +3250,7 @@
 "cockpit_menu_remaining_bar" = "Доступно сегодня: полоса";
 "cockpit_menu_remaining_circle" = "Доступно сегодня: заполненный круг";
 "cockpit_menu_remaining_accessibility" = "Доступно сегодня: %@ дневного объёма; соответствует %@ недельного лимита";
-"cockpit_menu_remaining_help" = "Показывает оставшуюся долю выделенного на сегодня объёма, где весь дневной объём равен 100%. Учитывает личные ограничения и фактический остаток; обновляется по кривой комфорта и окну сброса. ≤ обозначает верхнюю границу при неполных наблюдениях; ≈ устаревшие данные; — неизвестное значение.";
+"cockpit_menu_remaining_help" = "Показывает оставшуюся долю выделенного на сегодня объёма, где весь дневной объём равен 100%. Учитывает личные ограничения и фактический остаток; обновляется по кривой комфорта и окну сброса. При неполных наблюдениях фактически доступный объём может быть меньше; ≈ означает устаревшие данные, — неизвестное значение.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Синхронизировать настройки, оценки в календаре и личные лимиты";

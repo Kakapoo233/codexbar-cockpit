@@ -120,8 +120,9 @@ describe("ComfortHistoryCalendar", () => {
       />,
     );
 
-    const recordedDay = screen.getByRole("gridcell", { name: /Aug 12.*weekly quota used ≥5%/i });
-    expect(recordedDay).toHaveTextContent("≥5%");
+    const recordedDay = screen.getByRole("gridcell", { name: /Aug 12.*weekly quota used 5%/i });
+    expect(recordedDay).toHaveTextContent("5%");
+    expect(recordedDay).toHaveAttribute("title", "weekly quota used 5% · Partial observations");
     expect(recordedDay).not.toHaveTextContent("99%");
   });
 

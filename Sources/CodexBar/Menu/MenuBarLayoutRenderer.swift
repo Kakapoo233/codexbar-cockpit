@@ -1327,9 +1327,10 @@ extension MenuBarLayoutRenderer {
         var accessibility = value.map {
             L(
                 "cockpit_menu_remaining_accessibility",
-                "\($0.isUpperBound ? "≤" : "")\(self.cockpitRemainingPercent($0.percent))",
-                "\($0.isUpperBound ? "≤" : "")\(self.cockpitRemainingPercent($0.weeklyPercent))")
+                self.cockpitRemainingPercent($0.percent),
+                self.cockpitRemainingPercent($0.weeklyPercent))
         } ?? L("%@ unavailable", L("cockpit_menu_remaining_title"))
+        if value?.isUpperBound == true { accessibility += ", " + L("cockpit_advice_partial_note") }
         if stale, value != nil { accessibility += ", " + L("cockpit_ui_stale") }
         var attributes = style.attributes
         if options.isHighlighted { attributes[.foregroundColor] = NSColor.selectedMenuItemTextColor }

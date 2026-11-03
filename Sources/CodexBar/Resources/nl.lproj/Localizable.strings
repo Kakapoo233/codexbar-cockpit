@@ -43,7 +43,7 @@
 "hooks_event" = "Gebeurtenis";
 "hooks_provider" = "Aanbieder";
 "hooks_any_provider" = "Elke provider";
-"hooks_threshold" = "Uitvoeren bij gebruik ≥";
+"hooks_threshold" = "Uitvoeren wanneer het gebruik deze waarde bereikt";
 "hooks_threshold_placeholder" = "90";
 "hooks_executable" = "Uitvoerbaar bestand";
 "hooks_executable_placeholder" = "/usr/local/bin/my-command";
@@ -2493,7 +2493,7 @@
 "spend_tools_filter" = "Filter operations";
 "spend_tools_filter_all" = "All";
 "spend_tools_filter_attention" = "Needs review";
-"spend_tools_filter_slow" = "Slow (≥10 s)";
+"spend_tools_filter_slow" = "Slow (10 s or longer)";
 "spend_tools_empty" = "No native tool operations recorded for these dates.";
 "spend_tools_no_matches" = "No operations match this filter.";
 "spend_tools_more" = "Show more operations";
@@ -2819,7 +2819,7 @@
 "cockpit_ui_observed" = "Vandaag waargenomen";
 "cockpit_ui_ok" = "OK";
 "cockpit_ui_overloaded" = "Overbelast";
-"cockpit_ui_partial_cost_note" = "Sommige vermeldingen ontbreken of hebben geen prijs. ≥ geeft het bekende, verifieerbare gedeelte aan.";
+"cockpit_ui_partial_cost_note" = "Sommige vermeldingen ontbreken of hebben geen prijs. Alleen het bekende, verifieerbare gedeelte wordt getoond.";
 "cockpit_ui_partial_lineage" = "Onvolledige taaktoewijzing; bekende sessies behouden";
 "cockpit_ui_partial_task_note" = "Sommige taaktoewijzingen zijn onvolledig; bevestigde sessiegegevens worden behouden.";
 "cockpit_ui_period" = "Rapportageperiode";
@@ -2995,7 +2995,7 @@
 "cockpit_calendar_previous" = "Vorige periode";
 "cockpit_calendar_next" = "Volgende periode";
 "cockpit_calendar_period_total" = "Geregistreerd gebruik in deze periode";
-"cockpit_calendar_partial" = "Onvolledige historie: ≥ markeert geregistreerde ondergrenzen; — betekent niet beschikbaar. Toekomstige datums worden niet in totalen opgenomen.";
+"cockpit_calendar_partial" = "Onvolledige historie: totalen bevatten alleen geregistreerde gegevens; — betekent niet beschikbaar. Toekomstige datums worden niet in totalen opgenomen.";
 "cockpit_calendar_range" = "%@ – %@";
 "cockpit_calendar_quarter_title" = "%@ · K%@";
 "cockpit_calendar_select_day" = "Selecteer een dag om aanbiedergegevens, persoonlijke status en resetgebeurtenissen te bekijken.";
@@ -3244,7 +3244,7 @@
 "cockpit_menu_remaining_bar" = "Vandaag beschikbaar: balk";
 "cockpit_menu_remaining_circle" = "Vandaag beschikbaar: gevulde cirkel";
 "cockpit_menu_remaining_accessibility" = "Vandaag beschikbaar: %@ van de dagtoewijzing; komt overeen met %@ van het weekquotum";
-"cockpit_menu_remaining_help" = "Toont welk deel van de toewijzing voor vandaag nog beschikbaar is, waarbij de volledige dagtoewijzing 100% is. Houdt rekening met persoonlijke limieten en het werkelijke saldo en wordt bijgewerkt op basis van de comfortcurve en het resetvenster. ≤ geeft een bovengrens bij onvolledige waarnemingen aan; ≈ verouderde gegevens; — een onbekende waarde.";
+"cockpit_menu_remaining_help" = "Toont welk deel van de toewijzing voor vandaag nog beschikbaar is, waarbij de volledige dagtoewijzing 100% is. Houdt rekening met persoonlijke limieten en het werkelijke saldo en wordt bijgewerkt op basis van de comfortcurve en het resetvenster. Bij onvolledige waarnemingen kan de werkelijke beschikbaarheid lager zijn; ≈ geeft verouderde gegevens aan en — een onbekende waarde.";
 
 /* iCloud Drive personal document synchronization */
 "Sync settings, calendar feedback, and personal caps" = "Instellingen, kalenderfeedback en persoonlijke limieten synchroniseren";

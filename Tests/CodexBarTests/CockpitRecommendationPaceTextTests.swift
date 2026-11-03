@@ -16,16 +16,16 @@ struct CockpitRecommendationPaceTextTests {
     private static let now = Date(timeIntervalSince1970: 1_800_014_400) // UTC noon
 
     @Test
-    func `menu sign follows preference and partial bounds round outward`() throws {
+    func `menu sign follows preference and preserves partial rounding without comparison prefixes`() throws {
         let ahead = try #require(Self.pace(used: 15.6))
         #expect(CockpitRecommendationPaceText.menuBarText(pace: ahead) == "+6%")
         #expect(CockpitRecommendationPaceText.menuBarText(pace: ahead, reservePositive: true) == "-6%")
         let partialAhead = try #require(Self.pace(used: 15.6, coverage: .partial))
-        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialAhead) == "≥+5%")
-        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialAhead, reservePositive: true) == "≤-5%")
+        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialAhead) == "+5%")
+        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialAhead, reservePositive: true) == "-5%")
         let partialBehind = try #require(Self.pace(used: 4.4, coverage: .partial))
-        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialBehind) == "≥-6%")
-        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialBehind, reservePositive: true) == "≤+6%")
+        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialBehind) == "-6%")
+        #expect(CockpitRecommendationPaceText.menuBarText(pace: partialBehind, reservePositive: true) == "+6%")
         #expect(CockpitRecommendationPaceText.menuBarText(pace: nil) == nil)
     }
 

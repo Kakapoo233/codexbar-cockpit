@@ -25,12 +25,12 @@ it("rounds negative exact half points away from zero like the Mac and native cli
   expect(screen.getByText("Pace -6%")).toHaveAccessibleName(/Today: 5.5 pp behind recommendation/);
 });
 
-it("rounds partial bounds outward and never labels negative bounds as reserve", () => {
+it("preserves partial rounding and uncertainty while displaying direct signed values", () => {
   const { rerender } = render(<RecommendationPace pace={{ ...pace, isLowerBound: true }} language="en" compact />);
-  expect(screen.getByText("Pace ≥+5%")).toHaveAccessibleName(/at least 5.6 pp ahead · incomplete data/);
+  expect(screen.getByText("Pace +5%")).toHaveAccessibleName(/at least 5.6 pp ahead · incomplete data/);
   rerender(<RecommendationPace pace={{ ...pace, deltaPercent: -5.6, observedUsedPercent: 4.4, isLowerBound: true }} language="en" compact />);
-  expect(screen.getByText("Pace ≥-6%")).toHaveAccessibleName(/Today's pace needs complete usage data/);
-  expect(screen.getByText("Pace ≥-6%")).toHaveAttribute("title", expect.stringContaining("cannot establish a reserve"));
+  expect(screen.getByText("Pace -6%")).toHaveAccessibleName(/Today's pace needs complete usage data/);
+  expect(screen.getByText("Pace -6%")).toHaveAttribute("title", expect.stringContaining("cannot establish a reserve"));
   rerender(<RecommendationPace pace={{ ...pace, deltaPercent: 0, isLowerBound: true }} language="en" />);
   expect(screen.getByText("Today's pace needs complete usage data")).toBeInTheDocument();
   expect(screen.queryByText("Today: on recommendation pace")).not.toBeInTheDocument();
