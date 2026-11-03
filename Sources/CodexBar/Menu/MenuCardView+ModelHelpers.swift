@@ -472,7 +472,6 @@ extension UsageMenuCardView.Model {
             (current.statusText == nil) == (candidate.statusText == nil) &&
             (current.resetText == nil) == (candidate.resetText == nil) &&
             (current.detailText == nil) == (candidate.detailText == nil) &&
-            (current.cockpitDailyRecommendation == nil) == (candidate.cockpitDailyRecommendation == nil) &&
             (candidateMetaText == nil || currentMetaText != nil) &&
             current.cardStyle == candidate.cardStyle
     }

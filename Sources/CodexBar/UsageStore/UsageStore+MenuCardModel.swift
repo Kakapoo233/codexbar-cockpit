@@ -170,8 +170,6 @@ extension UsageStore {
                     provider: provider,
                     window: weeklyWindow,
                     snapshot: snapshot),
-            cockpitDailyRecommendation: !isSettings && account?.allowsLocalCockpitPlan != false
-                ? self.cockpitMenuBarRecommendation(provider: provider, snapshot: snapshot, now: now) : nil,
             sessionEquivalentForecast: forecast,
             quotaWarningThresholds: [
                 .session: self.quotaWarningMarkerThresholds(provider: provider, window: .session),
