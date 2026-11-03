@@ -31,7 +31,7 @@ struct CockpitStatusPacePresentationTests {
             let renderer = MenuBarLayoutRenderer()
             let output = self.render(renderer, data: data)
             #expect(output.attributedTitle
-                .string == "P W " + (CockpitRecommendationPaceText.statusItemText(pace: pace) ?? ""))
+                .string == "P W\u{200A}" + (CockpitRecommendationPaceText.statusItemText(pace: pace) ?? ""))
             #expect(!output.attributedTitle.string.contains("≥"))
             #expect(!output.attributedTitle.string.contains("≤"))
             #expect(output.accessibilityLabel.contains(presentation.explanation))
@@ -46,7 +46,7 @@ struct CockpitStatusPacePresentationTests {
             settings.menuBarPaceReservePositive = true
             let flipped = self.render(renderer, data: self.fixture.render(store, snapshot: snapshot))
             #expect(flipped.attributedTitle.string ==
-                "P W " + (CockpitRecommendationPaceText.statusItemText(pace: pace, reservePositive: true) ?? ""))
+                "P W\u{200A}" + (CockpitRecommendationPaceText.statusItemText(pace: pace, reservePositive: true) ?? ""))
             #expect(flipped.attributedTitle.string != output.attributedTitle.string)
             #expect(self.color(flipped) == self.color(output))
             _ = StatusItemController.applyMenuBarLayoutContent(flipped, for: button, gap: .regular)
@@ -90,7 +90,7 @@ struct CockpitStatusPacePresentationTests {
             #expect(data.pacePresentations[.weekly]?.roundedObservedDelta == 0)
             let renderer = MenuBarLayoutRenderer()
             let zero = self.render(renderer, data: data)
-            #expect(zero.attributedTitle.string == "P W 0%")
+            #expect(zero.attributedTitle.string == "P W\u{200A}0%")
             #expect(self.color(zero) == NSColor.controlTextColor)
             let button = NSButton()
             _ = StatusItemController.applyMenuBarLayoutContent(zero, for: button, gap: .regular)
@@ -99,7 +99,7 @@ struct CockpitStatusPacePresentationTests {
             #expect(missingData.pacePresentations.isEmpty)
             #expect(missingData.metrics.weeklyPaceDelta == nil)
             let missing = self.render(renderer, data: missingData)
-            #expect(missing.attributedTitle.string == "P W –")
+            #expect(missing.attributedTitle.string == "P W\u{200A}–")
             #expect(self.color(missing) == NSColor.controlTextColor)
             #expect(missing.toolTip == nil)
             _ = StatusItemController.applyMenuBarLayoutContent(missing, for: button, gap: .regular)

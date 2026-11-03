@@ -1034,7 +1034,7 @@ final class MenuBarLayoutRenderer {
         let shortLabel = ProviderDescriptorRegistry.descriptor(for: data.provider)
             .menuBarMetrics.namedExtraShortLabels[id]
         return self.textToken(
-            L("%@ %@", shortLabel ?? title, resolvedValue.text),
+            MenuBarDisplayText.prefixedStatusValue(shortLabel ?? title, value: resolvedValue.text),
             accessibilityText: accessibility,
             attributes: attributes)
     }
@@ -1165,7 +1165,7 @@ final class MenuBarLayoutRenderer {
         let label = L("cockpit_menu_daily_recommendation_short")
         guard let value = data.cockpitDailyRecommendationPercent, value.isFinite, value >= 0 else {
             return self.textToken(
-                "\(label) —",
+                MenuBarDisplayText.prefixedStatusValue(label, value: "—"),
                 accessibilityText: L("%@ unavailable", L("cockpit_menu_daily_recommendation")),
                 attributes: attributes)
         }
@@ -1180,7 +1180,7 @@ final class MenuBarLayoutRenderer {
         }
         let approximate = data.cockpitDailyRecommendationIsPartial || data.cockpitDailyRecommendationIsStale
         return self.textToken(
-            "\(label) \(approximate ? "≈" : "")\(percent)",
+            MenuBarDisplayText.prefixedStatusValue(label, value: "\(approximate ? "≈" : "")\(percent)"),
             accessibilityText: accessibility,
             attributes: attributes)
     }
@@ -1333,7 +1333,7 @@ extension MenuBarLayoutRenderer {
         if options.isHighlighted { attributes[.foregroundColor] = NSColor.selectedMenuItemTextColor }
         guard displayStyle != .percent else {
             return self.textToken(
-                "\(label) \(qualifiers)\(percent)",
+                MenuBarDisplayText.prefixedStatusValue(label, value: "\(qualifiers)\(percent)"),
                 accessibilityText: accessibility,
                 attributes: attributes)
         }
@@ -1351,7 +1351,8 @@ extension MenuBarLayoutRenderer {
             y: self.attachmentYOrigin(height: height, style: style),
             width: size.width,
             height: height)
-        let result = NSMutableAttributedString(string: "\(label) \(qualifiers)", attributes: attributes)
+        let result = NSMutableAttributedString(
+            string: MenuBarDisplayText.prefixedStatusValue(label, value: qualifiers), attributes: attributes)
         result.append(self.attachmentText(attachment, style: style))
         return (result, accessibility)
     }

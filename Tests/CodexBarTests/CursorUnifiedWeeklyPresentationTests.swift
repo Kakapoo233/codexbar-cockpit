@@ -86,7 +86,7 @@ struct CursorUnifiedWeeklyPresentationTests {
                 appearanceName: "aqua",
                 isDebugApp: false,
                 now: Self.now))
-        #expect(rendered.attributedTitle.string == "W 30%\u{2009}W 30%\u{2009}30%")
+        #expect(rendered.attributedTitle.string == "W\u{200A}30%\u{2009}W\u{200A}30%\u{2009}W\u{200A}30%")
         #expect(rendered.accessibilityLabel == "Weekly 30%, Weekly 30%, Weekly 30%")
     }
 

@@ -19,8 +19,8 @@ extension MenuBarLayoutRendererTests {
                     ? .windowResetAbsolute(window: window) : .windowResetCountdown(window: window)
                 let output = MenuBarLayoutRenderer().render(
                     layout: MenuBarLayout(lines: [[token]]), data: data, icon: nil, options: self.options())
-                let prefix = window == .session ? "S" : window == .weekly ? "W" : "F"
-                let value = String(output.attributedTitle.string.dropFirst("R \(prefix) ".count))
+                let prefix = window == .session ? "R S" : "R"
+                let value = String(output.attributedTitle.string.dropFirst("\(prefix)\u{200A}".count))
                 #expect(output.accessibilityLabel == "\(label): \(value)")
             }
         }
@@ -63,8 +63,8 @@ extension MenuBarLayoutRendererTests {
                     : UsageFormatter.resetCountdownDescription(
                         from: reset,
                         now: self.now)
-                #expect(output.attributedTitle
-                    .string == "R \(window == .session ? "S" : window == .weekly ? "W" : "F") \(expected)")
+                let prefix = window == .session ? "R S" : "R"
+                #expect(output.attributedTitle.string == "\(prefix)\u{200A}\(expected)")
             }
         }
     }
@@ -87,7 +87,7 @@ extension MenuBarLayoutRendererTests {
                     data: self.resetData(weekly: weekly),
                     icon: nil,
                     options: self.options())
-                #expect(output.attributedTitle.string == "R W –")
+                #expect(output.attributedTitle.string == "R\u{200A}–")
             }
         }
     }
@@ -105,7 +105,7 @@ extension MenuBarLayoutRendererTests {
                 data: self.resetData(weekly: weekly),
                 icon: nil,
                 options: self.options())
-            #expect(output.attributedTitle.string == "R W Friday at 10:00")
+            #expect(output.attributedTitle.string == "R\u{200A}Friday at 10:00")
         }
     }
 
@@ -134,9 +134,9 @@ extension MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: self.now.addingTimeInterval(51)))
-        #expect(first.attributedTitle.string == "R W in 7m")
+        #expect(first.attributedTitle.string == "R\u{200A}in 7m")
         #expect(first.attributedTitle === same.attributedTitle)
-        #expect(next.attributedTitle.string == "R W in 6m")
+        #expect(next.attributedTitle.string == "R\u{200A}in 6m")
         #expect(first.attributedTitle !== next.attributedTitle)
     }
 
@@ -167,10 +167,10 @@ extension MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: after))
-        #expect(first.attributedTitle.string == "R W " + UsageFormatter.resetDescription(
+        #expect(first.attributedTitle.string == "R\u{200A}" + UsageFormatter.resetDescription(
             from: reset,
             now: before))
-        #expect(next.attributedTitle.string == "R W " + UsageFormatter.resetDescription(
+        #expect(next.attributedTitle.string == "R\u{200A}" + UsageFormatter.resetDescription(
             from: reset,
             now: after))
         #expect(first.attributedTitle.string != next.attributedTitle.string)

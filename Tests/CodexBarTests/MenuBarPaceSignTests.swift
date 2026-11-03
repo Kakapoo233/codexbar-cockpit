@@ -88,7 +88,7 @@ struct MenuBarPaceSignTests {
                 elseToken: .hidden)
             let renderer = MenuBarLayoutRenderer()
             let expectedPace = self.expected(delta: delta, reservePositive: reservePositive)
-            let expectedTitle = "P \(window == .weekly ? "W" : "S") \(expectedPace)"
+            let expectedTitle = "P \(window == .weekly ? "W" : "S")\u{200A}\(expectedPace)"
             let output = renderer.render(
                 layout: MenuBarLayout(lines: [[.pace(window: window)]]),
                 data: data,
@@ -136,7 +136,9 @@ struct MenuBarPaceSignTests {
                 icon: nil,
                 options: self.options())
             #expect(output.attributedTitle.string
-                == (reservePositive ? "P S +23%\u{2009}·\u{2009}P W -5%" : "P S -23%\u{2009}·\u{2009}P W +5%"))
+                ==
+                (reservePositive ? "P S\u{200A}+23%\u{2009}·\u{2009}P W\u{200A}-5%" :
+                    "P S\u{200A}-23%\u{2009}·\u{2009}P W\u{200A}+5%"))
         }
     }
 
@@ -152,7 +154,8 @@ struct MenuBarPaceSignTests {
                 data: data,
                 icon: nil,
                 options: self.options())
-            #expect(output.attributedTitle.string == "P \(window == .weekly ? "W" : window == .session ? "S" : "U") –")
+            #expect(output.attributedTitle
+                .string == "P \(window == .weekly ? "W" : window == .session ? "S" : "U")\u{200A}–")
             #expect(output.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
                 == .controlTextColor)
         }

@@ -8,6 +8,54 @@ import Testing
 struct MenuBarStatusPrefixTests {
     private let fixture = MenuBarLayoutRendererTests()
 
+    @Test(arguments: [
+        MenuBarLayoutToken.resetCountdown, .resetAbsolute,
+        .windowResetCountdown(window: .weekly), .windowResetAbsolute(window: .weekly),
+        .windowResetCountdown(window: .automatic), .windowResetAbsolute(window: .automatic),
+    ])
+    func `weekly reset variants use a single R and retain the spoken weekly context`(token: MenuBarLayoutToken) {
+        let data = self.fixture.data(
+            automaticUsedPercent: 60,
+            automaticResetAt: self.fixture.now.addingTimeInterval(3 * 24 * 60 * 60),
+            automaticWindowMinutes: 10080)
+        let output = MenuBarLayoutRenderer().render(
+            layout: .init(lines: [[token]]), data: data, icon: nil, options: self.fixture.options())
+        #expect(output.attributedTitle.string.hasPrefix("R\u{200A}"))
+        #expect(!output.attributedTitle.string.contains("R W"))
+        #expect(output.accessibilityLabel.contains("Weekly"))
+        #expect(!output.accessibilityLabel.contains("\u{200A}"))
+    }
+
+    @Test(arguments: MenuBarLayoutSize.allCases)
+    func `the prefix separator is visibly narrower than a normal space`(size: MenuBarLayoutSize) {
+        let output = MenuBarLayoutRenderer().render(
+            layout: .init(lines: [[.percent(window: .weekly)]]),
+            data: self.fixture.data(),
+            icon: nil,
+            options: self.fixture.options(size: size))
+        #expect(output.attributedTitle.string == "W\u{200A}60%")
+        let oldSpacing = NSAttributedString(
+            string: "W 60%", attributes: output.attributedTitle.attributes(at: 0, effectiveRange: nil))
+        #expect(output.attributedTitle.size().width < oldSpacing.size().width)
+    }
+
+    @Test(arguments: CockpitDailyRemainingStyle.allCases)
+    func `today values and graphical forms retain T with the compact separator`(style: CockpitDailyRemainingStyle) {
+        CodexBarLocalizationOverride.$appLanguage.withValue("en") {
+            var data = self.fixture.data()
+            data.cockpitDailyRemaining = .init(percent: 75, weeklyPercent: 15, isUpperBound: false, isStale: false)
+            let output = MenuBarLayoutRenderer().render(
+                layout: .init(lines: [[.cockpitDailyRemaining(style: style)]]),
+                data: data,
+                icon: nil,
+                options: self.fixture.options())
+            #expect(output.attributedTitle.string.hasPrefix("T\u{200A}"))
+            if style == .percent { #expect(output.attributedTitle.string == "T\u{200A}75%") }
+            #expect(output.accessibilityLabel.contains("75%"))
+            #expect(output.accessibilityLabel.contains("15%"))
+        }
+    }
+
     @Test(arguments: ["en", "zh-Hans", "ja", "ar"])
     func `period and metric initials stay English while surrounding content keeps the app language`(language: String) {
         CodexBarLocalizationOverride.$appLanguage.withValue(language) {
@@ -19,10 +67,10 @@ struct MenuBarStatusPrefixTests {
             let output = MenuBarLayoutRenderer().render(
                 layout: layout, data: data, icon: nil, options: self.fixture.options(colorPace: true))
             let parts = output.attributedTitle.string.components(separatedBy: "\u{2009}")
-            #expect(parts[0].hasPrefix("W "))
-            #expect(parts[1].hasPrefix("P W "))
-            #expect(parts[2].hasPrefix("R W "))
-            #expect(parts[3].hasPrefix("E "))
+            #expect(parts[0].hasPrefix("W\u{200A}"))
+            #expect(parts[1].hasPrefix("P W\u{200A}"))
+            #expect(parts[2].hasPrefix("R\u{200A}"))
+            #expect(parts[3].hasPrefix("E\u{200A}"))
             #expect(codexBarLocalizationSignature() == language)
             #expect(!output.accessibilityLabel.contains("P W"))
             #expect(!output.accessibilityLabel.contains("R W"))
@@ -41,7 +89,8 @@ struct MenuBarStatusPrefixTests {
             layout: layout, data: data, icon: nil, options: self.fixture.options())
         let reset = UsageFormatter.resetCountdownDescription(
             from: self.fixture.now.addingTimeInterval(3 * 24 * 60 * 60), now: self.fixture.now)
-        #expect(output.attributedTitle.string == "W 50%\u{2009}T \u{FFFC}\nR W \(reset)\u{2009}E 1d 16h")
+        #expect(output.attributedTitle
+            .string == "W\u{200A}50%\u{2009}T\u{200A}\u{FFFC}\nR\u{200A}\(reset)\u{2009}E\u{200A}1d 16h")
         #expect(output.accessibilityLabel.contains("Weekly"))
         #expect(output.accessibilityLabel.contains("Runs out in 1d 16h"))
     }
@@ -54,7 +103,7 @@ struct MenuBarStatusPrefixTests {
         let renderer = MenuBarLayoutRenderer()
         let layout = MenuBarLayout(lines: [[token]])
         let visible = renderer.render(layout: layout, data: data, icon: nil, options: self.fixture.options())
-        #expect(visible.attributedTitle.string.hasPrefix("\(expected) "))
+        #expect(visible.attributedTitle.string.hasPrefix("\(expected)\u{200A}"))
         let hidden = renderer.render(
             layout: layout, data: data, icon: nil, options: self.fixture.options(showWindowLabels: false))
         #expect(hidden.attributedTitle.string == (graphical ? "\u{FFFC}" : "50%"))
@@ -71,7 +120,7 @@ struct MenuBarStatusPrefixTests {
             data: data,
             icon: nil,
             options: self.fixture.options())
-        #expect(output.attributedTitle.string == "P F –")
+        #expect(output.attributedTitle.string == "P F\u{200A}–")
         #expect(output.accessibilityLabel.contains("unavailable"))
     }
 
@@ -82,7 +131,7 @@ struct MenuBarStatusPrefixTests {
             data: self.fixture.data(),
             icon: nil,
             options: self.fixture.options(colorPace: true, highContrast: highContrast))
-        #expect(output.attributedTitle.string == "P W +11%")
+        #expect(output.attributedTitle.string == "P W\u{200A}+11%")
         let text = output.attributedTitle.string as NSString
         let value = text.range(of: "+11%")
         try #require(value.location != NSNotFound)
@@ -106,17 +155,17 @@ struct MenuBarStatusPrefixTests {
             resetDescription: nil)
         let pace = UsagePace.weekly(window: week, now: now)
         #expect(MenuBarDisplayText.displayText(
-            mode: .percent, percentWindow: week, showUsed: true, showPrefixes: true, now: now) == "W 73%")
+            mode: .percent, percentWindow: week, showUsed: true, showPrefixes: true, now: now) == "W\u{200A}73%")
         #expect(MenuBarDisplayText.displayText(
             mode: .both,
             percentWindow: week,
             pace: pace,
             showUsed: true,
             showPrefixes: true,
-            now: now) == "W 73% · P +23%")
+            now: now) == "W\u{200A}73% · P\u{200A}+23%")
         let reset = MenuBarDisplayText.displayText(
             mode: .resetTime, percentWindow: week, showUsed: true, showPrefixes: true, now: now)
-        #expect(reset?.hasPrefix("R W ") == true)
+        #expect(reset?.hasPrefix("R\u{200A}") == true)
         #expect(reset?.contains("↻") == false)
         let exhausted = RateWindow(
             usedPercent: 100,
@@ -130,7 +179,7 @@ struct MenuBarStatusPrefixTests {
             showUsed: true,
             showsResetTimeWhenExhausted: true,
             showPrefixes: true,
-            now: now) == "R W in 2h")
+            now: now) == "R\u{200A}in 2h")
         let noReset = RateWindow(usedPercent: 100, windowMinutes: 10080, resetsAt: nil, resetDescription: nil)
         #expect(MenuBarDisplayText.displayText(
             mode: .both,
@@ -139,6 +188,6 @@ struct MenuBarStatusPrefixTests {
             showUsed: true,
             showsResetTimeWhenExhausted: true,
             showPrefixes: true,
-            now: now) == "W 100%")
+            now: now) == "W\u{200A}100%")
     }
 }

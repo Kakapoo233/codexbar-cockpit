@@ -1,5 +1,10 @@
 # Cockpit changes
 
+## 0.8.21 — Tighter status-item labels
+
+- Reduce the gap between English prefixes and their numbers or meters, including daily T components.
+- Simplify weekly reset labels from R W to R while retaining full window descriptions for accessibility.
+
 ## 0.8.20 — Compact menu-bar identifiers
 
 - Identify weekly quota with W, session quota with S, resets with R, pace with P and exhaustion estimates with E; retain T for today's components.

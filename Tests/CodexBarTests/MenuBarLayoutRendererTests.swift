@@ -24,7 +24,8 @@ struct MenuBarLayoutRendererTests {
         let visible = renderer.render(layout: layout, data: self.data(), icon: nil, options: self.options())
         let hidden = renderer.render(
             layout: layout, data: self.data(), icon: nil, options: self.options(showWindowLabels: false))
-        #expect(visible.attributedTitle.string == "S 25%\u{2009}W 60%\u{2009}F 80%\u{2009}S 50%\u{2009}$ 46%")
+        #expect(visible.attributedTitle
+            .string == "S\u{200A}25%\u{2009}W\u{200A}60%\u{2009}F\u{200A}80%\u{2009}S\u{200A}50%\u{2009}$ 46%")
         #expect(hidden.attributedTitle.string == "25%\u{2009}60%\u{2009}80%\u{2009}50%\u{2009}$ 46%")
         #expect(hidden.accessibilityLabel == visible.accessibilityLabel)
         #expect(hidden.attributedTitle !== visible.attributedTitle)
@@ -44,7 +45,7 @@ struct MenuBarLayoutRendererTests {
                 data: data,
                 icon: nil,
                 options: self.options(showUsed: false, showWindowLabels: false))
-            #expect(visible.attributedTitle.string == (minutes == nil ? "U 25%" : "S 25%"))
+            #expect(visible.attributedTitle.string == (minutes == nil ? "U\u{200A}25%" : "S\u{200A}25%"))
             #expect(hidden.attributedTitle.string == "75%")
             #expect(hidden.accessibilityLabel == L("%@ %@", L("Session"), "75%"))
         }
@@ -91,7 +92,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options(showUsed: showUsed))
         let expected = showUsed ? "9%" : "91%"
-        #expect(output.attributedTitle.string == "M \(expected)")
+        #expect(output.attributedTitle.string == "M\u{200A}\(expected)")
         #expect(output.accessibilityLabel == L("%@ %@", L("Weekly"), expected))
     }
 
@@ -103,17 +104,17 @@ struct MenuBarLayoutRendererTests {
         let expected: [(MenuBarLayoutToken, String)] = [
             (.providerName, "Codex"),
             (.accountLabel, "user@example.com"),
-            (.percent(window: .session), "S 25%"),
-            (.percent(window: .weekly), "W 60%"),
-            (.percent(window: .scopedWeekly), "F 80%"),
-            (.percent(window: .automatic), "S 50%"),
-            (.pace(window: .session), "P S -8%"),
-            (.pace(window: .weekly), "P W +11%"),
-            (.pace(window: .automatic), "P S 0%"),
-            (.usageBar, "S ▮▮▯"),
-            (.resetCountdown, "R S in 2h"),
-            (.runsOut, "E Runs out in 1d 16h"),
-            (.runsOutCompact, "E 1d 16h"),
+            (.percent(window: .session), "S\u{200A}25%"),
+            (.percent(window: .weekly), "W\u{200A}60%"),
+            (.percent(window: .scopedWeekly), "F\u{200A}80%"),
+            (.percent(window: .automatic), "S\u{200A}50%"),
+            (.pace(window: .session), "P S\u{200A}-8%"),
+            (.pace(window: .weekly), "P W\u{200A}+11%"),
+            (.pace(window: .automatic), "P S\u{200A}0%"),
+            (.usageBar, "S\u{200A}▮▮▯"),
+            (.resetCountdown, "R S\u{200A}in 2h"),
+            (.runsOut, "E\u{200A}Runs out in 1d 16h"),
+            (.runsOutCompact, "E\u{200A}1d 16h"),
             (.balance, "$12.34"),
             (.costToday, "$1.25"),
             (.costWindow, "$20.00"),
@@ -155,7 +156,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "M 60%")
+        #expect(output.attributedTitle.string == "M\u{200A}60%")
         #expect(output.accessibilityLabel == L("%@ %@", L("Monthly"), "60%"))
     }
 
@@ -172,7 +173,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "T 10%\u{2009}C 9%\u{2009}TP 17%")
+        #expect(output.attributedTitle.string == "T\u{200A}10%\u{2009}C\u{200A}9%\u{2009}TP\u{200A}17%")
         #expect(output.accessibilityLabel == "Total 10%, Cursor 9%, Third Party 17%")
     }
 
@@ -180,9 +181,9 @@ struct MenuBarLayoutRendererTests {
     func `Cursor semantic percentages reuse explicit lane tags`() {
         let renderer = MenuBarLayoutRenderer()
         let expected: [(PercentWindow, String, String)] = [
-            (.session, "T 25%", "Total 25%"),
-            (.weekly, "C 60%", "Cursor 60%"),
-            (.automatic, "S 50%", "\(L("Usage")) 50%"),
+            (.session, "T\u{200A}25%", "Total 25%"),
+            (.weekly, "C\u{200A}60%", "Cursor 60%"),
+            (.automatic, "S\u{200A}50%", "\(L("Usage")) 50%"),
         ]
         for (window, value, accessibility) in expected {
             let output = renderer.render(
@@ -206,7 +207,7 @@ struct MenuBarLayoutRendererTests {
                 data: data,
                 icon: nil,
                 options: self.options())
-            #expect(output.attributedTitle.string == "M 10%\u{2009}M 9%")
+            #expect(output.attributedTitle.string == "M\u{200A}10%\u{2009}M\u{200A}9%")
             #expect(output.accessibilityLabel == "\(data.laneLabels.primary) 10%, \(data.laneLabels.secondary) 9%")
         }
     }
@@ -230,7 +231,8 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "T 10%\u{2009}C 9%\u{2009}TP 17%\u{2009}GB 42%")
+        #expect(output.attributedTitle
+            .string == "T\u{200A}10%\u{2009}C\u{200A}9%\u{2009}TP\u{200A}17%\u{2009}GB\u{200A}42%")
         #expect(output.accessibilityLabel == "Total 10%, Cursor 9%, Third Party 17%, Grok Bot 42%")
     }
 
@@ -240,8 +242,8 @@ struct MenuBarLayoutRendererTests {
         let renderer = MenuBarLayoutRenderer()
         let data = self.data(provider: .cursor, omitsSession: true, weeklyUsedPercent: 9)
         let expected: [(PercentWindow, String, String)] = [
-            (.session, "T –", "Total unavailable"),
-            (.weekly, "C 9%", "Cursor 9%"),
+            (.session, "T\u{200A}–", "Total unavailable"),
+            (.weekly, "C\u{200A}9%", "Cursor 9%"),
         ]
         for (window, value, accessibility) in expected {
             let output = renderer.render(
@@ -265,7 +267,7 @@ struct MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options())
-        #expect(bar.attributedTitle.string.hasPrefix("C "))
+        #expect(bar.attributedTitle.string.hasPrefix("C\u{200A}"))
         #expect(bar.accessibilityLabel == "Cursor 9%")
     }
 
@@ -283,7 +285,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "Gemini weekly 30%")
+        #expect(output.attributedTitle.string == "Gemini weekly\u{200A}30%")
         #expect(output.accessibilityLabel == "Gemini weekly 30%")
     }
 
@@ -296,7 +298,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "T 10%\u{2009}GB –")
+        #expect(output.attributedTitle.string == "T\u{200A}10%\u{2009}GB\u{200A}–")
         #expect(output.accessibilityLabel == "Total 10%, Grok Bot unavailable")
     }
 
@@ -314,17 +316,17 @@ struct MenuBarLayoutRendererTests {
                 data: self.data(provider: .cursor, extraRateWindows: [extra]),
                 icon: nil,
                 options: self.options(showUsed: false))
-            #expect(output.attributedTitle.string == "T 90%\nGB \(Int(100 - used))%")
+            #expect(output.attributedTitle.string == "T\u{200A}90%\nGB\u{200A}\(Int(100 - used))%")
             let other = renderer.render(
                 layout: layout,
                 data: self.data(provider: .codex, extraRateWindows: [extra]),
                 icon: nil,
                 options: self.options())
-            #expect(other.attributedTitle.string == "M 10%")
+            #expect(other.attributedTitle.string == "M\u{200A}10%")
         }
         let missing = renderer.render(
             layout: layout, data: self.data(provider: .cursor), icon: nil, options: self.options())
-        #expect(missing.attributedTitle.string == "T 10%\nGB –")
+        #expect(missing.attributedTitle.string == "T\u{200A}10%\nGB\u{200A}–")
     }
 
     @Test(arguments: [0.0, 42.0])
@@ -342,7 +344,7 @@ struct MenuBarLayoutRendererTests {
                 data: self.data(provider: .cursor, extraRateWindows: [extra]),
                 icon: nil,
                 options: self.options())
-            #expect(rendered.attributedTitle.string == (known ? "GB \(Int(used))%" : "GB –"))
+            #expect(rendered.attributedTitle.string == (known ? "GB\u{200A}\(Int(used))%" : "GB\u{200A}–"))
             #expect(rendered.accessibilityLabel == (known ? "Grok Bot \(Int(used))%" : "Grok Bot unavailable"))
         }
     }
@@ -429,7 +431,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(automaticUsedPercent: 0, provider: .deepseek, automaticText: "¥100.00"),
             icon: nil,
             options: self.options())
-        #expect(output.attributedTitle.string == "S 25%")
+        #expect(output.attributedTitle.string == "S\u{200A}25%")
     }
 
     @Test
@@ -462,7 +464,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "P M +11%")
+        #expect(output.attributedTitle.string == "P M\u{200A}+11%")
         #expect(output.accessibilityLabel == L("%@ %@ %@", L("Monthly"), L("display_mode_pace").lowercased(), "+11%"))
     }
 
@@ -596,7 +598,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "E 1d 16h")
+        #expect(output.attributedTitle.string == "E\u{200A}1d 16h")
         #expect(output.accessibilityLabel == "Runs out in 1d 16h")
     }
 
@@ -614,7 +616,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options())
 
         // Each pace token reads its own window, so weekly pace never borrows the session delta.
-        #expect(output.attributedTitle.string == "W 60%\u{2009}·\u{2009}P W +11%")
+        #expect(output.attributedTitle.string == "W\u{200A}60%\u{2009}·\u{2009}P W\u{200A}+11%")
         #expect(output.accessibilityLabel.contains(L("menu_bar_layout_token_weekly_pace")))
     }
 
@@ -656,7 +658,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "S 25%\u{2009}·\u{2009}P S –")
+        #expect(output.attributedTitle.string == "S\u{200A}25%\u{2009}·\u{2009}P S\u{200A}–")
         #expect(output.accessibilityLabel.contains("unavailable"))
     }
 
@@ -673,7 +675,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "F 80%\u{2009}·\u{2009}P F –")
+        #expect(output.attributedTitle.string == "F\u{200A}80%\u{2009}·\u{2009}P F\u{200A}–")
         #expect(output.accessibilityLabel.contains("unavailable"))
     }
 
@@ -689,7 +691,7 @@ struct MenuBarLayoutRendererTests {
             with: NSSize(width: 200, height: CGFloat.greatestFiniteMagnitude),
             options: [.usesLineFragmentOrigin, .usesFontLeading])
 
-        #expect(output.attributedTitle.string == "S 25%\nW 60%")
+        #expect(output.attributedTitle.string == "S\u{200A}25%\nW\u{200A}60%")
         #expect(output.accessibilityLabel.contains(L("menu_bar_layout_line", 2)))
         #expect(bounds.height <= 22)
     }
@@ -713,7 +715,7 @@ struct MenuBarLayoutRendererTests {
         if adjustment == 0 {
             #expect(leadingIcon === icon)
         }
-        #expect(output.attributedTitle.string == "\(explicitSpace ? " " : "\u{2009}")S 25%\nW 60%")
+        #expect(output.attributedTitle.string == "\(explicitSpace ? " " : "\u{2009}")S\u{200A}25%\nW\u{200A}60%")
         #expect(!output.attributedTitle.string.contains("\u{FFFC}"))
         let expectedAccessibility = "\(L("%@ icon", "Codex")), \(L("Session")) 25%, "
             + "\(L("menu_bar_layout_line", 2)), \(L("Weekly")) 60%"
@@ -829,7 +831,7 @@ struct MenuBarLayoutRendererTests {
             with: NSSize(width: 200, height: CGFloat.greatestFiniteMagnitude),
             options: [.usesLineFragmentOrigin, .usesFontLeading])
 
-        #expect(composed.attributedTitle.string == "S 69%\nS 45%")
+        #expect(composed.attributedTitle.string == "S\u{200A}69%\nS\u{200A}45%")
         #expect(composed.accessibilityLabel.contains(L("menu_bar_layout_line", 2)))
         // Neither row's layout includes the icon or provider-name token, so the composed label is the
         // only place a provider is ever named — VoiceOver would otherwise hear two anonymous percentages.
@@ -854,8 +856,8 @@ struct MenuBarLayoutRendererTests {
             top: top, bottom: before, topProviderName: "Codex", bottomProviderName: "Claude")
         let afterTitle = MenuBarLayoutRenderer.composeStackedProviderRows(
             top: top, bottom: after, topProviderName: "Codex", bottomProviderName: "Claude")
-        #expect(beforeTitle.attributedTitle.string == "S 50%\nS 10%")
-        #expect(afterTitle.attributedTitle.string == "S 50%\nS 90%")
+        #expect(beforeTitle.attributedTitle.string == "S\u{200A}50%\nS\u{200A}10%")
+        #expect(afterTitle.attributedTitle.string == "S\u{200A}50%\nS\u{200A}90%")
         #expect(beforeTitle.accessibilityLabel != afterTitle.accessibilityLabel)
     }
 
@@ -888,7 +890,7 @@ struct MenuBarLayoutRendererTests {
             bottomProviderName: "Claude")
 
         // No stray blank row or vertical offset — the emptied row is dropped, not stacked as a blank line.
-        #expect(composed.attributedTitle.string == "S 69%")
+        #expect(composed.attributedTitle.string == "S\u{200A}69%")
         #expect(!composed.attributedTitle.string.contains("\n"))
         // The surviving row still gets its provider named, even though only one row made it through.
         #expect(composed.accessibilityLabel == "Codex, \(top.accessibilityLabel)")
@@ -915,7 +917,8 @@ struct MenuBarLayoutRendererTests {
 
         #expect(output.leadingIcon == nil)
         #expect(output.attributedTitle.attribute(.attachment, at: 0, effectiveRange: nil) is NSTextAttachment)
-        #expect(output.attributedTitle.string == "\u{FFFC}\nS 50%\u{2009}S 25%\u{2009}W 60%\u{2009}M 10%")
+        #expect(output.attributedTitle
+            .string == "\u{FFFC}\nS\u{200A}50%\u{2009}S\u{200A}25%\u{2009}W\u{200A}60%\u{2009}M\u{200A}10%")
         #expect(output.accessibilityLabel.contains(L("menu_bar_layout_line", 2)))
     }
 
@@ -937,7 +940,7 @@ struct MenuBarLayoutRendererTests {
 
         let leadingIcon = try #require(output.leadingIcon)
         #expect(leadingIcon === icon)
-        #expect(output.attributedTitle.string == "\u{2009}S 50%\u{2009}S 25%\u{2009}W 60%")
+        #expect(output.attributedTitle.string == "\u{2009}S\u{200A}50%\u{2009}S\u{200A}25%\u{2009}W\u{200A}60%")
         #expect(output.attributedTitle.attribute(.attachment, at: 0, effectiveRange: nil) == nil)
     }
 
@@ -1249,7 +1252,7 @@ struct MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: now))
-        #expect(first.attributedTitle.string == "R S in 6m")
+        #expect(first.attributedTitle.string == "R S\u{200A}in 6m")
 
         // A different exact instant with the same visible value still hits the attributed-title cache.
         let sameMinute = renderer.render(
@@ -1264,7 +1267,7 @@ struct MenuBarLayoutRendererTests {
             data: data,
             icon: nil,
             options: self.options(now: now.addingTimeInterval(60)))
-        #expect(nextMinute.attributedTitle.string == "R S in 5m")
+        #expect(nextMinute.attributedTitle.string == "R S\u{200A}in 5m")
         #expect(first.attributedTitle !== nextMinute.attributedTitle)
     }
 
@@ -1284,7 +1287,7 @@ struct MenuBarLayoutRendererTests {
                 isDebugApp: false,
                 now: self.now))
 
-        #expect(output.attributedTitle.string == "S ▮▮▮")
+        #expect(output.attributedTitle.string == "S\u{200A}▮▮▮")
     }
 
     @Test(arguments: [PercentWindow.session, .weekly, .scopedWeekly, .automatic])
@@ -1311,16 +1314,16 @@ struct MenuBarLayoutRendererTests {
 
         switch window {
         case .session:
-            #expect(text.hasPrefix("S "))
+            #expect(text.hasPrefix("S\u{200A}"))
             #expect(output.accessibilityLabel.contains("25%"))
         case .weekly:
-            #expect(text.hasPrefix("W "))
+            #expect(text.hasPrefix("W\u{200A}"))
             #expect(output.accessibilityLabel.contains("60%"))
         case .automatic:
-            #expect(text == "S \u{FFFC}")
+            #expect(text == "S\u{200A}\u{FFFC}")
             #expect(output.accessibilityLabel.contains("50%"))
         case .scopedWeekly:
-            #expect(text.hasPrefix("F "))
+            #expect(text.hasPrefix("F\u{200A}"))
             #expect(output.accessibilityLabel.contains("80%"))
         case .spend:
             Issue.record("Spend has no progress bar palette token")
@@ -1336,7 +1339,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "S –")
+        #expect(output.attributedTitle.string == "S\u{200A}–")
         #expect(output.accessibilityLabel.contains("unavailable"))
     }
 
@@ -1403,7 +1406,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
 
-        #expect(output.attributedTitle.string == "R U Friday at 10:00")
+        #expect(output.attributedTitle.string == "R U\u{200A}Friday at 10:00")
     }
 
     @Test
@@ -1472,8 +1475,8 @@ struct MenuBarLayoutRendererTests {
     }
 
     @Test(arguments: [
-        (0.0, MenuBarLayoutToken.percent(window: .session), "S 25%"),
-        (50.0, MenuBarLayoutToken.resetCountdown, "R S in 2h"),
+        (0.0, MenuBarLayoutToken.percent(window: .session), "S\u{200A}25%"),
+        (50.0, MenuBarLayoutToken.resetCountdown, "R S\u{200A}in 2h"),
     ])
     func `conditional renders the matching branch`(threshold: Double, token: MenuBarLayoutToken, expected: String) {
         let renderer = MenuBarLayoutRenderer()
@@ -1542,7 +1545,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options())
         #expect(trueOutput.attributedTitle.string == trueControl.attributedTitle.string)
-        #expect(trueOutput.attributedTitle.string == "S 25%")
+        #expect(trueOutput.attributedTitle.string == "S\u{200A}25%")
     }
 
     @Test
@@ -1570,7 +1573,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options())
 
         #expect(output.attributedTitle.string == control.attributedTitle.string)
-        #expect(output.attributedTitle.string == "S 25%")
+        #expect(output.attributedTitle.string == "S\u{200A}25%")
     }
 
     @Test
@@ -1595,7 +1598,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options())
 
         #expect(output.attributedTitle.string == control.attributedTitle.string)
-        #expect(output.attributedTitle.string == "R U –")
+        #expect(output.attributedTitle.string == "R U\u{200A}–")
     }
 
     @Test
@@ -1666,14 +1669,14 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: options)
-        #expect(middle.attributedTitle.string == "S 25%\u{2009}W 60%")
+        #expect(middle.attributedTitle.string == "S\u{200A}25%\u{2009}W\u{200A}60%")
 
         let trailing = renderer.render(
             layout: MenuBarLayout(lines: [[.percent(window: .session), .conditional(id: conditional.id)]]),
             data: self.data(),
             icon: nil,
             options: options)
-        #expect(trailing.attributedTitle.string == "S 25%")
+        #expect(trailing.attributedTitle.string == "S\u{200A}25%")
     }
 
     @Test
@@ -1695,7 +1698,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: options)
-        #expect(leadingHidden.attributedTitle.string == "W 60%")
+        #expect(leadingHidden.attributedTitle.string == "W\u{200A}60%")
         #expect(!leadingHidden.accessibilityLabel.contains(L("menu_bar_layout_line", 2)))
 
         // Trailing line hidden: no trailing newline.
@@ -1707,7 +1710,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: options)
-        #expect(trailingHidden.attributedTitle.string == "W 60%")
+        #expect(trailingHidden.attributedTitle.string == "W\u{200A}60%")
 
         // A collapsed layout also drops stacked typography: it matches the single-line control.
         let control = renderer.render(
@@ -1812,7 +1815,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [conditionTrue]))
-        #expect(first.attributedTitle.string == "S 25%")
+        #expect(first.attributedTitle.string == "S\u{200A}25%")
 
         // Flip the comparison so the same layout now renders the else branch.
         let conditionFalse = MenuBarLayoutConditional(
@@ -1826,7 +1829,7 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options(conditionals: [conditionFalse]))
         #expect(second.attributedTitle.string != first.attributedTitle.string)
-        #expect(second.attributedTitle.string == "R S in 2h")
+        #expect(second.attributedTitle.string == "R S\u{200A}in 2h")
     }
 
     @Test
@@ -1856,7 +1859,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options())
 
         #expect(output.attributedTitle.string == control.attributedTitle.string)
-        #expect(output.attributedTitle.string == "R S in 2h")
+        #expect(output.attributedTitle.string == "R S\u{200A}in 2h")
     }
 
     /// The fixture's session resets one hour out, so a `< 2h` countdown predicate holds. Rewinding the
@@ -1875,7 +1878,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [conditional]))
-        #expect(inside.attributedTitle.string == "S 25%")
+        #expect(inside.attributedTitle.string == "S\u{200A}25%")
 
         let outside = renderer.render(
             layout: layout,
@@ -1884,7 +1887,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options(
                 now: self.now.addingTimeInterval(-4 * 60 * 60),
                 conditionals: [conditional]))
-        #expect(outside.attributedTitle.string == "R S in 6h")
+        #expect(outside.attributedTitle.string == "R S\u{200A}in 6h")
     }
 
     @Test
@@ -1921,14 +1924,14 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [passing]))
-        #expect(then.attributedTitle.string == "S 25%")
+        #expect(then.attributedTitle.string == "S\u{200A}25%")
 
         let otherwise = renderer.render(
             layout: layout(failing),
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [failing]))
-        #expect(otherwise.attributedTitle.string == "R S in 2h")
+        #expect(otherwise.attributedTitle.string == "R S\u{200A}in 2h")
     }
 
     /// Session is 25% used, so 75% remains: the same threshold must flip with the direction.
@@ -1938,12 +1941,12 @@ struct MenuBarLayoutRendererTests {
             metric: .session,
             comparison: .greaterThan,
             threshold: 50,
-            direction: .remaining)) == "S 25%")
+            direction: .remaining)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
             metric: .session,
             comparison: .greaterThan,
             threshold: 50,
-            direction: .used)) == "R S in 2h")
+            direction: .used)) == "R S\u{200A}in 2h")
     }
 
     @Test
@@ -1952,12 +1955,12 @@ struct MenuBarLayoutRendererTests {
             metric: .balance,
             comparison: .greaterThan,
             threshold: 10,
-            direction: .remaining)) == "S 25%")
+            direction: .remaining)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
             metric: .balance,
             comparison: .greaterThan,
             threshold: 10,
-            direction: .used)) == "R S in 2h")
+            direction: .used)) == "R S\u{200A}in 2h")
     }
 
     @Test
@@ -1965,24 +1968,24 @@ struct MenuBarLayoutRendererTests {
         #expect(self.branchText(self.clause(
             metric: .weeklyPace,
             comparison: .greaterThan,
-            threshold: 10)) == "S 25%")
+            threshold: 10)) == "S\u{200A}25%")
         // 2400 minutes == 40 hours.
         #expect(self.branchText(self.clause(
             metric: .runsOutIn,
             comparison: .lessThan,
-            threshold: 48)) == "S 25%")
+            threshold: 48)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
             metric: .runsOutIn,
             comparison: .lessThan,
-            threshold: 12)) == "R S in 2h")
+            threshold: 12)) == "R S\u{200A}in 2h")
         #expect(self.branchText(self.clause(
             metric: .costToday,
             comparison: .greaterThanOrEqual,
-            threshold: 1)) == "S 25%")
+            threshold: 1)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
             metric: .tertiaryLane,
             comparison: .greaterThan,
-            threshold: 10)) == "S 25%")
+            threshold: 10)) == "S\u{200A}25%")
     }
 
     @Test
@@ -1997,7 +2000,7 @@ struct MenuBarLayoutRendererTests {
             data: self.data(metrics: .unavailable),
             icon: nil,
             options: self.options(conditionals: [conditional]))
-        #expect(output.attributedTitle.string == "R S in 2h")
+        #expect(output.attributedTitle.string == "R S\u{200A}in 2h")
     }
 
     /// Regression guard for the title cache: a countdown predicate flips with nothing but the clock, and
@@ -2029,7 +2032,7 @@ struct MenuBarLayoutRendererTests {
             options: self.options(
                 now: self.now.addingTimeInterval(2 * 24 * 60 * 60),
                 conditionals: [conditional]))
-        #expect(after.attributedTitle.string == "S 25%")
+        #expect(after.attributedTitle.string == "S\u{200A}25%")
     }
 
     /// Renders a single-clause conditional whose then branch is the session percent and whose else
@@ -2066,14 +2069,14 @@ struct MenuBarLayoutRendererTests {
             data: self.data(),
             icon: nil,
             options: self.options(conditionals: [auto]))
-        #expect(withHeadroom.attributedTitle.string == "S 50%")
+        #expect(withHeadroom.attributedTitle.string == "S\u{200A}50%")
 
         let spent = renderer.render(
             layout: layout,
             data: self.data(automaticUsedPercent: 100),
             icon: nil,
             options: self.options(conditionals: [auto]))
-        #expect(spent.attributedTitle.string == "R S in 2h")
+        #expect(spent.attributedTitle.string == "R S\u{200A}in 2h")
     }
 
     @Test
@@ -2301,9 +2304,9 @@ struct MenuBarLayoutRendererTests {
         data.spendBudget = nil
         let expected: [(MenuBarLayoutToken, String)] = [
             (.percent(window: .spend), "$ –"),
-            (.pace(window: .spend), "P –"),
-            (.windowResetCountdown(window: .spend), "R –"),
-            (.windowResetAbsolute(window: .spend), "R –"),
+            (.pace(window: .spend), "P\u{200A}–"),
+            (.windowResetCountdown(window: .spend), "R\u{200A}–"),
+            (.windowResetAbsolute(window: .spend), "R\u{200A}–"),
             (.spendAmount, "–"),
             (.spendBudget, "–"),
         ]
@@ -2316,13 +2319,13 @@ struct MenuBarLayoutRendererTests {
 
     @Test
     func `spend pace renders its own delta and never borrows weekly pace`() {
-        #expect(self.renderToken(.pace(window: .spend)).attributedTitle.string == "P +6%")
+        #expect(self.renderToken(.pace(window: .spend)).attributedTitle.string == "P\u{200A}+6%")
 
         var data = self.data()
         data.spendPace = nil
         // Weekly pace is still resolved, yet the Spend token must not fall back to it.
         #expect(data.weeklyPace == "+11%")
-        #expect(self.renderToken(.pace(window: .spend), data: data).attributedTitle.string == "P –")
+        #expect(self.renderToken(.pace(window: .spend), data: data).attributedTitle.string == "P\u{200A}–")
 
         // The pace color reads the Spend delta as well: a reserve is green while weekly pace is a deficit.
         var reserve = MenuBarLayoutRenderMetrics.unavailable
@@ -2342,8 +2345,8 @@ struct MenuBarLayoutRendererTests {
         let reset = self.now.addingTimeInterval(12 * 24 * 60 * 60)
         let countdown = self.renderToken(.windowResetCountdown(window: .spend)).attributedTitle.string
         let absolute = self.renderToken(.windowResetAbsolute(window: .spend)).attributedTitle.string
-        #expect(countdown == "R " + UsageFormatter.resetCountdownDescription(from: reset, now: self.now))
-        #expect(absolute == "R " + UsageFormatter.resetDescription(from: reset, now: self.now))
+        #expect(countdown == "R\u{200A}" + UsageFormatter.resetCountdownDescription(from: reset, now: self.now))
+        #expect(absolute == "R\u{200A}" + UsageFormatter.resetDescription(from: reset, now: self.now))
         #expect(countdown != self.renderToken(.windowResetCountdown(window: .weekly)).attributedTitle.string)
     }
 
@@ -2367,44 +2370,45 @@ struct MenuBarLayoutRendererTests {
                 threshold: threshold,
                 direction: direction))
         }
-        #expect(usedAbove(40, .used) == "S 25%")
-        #expect(usedAbove(50, .used) == "R S in 2h")
-        #expect(usedAbove(50, .remaining) == "S 25%")
-        #expect(usedAbove(60, .remaining) == "R S in 2h")
+        #expect(usedAbove(40, .used) == "S\u{200A}25%")
+        #expect(usedAbove(50, .used) == "R S\u{200A}in 2h")
+        #expect(usedAbove(50, .remaining) == "S\u{200A}25%")
+        #expect(usedAbove(60, .remaining) == "R S\u{200A}in 2h")
     }
 
     @Test
     func `spend resets in and pace predicates read their own datum`() {
         #expect(self.branchText(self.clause(
-            metric: .spendResetsIn, comparison: .greaterThan, threshold: 200)) == "S 25%")
+            metric: .spendResetsIn, comparison: .greaterThan, threshold: 200)) == "S\u{200A}25%")
         // The weekly window resets in 72h; borrowing it would make this branch true.
         #expect(self.branchText(self.clause(
-            metric: .spendResetsIn, comparison: .lessThan, threshold: 100)) == "R S in 2h")
+            metric: .spendResetsIn, comparison: .lessThan, threshold: 100)) == "R S\u{200A}in 2h")
         #expect(self.branchText(self.clause(
-            metric: .spendPace, comparison: .greaterThan, threshold: 5)) == "S 25%")
+            metric: .spendPace, comparison: .greaterThan, threshold: 5)) == "S\u{200A}25%")
         // Weekly pace is +11; borrowing it would make this branch true.
         #expect(self.branchText(self.clause(
-            metric: .spendPace, comparison: .greaterThan, threshold: 8)) == "R S in 2h")
+            metric: .spendPace, comparison: .greaterThan, threshold: 8)) == "R S\u{200A}in 2h")
     }
 
     @Test
     func `spend amount predicate compares USD used and remaining and is false without a USD rate`() {
         #expect(self.branchText(self.clause(
-            metric: .spendAmount, comparison: .greaterThan, threshold: 450)) == "S 25%")
+            metric: .spendAmount, comparison: .greaterThan, threshold: 450)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
-            metric: .spendAmount, comparison: .greaterThan, threshold: 500, direction: .remaining)) == "S 25%")
+            metric: .spendAmount, comparison: .greaterThan, threshold: 500, direction: .remaining)) == "S\u{200A}25%")
         #expect(self.branchText(self.clause(
-            metric: .spendAmount, comparison: .greaterThan, threshold: 550, direction: .remaining)) == "R S in 2h")
+            metric: .spendAmount, comparison: .greaterThan, threshold: 550, direction: .remaining)) ==
+            "R S\u{200A}in 2h")
         // Balance and cost amounts never answer for the budget.
         #expect(self.branchText(self.clause(
-            metric: .spendAmount, comparison: .lessThan, threshold: 10)) == "R S in 2h")
+            metric: .spendAmount, comparison: .lessThan, threshold: 10)) == "R S\u{200A}in 2h")
 
         // Without a USD figure the datum is missing, even though the money token still renders.
         var unrated = self.data(metrics: .unavailable)
         unrated.spendAmount = "€390"
         #expect(self.branchText(
             self.clause(metric: .spendAmount, comparison: .greaterThanOrEqual, threshold: 0),
-            data: unrated) == "R S in 2h")
+            data: unrated) == "R S\u{200A}in 2h")
     }
 
     @Test

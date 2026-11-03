@@ -41,7 +41,10 @@ extension MenuBarLayoutRenderer {
             guard selection != .spend else { return nil }
             return (self.windowPrefix(selection, data: data), self.windowAccessibilityLabel(selection, data: data))
         }
-        let prefix = [metric, label?.short].compactMap(\.self).joined(separator: " ")
+        let weeklyReset = metric == "R" && (label?.short == "W" || window.flatMap {
+            self.window($0, data: data)?.windowMinutes
+        } == 10080)
+        let prefix = [metric, weeklyReset ? nil : label?.short].compactMap(\.self).joined(separator: " ")
         let accessibility = window == .automatic && label?.full != L("Usage")
             ? label.flatMap { label in rendered.accessibilityText.map { L("%@: %@", label.full, $0) } }
             ?? rendered.accessibilityText
@@ -90,7 +93,8 @@ extension MenuBarLayoutRenderer {
         attributes: [NSAttributedString.Key: Any]) -> NSAttributedString
     {
         guard !prefix.isEmpty else { return value }
-        let result = NSMutableAttributedString(string: "\(prefix) ", attributes: attributes)
+        let result = NSMutableAttributedString(
+            string: MenuBarDisplayText.prefixedStatusValue(prefix, value: ""), attributes: attributes)
         result.addAttribute(self.windowPrefixKey, value: true, range: NSRange(location: 0, length: result.length))
         result.append(value)
         return result
