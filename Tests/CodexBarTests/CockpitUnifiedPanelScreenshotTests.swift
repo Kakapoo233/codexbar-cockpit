@@ -70,6 +70,7 @@ struct CockpitUnifiedPanelScreenshotTests {
             try await Self.waitUntilIdle(controller)
 
             let plan = CockpitPlanStore(fileURL: temporary.appendingPathComponent("plan.json"))
+            store.cockpitPlanStore = plan
             let midnight = Calendar.current.startOfDay(for: now)
             plan.ingest([.claude: Self.quota(at: midnight, now: now, usedPercent: 0)])
             let quota = Self.quota(at: now, now: now, usedPercent: 12)
@@ -90,7 +91,11 @@ struct CockpitUnifiedPanelScreenshotTests {
                 let bridge = CockpitMenuBridge()
                 bridge.width = layout.menuCardWidth
                 let card = try Self.makeCard(
-                    quota: quota, tokens: tokens, now: now, width: bridge.width, language: language)
+                    quota: quota,
+                    tokens: tokens,
+                    recommendation: store.cockpitMenuBarRecommendation(provider: .claude, snapshot: quota, now: now),
+                    now: now,
+                    width: bridge.width)
                 let menu = Self.makeMenu(card: card)
                 bridge.reload(menu)
                 let navigation = CockpitPanelNavigation()
@@ -272,9 +277,9 @@ struct CockpitUnifiedPanelScreenshotTests {
     private static func makeCard(
         quota: UsageSnapshot,
         tokens: CostUsageTokenSnapshot,
+        recommendation: CockpitMenuBarRecommendation?,
         now: Date,
-        width: CGFloat,
-        language: String) throws -> NSHostingView<AnyView>
+        width: CGFloat) throws -> NSHostingView<AnyView>
     {
         let metadata = try #require(ProviderDefaults.metadata[.claude])
         let model = UsageMenuCardView.Model.make(.init(
@@ -296,11 +301,12 @@ struct CockpitUnifiedPanelScreenshotTests {
             sourceLabel: "synthetic",
             subtitleOverride: "合成额度与 Token 用量 · 未连接真实账号",
             hidePersonalInfo: false,
+            cockpitDailyRecommendation: recommendation,
             preferredCurrencyCode: "USD",
             now: now))
         let card = NSHostingView(rootView: AnyView(UsageMenuCardView(model: model, width: width)
                 .environment(\.colorScheme, .light)
-                .environment(\.locale, Locale(identifier: language))))
+                .environment(\.locale, codexBarLocalizedLocale())))
         card.appearance = NSAppearance(named: .aqua)
         card.frame = NSRect(x: 0, y: 0, width: width, height: max(1, ceil(card.fittingSize.height)))
         card.layoutSubtreeIfNeeded()
