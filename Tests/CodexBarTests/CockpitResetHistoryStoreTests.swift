@@ -5,32 +5,34 @@ import Testing
 
 @MainActor
 struct CockpitResetHistoryStoreTests {
-    @Test func `successful sync announces the next estimate once across refreshes and restarts`() async throws {
+    @Test func `history never notifies or supplies a date across refreshes and legacy cache restarts`() async throws {
         try await self.withFixture { fixture in
             let history = try fixture.history(anchor: "cycle-one")
+            try JSONEncoder().encode(["local:cycle-one"]).write(to: fixture.receiptsURL)
             let loader = Loader(history: history)
             let store = fixture.store(loader: loader)
-            #expect(store.history == nil)
-            #expect(await loader.calls == 0)
             store.start()
             defer { store.stop() }
             await store.refresh()
+            await store.refresh()
             #expect(store.history == history)
             #expect(store.lastSyncedAt == fixture.now)
-            #expect(fixture.notices.count == 1)
-            let notice = try #require(fixture.notices.first)
-            #expect(notice.isCurrent())
-            notice.completion(true)
-            await store.refresh()
-            #expect(fixture.notices.count == 1)
+            #expect(fixture.notices.isEmpty)
             store.stop()
 
             let reloaded = fixture.store(loader: loader)
             #expect(reloaded.history == history)
+            let accountReset = fixture.now.addingTimeInterval(7 * 86400)
+            #expect(reloaded.planningWindow(accountResetAt: accountReset, on: fixture.now)?.resetsAt == accountReset)
             reloaded.start()
             defer { reloaded.stop() }
             await reloaded.refresh()
-            #expect(fixture.notices.count == 1)
+            fixture.enabled = false
+            reloaded.notificationPreferenceDidChange()
+            fixture.enabled = true
+            reloaded.notificationPreferenceDidChange()
+            #expect(fixture.notices.isEmpty)
+            #expect(reloaded.planningWindow(accountResetAt: accountReset, on: fixture.now)?.source == .account)
         }
     }
 
@@ -43,13 +45,11 @@ struct CockpitResetHistoryStoreTests {
             #expect(fixture.notices.isEmpty)
             await loader.setFailure(true)
             let offline = fixture.store(loader: loader)
-            let cachedForecast = offline.forecast
             offline.start()
             defer { offline.stop() }
             await offline.refresh()
             #expect(offline.history == history)
             #expect(offline.lastSyncedAt == fixture.now)
-            #expect(offline.forecast == cachedForecast)
             #expect(offline.errorMessage != nil)
             #expect(fixture.notices.isEmpty)
         }
@@ -58,7 +58,9 @@ struct CockpitResetHistoryStoreTests {
     @Test func `failed delivery retries but disabling invalidates an in flight notice`() async throws {
         try await self.withFixture { fixture in
             let loader = try Loader(history: fixture.history(anchor: "retry-cycle"))
-            let store = fixture.store(loader: loader)
+            try await loader.setStatus(CockpitResetStatus(
+                generatedAt: fixture.now, scheduledReset: fixture.scheduled(id: "retry-cycle")))
+            let store = fixture.store(loader: loader, includesStatus: true)
             store.start()
             defer { store.stop() }
             await store.refresh()
@@ -85,15 +87,18 @@ struct CockpitResetHistoryStoreTests {
         }
     }
 
-    @Test func `a replacement estimate cancels old delivery and remembers only the current cycle`() async throws {
+    @Test func `a replacement announcement cancels old delivery and remembers only the current plan`() async throws {
         try await self.withFixture { fixture in
             let loader = try Loader(history: fixture.history(anchor: "old-cycle"))
-            let store = fixture.store(loader: loader)
+            try await loader.setStatus(CockpitResetStatus(
+                generatedAt: fixture.now, scheduledReset: fixture.scheduled(id: "old-cycle")))
+            let store = fixture.store(loader: loader, includesStatus: true)
             store.start()
             defer { store.stop() }
             await store.refresh()
             let old = try #require(fixture.notices.last)
-            try await loader.setHistory(fixture.history(anchor: "new-cycle", shift: 3600))
+            try await loader.setStatus(CockpitResetStatus(
+                generatedAt: fixture.now, scheduledReset: fixture.scheduled(id: "new-cycle")))
             await store.refresh()
             #expect(!old.isCurrent())
             old.completion(true)
@@ -102,23 +107,21 @@ struct CockpitResetHistoryStoreTests {
             #expect(current.isCurrent())
             current.completion(true)
             let receipts = try JSONDecoder().decode([String].self, from: Data(contentsOf: fixture.receiptsURL))
-            #expect(receipts == ["local:new-cycle"])
+            #expect(receipts == ["scheduled:new-cycle"])
         }
     }
 
-    @Test func `overdue estimates are retained without announcing a fictional next cycle`() async throws {
+    @Test func `old history remains visible without announcing a fictional next cycle`() async throws {
         try await self.withFixture { fixture in
             let loader = try Loader(history: fixture.history(anchor: "overdue", shift: -4 * 86400))
             let store = fixture.store(loader: loader)
             store.start()
             defer { store.stop() }
             await store.refresh()
-            let forecast = try #require(store.forecast)
-            #expect(forecast.isOverdue(at: fixture.now))
+            let history = try #require(store.history)
             #expect(fixture.notices.isEmpty)
-            let estimatedAt = forecast.estimatedAt
             await store.refresh()
-            #expect(store.forecast?.estimatedAt == estimatedAt)
+            #expect(store.history == history)
         }
     }
 
@@ -158,7 +161,10 @@ struct CockpitResetHistoryStoreTests {
             try original.write(to: fixture.cacheURL)
             try original.write(to: fixture.receiptsURL)
             let history = try fixture.history(anchor: "preserved")
-            let store = fixture.store(loader: Loader(history: history))
+            let loader = Loader(history: history)
+            try await loader.setStatus(CockpitResetStatus(
+                generatedAt: fixture.now, scheduledReset: fixture.scheduled(id: "preserved")))
+            let store = fixture.store(loader: loader, includesStatus: true)
             #expect(store.errorMessage != nil)
             #expect(store.notificationErrorMessage != nil)
             store.start()
@@ -317,12 +323,15 @@ struct CockpitResetHistoryStoreTests {
     @Test func `stale submission cleanup cannot remove a newer delivery of the same candidate`() async throws {
         try await self.withFixture { fixture in
             let loader = try Loader(history: fixture.history(anchor: "same-candidate"))
+            try await loader.setStatus(CockpitResetStatus(
+                generatedAt: fixture.now, scheduledReset: fixture.scheduled(id: "same-candidate")))
             var visible: Set<String> = []
             let store = CockpitResetHistoryStore(
                 cacheURL: fixture.cacheURL,
                 receiptsURL: fixture.receiptsURL,
                 notificationsEnabled: { fixture.enabled },
                 fetch: { try await loader.load() },
+                fetchStatus: { try await loader.loadStatus() },
                 now: { fixture.now },
                 post: { fixture.notices.append($0) },
                 remove: {
@@ -368,11 +377,11 @@ struct CockpitResetHistoryStoreTests {
             #expect(!fixture.removed.contains(second.identifier))
             #expect(store.notificationErrorMessage == nil)
             let receipts = try JSONDecoder().decode([String].self, from: Data(contentsOf: fixture.receiptsURL))
-            #expect(receipts == ["local:same-candidate"])
+            #expect(receipts == ["scheduled:same-candidate"])
         }
     }
 
-    @Test func `an older status snapshot does not suppress a newer history estimate`() async throws {
+    @Test func `an older status snapshot never revives local historical estimates`() async throws {
         try await self.withFixture { fixture in
             let history = try fixture.history(anchor: "newer-history")
             let loader = Loader(history: history)
@@ -381,9 +390,7 @@ struct CockpitResetHistoryStoreTests {
             store.start()
             defer { store.stop() }
             await store.refresh()
-            let notice = try #require(fixture.notices.first)
-            #expect(notice.title == L("cockpit_reset_forecast_notification_title"))
-            #expect(notice.isCurrent())
+            #expect(fixture.notices.isEmpty)
         }
     }
 

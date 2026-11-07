@@ -2890,13 +2890,13 @@
 "cockpit_reset_show_date" = "Visa datum";
 "cockpit_reset_forecast_basis" = "Medianen av de senaste %@ intervallen mellan ordinarie återställningar inom 180 dagar. En uppskattning, inget officiellt löfte.";
 "cockpit_reset_forecast_overdue" = "Den uppskattade tiden har passerat. Ingen ny återställning är bekräftad; inväntar nya meddelanden.";
-"cockpit_reset_forecast_unavailable" = "Det finns inte tillräckligt med aktuell historik över ordinarie återställningar för att uppskatta ett datum.";
+"cockpit_reset_no_pending_notice" = "Inget väntande återställningsbesked eller aktiv varning.";
 "cockpit_reset_history_note" = "Datumen följer meddelandets eller observationens tidpunkt. Offentliga meddelanden bekräftar inte att ditt konto har återställts.";
 "cockpit_reset_original" = "Visa källa ↗";
 "cockpit_reset_observed_source" = "Observation från gemenskapen · Data från";
 "cockpit_reset_announcement_source" = "Offentligt meddelande · Data från";
 "cockpit_reset_notice_setting_title" = "Förhandsbesked om Codex-återställning";
-"cockpit_reset_notice_setting_subtitle" = "Meddela så snart ett nytt meddelande, en webbplatsprognos eller en lokal uppskattning finns. Öppna notisen för att visa kalendern.";
+"cockpit_reset_notice_setting_subtitle" = "Meddela så snart ett nytt meddelande eller en ny webbplatsprognos finns. Öppna notisen för att visa kalendern.";
 "cockpit_reset_sync_failed" = "Synkroniseringen misslyckades; cachade data har bevarats: %@";
 "cockpit_reset_cache_read_failed" = "Det går inte att läsa återställningscachen; originalfilen har bevarats: %@";
 "cockpit_reset_cache_save_failed" = "Det går inte att spara återställningscachen: %@";

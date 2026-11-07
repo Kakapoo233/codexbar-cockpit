@@ -2890,13 +2890,13 @@
 "cockpit_reset_show_date" = "Mostrar a data";
 "cockpit_reset_forecast_basis" = "Mediana dos últimos %@ intervalos de restablecemento ordinario en 180 días. É unha estimación, non un compromiso oficial.";
 "cockpit_reset_forecast_overdue" = "A hora estimada xa pasou. Non se confirmou ningún restablecemento novo; agárdanse anuncios actualizados.";
-"cockpit_reset_forecast_unavailable" = "Non hai suficientes restablecementos ordinarios recentes para estimar unha data.";
+"cockpit_reset_no_pending_notice" = "Non hai anuncios de reinicio pendentes nin alertas activas.";
 "cockpit_reset_history_note" = "As datas corresponden á hora do anuncio ou da observación. Un anuncio público non confirma o restablecemento da túa conta.";
 "cockpit_reset_original" = "Ver a fonte ↗";
 "cockpit_reset_observed_source" = "Observación da comunidade · Fonte dos datos";
 "cockpit_reset_announcement_source" = "Anuncio público · Fonte dos datos";
 "cockpit_reset_notice_setting_title" = "Avisos de restablecemento de Codex";
-"cockpit_reset_notice_setting_subtitle" = "Notificar en canto haxa un anuncio, unha previsión do sitio ou unha estimación local novos. Abre a notificación para ver o calendario.";
+"cockpit_reset_notice_setting_subtitle" = "Notificar en canto haxa un anuncio novo ou unha previsión nova do sitio. Abre a notificación para ver o calendario.";
 "cockpit_reset_sync_failed" = "Fallou a sincronización; conservouse a caché: %@";
 "cockpit_reset_cache_read_failed" = "Non se pode ler a caché de restablecementos; conservouse o ficheiro orixinal: %@";
 "cockpit_reset_cache_save_failed" = "Non se pode gardar a caché de restablecementos: %@";

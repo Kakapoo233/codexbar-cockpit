@@ -1,5 +1,5 @@
 import { MAX_DAILY_OBSERVED_PERCENT } from "../types";
-import type { ActivityEvent, DailyPaceBaseline, DailyRecommendationRecord, DailyUsageSummary, Language, ProviderId, ProviderSnapshot, QuotaHistoryPoint, ResetForecast, RuntimeState } from "../types";
+import type { ActivityEvent, DailyPaceBaseline, DailyRecommendationRecord, DailyUsageSummary, Language, ProviderId, ProviderSnapshot, QuotaHistoryPoint, RuntimeState } from "../types";
 import { normalizeComfortFeedbackRecords, normalizeComfortPromptedKeys } from "./comfortFeedback";
 import type { RecentCodexReset } from "./resetDetection";
 import { DEFAULT_PROVIDER_ORDER, normalizeProviderOrder } from "./providers";
@@ -146,13 +146,6 @@ function dailyPaceBaseline(value: unknown): DailyPaceBaseline | null {
     cycleStartRemainingPercent: typeof candidate.cycleStartRemainingPercent === "number" && Number.isFinite(candidate.cycleStartRemainingPercent)
       ? Math.min(100, Math.max(0, candidate.cycleStartRemainingPercent))
       : 100,
-    planningResetsAt: validDate(candidate.planningResetsAt) ? candidate.planningResetsAt : candidate.resetsAt,
-    resetForecastScore: typeof candidate.resetForecastScore === "number" && Number.isFinite(candidate.resetForecastScore)
-      ? Math.min(100, Math.max(0, candidate.resetForecastScore))
-      : null,
-    resetForecastWindowHours: typeof candidate.resetForecastWindowHours === "number" && Number.isFinite(candidate.resetForecastWindowHours)
-      ? Math.max(0, candidate.resetForecastWindowHours)
-      : null,
   };
 }
 
@@ -312,13 +305,12 @@ export function recordSnapshotActivity(
   now = new Date(),
   language: Language = "en",
   notificationCooldownMinutes = 120,
-  resetForecast: ResetForecast | null = null,
 ): RuntimeUpdate {
   const occurredAt = now.toISOString();
   const isNewReset = recentReset !== null
     && !current.events.some((item) => item.kind === "reset" && item.occurredAt === recentReset.resetAt);
   const resetProviders = isNewReset ? new Set<string>(["codex"]) : new Set<string>();
-  const dailyPaceBaselines = refreshDailyPaceBaselines(current.dailyPaceBaselines, nextSnapshots, now, resetProviders, resetForecast);
+  const dailyPaceBaselines = refreshDailyPaceBaselines(current.dailyPaceBaselines, nextSnapshots, now, resetProviders);
   const lastNotifications = isNewReset
     ? Object.fromEntries(Object.entries(current.lastNotifications).filter(([key]) => !key.split(":").includes("codex")))
     : current.lastNotifications;

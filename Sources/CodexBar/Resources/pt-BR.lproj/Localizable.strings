@@ -2891,13 +2891,13 @@
 "cockpit_reset_show_date" = "Ver data";
 "cockpit_reset_forecast_basis" = "Mediana dos últimos %@ intervalos entre redefinições regulares em 180 dias. É uma estimativa, não um compromisso oficial.";
 "cockpit_reset_forecast_overdue" = "O horário estimado já passou. Nenhuma nova redefinição foi confirmada; aguardando novos anúncios.";
-"cockpit_reset_forecast_unavailable" = "Não há histórico recente suficiente de redefinições regulares para estimar uma data.";
+"cockpit_reset_no_pending_notice" = "Nenhum anúncio de redefinição pendente ou alerta ativo.";
 "cockpit_reset_history_note" = "As datas seguem o horário do anúncio ou da observação. Anúncios públicos não confirmam uma redefinição na sua conta.";
 "cockpit_reset_original" = "Ver fonte ↗";
 "cockpit_reset_observed_source" = "Observação da comunidade · Dados de";
 "cockpit_reset_announcement_source" = "Anúncio público · Dados de";
 "cockpit_reset_notice_setting_title" = "Avisos de redefinição do Codex";
-"cockpit_reset_notice_setting_subtitle" = "Avisar assim que houver um novo anúncio, uma previsão do site ou uma estimativa local. Abra a notificação para ver o calendário.";
+"cockpit_reset_notice_setting_subtitle" = "Avisar assim que houver um novo anúncio ou uma nova previsão do site. Abra a notificação para ver o calendário.";
 "cockpit_reset_sync_failed" = "Falha na sincronização; dados em cache preservados: %@";
 "cockpit_reset_cache_read_failed" = "Não foi possível ler o cache de redefinições; o arquivo original foi preservado: %@";
 "cockpit_reset_cache_save_failed" = "Não foi possível salvar o cache de redefinições: %@";

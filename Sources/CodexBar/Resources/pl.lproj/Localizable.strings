@@ -2894,13 +2894,13 @@
 "cockpit_reset_show_date" = "Pokaż datę";
 "cockpit_reset_forecast_basis" = "Mediana ostatnich %@ odstępów między zwykłymi resetami w ciągu 180 dni. To szacunek, a nie oficjalna obietnica.";
 "cockpit_reset_forecast_overdue" = "Szacowany termin minął. Nowy reset nie jest potwierdzony; oczekiwanie na nowe ogłoszenia.";
-"cockpit_reset_forecast_unavailable" = "Za mało niedawnych zwykłych resetów, aby oszacować termin.";
+"cockpit_reset_no_pending_notice" = "Brak oczekujących zapowiedzi resetu i aktywnych ostrzeżeń.";
 "cockpit_reset_history_note" = "Daty odpowiadają czasom ogłoszeń lub obserwacji. Publiczne ogłoszenie nie potwierdza resetu na Twoim koncie.";
 "cockpit_reset_original" = "Zobacz źródło ↗";
 "cockpit_reset_observed_source" = "Obserwacja społeczności · Źródło danych";
 "cockpit_reset_announcement_source" = "Ogłoszenie publiczne · Źródło danych";
 "cockpit_reset_notice_setting_title" = "Zapowiedzi resetów Codex";
-"cockpit_reset_notice_setting_subtitle" = "Powiadamiaj od razu po pojawieniu się ogłoszenia, prognozy witryny lub lokalnego szacunku. Kliknij powiadomienie, aby otworzyć kalendarz.";
+"cockpit_reset_notice_setting_subtitle" = "Powiadamiaj od razu po pojawieniu się nowego ogłoszenia lub prognozy witryny. Kliknij powiadomienie, aby otworzyć kalendarz.";
 "cockpit_reset_sync_failed" = "Synchronizacja nie powiodła się; zachowano pamięć podręczną: %@";
 "cockpit_reset_cache_read_failed" = "Nie można odczytać pamięci resetów; zachowano oryginalny plik: %@";
 "cockpit_reset_cache_save_failed" = "Nie można zapisać pamięci resetów: %@";

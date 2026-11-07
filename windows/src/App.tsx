@@ -108,7 +108,7 @@ export default function App() {
         setError(zh ? "额度刷新失败，保留上次快照。" : "Quota refresh failed; the previous snapshot is retained.");
       }
       if (results[1].status === "fulfilled") setForecast(results[1].value);
-      // A failed public request must not erase a cache or turn an estimate into a confirmed notice.
+      // Keep the last public reset data if the request rejects.
       setRefreshing(false);
     }
     refreshBusy.current = false;

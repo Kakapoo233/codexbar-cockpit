@@ -5,34 +5,22 @@ import Testing
 
 @MainActor
 struct CockpitResetCalendarProjectionTests {
-    @Test(arguments: [-3600.0, 3600.0])
-    func `a newer public reset suppresses the old calendar estimate but an older status does not`(
-        statusOffset: TimeInterval) async throws
-    {
+    @Test
+    func `historical resets remain available without an upcoming notice`() async throws {
         let now = Date()
         let history = try Self.history(now: now)
-        let anchor = try #require(history.events.first)
-        let latest = try CockpitResetEvent(
-            id: "status-latest",
-            kind: .regular,
-            announcedAt: anchor.announcedAt.addingTimeInterval(statusOffset),
-            text: "Synthetic observation",
-            sourceType: "observed",
-            sourceURL: CockpitResetHistoryClient.websiteURL)
-        let status = CockpitResetStatus(
-            generatedAt: now,
-            latestReset: latest)
         try await Self.withStore(
             history: history,
-            status: status)
+            status: CockpitResetStatus(generatedAt: now))
         { store in
-            #expect(store.forecast != nil)
-            #expect((store.calendarLocalForecast == nil) == (statusOffset > 0))
+            #expect(store.history?.events == history.events)
+            #expect(store.pendingCalendarReset == nil)
+            #expect(store.activeCalendarWatch == nil)
         }
     }
 
     @Test
-    func `an undated scheduled announcement stays undated and supersedes a local estimate`() async throws {
+    func `an undated scheduled announcement stays undated`() async throws {
         let now = Date()
         let reset = try CockpitScheduledReset(
             id: "upcoming",
@@ -49,12 +37,11 @@ struct CockpitResetCalendarProjectionTests {
         { store in
             #expect(store.pendingCalendarReset?.id == "upcoming")
             #expect(store.pendingCalendarReset?.scheduledFor == nil)
-            #expect(store.calendarLocalForecast == nil)
         }
     }
 
     @Test(arguments: [-3600.0, 3600.0])
-    func `only an unexpired website watch takes precedence in the calendar`(expiryOffset: TimeInterval) async throws {
+    func `only an unexpired website watch appears in the calendar`(expiryOffset: TimeInterval) async throws {
         let now = Date()
         let watch = try CockpitResetWatch(
             id: "watch",
@@ -73,7 +60,6 @@ struct CockpitResetCalendarProjectionTests {
             status: status)
         { store in
             #expect((store.activeCalendarWatch != nil) == (expiryOffset > 0))
-            #expect((store.calendarLocalForecast == nil) == (expiryOffset > 0))
         }
     }
 

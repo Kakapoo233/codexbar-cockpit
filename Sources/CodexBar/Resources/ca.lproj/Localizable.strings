@@ -2893,13 +2893,13 @@
 "cockpit_reset_show_date" = "Mostra la data";
 "cockpit_reset_forecast_basis" = "Mediana dels darrers %@ intervals de restabliment ordinari en 180 dies. És una estimació, no un compromís oficial.";
 "cockpit_reset_forecast_overdue" = "L'hora estimada ja ha passat. No s'ha confirmat cap restabliment nou; s'esperen anuncis actualitzats.";
-"cockpit_reset_forecast_unavailable" = "No hi ha prou restabliments ordinaris recents per estimar una data.";
+"cockpit_reset_no_pending_notice" = "No hi ha cap anunci de restabliment pendent ni cap alerta activa.";
 "cockpit_reset_history_note" = "Les dates corresponen a l'hora de l'anunci o l'observació. Un anunci públic no confirma el restabliment del teu compte.";
 "cockpit_reset_original" = "Mostra la font ↗";
 "cockpit_reset_observed_source" = "Observació de la comunitat · Font de dades";
 "cockpit_reset_announcement_source" = "Anunci públic · Font de dades";
 "cockpit_reset_notice_setting_title" = "Avisos de restabliment de Codex";
-"cockpit_reset_notice_setting_subtitle" = "Notifica tan aviat com hi hagi un anunci, una previsió del web o una estimació local nous. Obre la notificació per veure el calendari.";
+"cockpit_reset_notice_setting_subtitle" = "Notifica tan aviat com hi hagi un anunci nou o una previsió nova del web. Obre la notificació per veure el calendari.";
 "cockpit_reset_sync_failed" = "La sincronització ha fallat; s'ha conservat la memòria cau: %@";
 "cockpit_reset_cache_read_failed" = "No es pot llegir la memòria de restabliments; s'ha conservat el fitxer original: %@";
 "cockpit_reset_cache_save_failed" = "No es pot desar la memòria de restabliments: %@";

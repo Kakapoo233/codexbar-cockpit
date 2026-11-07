@@ -84,7 +84,7 @@ struct CockpitUnifiedPanelScreenshotTests {
             let resetStore = try Self.makeResetStore(in: temporary, now: now)
             await resetStore.refresh()
             #expect(resetStore.history?.events.count == 6)
-            #expect(resetStore.forecast != nil)
+            #expect(resetStore.history?.events.isEmpty == false)
 
             for size in [CockpitPanelLayout.preferredSize, CGSize(width: 676, height: 460)] {
                 let layout = CockpitPanelLayout(width: size.width)

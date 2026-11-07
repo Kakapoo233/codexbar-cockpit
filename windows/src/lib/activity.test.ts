@@ -277,15 +277,6 @@ describe("activity timeline and notification policy", () => {
       { resetAt: "2026-07-19T03:00:00Z", detectedAt: "2026-07-19T03:00:00Z", source: "observed" },
       15,
       new Date("2026-07-19T03:00:00Z"),
-      "en",
-      120,
-      {
-        score: 90,
-        windowHours: 48,
-        fetchedAt: "2026-07-19T03:00:00Z",
-        resetAnnounced: false,
-        sourceUrl: "https://codex-resets.com/",
-      },
     );
     const baseline = afterReset.state.dailyPaceBaselines["codex:weekly"];
 
@@ -294,8 +285,6 @@ describe("activity timeline and notification policy", () => {
     expect(baseline.capturedAt).toBe("2026-07-19T03:00:00.000Z");
     expect(baseline.cycleStartedAt).toBe("2026-07-19T03:00:00.000Z");
     expect(baseline.cycleStartRemainingPercent).toBe(100);
-    expect(baseline.planningResetsAt).toBe("2026-08-01T00:00:00Z");
-    expect(baseline.resetForecastScore).toBeNull();
     expect(afterReset.state.lastNotifications).toEqual({ "quota:volcengine": "2026-07-19T02:30:00Z" });
     expect(afterReset.createdEvents).toEqual(expect.arrayContaining([expect.objectContaining({ kind: "reset" })]));
 
@@ -317,7 +306,7 @@ describe("activity timeline and notification policy", () => {
     )).toBe(true);
   });
 
-  it("loads pre-Radar daily baselines with the weekly reset as their fallback", () => {
+  it("loads legacy daily baselines using the account reset and discards old estimates", () => {
     const normalized = normalizeRuntimeState({
       dailyPaceBaselines: {
         "codex:weekly": {
@@ -327,15 +316,23 @@ describe("activity timeline and notification policy", () => {
           capturedAt: "2026-07-19T01:00:00Z",
           remainingPercent: 50,
           resetsAt: "2026-07-25T00:00:00Z",
+          planningResetsAt: "2026-07-21T00:00:00Z",
+          resetForecastScore: 90,
+          resetForecastWindowHours: 24,
         },
       },
     });
 
-    expect(normalized.dailyPaceBaselines["codex:weekly"]).toEqual(expect.objectContaining({
-      planningResetsAt: "2026-07-25T00:00:00Z",
-      resetForecastScore: null,
-      resetForecastWindowHours: null,
-    }));
+    expect(normalized.dailyPaceBaselines["codex:weekly"]).toEqual({
+      provider: "codex",
+      period: "weekly",
+      localDate: "2026-07-19",
+      capturedAt: "2026-07-19T01:00:00Z",
+      remainingPercent: 50,
+      resetsAt: "2026-07-25T00:00:00Z",
+      cycleStartedAt: "2026-07-18T00:00:00.000Z",
+      cycleStartRemainingPercent: 100,
+    });
   });
 
   it("migrates legacy saved styles and preserves newer layout variations", () => {

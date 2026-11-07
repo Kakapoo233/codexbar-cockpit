@@ -2890,13 +2890,13 @@
 "cockpit_reset_show_date" = "Voir la date";
 "cockpit_reset_forecast_basis" = "Médiane des %@ derniers intervalles de réinitialisation régulière sur 180 jours. Une estimation, pas un engagement officiel.";
 "cockpit_reset_forecast_overdue" = "L’heure estimée est passée. Aucune nouvelle réinitialisation n’est confirmée ; en attente d’annonces.";
-"cockpit_reset_forecast_unavailable" = "L’historique récent des réinitialisations régulières est insuffisant pour estimer une date.";
+"cockpit_reset_no_pending_notice" = "Aucune annonce de réinitialisation en attente ni veille active.";
 "cockpit_reset_history_note" = "Les dates suivent l’heure d’annonce ou d’observation. Une annonce publique ne confirme pas la réinitialisation de votre compte.";
 "cockpit_reset_original" = "Voir la source ↗";
 "cockpit_reset_observed_source" = "Observation communautaire · Données de";
 "cockpit_reset_announcement_source" = "Annonce publique · Données de";
 "cockpit_reset_notice_setting_title" = "Préavis de réinitialisation Codex";
-"cockpit_reset_notice_setting_subtitle" = "Prévenir dès qu’une annonce, une prévision du site ou une estimation locale est disponible. Ouvrez la notification pour afficher le calendrier.";
+"cockpit_reset_notice_setting_subtitle" = "Prévenir dès qu’une annonce ou une prévision du site est disponible. Ouvrez la notification pour afficher le calendrier.";
 "cockpit_reset_sync_failed" = "Échec de la synchronisation ; données en cache conservées : %@";
 "cockpit_reset_cache_read_failed" = "Impossible de lire le cache des réinitialisations ; le fichier d’origine a été conservé : %@";
 "cockpit_reset_cache_save_failed" = "Impossible d’enregistrer le cache des réinitialisations : %@";

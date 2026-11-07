@@ -2883,13 +2883,13 @@
 "cockpit_reset_show_date" = "查看日期";
 "cockpit_reset_forecast_basis" = "根据近 180 天内最近 %@ 次常规重置间隔的中位数估算，不代表官方承诺。";
 "cockpit_reset_forecast_overdue" = "估算时间已过，尚未确认新重置，等待公告更新。";
-"cockpit_reset_forecast_unavailable" = "近期常规重置记录不足，暂无法估算日期。";
+"cockpit_reset_no_pending_notice" = "暂无待执行的重置公告或生效中的预警。";
 "cockpit_reset_history_note" = "按公告或观察时间归入日期；公开公告不代表你的账户已完成重置。";
 "cockpit_reset_original" = "查看来源 ↗";
 "cockpit_reset_observed_source" = "社区观察 · 数据来源";
 "cockpit_reset_announcement_source" = "公开公告 · 数据来源";
 "cockpit_reset_notice_setting_title" = "Codex 重置预告提醒";
-"cockpit_reset_notice_setting_subtitle" = "发现新的重置预告、网站预测或本机估算时尽早提醒；点击通知打开日历。";
+"cockpit_reset_notice_setting_subtitle" = "发现新的重置预告或网站预测时尽早提醒。点击通知打开日历。";
 "cockpit_reset_sync_failed" = "同步失败，已保留缓存：%@";
 "cockpit_reset_cache_read_failed" = "无法读取重置缓存，已保留原文件：%@";
 "cockpit_reset_cache_save_failed" = "重置缓存保存失败：%@";

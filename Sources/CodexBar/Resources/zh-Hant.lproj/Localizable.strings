@@ -2869,13 +2869,13 @@
 "cockpit_reset_show_date" = "查看日期";
 "cockpit_reset_forecast_basis" = "依近 180 天內最近 %@ 次常規重置間隔的中位數估算，不代表官方承諾。";
 "cockpit_reset_forecast_overdue" = "估算時間已過，尚未確認新重置，等待公告更新。";
-"cockpit_reset_forecast_unavailable" = "近期常規重置紀錄不足，暫時無法估算日期。";
+"cockpit_reset_no_pending_notice" = "目前沒有待執行的重置公告或生效中的預警。";
 "cockpit_reset_history_note" = "依公告或觀察時間歸入日期；公開公告不代表你的帳號已完成重置。";
 "cockpit_reset_original" = "查看來源 ↗";
 "cockpit_reset_observed_source" = "社群觀察 · 資料來源";
 "cockpit_reset_announcement_source" = "公開公告 · 資料來源";
 "cockpit_reset_notice_setting_title" = "Codex 重置預告提醒";
-"cockpit_reset_notice_setting_subtitle" = "發現新的重置預告、網站預測或本機估算時儘早提醒；點按通知以開啟月曆。";
+"cockpit_reset_notice_setting_subtitle" = "發現新的重置預告或網站預測時儘早提醒。點按通知以開啟月曆。";
 "cockpit_reset_sync_failed" = "同步失敗，已保留快取：%@";
 "cockpit_reset_cache_read_failed" = "無法讀取重置快取，已保留原始檔案：%@";
 "cockpit_reset_cache_save_failed" = "無法儲存重置快取：%@";

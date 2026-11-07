@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.30 — Remove local reset-date estimates
+
+- Remove historical reset-date extrapolation, its calendar markers and notices, and its effect on daily planning.
+- Keep historical records, account reset times, confirmed announcements and explicitly labeled website watches.
+- Ignore legacy local planning-date hints on Windows; update calendar empty states and notification settings text.
+
 ## 0.8.29 — Plain numeric readouts
 
 - Remove comparison-sign prefixes from allowance, pace, statistics, calendar and receipt values across Mac and Windows UI.

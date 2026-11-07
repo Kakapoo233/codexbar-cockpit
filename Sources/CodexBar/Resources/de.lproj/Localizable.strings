@@ -2889,13 +2889,13 @@
 "cockpit_reset_show_date" = "Datum anzeigen";
 "cockpit_reset_forecast_basis" = "Median der letzten %@ regulären Reset-Intervalle innerhalb von 180 Tagen. Eine Schätzung, keine offizielle Zusage.";
 "cockpit_reset_forecast_overdue" = "Der geschätzte Zeitpunkt ist verstrichen. Ein neuer Reset ist nicht bestätigt; weitere Ankündigungen werden abgewartet.";
-"cockpit_reset_forecast_unavailable" = "Der aktuelle Verlauf regulärer Resets reicht für eine Datumsschätzung nicht aus.";
+"cockpit_reset_no_pending_notice" = "Keine bevorstehende Reset-Ankündigung oder aktive Warnung.";
 "cockpit_reset_history_note" = "Die Datierung folgt Ankündigungs- oder Beobachtungszeiten. Öffentliche Ankündigungen bestätigen keinen Reset Ihres Kontos.";
 "cockpit_reset_original" = "Quelle ansehen ↗";
 "cockpit_reset_observed_source" = "Community-Beobachtung · Daten von";
 "cockpit_reset_announcement_source" = "Öffentliche Ankündigung · Daten von";
 "cockpit_reset_notice_setting_title" = "Codex-Reset-Vorschau";
-"cockpit_reset_notice_setting_subtitle" = "Sobald eine neue Ankündigung, Website-Prognose oder lokale Schätzung vorliegt, benachrichtigen. Die Benachrichtigung öffnet den Kalender.";
+"cockpit_reset_notice_setting_subtitle" = "Sobald eine neue Ankündigung oder Website-Prognose vorliegt, benachrichtigen. Die Benachrichtigung öffnet den Kalender.";
 "cockpit_reset_sync_failed" = "Synchronisierung fehlgeschlagen; Cache-Daten beibehalten: %@";
 "cockpit_reset_cache_read_failed" = "Der Reset-Cache kann nicht gelesen werden; die Originaldatei wurde beibehalten: %@";
 "cockpit_reset_cache_save_failed" = "Der Reset-Cache kann nicht gespeichert werden: %@";

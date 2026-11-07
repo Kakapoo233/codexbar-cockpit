@@ -170,8 +170,9 @@ the same page again when the button's standard activation follows the initial pr
 - `CockpitResetHistoryStore` is owned by the status controller for the application lifetime, independent
   of popover visibility. History and status refresh independently, retain their last successful caches,
   and publish early notices with durable deduplication. Disabling notices invalidates in-flight delivery.
-- Local reset estimates use the median of up to ten recent regular-reset intervals within 180 days.
-  They remain explicitly approximate; an overdue estimate is not rolled forward as a new prediction.
+- Local history never supplies an estimated future reset date, calendar marker, notification or planning
+  deadline, including when restoring older caches. Only a fresh dated announcement can shorten the
+  account-provided planning deadline. Website watch probabilities remain separate from precise dates.
   Scheduled times are grouped using the calendar reporting zone; unknown times stay undated.
 - Settings remain in the canonical preferences window, including explicit import from CodexBar.
 - The optional English status-text preference is scoped to synchronous top-menu-bar rendering and

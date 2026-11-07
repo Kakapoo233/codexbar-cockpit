@@ -308,9 +308,6 @@ describe("QuotaCard platform ledger", () => {
               resetsAt: "2026-07-25T00:00:00Z",
               cycleStartedAt: "2026-07-18T00:00:00Z",
               cycleStartRemainingPercent: 100,
-              planningResetsAt: "2026-07-25T00:00:00Z",
-              resetForecastScore: null,
-              resetForecastWindowHours: null,
             },
           }}
           resetForecast={{

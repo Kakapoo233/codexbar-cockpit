@@ -2888,13 +2888,13 @@
 "cockpit_reset_show_date" = "Datum tonen";
 "cockpit_reset_forecast_basis" = "Mediaan van de laatste %@ intervallen tussen reguliere resets binnen 180 dagen. Een schatting, geen officiële toezegging.";
 "cockpit_reset_forecast_overdue" = "Het geschatte tijdstip is verstreken. Er is geen nieuwe reset bevestigd; er wordt gewacht op nieuwe aankondigingen.";
-"cockpit_reset_forecast_unavailable" = "Er zijn onvoldoende recente reguliere resets om een datum te schatten.";
+"cockpit_reset_no_pending_notice" = "Geen openstaande resetaankondiging of actieve waarschuwing.";
 "cockpit_reset_history_note" = "Datums volgen het tijdstip van de aankondiging of waarneming. Openbare aankondigingen bevestigen geen reset van je account.";
 "cockpit_reset_original" = "Bron bekijken ↗";
 "cockpit_reset_observed_source" = "Waarneming uit de gemeenschap · Gegevens van";
 "cockpit_reset_announcement_source" = "Openbare aankondiging · Gegevens van";
 "cockpit_reset_notice_setting_title" = "Vooruitblik op Codex-resets";
-"cockpit_reset_notice_setting_subtitle" = "Meld zodra er een nieuwe aankondiging, websitevoorspelling of lokale schatting is. Open de melding om de kalender te bekijken.";
+"cockpit_reset_notice_setting_subtitle" = "Meld zodra er een nieuwe aankondiging of websitevoorspelling is. Open de melding om de kalender te bekijken.";
 "cockpit_reset_sync_failed" = "Synchroniseren mislukt; gegevens in de cache behouden: %@";
 "cockpit_reset_cache_read_failed" = "De resetcache kan niet worden gelezen; het oorspronkelijke bestand is behouden: %@";
 "cockpit_reset_cache_save_failed" = "De resetcache kan niet worden opgeslagen: %@";

@@ -2891,13 +2891,13 @@
 "cockpit_reset_show_date" = "日付を表示";
 "cockpit_reset_forecast_basis" = "過去180日間の直近%@回の通常リセット間隔の中央値による推定です。公式の確約ではありません。";
 "cockpit_reset_forecast_overdue" = "推定時刻を過ぎました。新しいリセットは未確認です。告知の更新を待っています。";
-"cockpit_reset_forecast_unavailable" = "最近の通常リセット履歴が不足しているため、日付を推定できません。";
+"cockpit_reset_no_pending_notice" = "予定されているリセットの告知や有効な警戒情報はありません。";
 "cockpit_reset_history_note" = "告知・観測時刻の日付で表示します。公開告知は、ご自身のアカウントのリセット完了を示すものではありません。";
 "cockpit_reset_original" = "出典を表示 ↗";
 "cockpit_reset_observed_source" = "コミュニティの観測 · データ提供";
 "cockpit_reset_announcement_source" = "公開告知 · データ提供";
 "cockpit_reset_notice_setting_title" = "Codex リセット予告";
-"cockpit_reset_notice_setting_subtitle" = "新しい告知、サイトの予測、ローカル推定が利用可能になり次第通知します。通知を開くとカレンダーが表示されます。";
+"cockpit_reset_notice_setting_subtitle" = "新しい告知またはサイトの予測が利用可能になり次第通知します。通知を開くとカレンダーが表示されます。";
 "cockpit_reset_sync_failed" = "同期に失敗しました。キャッシュは保持されています：%@";
 "cockpit_reset_cache_read_failed" = "リセットのキャッシュを読み込めません。元のファイルは保持されています：%@";
 "cockpit_reset_cache_save_failed" = "リセットのキャッシュを保存できません：%@";

@@ -2893,13 +2893,13 @@
 "cockpit_reset_show_date" = "ดูวันที่";
 "cockpit_reset_forecast_basis" = "ประมาณจากค่ามัธยฐานของช่วงห่างการรีเซ็ตปกติ %@ ครั้งล่าสุดใน 180 วัน ไม่ใช่คำรับรองอย่างเป็นทางการ";
 "cockpit_reset_forecast_overdue" = "เลยเวลาที่ประมาณไว้แล้ว ยังไม่ยืนยันการรีเซ็ตครั้งใหม่ กำลังรอประกาศอัปเดต";
-"cockpit_reset_forecast_unavailable" = "ประวัติการรีเซ็ตปกติช่วงล่าสุดไม่เพียงพอที่จะประมาณวันที่";
+"cockpit_reset_no_pending_notice" = "ไม่มีประกาศการรีเซ็ตที่รอดำเนินการหรือการแจ้งเตือนที่ยังมีผล";
 "cockpit_reset_history_note" = "วันที่อ้างอิงเวลาประกาศหรือเวลาที่สังเกตพบ ประกาศสาธารณะไม่ได้ยืนยันว่าบัญชีของคุณรีเซ็ตแล้ว";
 "cockpit_reset_original" = "ดูแหล่งที่มา ↗";
 "cockpit_reset_observed_source" = "การสังเกตของชุมชน · ข้อมูลจาก";
 "cockpit_reset_announcement_source" = "ประกาศสาธารณะ · ข้อมูลจาก";
 "cockpit_reset_notice_setting_title" = "แจ้งล่วงหน้าการรีเซ็ต Codex";
-"cockpit_reset_notice_setting_subtitle" = "แจ้งเตือนทันทีที่มีประกาศใหม่ การคาดการณ์จากเว็บไซต์ หรือประมาณการในเครื่อง เปิดการแจ้งเตือนเพื่อดูปฏิทิน";
+"cockpit_reset_notice_setting_subtitle" = "แจ้งเตือนทันทีที่มีประกาศใหม่หรือการคาดการณ์จากเว็บไซต์ เปิดการแจ้งเตือนเพื่อดูปฏิทิน";
 "cockpit_reset_sync_failed" = "ซิงค์ไม่สำเร็จ โดยเก็บแคชไว้แล้ว: %@";
 "cockpit_reset_cache_read_failed" = "อ่านแคชการรีเซ็ตไม่ได้ โดยเก็บไฟล์ต้นฉบับไว้แล้ว: %@";
 "cockpit_reset_cache_save_failed" = "บันทึกแคชการรีเซ็ตไม่ได้: %@";

@@ -2895,13 +2895,13 @@
 "cockpit_reset_show_date" = "نمایش تاریخ";
 "cockpit_reset_forecast_basis" = "میانهٔ آخرین %@ فاصلهٔ بازنشانی‌های عادی در ۱۸۰ روز گذشته. برآورد است، نه تعهد رسمی.";
 "cockpit_reset_forecast_overdue" = "زمان برآوردی گذشته است. بازنشانی تازه‌ای تأیید نشده؛ منتظر به‌روزرسانی اعلان‌ها هستیم.";
-"cockpit_reset_forecast_unavailable" = "سابقهٔ اخیر بازنشانی‌های عادی برای برآورد تاریخ کافی نیست.";
+"cockpit_reset_no_pending_notice" = "هیچ اطلاعیهٔ بازنشانی در انتظار یا هشدار فعالی وجود ندارد.";
 "cockpit_reset_history_note" = "تاریخ‌ها بر اساس زمان اعلان یا مشاهده‌اند. اعلان عمومی به معنی تأیید بازنشانی حساب شما نیست.";
 "cockpit_reset_original" = "دیدن منبع ↗";
 "cockpit_reset_observed_source" = "مشاهدهٔ جامعه · منبع داده";
 "cockpit_reset_announcement_source" = "اعلان عمومی · منبع داده";
 "cockpit_reset_notice_setting_title" = "خبرهای بازنشانی آیندهٔ Codex";
-"cockpit_reset_notice_setting_subtitle" = "به‌محض دریافت اعلان، پیش‌بینی سایت یا برآورد محلی تازه اطلاع بده. با باز کردن اعلان، تقویم نمایش داده می‌شود.";
+"cockpit_reset_notice_setting_subtitle" = "به‌محض دریافت اعلان تازه یا پیش‌بینی تازهٔ سایت اطلاع بده. با باز کردن اعلان، تقویم نمایش داده می‌شود.";
 "cockpit_reset_sync_failed" = "همگام‌سازی ناموفق بود؛ حافظه حفظ شد: %@";
 "cockpit_reset_cache_read_failed" = "حافظهٔ بازنشانی خوانده نشد؛ فایل اصلی حفظ شد: %@";
 "cockpit_reset_cache_save_failed" = "حافظهٔ بازنشانی ذخیره نشد: %@";

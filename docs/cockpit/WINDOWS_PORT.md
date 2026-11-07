@@ -47,7 +47,7 @@ entire Core is portable.
 | Codex collection | Native Windows `CODEX_HOME` and home paths, account-scoped official quota observations, safe unavailable/stale states. Tokens must never be converted into official quota percentage. |
 | Local history | Codex and Claude JSONL parsing, archived sessions, fork deduplication, timestamp/currency/coverage rules, selectable ranges and session receipt action. WSL roots require explicit selection and source deduplication. |
 | Calendar | Day/week/month views with common typography, personal feedback, comfort curve and pinned reset announcements. Unknown days remain unknown. |
-| Reset notices | Current verified reset source, dated confirmed banner and countdown, separately labeled estimates, notification opt-in and durable deduplication. |
+| Reset notices | Current verified reset source, dated confirmed banner and countdown, separately labeled website watches (no local reset-date estimates), notification opt-in and durable deduplication. |
 | Team and devices | Existing self-hosted Cloudflare Worker v2 protocol, independent-source declaration, account binding, revision conflicts and Asia/Shanghai team day. Store credentials through Windows current-user protection; never in settings JSON. |
 | Other providers | Inventory each provider and port authentication and collection separately. Expose only supported integrations; describe missing ones explicitly. Mac browser-cookie/Keychain/PTY collectors are not automatically portable. |
 | Languages | Preserve the established app languages as translated features land. Keep any English-only tray preference scoped to the tray. |

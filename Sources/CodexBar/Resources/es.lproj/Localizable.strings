@@ -2889,13 +2889,13 @@
 "cockpit_reset_show_date" = "Ver fecha";
 "cockpit_reset_forecast_basis" = "Mediana de los últimos %@ intervalos entre reinicios regulares en 180 días. Es una estimación, no un compromiso oficial.";
 "cockpit_reset_forecast_overdue" = "La hora estimada ya pasó. No se ha confirmado un nuevo reinicio; esperando nuevos anuncios.";
-"cockpit_reset_forecast_unavailable" = "No hay suficiente historial reciente de reinicios regulares para estimar una fecha.";
+"cockpit_reset_no_pending_notice" = "No hay avisos de reinicio pendientes ni alertas activas.";
 "cockpit_reset_history_note" = "Las fechas corresponden al anuncio o la observación. Los anuncios públicos no confirman un reinicio en tu cuenta.";
 "cockpit_reset_original" = "Ver fuente ↗";
 "cockpit_reset_observed_source" = "Observación de la comunidad · Datos de";
 "cockpit_reset_announcement_source" = "Anuncio público · Datos de";
 "cockpit_reset_notice_setting_title" = "Avisos de reinicios de Codex";
-"cockpit_reset_notice_setting_subtitle" = "Avisar en cuanto haya un nuevo anuncio, una predicción del sitio o una estimación local. Abre la notificación para ver el calendario.";
+"cockpit_reset_notice_setting_subtitle" = "Avisar en cuanto haya un nuevo anuncio o una nueva predicción del sitio. Abre la notificación para ver el calendario.";
 "cockpit_reset_sync_failed" = "Error de sincronización; se conservaron los datos en caché: %@";
 "cockpit_reset_cache_read_failed" = "No se puede leer la caché de reinicios; se conservó el archivo original: %@";
 "cockpit_reset_cache_save_failed" = "No se puede guardar la caché de reinicios: %@";

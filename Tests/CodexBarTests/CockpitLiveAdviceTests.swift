@@ -9,53 +9,33 @@ struct CockpitLiveAdviceTests {
     private let now = Date(timeIntervalSince1970: 1_800_000_000)
 
     @Test
-    func `announcement outranks a conflicting forecast without extending the account deadline`() throws {
+    func `announcement shortens without extending the account deadline`() throws {
         let accountReset = self.now.addingTimeInterval(5 * 86400)
-        let forecast = try self.forecast()
         let announced = try self.scheduled(at: self.now.addingTimeInterval(2 * 86400))
         let selected = CockpitPlanningResetWindow.resolve(
-            accountResetAt: accountReset, scheduled: announced, forecast: forecast, now: self.now)
+            accountResetAt: accountReset, scheduled: announced, now: self.now)
         #expect(selected?.source == .announced)
         #expect(selected?.resetsAt == announced.scheduledFor)
         let later = try self.scheduled(at: accountReset.addingTimeInterval(86400))
         #expect(CockpitPlanningResetWindow.resolve(
-            accountResetAt: accountReset, scheduled: later, forecast: forecast, now: self.now)?.source == .account)
+            accountResetAt: accountReset, scheduled: later, now: self.now)?.source == .account)
         #expect(CockpitPlanningResetWindow.resolve(
-            accountResetAt: self.now, scheduled: announced, forecast: forecast, now: self.now) == nil)
+            accountResetAt: self.now, scheduled: announced, now: self.now) == nil)
     }
 
     @Test
-    func `undated or overdue pending announcements cannot revive an older estimate`() throws {
+    func `undated or overdue pending announcements retain the account deadline`() throws {
         let accountReset = self.now.addingTimeInterval(5 * 86400)
         for announcedDate in [nil, self.now.addingTimeInterval(-1)] {
             let selected = try CockpitPlanningResetWindow.resolve(
                 accountResetAt: accountReset,
                 scheduled: self.scheduled(at: announcedDate),
-                forecast: self.forecast(),
                 now: self.now)
             #expect(selected?.source == .account)
         }
         let banked = try self.scheduled(at: self.now.addingTimeInterval(60), kind: .banked)
         #expect(CockpitPlanningResetWindow.resolve(
             accountResetAt: accountReset, scheduled: banked, now: self.now)?.source == .account)
-    }
-
-    @Test
-    func `expired estimates and newer public reset events fall back without inventing a next cycle`() throws {
-        let accountReset = self.now.addingTimeInterval(5 * 86400)
-        let forecast = try self.forecast()
-        let before = CockpitPlanningResetWindow.resolve(
-            accountResetAt: accountReset, forecast: forecast, now: self.now)
-        #expect(before?.source == .estimated)
-        #expect(before?.resetsAt == forecast.estimatedAt)
-        let newer = try self.event(id: "newer", at: forecast.anchorDate.addingTimeInterval(1))
-        #expect(CockpitPlanningResetWindow.resolve(
-            accountResetAt: accountReset,
-            forecast: forecast,
-            latestPublicReset: newer,
-            now: self.now)?.source == .account)
-        #expect(CockpitPlanningResetWindow.resolve(
-            accountResetAt: accountReset, forecast: forecast, now: forecast.estimatedAt)?.source == .account)
     }
 
     @Test
@@ -73,21 +53,21 @@ struct CockpitLiveAdviceTests {
         let originalAnchors = state.plans
         state.setPersonalCap(30, providerID: "codex", on: noon, calendar: calendar)
         let account = state.status(providerID: "codex", on: noon, calendar: calendar)
-        let estimate = CockpitPlanningResetWindow(resetsAt: noon.addingTimeInterval(6 * 3600), source: .estimated)
-        let estimated = state.status(
-            providerID: "codex", on: noon, calendar: calendar, planningResetWindow: estimate)
+        let announcement = CockpitPlanningResetWindow(resetsAt: noon.addingTimeInterval(6 * 3600), source: .announced)
+        let announced = state.status(
+            providerID: "codex", on: noon, calendar: calendar, planningResetWindow: announcement)
         #expect(account.suggestedPercent == 11.36)
-        #expect(abs((estimated.suggestedPercent ?? -1) - (estimated.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
-        #expect(estimated.usedPercent == 20)
-        #expect(estimated.manualCapPercent == 30)
-        #expect(estimated.effectiveCapPercent == 30)
-        #expect(estimated.resetsAt == accountReset)
-        #expect(estimated.planningResetWindow == estimate)
+        #expect(abs((announced.suggestedPercent ?? -1) - (announced.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
+        #expect(announced.usedPercent == 20)
+        #expect(announced.manualCapPercent == 30)
+        #expect(announced.effectiveCapPercent == 30)
+        #expect(announced.resetsAt == accountReset)
+        #expect(announced.planningResetWindow == announcement)
         let later = state.status(
             providerID: "codex",
             on: noon.addingTimeInterval(7 * 3600),
             calendar: calendar,
-            planningResetWindow: estimate)
+            planningResetWindow: announcement)
         #expect(later.planningResetWindow?.source == .account)
         #expect(later.usedPercent == 20)
         #expect(later.remainingPercent == 50)
@@ -105,13 +85,13 @@ struct CockpitLiveAdviceTests {
             state.record(CockpitQuotaSnapshot(
                 providerID: provider, capturedAt: self.now, remainingPercent: 50, resetsAt: reset))
         }
-        let estimate = CockpitPlanningResetWindow(resetsAt: self.now.addingTimeInterval(60), source: .estimated)
-        let codex = state.status(providerID: "codex", on: self.now, planningResetWindow: estimate)
+        let announcement = CockpitPlanningResetWindow(resetsAt: self.now.addingTimeInterval(60), source: .announced)
+        let codex = state.status(providerID: "codex", on: self.now, planningResetWindow: announcement)
         #expect(codex.usedPercent == nil)
         #expect(codex.suggestionIsPartial)
         #expect(abs((codex.suggestedPercent ?? -1) - (codex.comfortAdvice?.softCapPercent ?? -2)) <= 0.0051)
         #expect(codex.remainingSuggestedPercent == nil)
-        let claude = state.status(providerID: "claude", on: self.now, planningResetWindow: estimate)
+        let claude = state.status(providerID: "claude", on: self.now, planningResetWindow: announcement)
         #expect(claude.planningResetWindow?.source == .account)
         #expect(claude.resetsAt == reset)
         #expect(state.status(providerID: "codex", accountID: "other", on: self.now).suggestedPercent == nil)
@@ -166,7 +146,7 @@ struct CockpitLiveAdviceTests {
     }
 
     @Test
-    func `fresh historical estimates are independent of notifications and expire from planning`() async throws {
+    func `historical intervals never shorten planning even with fresh history`() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let history = try self.history()
@@ -181,14 +161,10 @@ struct CockpitLiveAdviceTests {
             remove: { _ in })
         await resets.refresh()
         let reset = self.now.addingTimeInterval(5 * 86400)
-        #expect(resets.planningWindow(accountResetAt: reset, on: self.now)?.source == .estimated)
+        #expect(resets.planningWindow(accountResetAt: reset, on: self.now)?.source == .account)
         #expect(resets.planningWindow(accountResetAt: reset, on: self.now.addingTimeInterval(31 * 60))?
             .source == .account)
         #expect(!FileManager.default.fileExists(atPath: directory.appendingPathComponent("notices.json").path))
-    }
-
-    private func forecast() throws -> CockpitResetForecast {
-        try #require(CockpitResetForecast.estimate(events: self.history().events, now: self.now))
     }
 
     private func history() throws -> CockpitResetHistory {

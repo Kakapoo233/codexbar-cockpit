@@ -1,4 +1,4 @@
-import type { DailyPaceBaseline, ProviderSnapshot, ResetForecast, UsageWindow } from "../types";
+import type { DailyPaceBaseline, ProviderSnapshot, UsageWindow } from "../types";
 import { endOfUsageDay, usageDateKey } from "./usageDay";
 
 export type QuotaPeriod = "5h" | "weekly" | "monthly";
@@ -34,30 +34,11 @@ export function paceBaselineKey(provider: ProviderSnapshot["provider"], period: 
   return `${provider}:${period}`;
 }
 
-export function forecastAdjustedResetAt(resetsAt: string, now: Date, forecast: ResetForecast | null): string {
-  const guaranteedResetAt = Date.parse(resetsAt);
-  const nowMs = now.getTime();
-  if (!forecast || !Number.isFinite(guaranteedResetAt) || guaranteedResetAt <= nowMs
-    || !Number.isFinite(forecast.score) || !Number.isFinite(forecast.windowHours)) return resetsAt;
-  const probability = clamp(forecast.score, 0, 100) / 100;
-  const forecastWindowMs = Math.max(0, forecast.windowHours) * HOUR_MS;
-  if (probability <= 0 || !Number.isFinite(forecastWindowMs) || forecastWindowMs <= 0) return resetsAt;
-
-  // Radar reports a chance within a window, not an exact time. Treat the
-  // midpoint as the conditional reset time, then retain the regular Codex
-  // reset as the probability-weighted fallback.
-  const guaranteedRemainingMs = guaranteedResetAt - nowMs;
-  const conditionalResetMs = Math.min(guaranteedRemainingMs, forecastWindowMs / 2);
-  const expectedRemainingMs = probability * conditionalResetMs + (1 - probability) * guaranteedRemainingMs;
-  return new Date(nowMs + expectedRemainingMs).toISOString();
-}
-
 export function refreshDailyPaceBaselines(
   current: Record<string, DailyPaceBaseline>,
   snapshots: ProviderSnapshot[],
   now = new Date(),
   resetProviders: ReadonlySet<string> = new Set(),
-  resetForecast: ResetForecast | null = null,
 ): Record<string, DailyPaceBaseline> {
   const next: Record<string, DailyPaceBaseline> = {};
   const localDate = usageDateKey(now);
@@ -81,9 +62,6 @@ export function refreshDailyPaceBaselines(
         && !quotaRestored
         && existing.localDate === localDate
         && existing.resetsAt === window.resetsAt;
-      const applicableForecast = snapshot.provider === "codex" && period === "weekly" && !resetProviders.has(snapshot.provider)
-        ? resetForecast
-        : null;
       const inferredCycleStartedAt = new Date(Date.parse(window.resetsAt) - Math.max(1, window.windowSeconds * 1000)).toISOString();
       const currentRemaining = clamp(window.remainingPercent, 0, 100);
       next[key] = canReuse ? existing : {
@@ -99,9 +77,6 @@ export function refreshDailyPaceBaselines(
         cycleStartRemainingPercent: cycleReset
           ? currentRemaining
           : sameCycle && existing ? existing.cycleStartRemainingPercent : 100,
-        planningResetsAt: forecastAdjustedResetAt(window.resetsAt, now, applicableForecast),
-        resetForecastScore: applicableForecast ? clamp(applicableForecast.score, 0, 100) : null,
-        resetForecastWindowHours: applicableForecast ? Math.max(0, applicableForecast.windowHours) : null,
       };
     }
   }
@@ -174,12 +149,8 @@ export function calculateQuotaPace(window: UsageWindow, now = new Date(), baseli
     0,
     100,
   );
-  const savedPlanningResetAt = matchingBaseline ? Date.parse(matchingBaseline.planningResetsAt) : Number.NaN;
-  const planningResetAt = Number.isFinite(savedPlanningResetAt) && savedPlanningResetAt >= baselineAt && savedPlanningResetAt <= resetAt
-    ? savedPlanningResetAt
-    : resetAt;
-  const baselineRemainingMs = Math.max(0, planningResetAt - baselineAt);
-  const planningHorizon = Math.min(planningResetAt, endOfUsageDay(new Date(baselineAt)));
+  const baselineRemainingMs = Math.max(0, resetAt - baselineAt);
+  const planningHorizon = Math.min(resetAt, endOfUsageDay(new Date(baselineAt)));
   const horizonMs = Math.max(0, planningHorizon - baselineAt);
   const dailyBudget = baselineRemainingMs > 0
     ? clamp(baselineRemaining * (horizonMs / baselineRemainingMs), 0, baselineRemaining)
@@ -190,7 +161,7 @@ export function calculateQuotaPace(window: UsageWindow, now = new Date(), baseli
   const todayUsedPercent = usedPercent;
   const plannedUsedByEndOfDay = clamp(
     cycleStartUsed + cycleStartRemaining * (
-      (Math.min(planningResetAt, endOfUsageDay(now)) - cycleStartedAt) / Math.max(1, planningResetAt - cycleStartedAt)
+      (Math.min(resetAt, endOfUsageDay(now)) - cycleStartedAt) / Math.max(1, resetAt - cycleStartedAt)
     ),
     cycleStartUsed,
     100,

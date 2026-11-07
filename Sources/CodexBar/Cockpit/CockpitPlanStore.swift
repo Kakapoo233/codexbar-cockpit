@@ -44,7 +44,6 @@ final class CockpitPlanStore {
         _ = self.accounts
         _ = self.resetHistoryStore?.history
         _ = self.resetHistoryStore?.status
-        _ = self.resetHistoryStore?.forecast
         _ = self.resetHistoryStore?.lastSyncedAt
         _ = self.resetHistoryStore?.lastStatusSyncedAt
         return 0

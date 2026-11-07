@@ -7,7 +7,6 @@ struct CockpitCalendarDay: Identifiable, Equatable {
     let tokens: Int?
     let feeling: CockpitFeeling?
     var resetKinds: [CockpitResetKind] = []
-    var hasResetForecast = false
     var hasScheduledReset = false
     var id: Date {
         self.day
@@ -177,7 +176,6 @@ struct CockpitCalendarDateCell: View {
         if let model = self.model {
             if let feeling = model.feeling { parts.append(feeling.calendarTitle) }
             parts += model.resetKinds.map(\.cockpitTitle)
-            if model.hasResetForecast { parts.append(L("cockpit_reset_estimate")) }
             if model.hasScheduledReset { parts.append(L("cockpit_reset_scheduled")) }
         }
         return parts.joined(separator: ", ")
@@ -211,9 +209,6 @@ private struct CockpitCalendarResetMarkers: View {
             }
         }) {
             result.append(Marker(id: "cockpit_reset_other", symbol: "questionmark.circle", color: .secondary))
-        }
-        if self.model.hasResetForecast {
-            result.append(Marker(id: "cockpit_reset_estimate", symbol: "clock.badge.questionmark", color: .orange))
         }
         if self.model.hasScheduledReset {
             result.append(Marker(id: "cockpit_reset_scheduled", symbol: "calendar.badge.clock", color: .teal))
