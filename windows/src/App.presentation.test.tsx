@@ -5,19 +5,21 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { useState } from "react";
 import { DEFAULT_WIDGET_PREFERENCES } from "./lib/preferences";
 import { EMPTY_RUNTIME_STATE } from "./lib/activity";
+import { localCalendarDay } from "./lib/cockpitDailyPlan";
+import { COMFORT_CURVE_VERSION } from "./lib/comfortFeedback";
 import type { CockpitRecommendationPace } from "./lib/cockpitRecommendationPace";
-import type { ProviderSnapshot } from "./types";
+import type { ComfortFeedbackRecord, ProviderSnapshot } from "./types";
 import type { PanelPresentation } from "./lib/panelPresentation";
 import App from "./App";
 const state = vi.hoisted(() => ({ receive: null as ((p: PanelPresentation) => void) | null,
-  get: vi.fn(), fetch: vi.fn(), runtime: vi.fn(), floating: vi.fn(), panel: vi.fn(), stop: vi.fn(), refreshUsage: vi.fn(async () => undefined) }));
+  get: vi.fn(), fetch: vi.fn(), runtime: vi.fn(), saveRuntime: vi.fn(async (_value: unknown) => undefined), floating: vi.fn(), panel: vi.fn(), stop: vi.fn(), refreshUsage: vi.fn(async () => undefined) }));
 vi.mock("./lib/bridge", () => ({
   isTauri: () => false,
   getPreferences: async () => ({ ...DEFAULT_WIDGET_PREFERENCES, displayMode: "floating" }),
   getRuntimeState: () => state.runtime(),
   getAppDiagnostics: async () => null, getAutostartEnabled: async () => false,
   fetchSnapshots: (...args: unknown[]) => state.fetch(...args), fetchCodexResetForecast: async () => null,
-  updatePreferences: vi.fn(async () => undefined), updateRuntimeState: vi.fn(async () => undefined),
+  updatePreferences: vi.fn(async () => undefined), updateRuntimeState: state.saveRuntime,
   setAutostartEnabled: async (v: boolean) => v, listenDesktopEvents: async () => () => undefined,
 }));
 vi.mock("./lib/useComfortUsage", () => ({ useComfortUsage: () => ({ data: null, error: false, refresh: state.refreshUsage }) }));
@@ -89,4 +91,52 @@ it("publishes one scoped daily recommendation pace to compact and retained full 
   fireEvent.click(screen.getByRole("button", { name: "Floating settings" }));
   expect(state.panel.mock.calls.at(-1)![0].pace).toBe(compactPace);
   expect(state.fetch).toHaveBeenCalledOnce();
+});
+
+it("changes or clears only the personal quota entry for the requested date, account and zone", async () => {
+  const time = new Date();
+  const { timeZoneIdentifier } = localCalendarDay(time);
+  const entry: ComfortFeedbackRecord = { localDate: "2025-01-08", accountScope: "a".repeat(64), timeZoneIdentifier,
+    observedAt: "2025-01-08T12:00:00Z", comfort: "comfortable", observedUsedPercent: 18,
+    usageObservedAt: "2025-01-08T12:00:00Z", usageCoverage: "complete", usageSource: "official-snapshot",
+    curveVersion: COMFORT_CURVE_VERSION };
+  const otherRecords = [
+    { ...entry, accountScope: "b".repeat(64) },
+    { ...entry, timeZoneIdentifier: timeZoneIdentifier === "UTC" ? "Asia/Shanghai" : "UTC" },
+    { ...entry, personId: "synthetic-team-member" },
+    { ...entry, localDate: "2025-01-07" },
+  ];
+  const legacy = { ...entry, localDate: "2025-01-06", timeZoneIdentifier: undefined };
+  const duplicate = { ...entry, timeZoneIdentifier: undefined, comfort: "overloaded" as const };
+  state.runtime.mockResolvedValue({ ...structuredClone(EMPTY_RUNTIME_STATE), comfortFeedback: [entry, duplicate, ...otherRecords, legacy] });
+  const snapshot: ProviderSnapshot = { provider: "codex", accountScope: entry.accountScope, displayName: "Codex", plan: "Synthetic",
+    status: "ok", updatedAt: time.toISOString(), message: null, shortWindow: null, resetCredits: null, weeklyWindow: null };
+  state.fetch.mockResolvedValue([snapshot]);
+  render(<App />);
+  const panel = () => state.panel.mock.calls.at(-1)![0];
+  await waitFor(() => expect(panel().feedback).toEqual([entry, otherRecords[3], legacy]));
+
+  await act(async () => { panel().onFeedback(entry.localDate, "idle"); });
+  expect(state.saveRuntime).toHaveBeenLastCalledWith(expect.objectContaining({ comfortFeedback: [
+    ...otherRecords, legacy, expect.objectContaining({ ...entry, comfort: "idle" }),
+  ] }));
+  await act(async () => { panel().onFeedback(entry.localDate, null); });
+  expect(state.saveRuntime).toHaveBeenLastCalledWith(expect.objectContaining({ comfortFeedback: [...otherRecords, legacy] }));
+  expect(panel().feedback).toEqual([otherRecords[3], legacy]);
+  await act(async () => { panel().onFeedback(legacy.localDate, "idle"); });
+  expect(state.saveRuntime).toHaveBeenLastCalledWith(expect.objectContaining({ comfortFeedback: [
+    ...otherRecords, expect.objectContaining({ ...legacy, comfort: "idle", timeZoneIdentifier }),
+  ] }));
+
+  const futureDate = localCalendarDay(new Date(time.getTime() + 2 * 86_400_000)).localDateKey;
+  await act(async () => { panel().onFeedback(futureDate, "overloaded"); });
+  expect(state.saveRuntime).toHaveBeenCalledTimes(3);
+
+  const oldOnFeedback = panel().onFeedback;
+  await waitFor(() => expect(panel().refreshing).toBe(false));
+  state.fetch.mockResolvedValue([{ ...snapshot, accountScope: otherRecords[0].accountScope }]);
+  act(() => { panel().onRefresh(); });
+  await waitFor(() => expect(panel().feedback).toEqual([otherRecords[0]]));
+  await act(async () => { oldOnFeedback(legacy.localDate, "overloaded"); });
+  expect(state.saveRuntime).toHaveBeenCalledTimes(3);
 });

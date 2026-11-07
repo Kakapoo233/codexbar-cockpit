@@ -21,6 +21,8 @@ struct CockpitMonthGridView: View {
     let select: (Date) -> Void
     var compact = false
     var metricText: ((Date) -> String)?
+    var onFeelingChange: ((Date, CockpitFeeling?) -> Void)?
+    var canEditFeeling: (Date) -> Bool = { _ in false }
 
     private var weekdaySymbols: [String] {
         var labelsCalendar = self.calendar
@@ -53,12 +55,14 @@ struct CockpitMonthGridView: View {
                             selectedDay: self.selectedDay,
                             model: self.days[day],
                             metricText: self.metricText?(day),
-                            minimumHeight: self.compact ? 96 : 156,
+                            minimumHeight: self.compact ? (self.onFeelingChange == nil ? 96 : 128) : 156,
                             compact: self.compact,
-                            select: self.select)
+                            select: self.select,
+                            onFeelingChange: self.onFeelingChange,
+                            canEditFeeling: self.canEditFeeling)
                     } else {
                         Color.primary.opacity(0.018)
-                            .frame(height: self.compact ? 96 : 156)
+                            .frame(height: self.compact ? (self.onFeelingChange == nil ? 96 : 128) : 156)
                             .modifier(CockpitCalendarCellBorder())
                     }
                 }
@@ -79,6 +83,8 @@ struct CockpitCalendarDateCell: View {
     var compact = false
     var showsWeekday = false
     let select: (Date) -> Void
+    var onFeelingChange: ((Date, CockpitFeeling?) -> Void)?
+    var canEditFeeling: (Date) -> Bool = { _ in false }
 
     private var selected: Bool {
         self.calendar.isDate(self.day, inSameDayAs: self.selectedDay)
@@ -100,6 +106,22 @@ struct CockpitCalendarDateCell: View {
     }
 
     var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            self.dateButton
+            if let onFeelingChange {
+                CockpitCalendarDayFeelingMenu(
+                    day: self.day,
+                    calendar: self.calendar,
+                    selected: self.model?.feeling,
+                    canRecord: self.canEditFeeling(self.day),
+                    compact: self.compact,
+                    onChange: { onFeelingChange(self.day, $0) })
+                    .padding(self.compact ? 7 : 11)
+            }
+        }
+    }
+
+    private var dateButton: some View {
         Button { self.select(self.day) } label: {
             VStack(alignment: .leading, spacing: self.compact ? 5 : 10) {
                 HStack(spacing: 6) {
@@ -128,7 +150,7 @@ struct CockpitCalendarDateCell: View {
                     .fixedSize(horizontal: false, vertical: true)
                 if self.compact {
                     HStack(alignment: .top, spacing: 4) {
-                        if let feeling = self.model?.feeling {
+                        if self.onFeelingChange == nil, let feeling = self.model?.feeling {
                             Text(feeling.cockpitEmoji).font(CockpitCalendarTypography.caption2)
                                 .accessibilityHidden(true)
                         }
@@ -138,7 +160,7 @@ struct CockpitCalendarDateCell: View {
                         Spacer(minLength: 0)
                     }
                 } else {
-                    if let feeling = self.model?.feeling {
+                    if self.onFeelingChange == nil, let feeling = self.model?.feeling {
                         HStack(spacing: 4) {
                             Text(feeling.cockpitEmoji).accessibilityHidden(true)
                             Text(feeling.calendarTitle).foregroundStyle(.secondary)
@@ -152,6 +174,7 @@ struct CockpitCalendarDateCell: View {
                 }
                 Spacer(minLength: 0)
             }
+            .padding(.bottom, self.onFeelingChange == nil ? 0 : 30)
             .padding(self.compact ? 7 : 11)
             .frame(maxWidth: .infinity)
             .frame(

@@ -10,7 +10,7 @@ import { scopedRecommendationPace } from "./lib/scopedRecommendationPace";
 import { TrayPanel } from "./components/TrayPanel";
 import { FloatingSummary } from "./components/FloatingSummary";
 import { applyPreviewDisplayMode, beginFloatingDrag, compactPanel, getPanelPresentation, hidePanel, listenPanelPresentation, openFullPanel, type PanelPage, type PanelPresentation } from "./lib/panelPresentation";
-import type { AppDiagnostics, CodexDailyUsage, ComfortCode, ProviderSnapshot, ResetForecast, RuntimeState, WidgetPreferences } from "./types";
+import type { AppDiagnostics, CodexDailyUsage, ComfortCode, ComfortFeedbackRecord, ProviderSnapshot, ResetForecast, RuntimeState, WidgetPreferences } from "./types";
 
 /** Native collection stays in Rust. The React shell receives only typed quota/usage aggregates. */
 export default function App() {
@@ -29,6 +29,7 @@ export default function App() {
   const [surface, setSurface] = useState<"compact" | "panel">("panel");
   const [pageRequest, setPageRequest] = useState<{ page: PanelPage; id: number }>();
   const runtimeRef = useRef(runtime);
+  const codexScopeRef = useRef<string | null>(null);
   const preferencesRef = useRef(preferences);
   const writable = useRef(false);
   const preferenceWritable = useRef(false);
@@ -41,7 +42,7 @@ export default function App() {
   const zh = language !== "en";
   const codex = snapshots.find(value => value.provider === "codex");
   const scope = codex?.accountScope ?? null;
-  const today = localCalendarDay(now).localDateKey;
+  const { localDateKey: today, timeZoneIdentifier } = localCalendarDay(now);
 
   useEffect(() => {
     let active = true;
@@ -72,6 +73,7 @@ export default function App() {
 
   const publishSnapshots = useCallback(async (values: ProviderSnapshot[]) => {
     if (!alive.current) return;
+    codexScopeRef.current = values.find(value => value.provider === "codex")?.accountScope ?? null;
     setNow(new Date());
     setSnapshots(values);
     if (!writable.current) return;
@@ -173,14 +175,25 @@ export default function App() {
   }, [preferences.appearanceMode, preferences.fontFamily, preferences.fontScale, systemDark]);
 
   const observations = runtime.cockpitQuotaObservations ?? [];
-  const ownFeedback = useMemo(() => runtime.comfortFeedback.filter(value => value.accountScope === scope && scope !== null), [runtime.comfortFeedback, scope]);
+  const isOwnFeedback = useCallback((value: ComfortFeedbackRecord) => scope !== null && value.accountScope === scope
+    && (value.timeZoneIdentifier === timeZoneIdentifier || value.timeZoneIdentifier === undefined)
+    && value.personId == null, [scope, timeZoneIdentifier]);
+  const ownFeedback = useMemo(() => {
+    const days = new Map<string, ComfortFeedbackRecord>();
+    for (const value of runtime.comfortFeedback) {
+      if (isOwnFeedback(value) && (!days.has(value.localDate) || value.timeZoneIdentifier === timeZoneIdentifier)) {
+        days.set(value.localDate, value);
+      }
+    }
+    return [...days.values()];
+  }, [runtime.comfortFeedback, isOwnFeedback, timeZoneIdentifier]);
   const curve = useMemo(() => personalizeComfortCurve(ownFeedback), [ownFeedback]);
   const resetSignal = useMemo(() => cockpitResetSignal(forecast), [forecast]);
   const plan = useMemo(() => buildCockpitDailyPlan({ providerID: "codex", accountID: scope ?? "unavailable", now,
-    snapshots: scope ? observations : [], comfortRecords: ownFeedback.filter(value => value.timeZoneIdentifier).map(value => ({ providerID: "codex", accountID: scope!, localDateKey: value.localDate, timeZoneIdentifier: value.timeZoneIdentifier!, recordedAt: value.updatedAt ?? value.observedAt, usedPercent: value.observedUsedPercent, feeling: value.comfort === "idle" ? "light" as const : value.comfort, coverage: value.usageCoverage })),
+    snapshots: scope ? observations : [], comfortRecords: ownFeedback.filter(value => value.timeZoneIdentifier === timeZoneIdentifier).map(value => ({ providerID: "codex", accountID: scope!, localDateKey: value.localDate, timeZoneIdentifier, recordedAt: value.updatedAt ?? value.observedAt, usedPercent: value.observedUsedPercent, feeling: value.comfort === "idle" ? "light" as const : value.comfort, coverage: value.usageCoverage })),
     personalCapPercent: preferences.dailyBudgetLocalDate === today && preferences.dailyBudgetAccountScope === scope ? preferences.dailyBudgetPercent : null,
     resetSignal,
-  }), [scope, observations, now, ownFeedback, preferences.dailyBudgetLocalDate, preferences.dailyBudgetAccountScope, preferences.dailyBudgetPercent, today, resetSignal]);
+  }), [scope, observations, now, ownFeedback, preferences.dailyBudgetLocalDate, preferences.dailyBudgetAccountScope, preferences.dailyBudgetPercent, today, timeZoneIdentifier, resetSignal]);
 
   const paceEnabled = (preferences.enabledProviders ?? ["codex"]).includes("codex") && !preferences.hiddenProviders.includes("codex");
   const pace = useMemo(() => scopedRecommendationPace(paceEnabled ? codex : null, plan, observations, now), [paceEnabled, codex, plan, observations, now]);
@@ -227,19 +240,25 @@ export default function App() {
       setError(zh ? "设置未保存，已恢复原值。" : "Settings were not saved; the previous value was restored.");
     });
   };
-  const saveFeedback = async (date: string, comfort: ComfortCode) => {
-    if (!scope || feedbackBusy.current || !writable.current) return;
-    feedbackBusy.current = true; setSavingFeedback(true);
+  const saveFeedback = async (date: string, comfort: ComfortCode | null) => {
+    if (!scope || codexScopeRef.current !== scope || date > today || feedbackBusy.current || !writable.current) return;
     const current = runtimeRef.current;
-    const existing = current.comfortFeedback.find(value => value.localDate === date && value.accountScope === scope);
-    const captured = dailyUsage.find(value => value.localDate === date);
-    const record = existing ? { ...existing, comfort, updatedAt: new Date().toISOString() } : {
-      ...createComfortFeedbackRecord({ localDate: date, isCatchUp: date !== today, observedUsedPercent: captured?.observedUsedPercent ?? null,
-        usageCoverage: captured?.coverage ?? "unavailable", usageObservedAt: captured?.lastObservedAt ?? null,
-        usageSource: captured ? "official-snapshot" : "unavailable" }, comfort), accountScope: scope, timeZoneIdentifier: localCalendarDay(now).timeZoneIdentifier,
-    };
-    const records = current.comfortFeedback.filter(value => !(value.localDate === date && value.accountScope === scope));
-    try { await commitRuntime({ ...current, comfortFeedback: [...records, record] }); }
+    const matchesDay = (value: ComfortFeedbackRecord) => value.localDate === date && isOwnFeedback(value);
+    const matches = current.comfortFeedback.filter(matchesDay);
+    const existing = matches.find(value => value.timeZoneIdentifier === timeZoneIdentifier) ?? matches[0];
+    if ((existing?.comfort ?? null) === comfort) return;
+    const records = current.comfortFeedback.filter(value => !matchesDay(value));
+    if (comfort !== null) {
+      const captured = dailyUsage.find(value => value.localDate === date);
+      const record = existing ? { ...existing, comfort, timeZoneIdentifier, updatedAt: new Date().toISOString() } : {
+        ...createComfortFeedbackRecord({ localDate: date, isCatchUp: date !== today, observedUsedPercent: captured?.observedUsedPercent ?? null,
+          usageCoverage: captured?.coverage ?? "unavailable", usageObservedAt: captured?.lastObservedAt ?? null,
+          usageSource: captured ? "official-snapshot" : "unavailable" }, comfort), accountScope: scope, timeZoneIdentifier,
+      };
+      records.push(record);
+    }
+    feedbackBusy.current = true; setSavingFeedback(true);
+    try { await commitRuntime({ ...current, comfortFeedback: records }); }
     catch { setError(zh ? "体验记录未写入磁盘，请重试。" : "The experience entry has not been saved; retry."); }
     finally { feedbackBusy.current = false; setSavingFeedback(false); }
   };
@@ -265,7 +284,7 @@ export default function App() {
     onRefresh={() => { setError(null); void refresh(true); void refreshUsage().catch(() => undefined); }}
     onHide={() => windowAction(preferences.displayMode === "floating" ? compactPanel : hidePanel)}
     onFeedback={(date, value) => void saveFeedback(date, value)} feedback={ownFeedback} dailyUsage={dailyUsage} curve={curve}
-    savingFeedback={savingFeedback} canRecordFeedback={Boolean(scope)} autostart={autostart} onAutostart={enabled => void setLaunchAtLogin(enabled)}
+    savingFeedback={savingFeedback || !writable.current} canRecordFeedback={Boolean(scope)} autostart={autostart} onAutostart={enabled => void setLaunchAtLogin(enabled)}
     onPersonalCap={value => savePreferences({ ...preferencesRef.current, dailyBudgetPercent: value ?? 0, dailyBudgetLocalDate: value === null ? null : today, dailyBudgetAccountScope: value === null ? null : scope })} />
     </div>
   </>;

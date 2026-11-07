@@ -66,7 +66,14 @@ struct CockpitCalendarPeriodScreenshotTests {
             Divider()
             if scale != .month {
                 CockpitCalendarPeriodView(
-                    ledger: ledger, period: period, metric: .cost, selectedDay: now, select: { _ in }, days: days)
+                    ledger: ledger,
+                    period: period,
+                    metric: .cost,
+                    selectedDay: now,
+                    select: { _ in },
+                    days: days,
+                    onFeelingChange: { _, _ in },
+                    canEditFeeling: { CockpitCalendarProjection.canRecord(on: $0, now: now, calendar: calendar) })
             }
             if [.month, .quarter, .year].contains(scale) {
                 if scale != .month { Text(L("cockpit_calendar_month")).font(.headline) }
@@ -77,15 +84,11 @@ struct CockpitCalendarPeriodScreenshotTests {
                     days: days,
                     select: { _ in },
                     compact: true,
-                    metricText: { ledger.text(on: $0, metric: .cost) })
+                    metricText: { ledger.text(on: $0, metric: .cost) },
+                    onFeelingChange: { _, _ in },
+                    canEditFeeling: { CockpitCalendarProjection.canRecord(on: $0, now: now, calendar: calendar) })
             }
             CockpitCalendarPeriodSummaryView(ledger: ledger, period: period, metric: .cost)
-            CockpitCalendarStatusEditor(
-                selected: .comfortable,
-                canRecord: true,
-                onSelect: { _ in },
-                onClear: {},
-                compact: true)
             Spacer(minLength: 0)
         }
         .padding(24)

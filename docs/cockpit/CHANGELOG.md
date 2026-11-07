@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.31 — Quota feedback inside calendar dates
+
+- Put personal quota-state selection and clearing inside each date cell for day, week and month views.
+- Show provider and feedback type above the grid; preserve the existing quota observations when editing feelings.
+- Reject future-day writes and stale menu actions after account changes.
+
 ## 0.8.30 — Remove local reset-date estimates
 
 - Remove historical reset-date extrapolation, its calendar markers and notices, and its effect on daily planning.

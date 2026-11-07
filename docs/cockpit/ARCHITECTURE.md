@@ -162,6 +162,10 @@ the same page again when the button's standard activation follows the initial pr
 - `CockpitUsageProjection` reads the shared statistics publication for the Calendar without changing
   the statistics page's reporting period or selected day. Receipts are an action on the selected historical
   session in `SessionUsageBrowser`, using that browser's reporting range, currency and privacy settings.
+- Quota feedback is edited inside each day/week/month date cell. The menu is a sibling of the
+  date-selection button; the provider and record-type controls precede the grid. Each action captures
+  its account scope and exact reporting-zone date; future days, unavailable providers and actions
+  retained across account switches cannot write. Token feedback retains its existing separate editor.
 - Calendar also owns subjective feedback and the experience chart. Today's feedback can capture a
   fresh, complete ambient Token sample; editing history preserves the original measurement.
 - `CockpitResetHistoryClient` reads the public Codex Resets history and status API without credentials.
