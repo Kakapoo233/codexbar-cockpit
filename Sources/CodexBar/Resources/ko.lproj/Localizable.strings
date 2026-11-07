@@ -877,6 +877,7 @@
 "reset_tomorrow_format" = "내일 %@";
 "Lasts until reset" = "재설정까지 유지";
 "1.5× headroom" = "1.5배 여유";
+"cockpit_pace_headroom_duration" = "현재 평균 속도라면 %@ 후 한도 소진 예상 (초기화 미반영)";
 "Updated %@" = "%@에 업데이트됨";
 "Updated relative %@" = "%@에 업데이트됨";
 "Updated absolute %@" = "%@에 업데이트됨";

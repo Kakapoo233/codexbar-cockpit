@@ -46,7 +46,8 @@ extension UsageMenuCardView.Model {
                     paceDetail = CockpitRecommendationPaceText.weeklyDetail(
                         pace: input.cockpitRecommendationPace,
                         officialPace: input.weeklyPace,
-                        now: input.now)
+                        now: input.now,
+                        headroomResetsAt: window.resetsAt)
                 } else {
                     paceDetail = Self.weeklyPaceDetail(
                         provider: input.provider,
@@ -93,7 +94,8 @@ extension UsageMenuCardView.Model {
                 metric.paceHelpText = CockpitRecommendationPaceText.detailHelp(
                     pace: input.cockpitRecommendationPace,
                     officialPace: input.weeklyPace,
-                    now: input.now)
+                    now: input.now,
+                    headroomResetsAt: window.resetsAt)
             }
             return metric
         }

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.32 — Remaining duration beside quota headroom
+
+- Append the estimated remaining duration after the 1.5× headroom hint for session and weekly allowances in the Usage card, using the same model's uncapped projected average rate and explicitly ignoring replenishment at reset.
+- Keep the menu-bar exhaustion metric and daily recommendation comparison unchanged; invalid or unavailable rates never invent a duration.
+- Expand the card's forecast text allowance so longer explanations can wrap, with localized wording across all 23 app languages.
+
 ## 0.8.31 — Quota feedback inside calendar dates
 
 - Put personal quota-state selection and clearing inside each date cell for day, week and month views.

@@ -905,6 +905,7 @@
 "reset_tomorrow_format" = "morgen, %@";
 "Lasts until reset" = "Hält bis zum Zurücksetzen an";
 "1.5× headroom" = "1,5× Spielraum";
+"cockpit_pace_headroom_duration" = "Bei diesem Durchschnittstempo ist das Kontingent voraussichtlich in %@ aufgebraucht (ohne Reset)";
 "Updated %@" = "Aktualisiert %@";
 "Updated relative %@" = "Aktualisiert %@";
 "Updated absolute %@" = "Aktualisiert %@";

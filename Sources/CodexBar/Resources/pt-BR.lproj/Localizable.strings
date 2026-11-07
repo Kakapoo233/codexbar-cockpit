@@ -902,6 +902,7 @@
 "reset_tomorrow_format" = "amanhã, %@";
 "Lasts until reset" = "Dura até a renovação";
 "1.5× headroom" = "folga de 1,5×";
+"cockpit_pace_headroom_duration" = "Nesse ritmo médio, a cota deve se esgotar em %@ (sem contar a redefinição)";
 "Updated %@" = "Atualizado %@";
 "Updated relative %@" = "Atualizado %@";
 "Updated absolute %@" = "Atualizado %@";

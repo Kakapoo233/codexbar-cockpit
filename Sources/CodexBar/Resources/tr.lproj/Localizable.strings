@@ -907,6 +907,7 @@
 "reset_tomorrow_format" = "yarın, %@";
 "Lasts until reset" = "Sıfırlamaya kadar sürer";
 "1.5× headroom" = "1,5× pay";
+"cockpit_pace_headroom_duration" = "Bu ortalama hızla kotanın %@ sonra tükenmesi bekleniyor (sıfırlama hariç)";
 "Updated %@" = "Güncellendi: %@";
 "Updated relative %@" = "Güncellendi: %@";
 "Updated absolute %@" = "Güncellendi: %@";

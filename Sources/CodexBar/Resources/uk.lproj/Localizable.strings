@@ -905,6 +905,7 @@
 "reset_tomorrow_format" = "завтра, %@";
 "Lasts until reset" = "Має вистачити до скидання";
 "1.5× headroom" = "запас 1,5×";
+"cockpit_pace_headroom_duration" = "За такого середнього темпу квота вичерпається приблизно через %@ (без урахування скидання)";
 "Updated %@" = "Оновлено %@";
 "Updated relative %@" = "Оновлено %@";
 "Updated absolute %@" = "Оновлено %@";

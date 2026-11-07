@@ -913,6 +913,7 @@
 "reset_tomorrow_format" = "besok, %@";
 "Lasts until reset" = "Bertahan hingga reset";
 "1.5× headroom" = "ruang 1,5×";
+"cockpit_pace_headroom_duration" = "Pada laju rata-rata ini, kuota diperkirakan habis dalam %@ (tanpa memperhitungkan reset)";
 "Updated %@" = "Diperbarui %@";
 "Updated relative %@" = "Diperbarui %@";
 "Updated absolute %@" = "Diperbarui %@";

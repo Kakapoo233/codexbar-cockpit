@@ -178,10 +178,9 @@ struct UsageMenuCardLayoutTests {
                 accessibilityLabel: "Est. 2 session quotas left · 6 windows until reset")))
             .sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
 
-        // The meta line may wrap to two lines so tail content stays readable
-        // instead of truncating; the card grows by roughly one text line.
+        // Long forecast and session-equivalent details may wrap across several lines.
         #expect(longHeight - shortHeight > Self.heightTolerance)
-        #expect(longHeight - shortHeight < 20)
+        #expect(longHeight - shortHeight < 60)
     }
 
     @Test

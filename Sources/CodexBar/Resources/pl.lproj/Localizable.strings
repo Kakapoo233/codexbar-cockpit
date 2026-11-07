@@ -913,6 +913,7 @@
 "reset_tomorrow_format" = "jutro, %@";
 "Lasts until reset" = "Wystarcza do resetu";
 "1.5× headroom" = "zapas 1,5×";
+"cockpit_pace_headroom_duration" = "W tym średnim tempie limit wyczerpie się za %@ (bez uwzględnienia resetu)";
 "Updated %@" = "Zaktualizowano %@";
 "Updated relative %@" = "Zaktualizowano %@";
 "Updated absolute %@" = "Zaktualizowano %@";

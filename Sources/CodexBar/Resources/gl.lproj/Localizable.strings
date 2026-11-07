@@ -1174,6 +1174,7 @@
 "%d%% in reserve" = "%d%% en reserva";
 "%dd" = "%d d";
 "1.5× headroom" = "1,5× de marxe";
+"cockpit_pace_headroom_duration" = "A este ritmo medio, a cota esgotaríase en %@ (sen ter en conta o reinicio)";
 "About CodexBar" = "Acerca de CodexBar";
 "Add Account..." = "Engadir conta...";
 "Add Google Account" = "Engadir conta de Google";

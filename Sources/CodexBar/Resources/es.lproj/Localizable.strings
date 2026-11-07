@@ -686,6 +686,7 @@
 "show_debug_settings_title" = "Mostrar ajustes de depuración";
 "show_debug_settings_subtitle" = "Muestra herramientas de diagnóstico en la pestaña Depuración.";
 "1.5× headroom" = "margen de 1,5×";
+"cockpit_pace_headroom_duration" = "A este ritmo medio, la cuota se agotaría en %@ (sin contar el reinicio)";
 "surprise_me_title" = "Sorpréndeme";
 "surprise_me_subtitle" = "Actívalo si te gusta que tus agentes se diviertan ahí arriba.";
 "hide_personal_info_title" = "Ocultar información personal";

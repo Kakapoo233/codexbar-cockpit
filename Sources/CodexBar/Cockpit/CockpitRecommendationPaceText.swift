@@ -47,11 +47,12 @@ enum CockpitRecommendationPaceText {
     static func weeklyDetail(
         pace: CockpitRecommendationPace?,
         officialPace: UsagePace?,
-        now: Date) -> UsageMenuCardView.Model.PaceDetail
+        now: Date,
+        headroomResetsAt: Date? = nil) -> UsageMenuCardView.Model.PaceDetail
     {
         UsageMenuCardView.Model.PaceDetail(
             leftLabel: self.detailLabel(pace),
-            rightLabel: self.quotaForecast(officialPace, now: now),
+            rightLabel: self.quotaForecast(officialPace, now: now, headroomResetsAt: headroomResetsAt),
             pacePercent: nil,
             paceOnTop: true,
             isPaceDerived: true)
@@ -72,9 +73,12 @@ enum CockpitRecommendationPaceText {
     static func detailHelp(
         pace: CockpitRecommendationPace?,
         officialPace: UsagePace?,
-        now: Date) -> String
+        now: Date,
+        headroomResetsAt: Date? = nil) -> String
     {
-        let forecast = self.quotaForecast(officialPace, now: now).map { L("cockpit_pace_quota_forecast", $0) }
+        let forecast = self.quotaForecast(officialPace, now: now, headroomResetsAt: headroomResetsAt).map { L(
+            "cockpit_pace_quota_forecast",
+            $0) }
         return [L("menu_bar_help_pace"), self.explanationLabel(pace), forecast]
             .compactMap(\.self)
             .joined(separator: "\n")
@@ -98,7 +102,10 @@ enum CockpitRecommendationPaceText {
         value.formatted(.number.precision(.fractionLength(0...2)).locale(codexBarLocalizedLocale()))
     }
 
-    private static func quotaForecast(_ pace: UsagePace?, now: Date) -> String? {
-        pace.flatMap { UsagePaceText.weeklyDetail(provider: .codex, pace: $0, now: now).rightLabel }
+    private static func quotaForecast(_ pace: UsagePace?, now: Date, headroomResetsAt: Date?) -> String? {
+        pace.flatMap {
+            UsagePaceText.weeklyDetail(
+                provider: .codex, pace: $0, now: now, headroomResetsAt: headroomResetsAt).rightLabel
+        }
     }
 }
