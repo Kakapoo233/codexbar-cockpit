@@ -85,6 +85,61 @@
   text-overflow: ellipsis;
 }
 
+.comfort-history-grid-row {
+  display: contents;
+}
+
+.comfort-history-day--with-status {
+  cursor: default;
+}
+
+.comfort-history-day--with-status .comfort-history-date-button {
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  outline-offset: -2px;
+}
+
+.comfort-history-cell-status {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 24px;
+  max-width: 100%;
+  padding: 2px 4px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 6px;
+  color: var(--glass-muted);
+  background: var(--glass-surface);
+  line-height: 1;
+}
+
+.comfort-history-cell-status svg { width: .9em; height: .9em; }
+.comfort-history-cell-status .comfort-history-status-caret { width: .6em; height: .6em; }
+.comfort-history-cell-status:hover:not([data-disabled]),
+.comfort-history-cell-status:focus-within { border-color: var(--glass-mint); color: var(--glass-ink); }
+.comfort-history-cell-status[data-disabled] { opacity: .55; }
+
+.comfort-history-cell-status select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.comfort-history-cell-status select:disabled { cursor: default; }
+:root[data-appearance="dark"] .comfort-history-cell-status select { color-scheme: dark; }
+
 @media (max-width: 420px) {
   .comfort-history-heading,
   .comfort-history-header .comfort-history-nav {

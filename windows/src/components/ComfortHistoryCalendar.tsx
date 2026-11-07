@@ -1,5 +1,5 @@
 import { calendarDate, dateAtBeijingNoon, USAGE_TIME_ZONE } from "../lib/usageDay";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { CaretDown, CaretLeft, CaretRight, Smiley } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { localDateKey } from "../lib/comfortFeedback";
 import { buildTokenComfortSnapshot } from "../lib/tokenComfort";
@@ -9,11 +9,13 @@ import "./ComfortHistoryCalendar.css";
 
 interface ComfortHistoryCalendarProps {
   personalLocalDay?: boolean;
+  now?: Date;
   records: readonly ComfortFeedbackRecord[];
   dailyUsage?: readonly DailyUsageSummary[];
   dailyUsageHistory?: readonly CodexDailyUsage[];
   language: Language;
   onChange: (localDate: string, comfort: ComfortCode) => void;
+  onClear?: (localDate: string) => void;
   tokenMode?: boolean;
   personPercentMode?: boolean;
   percentByDate?: Record<string, ComfortQuotaAllocation>;
@@ -81,9 +83,9 @@ function formatUsagePercent(value: number, language: Language): string {
   return `${formatted}%`;
 }
 
-export function ComfortHistoryCalendar({ personalLocalDay = false, records, dailyUsage = [], dailyUsageHistory = [], language, onChange, tokenMode = false, personPercentMode = false, percentByDate = {}, personId = null, usageData = null, saving = false, onRefreshSnapshot }: ComfortHistoryCalendarProps) {
+export function ComfortHistoryCalendar({ personalLocalDay = false, now, records, dailyUsage = [], dailyUsageHistory = [], language, onChange, onClear, tokenMode = false, personPercentMode = false, percentByDate = {}, personId = null, usageData = null, saving = false, onRefreshSnapshot }: ComfortHistoryCalendarProps) {
   const currentDay = (date: Date) => personalLocalDay ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}` : localDateKey(date);
-  const today = currentDay(new Date());
+  const today = currentDay(now ?? new Date());
   const [view, setView] = useState<CalendarView>("week");
   const [visibleWeekEnd, setVisibleWeekEnd] = useState(() => dateFromLocalDate(today));
   const followsCurrentWeek = useRef(true);
@@ -103,6 +105,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
         next: "Next month",
         today: "Today",
         editor: "Set experience",
+        quotaExperience: "Quota experience",
+        clear: "Clear entry",
         noRecord: "No entry",
         recorded: "Recorded",
         weeklyUsage: "weekly quota used",
@@ -121,6 +125,8 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
         next: "下个月",
         today: "今天",
         editor: "选择当天体验",
+        quotaExperience: "配额使用状态",
+        clear: "清除",
         noRecord: "未记录",
         recorded: "已记录",
         weeklyUsage: "周额度用量",
@@ -184,11 +190,66 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
   };
 
   const goToday = () => {
-    const now = new Date();
+    const currentKey = currentDay(now ?? new Date());
+    const current = dateFromLocalDate(currentKey);
     followsCurrentWeek.current = true;
-    setVisibleWeekEnd(dateFromLocalDate(currentDay(now)));
-    setVisibleMonth(calendarDate(dateFromLocalDate(currentDay(now)).getUTCFullYear(), dateFromLocalDate(currentDay(now)).getUTCMonth(), 1));
-    setSelectedDate(currentDay(now));
+    setVisibleWeekEnd(current);
+    setVisibleMonth(calendarDate(current.getUTCFullYear(), current.getUTCMonth(), 1));
+    setSelectedDate(currentKey);
+  };
+
+  const renderDay = (date: Date) => {
+    const dateKey = localDateKey(date);
+    const record = recordsByDate.get(dateKey);
+    const usage = dailyUsageByDate.get(dateKey);
+    const tokenSnapshot = tokenMode && !personPercentMode ? snapshotFor(dateKey) : null;
+    const usagePercent = personPercentMode ? percentText(dateKey) : tokenMode ? tokenText(dateKey, tokenSnapshot) : usage ? formatUsagePercent(usage.observedUsedPercent, language) : null;
+    const usageCoverage = personPercentMode ? allocationFor(dateKey)?.coverage : tokenMode ? tokenSnapshot?.coverage : usage?.coverage;
+    const coverageNote = usageCoverage === "partial" ? (language === "en" ? " · Partial observations" : " · 部分观测") : "";
+    const usageLabel = tokenMode ? "Token" : labels.weeklyUsage;
+    const isOutside = view === "month" && date.getUTCMonth() !== visibleMonth.getUTCMonth();
+    const isFuture = dateKey > today;
+    const isSelected = dateKey === selectedDate;
+    const dateLabel = formatSelectedDate(dateKey, language);
+    const experienceLabel = record ? labels.options[record.comfort] : labels.noRecord;
+    const usageTitle = usagePercent !== null ? `${usageLabel} ${usagePercent}${coverageNote}` : undefined;
+    const cellLabel = `${dateLabel} · ${experienceLabel}${usageTitle ? ` · ${usageTitle}` : ""}`;
+    const cellClass = `comfort-history-day${tokenMode || personPercentMode ? " is-token-day" : ""}${isOutside ? " is-outside" : ""}${isSelected ? " is-selected" : ""}${dateKey === today ? " is-today" : ""}${isFuture ? " is-future" : ""}`;
+    const dateContent = <>
+      <span className="comfort-history-day-number">{date.getUTCDate()}</span>
+      <span className="comfort-history-day-detail" aria-hidden="true">
+        {!onClear && record ? <span className="comfort-history-day-emoji">{COMFORT_EMOJI[record.comfort]}</span> : null}
+        {usagePercent !== null ? <small className="comfort-history-day-usage">{tokenMode ? usagePercent.replace(/(\d+)\.\d{2}M$/, (_, whole: string) => Number(whole) >= 10 ? `${whole}M` : usagePercent.replace(/0M$/, "M")) : usagePercent}</small> : null}
+      </span>
+    </>;
+
+    if (!onClear) return <button key={dateKey} type="button" role="gridcell" className={cellClass}
+      aria-label={cellLabel} title={usageTitle} aria-selected={isSelected} disabled={isFuture}
+      onMouseDown={event => event.stopPropagation()} onClick={() => setSelectedDate(dateKey)}>{dateContent}</button>;
+
+    const statusDisabled = isFuture || saving;
+    return <div key={dateKey} role="gridcell" className={`${cellClass} comfort-history-day--with-status`}
+      aria-label={cellLabel} title={usageTitle} aria-selected={isSelected} aria-disabled={isFuture}>
+      <button type="button" className="comfort-history-date-button" aria-label={dateLabel} disabled={isFuture}
+        onMouseDown={event => event.stopPropagation()} onClick={() => setSelectedDate(dateKey)}>{dateContent}</button>
+      <label className="comfort-history-cell-status" title={`${labels.quotaExperience} · ${experienceLabel}`} data-disabled={statusDisabled || undefined}>
+        {record ? <span aria-hidden="true">{COMFORT_EMOJI[record.comfort]}</span> : <Smiley aria-hidden="true" />}
+        <CaretDown aria-hidden="true" className="comfort-history-status-caret" />
+        <select aria-label={`${labels.quotaExperience} · ${dateLabel}`} value={record?.comfort ?? ""} disabled={statusDisabled}
+          onMouseDown={event => event.stopPropagation()} onChange={event => {
+            if (statusDisabled) return;
+            const value = event.currentTarget.value;
+            const comfort = COMFORT_CODES.find(code => code === value);
+            if (comfort) onChange(dateKey, comfort);
+            else if (value === "" && record) onClear(dateKey);
+            else return;
+            setSelectedDate(dateKey);
+          }}>
+          <option value="" disabled={!record}>{record ? labels.clear : labels.noRecord}</option>
+          {COMFORT_CODES.map(comfort => <option key={comfort} value={comfort}>{labels.options[comfort]}</option>)}
+        </select>
+      </label>
+    </div>;
   };
 
   return (
@@ -214,42 +275,14 @@ export function ComfortHistoryCalendar({ personalLocalDay = false, records, dail
         {weekdays.map((weekday, index) => <span key={`${weekday}-${index}`}>{weekday}</span>)}
       </div>
       <div className={`comfort-history-grid${view === "week" ? " comfort-history-grid--week" : view === "day" ? " comfort-history-grid--day" : ""}`} role="grid" aria-label={periodLabel}>
-        {days.map((date) => {
-          const dateKey = localDateKey(date);
-          const record = recordsByDate.get(dateKey);
-          const usage = dailyUsageByDate.get(dateKey);
-          const tokenSnapshot = tokenMode && !personPercentMode ? snapshotFor(dateKey) : null;
-          const usagePercent = personPercentMode ? percentText(dateKey) : tokenMode ? tokenText(dateKey, tokenSnapshot) : usage ? formatUsagePercent(usage.observedUsedPercent, language) : null;
-          const usageCoverage = personPercentMode ? allocationFor(dateKey)?.coverage : tokenMode ? tokenSnapshot?.coverage : usage?.coverage;
-          const coverageNote = usageCoverage === "partial" ? (language === "en" ? " · Partial observations" : " · 部分观测") : "";
-          const usageLabel = tokenMode ? "Token" : labels.weeklyUsage;
-          const isOutside = view === "month" && date.getUTCMonth() !== visibleMonth.getUTCMonth();
-          const isFuture = dateKey > today;
-          const isSelected = dateKey === selectedDate;
-          return (
-            <button
-              key={dateKey}
-              type="button"
-              role="gridcell"
-              className={`comfort-history-day${tokenMode || personPercentMode ? " is-token-day" : ""}${isOutside ? " is-outside" : ""}${isSelected ? " is-selected" : ""}${dateKey === today ? " is-today" : ""}${isFuture ? " is-future" : ""}`}
-              aria-label={`${formatSelectedDate(dateKey, language)} · ${record ? labels.options[record.comfort] : labels.noRecord}${usagePercent !== null ? ` · ${usageLabel} ${usagePercent}${coverageNote}` : ""}`}
-              title={usagePercent !== null ? `${usageLabel} ${usagePercent}${coverageNote}` : undefined}
-              aria-selected={isSelected}
-              disabled={isFuture}
-              onMouseDown={(event) => event.stopPropagation()}
-              onClick={() => setSelectedDate(dateKey)}
-            >
-              <span className="comfort-history-day-number">{date.getUTCDate()}</span>
-              <span className="comfort-history-day-detail" aria-hidden="true">
-                {record ? <span className="comfort-history-day-emoji">{COMFORT_EMOJI[record.comfort]}</span> : null}
-                {usagePercent !== null ? <small className="comfort-history-day-usage">{tokenMode ? usagePercent.replace(/(\d+)\.\d{2}M$/, (_, whole: string) => Number(whole) >= 10 ? `${whole}M` : usagePercent.replace(/0M$/, "M")) : usagePercent}</small> : null}
-              </span>
-            </button>
-          );
-        })}
+        {Array.from({ length: Math.ceil(days.length / 7) }, (_, index) => (
+          <div key={days[index * 7].getTime()} role="row" className="comfort-history-grid-row">
+            {days.slice(index * 7, index * 7 + 7).map(renderDay)}
+          </div>
+        ))}
       </div>
 
-      {selectedDate ? (
+      {!onClear && selectedDate ? (
         <div className="comfort-history-editor" aria-label={labels.editor}>
           {!personPercentMode && <div className="comfort-history-editor-heading">
             <strong>{formatSelectedDate(selectedDate, language)}</strong>

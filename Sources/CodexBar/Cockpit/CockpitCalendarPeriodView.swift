@@ -71,6 +71,8 @@ struct CockpitCalendarPeriodView: View {
     let selectedDay: Date
     let select: (Date) -> Void
     var days: [Date: CockpitCalendarDay] = [:]
+    var onFeelingChange: ((Date, CockpitFeeling?) -> Void)?
+    var canEditFeeling: (Date) -> Bool = { _ in false }
 
     private var subperiods: [CockpitCalendarPeriod] {
         switch self.period.scale {
@@ -128,7 +130,9 @@ struct CockpitCalendarPeriodView: View {
                     minimumHeight: minimumHeight,
                     compact: self.period.scale == .week,
                     showsWeekday: true,
-                    select: self.select)
+                    select: self.select,
+                    onFeelingChange: self.onFeelingChange,
+                    canEditFeeling: self.canEditFeeling)
             }
         }
         .modifier(CockpitCalendarSurface())

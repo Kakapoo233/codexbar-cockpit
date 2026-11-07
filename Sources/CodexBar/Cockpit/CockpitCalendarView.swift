@@ -144,21 +144,18 @@ struct CockpitCalendarView: View {
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    self.feedbackScope
                     self.calendarContent(ledger: ledger)
+                    if self.experienceMode == .quota, let error = self.planStore.errorMessage {
+                        Label(error, systemImage: "exclamationmark.triangle")
+                            .font(CockpitCalendarTypography.caption).foregroundStyle(.orange)
+                    }
                     CockpitCalendarPeriodSummaryView(ledger: ledger, period: self.period, metric: self.metric)
                     Text(L("cockpit_ui_calendar_zone", self.calendar.timeZone.identifier))
                         .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                     Divider()
                     self.selectedDayHeader
-                    CockpitCalendarPicker(
-                        selection: self.$experienceMode,
-                        choices: CockpitExperienceMode.allCases,
-                        title: { $0.title },
-                        label: L("cockpit_comfort_mode"))
-                    Text(L(self.experienceMode == .quota
-                            ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
-                        .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
-                    self.personalStatus
+                    if self.experienceMode == .tokens { self.personalStatus }
                     if self.experienceMode == .quota {
                         self.quotaFeedbackNotice
                     }
@@ -206,7 +203,11 @@ struct CockpitCalendarView: View {
                 timeZone: self.calendar.timeZone,
                 accessibility: true))
                 .font(CockpitCalendarTypography.headline)
-            Spacer()
+        }
+    }
+
+    private var feedbackScope: some View {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Text(L("cockpit_ui_feeling_records")).font(CockpitCalendarTypography.body)
                 CockpitCalendarPicker(
@@ -217,11 +218,27 @@ struct CockpitCalendarView: View {
                     style: .popUp)
             }
             .frame(width: 200)
+            CockpitCalendarPicker(
+                selection: self.$experienceMode,
+                choices: CockpitExperienceMode.allCases,
+                title: { $0.title },
+                label: L("cockpit_comfort_mode"))
+            Text(L(self.experienceMode == .quota
+                    ? "cockpit_comfort_quota_scope" : "cockpit_ui_local_experience_note"))
+                .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
+            if self.experienceMode == .quota, !self.hasQuotaAccount {
+                Text(L("cockpit_comfort_no_account"))
+                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
+            }
         }
     }
 
     @ViewBuilder
     private func calendarContent(ledger: CockpitCalendarLedger) -> some View {
+        let feedback = CockpitCalendarQuotaFeedback(
+            store: self.planStore, provider: self.feelingProvider, calendar: self.calendar)
+        let change: ((Date, CockpitFeeling?) -> Void)? = self.experienceMode == .quota
+            ? { day, feeling in feedback.update(feeling, on: day) } : nil
         if self.scale != .month {
             CockpitCalendarPeriodView(
                 ledger: ledger,
@@ -229,7 +246,9 @@ struct CockpitCalendarView: View {
                 metric: self.metric,
                 selectedDay: self.selectedDay,
                 select: { self.selectedDay = $0 },
-                days: self.calendarDays(ledger: ledger))
+                days: self.calendarDays(ledger: ledger),
+                onFeelingChange: change,
+                canEditFeeling: { feedback.canRecord(on: $0) })
         }
         if [.month, .quarter, .year].contains(self.scale) {
             if self.scale != .month {
@@ -246,7 +265,9 @@ struct CockpitCalendarView: View {
                 days: self.calendarDays(ledger: ledger),
                 select: { self.selectedDay = $0 },
                 compact: true,
-                metricText: { ledger.text(on: $0, metric: self.metric) })
+                metricText: { ledger.text(on: $0, metric: self.metric) },
+                onFeelingChange: change,
+                canEditFeeling: { feedback.canRecord(on: $0) })
         }
     }
 

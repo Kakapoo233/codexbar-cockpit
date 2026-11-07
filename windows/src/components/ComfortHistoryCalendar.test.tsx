@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { COMFORT_CURVE_VERSION } from "../lib/comfortFeedback";
 import type { CodexDailyUsage, ComfortFeedbackRecord, DailyUsageSummary } from "../types";
@@ -104,6 +104,38 @@ describe("ComfortHistoryCalendar", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Next 7 days" }));
     expect(screen.getByRole("gridcell", { name: /Sat, Aug 15/i })).toBeDisabled();
+  });
+
+  it("edits the date of the inline quota selector in each calendar view", () => {
+    const onChange = vi.fn(), onClear = vi.fn();
+    const props = { personalLocalDay: true, now: new Date(2026, 7, 14, 12), records: [record()], language: "en" as const, onChange, onClear };
+    const { rerender } = render(<ComfortHistoryCalendar {...props} />);
+    const statusFor = (day: RegExp) => within(screen.getByRole("gridcell", { name: day })).getByRole("combobox");
+    const status = statusFor(/Wed, Aug 12/);
+    expect(status).toHaveAccessibleName("Quota experience · Wed, Aug 12");
+    expect(status).toHaveValue("comfortable");
+    expect(status.closest("button")).toBeNull();
+    expect(screen.getByRole("gridcell", { name: /Fri, Aug 14/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.queryByRole("radiogroup")).not.toBeInTheDocument();
+
+    fireEvent.change(status, { target: { value: "idle" } });
+    expect(onChange).toHaveBeenLastCalledWith("2026-08-12", "idle");
+    fireEvent.change(status, { target: { value: "" } });
+    expect(onClear).toHaveBeenCalledWith("2026-08-12");
+
+    fireEvent.click(screen.getByRole("button", { name: "Day" }));
+    fireEvent.change(statusFor(/Wed, Aug 12/), { target: { value: "overloaded" } });
+    expect(onChange).toHaveBeenLastCalledWith("2026-08-12", "overloaded");
+
+    fireEvent.click(screen.getByRole("button", { name: "Month" }));
+    fireEvent.change(statusFor(/Thu, Aug 13/), { target: { value: "comfortable" } });
+    expect(onChange).toHaveBeenLastCalledWith("2026-08-13", "comfortable");
+    const future = statusFor(/Sat, Aug 15/);
+    expect(future).toBeDisabled();
+    fireEvent.change(future, { target: { value: "overloaded" } });
+    expect(onChange).toHaveBeenCalledTimes(3);
+    rerender(<ComfortHistoryCalendar {...props} saving />);
+    expect(statusFor(/Thu, Aug 13/)).toBeDisabled();
   });
 
   it("prefers official history over stale refresh snapshots", () => {

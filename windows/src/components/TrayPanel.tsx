@@ -27,7 +27,7 @@ interface Props {
   forecast: ResetForecast | null; now: Date; usage: TokeiUsage | null; usageError: boolean;
   onUsageRefresh: () => Promise<unknown>; diagnostics: AppDiagnostics | null; startupReady: boolean;
   settingsWritable: boolean; error: string | null; onDismissError: () => void; refreshing: boolean;
-  onRefresh: () => void; onHide: () => void; onFeedback: (date: string, value: ComfortCode) => void;
+  onRefresh: () => void; onHide: () => void; onFeedback: (date: string, value: ComfortCode | null) => void;
   feedback: ComfortFeedbackRecord[]; dailyUsage: CodexDailyUsage[]; curve: PersonalizedComfortCurve;
   savingFeedback: boolean; canRecordFeedback: boolean; autostart: boolean; onAutostart: (enabled: boolean) => void;
   onPersonalCap: (value: number | null) => void;
@@ -141,7 +141,14 @@ export function TrayPanel(props: Props) {
           {!props.snapshots.length && <p role="status">{props.startupReady ? zh ? "暂无额度数据，请检查登录状态与本机数据目录。" : "No quota data. Check sign-in and local data sources." : zh ? "正在加载…" : "Loading…"}</p>}
         </>}
         {page === "statistics" && <><QuotaHistory history={props.history} range={dateRange} zh={zh} /><CodexUsagePanel zh={zh} initialUsage={props.usage} onOpenSettings={() => setPage("settings")} externalRange={dateRange} fixedRange /></>}
-        {page === "calendar" && <><ComfortHistoryCalendar records={props.feedback} dailyUsageHistory={props.dailyUsage} language={preferences.language} onChange={props.onFeedback} saving={props.savingFeedback || !props.canRecordFeedback} personalLocalDay /><ComfortCurvePanel curve={props.curve} language={preferences.language} /></>}
+        {page === "calendar" && <>
+          <ComfortHistoryCalendar
+            key={`${props.snapshots.find(snapshot => snapshot.provider === "codex")?.accountScope ?? ""}|${plan.timeZoneIdentifier}`}
+            records={props.feedback} dailyUsageHistory={props.dailyUsage} language={preferences.language}
+            onChange={props.onFeedback} onClear={date => props.onFeedback(date, null)}
+            saving={props.savingFeedback || !props.canRecordFeedback} now={now} personalLocalDay />
+          <ComfortCurvePanel curve={props.curve} language={preferences.language} />
+        </>}
         {page === "members" && <><p className="usage-note">{zh ? "管理人员与设备归属。云服务地址和连接凭据在设置中配置；Windows 活动上传正在适配，当前不会发送活动快照。" : "Manage members and device assignment. Configure your cloud service in Settings. Windows activity upload is pending adaptation; activity snapshots are not sent."}</p><TeamMemberSettings usage={props.usage} loadingError={props.usageError} preferences={preferences} zh={zh} onPreferences={onPreferences} onSaved={props.onUsageRefresh} /></>}
         {page === "settings" && <div className="tray-settings">
           <fieldset disabled={!props.settingsWritable}>
