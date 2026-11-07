@@ -42,7 +42,7 @@ struct MetricRow: View {
                     self.layoutPreservingText(
                         presentation.metaText,
                         layoutText: layoutMetaText,
-                        lineLimit: 2)
+                        lineLimit: 4)
                 }
                 if !self.compact, let layoutDetailText = self.layoutMetric.detailText {
                     self.layoutPreservingText(

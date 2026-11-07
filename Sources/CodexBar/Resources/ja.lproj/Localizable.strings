@@ -902,6 +902,7 @@
 "reset_tomorrow_format" = "明日 %@";
 "Lasts until reset" = "リセットまで持続";
 "1.5× headroom" = "1.5倍の余裕";
+"cockpit_pace_headroom_duration" = "この平均ペースでは約%@で利用枠を使い切る見込み（リセットは考慮しない）";
 "Updated %@" = "%@ に更新";
 "Updated relative %@" = "%@ に更新";
 "Updated absolute %@" = "%@ に更新";

@@ -1231,6 +1231,7 @@
 "Last 30 days: %@ · %@ tokens" = "Últims 30 dies: %@ · %@ tokens";
 "Lasts until reset" = "Dura fins al reinici";
 "1.5× headroom" = "marge d'1,5×";
+"cockpit_pace_headroom_duration" = "A aquest ritme mitjà, la quota s’esgotaria en %@ (sense comptar el restabliment)";
 "Login with Google" = "Inicieu sessió amb Google";
 "login_success_notification_body" = "Podeu tornar a l'app; l'autenticació ha finalitzat.";
 "login_success_notification_title" = "Inici de sessió de %@ correcte";

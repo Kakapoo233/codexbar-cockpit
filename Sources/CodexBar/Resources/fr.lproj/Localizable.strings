@@ -905,6 +905,7 @@
 "reset_tomorrow_format" = "demain, %@";
 "Lasts until reset" = "Dure jusqu'à la réinitialisation";
 "1.5× headroom" = "marge de 1,5×";
+"cockpit_pace_headroom_duration" = "À ce rythme moyen, le quota serait épuisé dans %@ (hors réinitialisation)";
 "Updated %@" = "%@ mis à jour";
 "Updated relative %@" = "%@ mis à jour";
 "Updated absolute %@" = "%@ mis à jour";

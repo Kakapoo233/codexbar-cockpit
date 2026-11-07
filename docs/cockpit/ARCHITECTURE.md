@@ -82,7 +82,12 @@ the same page again when the button's standard activation follows the initial pr
   conditions; missing/stale/account-or-cycle-mismatched plans remain unavailable. Session
   lanes and other providers retain their window pace. The daily comparison never supplies a cumulative
   weekly progress stripe or an account exhaustion ETA; the latter remains separately labeled as a quota
-  forecast. Placed pace components and their editor preview observe planner changes and minute ticks.
+  forecast. The Usage card can also extend the headroom model's average projected rate beyond the
+  account reset: remaining duration = uncapped headroom ratio × time until reset. This is explicitly
+  labeled as ignoring reset replenishment; in historical/workday modes it remains an average-rate
+  extrapolation, not a future calendar schedule. Only the card opts into this text, and invalid inputs
+  produce no additional duration. It does not change `etaSeconds`, reset dates or daily recommendations.
+  Placed pace components and their editor preview observe planner changes and minute ticks.
   Display uses CodexBar's native integer deficit/reserve labels and two-point neutral presentation
   band, while preserving the daily calculation's original values. Stored menu-bar layout pace tokens
   separately present the rounded recorded difference as native signed numbers, with red for positive

@@ -696,6 +696,7 @@
 "show_debug_settings_title" = "顯示除錯設定";
 "show_debug_settings_subtitle" = "在「除錯」標籤中顯示疑難排解工具。";
 "1.5× headroom" = "1.5 倍餘裕";
+"cockpit_pace_headroom_duration" = "按目前平均節奏預計 %@ 後用完（不計重置）";
 "surprise_me_title" = "給我驚喜";
 "surprise_me_subtitle" = "讓選單列上的 Agent 多一點變化。";
 "hide_personal_info_title" = "隱藏個人資訊";

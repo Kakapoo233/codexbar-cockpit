@@ -905,6 +905,7 @@
 "reset_tomorrow_format" = "morgen, %@";
 "Lasts until reset" = "Gaat mee tot reset";
 "1.5× headroom" = "1,5× speelruimte";
+"cockpit_pace_headroom_duration" = "In dit gemiddelde tempo is het quotum naar verwachting over %@ op (zonder reset)";
 "Updated %@" = "Bijgewerkt %@";
 "Updated relative %@" = "Bijgewerkt %@";
 "Updated absolute %@" = "Bijgewerkt %@";

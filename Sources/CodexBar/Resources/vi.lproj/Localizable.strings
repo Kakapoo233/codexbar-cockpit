@@ -901,6 +901,7 @@
 "reset_tomorrow_format" = "ngày mai, %@";
 "Lasts until reset" = "Kéo dài cho đến Đặt lại";
 "1.5× headroom" = "dư địa 1,5×";
+"cockpit_pace_headroom_duration" = "Với tốc độ trung bình này, hạn mức dự kiến hết sau %@ (không tính lần đặt lại)";
 "Updated %@" = "Đã cập nhật %@";
 "Updated relative %@" = "Đã cập nhật %@";
 "Updated absolute %@" = "Đã cập nhật %@";

@@ -904,6 +904,7 @@
 "reset_tomorrow_format" = "imorgon %@";
 "Lasts until reset" = "Räcker till återställning";
 "1.5× headroom" = "1,5× marginal";
+"cockpit_pace_headroom_duration" = "I den här genomsnittliga takten beräknas kvoten ta slut om %@ (utan hänsyn till återställning)";
 "Updated %@" = "Uppdaterad %@";
 "Updated relative %@" = "Uppdaterad %@";
 "Updated absolute %@" = "Uppdaterad %@";

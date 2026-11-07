@@ -50,10 +50,16 @@ enum UsagePaceText {
         return L("Pace: %@", detail.leftLabel)
     }
 
-    static func weeklyDetail(provider: UsageProvider, pace: UsagePace, now: Date = .init()) -> WeeklyDetail {
+    static func weeklyDetail(
+        provider: UsageProvider,
+        pace: UsagePace,
+        now: Date = .init(),
+        headroomResetsAt: Date? = nil) -> WeeklyDetail
+    {
         WeeklyDetail(
             leftLabel: self.detailLeftLabel(for: pace),
-            rightLabel: self.detailRightLabel(for: pace, provider: provider, context: .weekly, now: now),
+            rightLabel: self.detailRightLabel(
+                for: pace, provider: provider, context: .weekly, now: now, headroomResetsAt: headroomResetsAt),
             expectedUsedPercent: pace.expectedUsedPercent,
             stage: pace.stage)
     }
@@ -120,11 +126,16 @@ enum UsagePaceText {
         for pace: UsagePace,
         provider: UsageProvider,
         context: DetailContext,
-        now: Date) -> String?
+        now: Date,
+        headroomResetsAt: Date? = nil) -> String?
     {
         let etaLabel: String?
         if pace.willLastToReset {
-            etaLabel = self.combinedLastsLabel(for: pace, provider: provider)
+            etaLabel = self.combinedLastsLabel(
+                for: pace,
+                provider: provider,
+                now: now,
+                headroomResetsAt: headroomResetsAt)
         } else if let etaSeconds = pace.etaSeconds {
             let etaText = Self.durationText(seconds: etaSeconds, now: now)
             if context == .session {
@@ -145,13 +156,38 @@ enum UsagePaceText {
         return riskLabel
     }
 
-    private static func combinedLastsLabel(for pace: UsagePace, provider: UsageProvider) -> String {
+    private static func combinedLastsLabel(
+        for pace: UsagePace,
+        provider: UsageProvider,
+        now: Date,
+        headroomResetsAt: Date?) -> String
+    {
         let paceCapability = ProviderDescriptorRegistry.descriptor(for: provider).pace
         guard paceCapability.showsHeadroomHint else { return L("Lasts until reset") }
         guard let speedLabel = self.speedHintLabel(for: pace) else {
             return L("Lasts until reset")
         }
-        return L("%@ · %@", L("Lasts until reset"), speedLabel)
+        let label = L("%@ · %@", L("Lasts until reset"), speedLabel)
+        guard let duration = self.headroomDuration(pace: pace, resetsAt: headroomResetsAt, now: now) else {
+            return label
+        }
+        return L("%@ · %@", label, L("cockpit_pace_headroom_duration", duration))
+    }
+
+    /// Extend the same average projected rate that supplies headroom, ignoring replenishment.
+    /// Use the uncapped multiplier: the visible 1.5x hint is not the actual capacity ratio.
+    /// Opt-in card context keeps menu-bar exhaustion metrics and reset forecasts unchanged.
+    private static func headroomDuration(pace: UsagePace, resetsAt: Date?, now: Date) -> String? {
+        guard let resetsAt, now.timeIntervalSince1970.isFinite,
+              let multiplier = pace.speedMultiplierToReset, multiplier.isFinite, multiplier > 0,
+              pace.actualUsedPercent.isFinite, pace.actualUsedPercent > 0, pace.actualUsedPercent < 100
+        else { return nil }
+        let horizon = resetsAt.timeIntervalSince(now)
+        let seconds = horizon * multiplier
+        guard horizon.isFinite, horizon > 0, seconds.isFinite, seconds > 0,
+              Int(exactly: ceil(seconds / 60)) != nil
+        else { return nil }
+        return self.durationText(seconds: seconds, now: now)
     }
 
     private static func speedHintLabel(for pace: UsagePace) -> String? {
@@ -181,11 +217,21 @@ enum UsagePaceText {
         return pace
     }
 
-    static func sessionDetail(provider: UsageProvider, window: RateWindow, now: Date = .init()) -> WeeklyDetail? {
+    static func sessionDetail(
+        provider: UsageProvider,
+        window: RateWindow,
+        now: Date = .init(),
+        includeHeadroomDuration: Bool = false) -> WeeklyDetail?
+    {
         guard let pace = sessionPace(provider: provider, window: window, now: now) else { return nil }
         return WeeklyDetail(
             leftLabel: Self.detailLeftLabel(for: pace),
-            rightLabel: Self.detailRightLabel(for: pace, provider: provider, context: .session, now: now),
+            rightLabel: Self.detailRightLabel(
+                for: pace,
+                provider: provider,
+                context: .session,
+                now: now,
+                headroomResetsAt: includeHeadroomDuration ? window.resetsAt : nil),
             expectedUsedPercent: pace.expectedUsedPercent,
             stage: pace.stage)
     }

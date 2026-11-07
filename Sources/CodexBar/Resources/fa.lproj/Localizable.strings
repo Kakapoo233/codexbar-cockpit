@@ -911,6 +911,7 @@
 "reset_tomorrow_format" = "فردا، %@";
 "Lasts until reset" = "تا زمان ریست ادامه دارد";
 "1.5× headroom" = "حاشیه ۱٫۵×";
+"cockpit_pace_headroom_duration" = "با این میانگین آهنگ مصرف، سهمیه تا %@ دیگر تمام می‌شود (بدون در نظر گرفتن بازنشانی)";
 "Updated %@" = "به روزرسانی %@";
 "Updated relative %@" = "به روزرسانی %@";
 "Updated absolute %@" = "به روزرسانی %@";

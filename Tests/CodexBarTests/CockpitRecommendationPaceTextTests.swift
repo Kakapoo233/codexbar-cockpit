@@ -159,6 +159,12 @@ struct CockpitRecommendationPaceTextTests {
         #expect(weekly.detailLeftText == CockpitRecommendationPaceText.detailLabel(pace))
         #expect(weekly.pacePercent == nil)
         #expect(weekly.detailRightText == originalWeekly.detailRightText)
+        #expect(weekly.detailRightText == L(
+            "%@ · %@",
+            L("%@ · %@", L("Lasts until reset"), L("1.5× headroom")),
+            L("cockpit_pace_headroom_duration", UsageFormatter.resetCountdownDuration(
+                from: Self.now.addingTimeInterval(6 * 86400), now: Self.now))))
+        #expect(weekly.paceHelpText?.contains(weekly.detailRightText ?? "missing forecast") == true)
         #expect(weekly.paceHelpText?.contains(L("menu_bar_help_pace")) == true)
         #expect(weekly.paceHelpText?.contains(CockpitRecommendationPaceText.explanationLabel(pace)) == true)
         #expect(missingWeekly.detailLeftText == CockpitRecommendationPaceText.detailLabel(nil))

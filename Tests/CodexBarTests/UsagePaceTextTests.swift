@@ -16,6 +16,7 @@ struct UsagePaceTextTests {
         "Runs out now",
         "Runs out in %@",
         "1.5× headroom",
+        "cockpit_pace_headroom_duration",
         "(%d%% risk)",
         "%@ left",
         "session quota",

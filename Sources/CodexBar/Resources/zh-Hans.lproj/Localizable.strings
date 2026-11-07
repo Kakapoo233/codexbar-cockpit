@@ -865,6 +865,7 @@
 "reset_tomorrow_format" = "明天 %@";
 "Lasts until reset" = "持续到重置";
 "1.5× headroom" = "1.5 倍余量";
+"cockpit_pace_headroom_duration" = "按当前平均节奏预计 %@ 后用完（不计重置）";
 "Updated %@" = "更新于 %@";
 "Updated relative %@" = "%@已更新";
 "Updated absolute %@" = "更新于 %@";
