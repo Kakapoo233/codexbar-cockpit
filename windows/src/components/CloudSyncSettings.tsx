@@ -1,16 +1,10 @@
 import { USAGE_TIME_ZONE } from "../lib/usageDay";
 import { useEffect, useState } from "react";
 import { isTauri } from "../lib/bridge";
-import { getUsageSyncStatus, syncUsageNow, type UsageSyncStatus } from "../lib/usageSyncBridge";
+import { getCloudSyncStatus, type CloudSyncStatus } from "../lib/cloudSyncStatus";
+import { getUsageSyncStatus, type UsageSyncStatus } from "../lib/usageSyncBridge";
 import type { TokeiUsage } from "../lib/tokeiUsage";
 
-interface CloudStatus {
-  lastPulledAt?: string | null;
-  sharedRevision?: number;
-  pricingReady?: boolean;
-  config: { endpoint: string; shareTaskDetails: boolean; deviceId: string; spaceId: string; spaceName: string; role: string; enabled: boolean; intervalSeconds: number } | null;
-  members: { deviceId: string; displayName: string; role: string; updatedAt: number | null; syncInfo?: { protocolVersion: number; appVersion: string; settingsRevision: number } | null; costCoverage?: {knownModels: number; totalModels: number} }[];
-}
 async function call<T>(command: string, args?: Record<string, unknown>): Promise<T> {
   if (!isTauri()) return { config: null, members: [] } as T;
   const { invoke } = await import("@tauri-apps/api/core");
@@ -19,7 +13,7 @@ async function call<T>(command: string, args?: Record<string, unknown>): Promise
 const when = (time: string | number | null | undefined, zh: boolean) => time ? new Date(typeof time === "number" ? time * 1000 : time).toLocaleString(zh ? "zh-CN" : "en-US", { timeZone: USAGE_TIME_ZONE, month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : (zh ? "尚无记录" : "No record");
 
 export function CloudSyncSettings({ usage, zh, onSynced }: { usage: TokeiUsage | null; zh: boolean; onSynced: () => Promise<unknown> | void }) {
-  const [cloud, setCloud] = useState<CloudStatus | null>(null);
+  const [cloud, setCloud] = useState<CloudSyncStatus | null>(null);
   const [runtime, setRuntime] = useState<UsageSyncStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +31,7 @@ export function CloudSyncSettings({ usage, zh, onSynced }: { usage: TokeiUsage |
     let active = true;
     const refresh = async () => {
       try {
-        const [next, status] = await Promise.all([call<CloudStatus>("get_cloud_sync_status"), getUsageSyncStatus()]);
+        const [next, status] = await Promise.all([getCloudSyncStatus(), getUsageSyncStatus()]);
         if (active) { setCloud(next); setRuntime(status); setDevice(current => current || status.settings?.deviceId || status.localDeviceId || `device-${crypto.randomUUID().slice(0, 8)}`); }
       } catch { if (active) setError(zh ? "暂时无法读取云同步状态" : "Cloud status unavailable"); }
     };
@@ -48,7 +42,7 @@ export function CloudSyncSettings({ usage, zh, onSynced }: { usage: TokeiUsage |
     setBusy(true); setError("");
     try {
       await run();
-      setCloud(await call<CloudStatus>("get_cloud_sync_status"));
+      setCloud(await getCloudSyncStatus());
       setRuntime(await getUsageSyncStatus());
       await onSynced();
     } catch (e) {
@@ -80,7 +74,7 @@ export function CloudSyncSettings({ usage, zh, onSynced }: { usage: TokeiUsage |
         await call("connect_cloud_sync", { setup: { endpoint: endpoint.trim(), inviteCode: mode === "join" ? code.trim() : null, displayName: name.trim(), deviceId: device.trim(), spaceName: mode === "create" ? spaceName.trim() : null, bootstrapSecret: mode === "create" ? secret : null, shareTaskDetails: shareTasks } });
         setSecret(""); setCode("");
         // Enrollment succeeds independently of a slow first collection.
-        setCloud(await call<CloudStatus>("get_cloud_sync_status"));
+        setCloud(await getCloudSyncStatus());
         // Enrollment does not upload activity until account/source binding is implemented.
       }); }}>
         <label>{zh ? "服务地址" : "Server URL"}<input required type="url" placeholder="https://your-worker.workers.dev" value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>

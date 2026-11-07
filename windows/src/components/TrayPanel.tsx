@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowClockwise, GearSix, X } from "@phosphor-icons/react";
+import { version } from "../../package.json";
 import { isTauri, openExternalUrl } from "../lib/bridge";
 import type { CockpitDailyPlanStatus, CockpitQuotaObservation } from "../lib/cockpitDailyPlan";
 import type { AppDiagnostics, CodexDailyUsage, ComfortCode, ComfortFeedbackRecord, PersonalizedComfortCurve, ProviderSnapshot, ResetForecast, WidgetPreferences } from "../types";
@@ -13,6 +14,7 @@ import { CodexUsagePanel } from "./CodexUsagePanel";
 import { ComfortHistoryCalendar } from "./ComfortHistoryCalendar";
 import { ComfortCurvePanel } from "./ComfortCurvePanel";
 import { TeamMemberSettings } from "./TeamMemberSettings";
+import { TeamUsagePanel } from "./TeamUsagePanel";
 import { CloudSyncSettings } from "./CloudSyncSettings";
 import { LocalUsageSourceSettings } from "./LocalUsageSourceSettings";
 import "./TrayPanel.css";
@@ -95,21 +97,34 @@ export function TrayPanel(props: Props) {
   const zh = preferences.language !== "en";
   const [page, setPage] = useState<Page>(props.pageRequest?.page ?? "usage");
   const [range, setRange] = useState<Range>("7d");
+  const [memberRefreshVersion, setMemberRefreshVersion] = useState(0);
   const contentRef = useRef<HTMLElement>(null);
+  const memberSettingsRef = useRef<HTMLDivElement>(null);
+  const openMemberSettingsNext = useRef(false);
   useLayoutEffect(() => {
     // Pages share a scroll container, but a previous page's offset must not hide the next header.
     if (contentRef.current) contentRef.current.scrollTop = 0;
+    if (page === "settings" && openMemberSettingsNext.current) {
+      openMemberSettingsNext.current = false;
+      memberSettingsRef.current?.focus({ preventScroll: true });
+      memberSettingsRef.current?.scrollIntoView?.({ block: "start" });
+    }
   }, [page]);
   const dateRange = useMemo(() => rangeFor(range, now), [range, now]);
   const reset = confirmedReset(forecast, now);
   const partial = plan.coverage !== "complete";
   const qualifier = plan.isStale ? "≈" : "";
   const patch = (value: Partial<WidgetPreferences>) => onPreferences({ ...preferences, ...value });
+  const openMemberSettings = () => { openMemberSettingsNext.current = true; setPage("settings"); };
+  const refreshPanel = () => {
+    if (page === "members") setMemberRefreshVersion(version => version + 1);
+    props.onRefresh();
+  };
   useEffect(() => { if (props.pageRequest) setPage(props.pageRequest.page); }, [props.pageRequest]);
   return <div className="tray-panel" onKeyDown={event => { if (event.key === "Escape" && !(event.target instanceof HTMLSelectElement)) props.onHide(); }}>
     <header className="tray-panel-header">
       <div><strong>CodexBar Cockpit</strong><small>{isTauri() ? "Windows" : zh ? "合成数据预览" : "Synthetic preview"}</small></div>
-      <div className="tray-header-actions"><button type="button" disabled={props.refreshing || !props.startupReady} onClick={props.onRefresh} title={zh ? "刷新额度与本机用量" : "Refresh quota and local usage"} aria-label={zh ? "刷新" : "Refresh"}><ArrowClockwise /></button>
+      <div className="tray-header-actions"><button type="button" disabled={props.refreshing || !props.startupReady} onClick={refreshPanel} title={page === "members" ? (zh ? "刷新组员用量与设备列表" : "Refresh member usage and devices") : (zh ? "刷新额度与本机用量" : "Refresh quota and local usage")} aria-label={zh ? "刷新" : "Refresh"}><ArrowClockwise /></button>
         <button type="button" onClick={() => setPage("settings")} title={zh ? "设置" : "Settings"} aria-label={zh ? "设置" : "Settings"}><GearSix /></button>
         <button type="button" onClick={props.onHide} title={preferences.displayMode === "floating" ? (zh ? "返回悬浮窗" : "Back to floating summary") : (zh ? "收起到系统托盘" : "Hide in system tray")} aria-label={zh ? "收起" : "Hide"}><X /></button></div>
     </header>
@@ -140,7 +155,7 @@ export function TrayPanel(props: Props) {
           <div className="tray-provider-grid">{props.snapshots.filter(value => !preferences.hiddenProviders.includes(value.provider)).map(snapshot => <section key={snapshot.provider} className="tray-card" aria-label={`${snapshot.displayName} ${zh ? "额度" : "quota"}`}><h2>{snapshot.displayName}<small>{snapshot.plan ?? ""}</small></h2><WindowMeter label={zh ? "短期剩余" : "Short-term remaining"} value={snapshot.shortWindow?.remainingPercent ?? null} /><WindowMeter label={zh ? "周额度剩余" : "Weekly remaining"} value={snapshot.weeklyWindow?.remainingPercent ?? null} /><small>{snapshot.status}{snapshot.message ? ` · ${snapshot.message}` : ""}</small></section>)}</div>
           {!props.snapshots.length && <p role="status">{props.startupReady ? zh ? "暂无额度数据，请检查登录状态与本机数据目录。" : "No quota data. Check sign-in and local data sources." : zh ? "正在加载…" : "Loading…"}</p>}
         </>}
-        {page === "statistics" && <><QuotaHistory history={props.history} range={dateRange} zh={zh} /><CodexUsagePanel zh={zh} initialUsage={props.usage} onOpenSettings={() => setPage("settings")} externalRange={dateRange} fixedRange /></>}
+        {page === "statistics" && <><QuotaHistory history={props.history} range={dateRange} zh={zh} /><CodexUsagePanel zh={zh} initialUsage={props.usage} onOpenSettings={openMemberSettings} externalRange={dateRange} fixedRange /></>}
         {page === "calendar" && <>
           <ComfortHistoryCalendar
             key={`${props.snapshots.find(snapshot => snapshot.provider === "codex")?.accountScope ?? ""}|${plan.timeZoneIdentifier}`}
@@ -149,7 +164,8 @@ export function TrayPanel(props: Props) {
             saving={props.savingFeedback || !props.canRecordFeedback} now={now} personalLocalDay />
           <ComfortCurvePanel curve={props.curve} language={preferences.language} />
         </>}
-        {page === "members" && <><p className="usage-note">{zh ? "管理人员与设备归属。云服务地址和连接凭据在设置中配置；Windows 活动上传正在适配，当前不会发送活动快照。" : "Manage members and device assignment. Configure your cloud service in Settings. Windows activity upload is pending adaptation; activity snapshots are not sent."}</p><TeamMemberSettings usage={props.usage} loadingError={props.usageError} preferences={preferences} zh={zh} onPreferences={onPreferences} onSaved={props.onUsageRefresh} /></>}
+        {page === "members" && <TeamUsagePanel usage={props.usage} loadingError={props.usageError} now={now} zh={zh}
+          colors={preferences.personRingColors} refreshVersion={memberRefreshVersion} onOpenSettings={openMemberSettings} />}
         {page === "settings" && <div className="tray-settings">
           <fieldset disabled={!props.settingsWritable}>
             <section className="tray-card"><h2>{zh ? "托盘与界面" : "Tray & appearance"}</h2>
@@ -165,8 +181,11 @@ export function TrayPanel(props: Props) {
             <section className="tray-card"><h2>{zh ? "提供商" : "Providers"}</h2><div className="tray-provider-options">{DEFAULT_PROVIDER_ORDER.map(provider => <label key={provider}><input type="checkbox" checked={(preferences.enabledProviders ?? ["codex"]).includes(provider)} onChange={event => patch({ enabledProviders: event.target.checked ? [...(preferences.enabledProviders ?? ["codex"]), provider] : (preferences.enabledProviders ?? ["codex"]).filter(value => value !== provider), hiddenProviders: event.target.checked ? preferences.hiddenProviders.filter(value => value !== provider) : [...preferences.hiddenProviders, provider] })} />{provider}</label>)}</div><p className="usage-note">{zh ? "当前为 Cockpit 原生采集器支持的提供商；其余 CodexBar 提供商待逐项适配。" : "These providers use the ported Cockpit collectors. Additional CodexBar providers require individual adaptation."}</p></section>
           </fieldset>
           <LocalUsageSourceSettings zh={zh} onSaved={() => { props.onRefresh(); }} />
-          <CloudSyncSettings usage={props.usage} zh={zh} onSynced={props.onUsageRefresh} />
-          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? "0.1.0-alpha.4"}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
+          <div ref={memberSettingsRef} className="tray-team-settings" role="region" aria-label={zh ? "组员设置" : "Member settings"} tabIndex={-1}>
+            <TeamMemberSettings usage={props.usage} loadingError={props.usageError} preferences={preferences} zh={zh} onPreferences={onPreferences} onSaved={props.onUsageRefresh} />
+            <CloudSyncSettings usage={props.usage} zh={zh} onSynced={props.onUsageRefresh} />
+          </div>
+          <section className="tray-card"><h2>{zh ? "关于" : "About"}</h2><strong>CodexBar Cockpit · Windows</strong><p>{props.diagnostics?.appVersion ?? version}</p><p>{zh ? "基于 CodexBar 与 Codex Cockpit 的独立开源整合。" : "An independent open-source integration of CodexBar and Codex Cockpit."}</p><button type="button" onClick={() => void openExternalUrl("https://github.com/Kakapoo233/codexbar-cockpit")}>{zh ? "开源项目" : "Project on GitHub"}</button><p className="usage-note">{zh ? "Windows 测试版：尚未完成全部提供商、多语言和跨设备同步验收。" : "Windows alpha: full provider, language and cross-device parity is not yet verified."}</p></section>
         </div>}
       </main>
     </div>

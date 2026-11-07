@@ -3283,3 +3283,18 @@
 "cockpit_pace_quota_forecast" = "Quotumprognose: %@";
 "cockpit_menu_pace_partial_color_help" = "De kleuren tonen het verschil tussen het geregistreerde gebruik en de aanbeveling voor vandaag. De gegevens zijn onvolledig en kunnen gebruik missen; groen bevestigt niet dat er een reserve beschikbaar is.";
 "cockpit_menu_pace_recorded_reference_help" = "Het tempo vergelijkt het vandaag geregistreerde gebruik met de dagaanbeveling vermenigvuldigd met het verstreken deel van de lokale dag, in procentpunten van het weekquotum. Het weergegeven teken volgt de instelling voor het tempoteken.";
+
+"Shared usage distribution" = "Verdeling van gedeeld gebruik";
+"Usage day (UTC+8)" = "Gebruiksdag (UTC+8)";
+"Recorded tokens" = "Geregistreerde tokens";
+"Share of recorded team tokens" = "Aandeel van de geregistreerde tokens van het team";
+"%1$@ of %2$@ devices reported usage" = "%1$@ van de %2$@ apparaten hebben gebruik gemeld";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "De aandelen worden berekend door de geregistreerde Codex-tokens van alle rapporterende apparaten te vergelijken, inclusief niet-toegewezen apparaten.";
+"No devices assigned" = "Geen apparaten toegewezen";
+"No shared usage for this day" = "Geen gedeelde gebruiksgegevens voor deze dag";
+"No members or devices yet." = "Er zijn nog geen leden of apparaten.";
+"Synchronize to load members and devices." = "Synchroniseer om leden en apparaten te laden.";
+"Synchronization is paused. Showing the last shared data." = "Synchronisatie is gepauzeerd. De laatst gedeelde gegevens worden getoond.";
+"Partial estimated cost (USD)" = "Gedeeltelijke geschatte kosten (USD)";
+"Invitations" = "Uitnodigingen";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Vraag de eigenaar van de ruimte om een nieuwe uitnodiging te maken in de instellingen onder ‘Members & Devices’.";

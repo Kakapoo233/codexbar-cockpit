@@ -3285,3 +3285,18 @@
 "cockpit_pace_quota_forecast" = "Kvotprognos: %@";
 "cockpit_menu_pace_partial_color_help" = "Färgerna visar skillnaden mellan registrerad användning och dagens rekommendation. Uppgifterna är ofullständiga och kan sakna användning; grönt bekräftar inte att det finns en reserv.";
 "cockpit_menu_pace_recorded_reference_help" = "Tempot jämför dagens registrerade användning med dagsrekommendationen multiplicerad med den andel av det lokala dygnet som har gått, i procentenheter av veckokvoten. Det visade tecknet följer inställningen för tempots tecken.";
+
+"Shared usage distribution" = "Fördelning av delad användning";
+"Usage day (UTC+8)" = "Användningsdag (UTC+8)";
+"Recorded tokens" = "Registrerade token";
+"Share of recorded team tokens" = "Andel av teamets registrerade token";
+"%1$@ of %2$@ devices reported usage" = "%1$@ av %2$@ enheter har rapporterat användning";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Andelarna beräknas genom att jämföra registrerade Codex-token på rapporterande enheter, även de som inte har tilldelats.";
+"No devices assigned" = "Inga enheter tilldelade";
+"No shared usage for this day" = "Inga delade användningsdata för den här dagen";
+"No members or devices yet." = "Det finns inga medlemmar eller enheter än.";
+"Synchronize to load members and devices." = "Synkronisera för att läsa in medlemmar och enheter.";
+"Synchronization is paused. Showing the last shared data." = "Synkroniseringen är pausad. De senast delade uppgifterna visas.";
+"Partial estimated cost (USD)" = "Uppskattad delkostnad (USD)";
+"Invitations" = "Inbjudningar";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Be utrymmets ägare att skapa en ny inbjudan under ”Members & Devices” i inställningarna.";

@@ -3292,3 +3292,18 @@
 "cockpit_pace_quota_forecast" = "توقع الحصة: %@";
 "cockpit_menu_pace_partial_color_help" = "تعكس الألوان الفرق بين الاستخدام المسجّل والتوصية لليوم. السجلات غير مكتملة وقد لا تشمل بعض الاستخدام؛ اللون الأخضر لا يؤكد وجود رصيد احتياطي.";
 "cockpit_menu_pace_recorded_reference_help" = "تقارن الوتيرة الاستخدام المسجّل اليوم بالتوصية اليومية مضروبة في نسبة الوقت المنقضي من اليوم المحلي، بوحدة النقاط المئوية من الحصة الأسبوعية. تتبع الإشارة المعروضة إعداد إشارة الوتيرة.";
+
+"Shared usage distribution" = "توزيع الاستخدام المشترك";
+"Usage day (UTC+8)" = "يوم الاستخدام (UTC+8)";
+"Recorded tokens" = "الرموز المسجّلة";
+"Share of recorded team tokens" = "الحصة من الرموز المسجّلة للفريق";
+"%1$@ of %2$@ devices reported usage" = "الأجهزة التي أبلغت عن الاستخدام (%1$@ من %2$@)";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "تُحسب الحصص بمقارنة رموز Codex المسجّلة على الأجهزة التي أبلغت عن استخدامها، بما فيها الأجهزة غير المعيّنة.";
+"No devices assigned" = "لا توجد أجهزة معيّنة";
+"No shared usage for this day" = "لا يوجد استخدام مشترك لهذا اليوم";
+"No members or devices yet." = "لا يوجد أعضاء أو أجهزة بعد.";
+"Synchronize to load members and devices." = "زامن البيانات لتحميل الأعضاء والأجهزة.";
+"Synchronization is paused. Showing the last shared data." = "المزامنة متوقفة مؤقتًا. تُعرض آخر البيانات المشتركة.";
+"Partial estimated cost (USD)" = "التكلفة التقديرية الجزئية (USD)";
+"Invitations" = "الدعوات";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "اطلب من مالك المساحة إنشاء دعوة جديدة في قسم «Members & Devices» ضمن الإعدادات.";

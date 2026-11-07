@@ -3291,3 +3291,18 @@
 "cockpit_pace_quota_forecast" = "Dự báo hạn mức: %@";
 "cockpit_menu_pace_partial_color_help" = "Màu sắc thể hiện chênh lệch giữa mức sử dụng đã ghi nhận và mức khuyến nghị hôm nay. Dữ liệu ghi nhận chưa đầy đủ và có thể bỏ sót mức sử dụng; màu xanh lá không xác nhận còn mức dự phòng.";
 "cockpit_menu_pace_recorded_reference_help" = "Nhịp độ so sánh mức sử dụng đã ghi nhận hôm nay với mức khuyến nghị hằng ngày nhân với tỷ lệ thời gian đã trôi qua trong ngày theo giờ địa phương, tính bằng điểm phần trăm của hạn mức tuần. Dấu hiển thị tuân theo cài đặt dấu của nhịp độ.";
+
+"Shared usage distribution" = "Phân bổ mức sử dụng đã chia sẻ";
+"Usage day (UTC+8)" = "Ngày sử dụng (UTC+8)";
+"Recorded tokens" = "Token đã ghi nhận";
+"Share of recorded team tokens" = "Tỷ lệ trong tổng số token đã ghi nhận của nhóm";
+"%1$@ of %2$@ devices reported usage" = "%1$@ trong số %2$@ thiết bị đã báo cáo mức sử dụng";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Tỷ lệ được tính bằng cách so sánh số token Codex đã ghi nhận trên các thiết bị có báo cáo, bao gồm cả thiết bị chưa được gán.";
+"No devices assigned" = "Chưa có thiết bị được gán";
+"No shared usage for this day" = "Không có dữ liệu sử dụng được chia sẻ cho ngày này";
+"No members or devices yet." = "Chưa có thành viên hoặc thiết bị.";
+"Synchronize to load members and devices." = "Đồng bộ hóa để tải danh sách thành viên và thiết bị.";
+"Synchronization is paused. Showing the last shared data." = "Đã tạm dừng đồng bộ hóa. Đang hiển thị dữ liệu được chia sẻ gần nhất.";
+"Partial estimated cost (USD)" = "Chi phí ước tính một phần (USD)";
+"Invitations" = "Lời mời";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Hãy yêu cầu chủ sở hữu không gian tạo lời mời mới trong mục “Members & Devices” của phần cài đặt.";

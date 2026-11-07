@@ -224,6 +224,21 @@ public struct CockpitTeamDeviceSnapshot: Codable, Equatable, Identifiable, Senda
         self.payload = payload
     }
 
+    static func latestPerDevice(_ snapshots: [Self]) -> [String: Self] {
+        Dictionary(grouping: snapshots, by: \.deviceID).compactMapValues { copies in
+            let valid = copies.filter {
+                $0.payload.deviceID == $0.deviceID && $0.updatedAt.isFinite && $0.updatedAt >= 0
+            }
+            guard let latest = valid.max(by: {
+                ($0.updatedAt, $0.payload.timestamp) < ($1.updatedAt, $1.payload.timestamp)
+            }), !valid.contains(where: {
+                $0.updatedAt == latest.updatedAt && $0.payload.timestamp == latest.payload.timestamp
+                    && $0.payload != latest.payload
+            }) else { return nil }
+            return latest
+        }
+    }
+
     private enum CodingKeys: String, CodingKey {
         case deviceID = "deviceId"
         case displayName, updatedAt, payload

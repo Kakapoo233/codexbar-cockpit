@@ -1,6 +1,6 @@
 # Windows tray client
 
-Current candidate: Windows 0.1.0-alpha.5, adding recommendation-linked pace to the tray/floating client.
+Current candidate: Windows 0.1.0-alpha.7, separating member usage information from configuration in Settings.
 Local source validation and genuine Windows installer/native acceptance are recorded separately in
 WORK_QUEUE.md and the corresponding pull request.
 
@@ -48,7 +48,7 @@ entire Core is portable.
 | Local history | Codex and Claude JSONL parsing, archived sessions, fork deduplication, timestamp/currency/coverage rules, selectable ranges and session receipt action. WSL roots require explicit selection and source deduplication. |
 | Calendar | Day/week/month views with common typography, personal feedback, comfort curve and pinned reset announcements. Unknown days remain unknown. |
 | Reset notices | Current verified reset source, dated confirmed banner and countdown, separately labeled website watches (no local reset-date estimates), notification opt-in and durable deduplication. |
-| Team and devices | Existing self-hosted Cloudflare Worker v2 protocol, independent-source declaration, account binding, revision conflicts and Asia/Shanghai team day. Store credentials through Windows current-user protection; never in settings JSON. |
+| Team and devices | Read-only member usage overview, member/device configuration in Settings. Activity upload and the member daily-plan UI remain unavailable. Existing self-hosted Cloudflare Worker v2 protocol, independent-source declaration, account binding, revision conflicts and Asia/Shanghai team day. Store credentials through Windows current-user protection; never in settings JSON. |
 | Other providers | Inventory each provider and port authentication and collection separately. Expose only supported integrations; describe missing ones explicitly. Mac browser-cookie/Keychain/PTY collectors are not automatically portable. |
 | Languages | Preserve the established app languages as translated features land. Keep any English-only tray preference scoped to the tray. |
 | Personal sync | The existing Mac CloudKit permission problem remains separate. Windows does not inherit that integration. Choose and verify a cross-platform personal-sync protocol before exposing a working-sync claim. |

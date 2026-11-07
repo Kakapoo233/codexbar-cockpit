@@ -3284,3 +3284,18 @@
 "cockpit_pace_quota_forecast" = "Kontingentprognose: %@";
 "cockpit_menu_pace_partial_color_help" = "Die Farben zeigen die Differenz zwischen der erfassten Nutzung und der heutigen Empfehlung. Die Aufzeichnungen sind unvollständig und können Nutzung auslassen; Grün bestätigt keine verfügbare Reserve.";
 "cockpit_menu_pace_recorded_reference_help" = "Das Tempo vergleicht die heute erfasste Nutzung mit der Tagesempfehlung multipliziert mit dem bereits verstrichenen Anteil des lokalen Tages, in Prozentpunkten des Wochenkontingents. Das angezeigte Vorzeichen richtet sich nach der Einstellung für das Tempo-Vorzeichen.";
+
+"Shared usage distribution" = "Verteilung der geteilten Nutzung";
+"Usage day (UTC+8)" = "Nutzungstag (UTC+8)";
+"Recorded tokens" = "Erfasste Token";
+"Share of recorded team tokens" = "Anteil an den erfassten Token des Teams";
+"%1$@ of %2$@ devices reported usage" = "%1$@ von %2$@ Geräten haben Nutzungsdaten gemeldet";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Die Anteile vergleichen die erfassten Codex-Token aller meldenden Geräte, einschließlich nicht zugewiesener Geräte.";
+"No devices assigned" = "Keine Geräte zugewiesen";
+"No shared usage for this day" = "Für diesen Tag liegen keine geteilten Nutzungsdaten vor";
+"No members or devices yet." = "Noch keine Mitglieder oder Geräte vorhanden.";
+"Synchronize to load members and devices." = "Synchronisieren, um Mitglieder und Geräte zu laden.";
+"Synchronization is paused. Showing the last shared data." = "Die Synchronisierung ist pausiert. Die zuletzt geteilten Daten werden angezeigt.";
+"Partial estimated cost (USD)" = "Geschätzte Teilkosten (USD)";
+"Invitations" = "Einladungen";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Bitte den Eigentümer des Bereichs, in den Einstellungen unter „Members & Devices“ eine neue Einladung zu erstellen.";

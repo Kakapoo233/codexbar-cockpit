@@ -46,6 +46,8 @@ struct PreferencesTeamPane: View {
                 }
                 self.accountSection
                 self.sharingSection
+                PreferencesTeamRosterSections(teamStore: self.teamStore)
+                PreferencesTeamBudgetSection(teamStore: self.teamStore)
                 if connection.role == .owner {
                     Section {
                         Text(L("Pause synchronization to keep this space's owner access recoverable."))

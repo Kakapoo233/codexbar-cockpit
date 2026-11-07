@@ -3270,3 +3270,18 @@
 "cockpit_pace_quota_forecast" = "週額度預測：%@";
 "cockpit_menu_pace_partial_color_help" = "顏色反映已記錄用量與今日建議的差值。記錄不完整，可能漏記用量；綠色不代表已確認有餘量。";
 "cockpit_menu_pace_recorded_reference_help" = "節奏比較今日已記錄用量與「全天建議 × 本地當天進度」的差值，單位為週額度百分點。顯示的正負號遵循「節奏符號」設定。";
+
+"Shared usage distribution" = "共享用量分布";
+"Usage day (UTC+8)" = "用量日期（UTC+8）";
+"Recorded tokens" = "已記錄 Token";
+"Share of recorded team tokens" = "佔團隊已記錄 Token 的比例";
+"%1$@ of %2$@ devices reported usage" = "%2$@ 台裝置中有 %1$@ 台回報了用量";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "佔比以所有已回報的 Codex Token 為基準，包含未分配裝置。";
+"No devices assigned" = "未分配裝置";
+"No shared usage for this day" = "當天暫無共享用量";
+"No members or devices yet." = "暫無組員或裝置。";
+"Synchronize to load members and devices." = "同步後可查看組員與裝置。";
+"Synchronization is paused. Showing the last shared data." = "同步已暫停，顯示上次同步的資料。";
+"Partial estimated cost (USD)" = "部分估算成本（美元）";
+"Invitations" = "邀請";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "請空間管理員在設定的「組員與裝置」中產生新邀請。";

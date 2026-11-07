@@ -3,23 +3,21 @@ import SwiftUI
 
 @MainActor
 struct CockpitTeamView: View {
-    @Bindable var teamStore: CockpitTeamStore
+    let teamStore: CockpitTeamStore
     let onSettings: () -> Void
-    @State private var draft = CockpitTeamGroups()
-    @State private var original = CockpitTeamGroups()
-    @State private var draftRevision = 0
-    @State private var personalBudget = 0.0
-    @State private var risk = 0.0
-    @State private var originalPersonalBudget = 0.0
-    @State private var originalRisk = 0.0
-    @State private var originalPlan: CockpitTeamDailyPlan?
-    @State private var revokingDevice: CockpitTeamDevice?
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 self.header
-                if self.teamStore.connection == nil {
+                if let connection = self.teamStore.connection {
+                    self.connectionStatus(connection)
+                    TimelineView(.periodic(from: .now, by: 60)) { _ in
+                        VStack(alignment: .leading, spacing: 12) {
+                            self.distribution(connection: connection)
+                        }
+                    }
+                } else {
                     ContentUnavailableView {
                         Label(L("Members and devices"), systemImage: "person.2")
                     } description: {
@@ -27,12 +25,6 @@ struct CockpitTeamView: View {
                     } actions: {
                         Button(L("Open team settings"), action: self.onSettings)
                     }
-                } else {
-                    self.connectionStatus
-                    self.budgetSection
-                    self.membersSection
-                    self.devicesSection
-                    self.invitationSection
                 }
                 if let message = self.teamStore.errorMessage {
                     Label(message, systemImage: "exclamationmark.triangle")
@@ -44,31 +36,6 @@ struct CockpitTeamView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityIdentifier("cockpit-team")
-        .onAppear { self.reloadDraft(); self.reloadBudget() }
-        .onChange(of: self.teamStore.sharedSettings) { _, _ in
-            if !self.hasChanges { self.reloadDraft() }
-        }
-        .onChange(of: self.teamStore.currentPlan) { _, _ in
-            if !self.budgetHasChanges { self.reloadBudget() }
-        }
-        .onChange(of: self.teamStore.currentPerson?.id) { _, _ in self.reloadBudget() }
-        .confirmationDialog(
-            L("Revoke device access?"),
-            isPresented: Binding(
-                get: { self.revokingDevice != nil },
-                set: { if !$0 { self.revokingDevice = nil } }),
-            titleVisibility: .visible)
-        {
-            if let device = self.revokingDevice {
-                Button(L("Revoke access"), role: .destructive) {
-                    Task { await self.teamStore.revoke(deviceID: device.deviceID) }
-                    self.revokingDevice = nil
-                }
-            }
-            Button(L("Cancel"), role: .cancel) { self.revokingDevice = nil }
-        } message: {
-            Text(L("This device will lose access. Previously shared data and other devices' caches are retained."))
-        }
     }
 
     private var header: some View {
@@ -82,15 +49,21 @@ struct CockpitTeamView: View {
                 Image(systemName: "arrow.clockwise")
             }
             .help(L("Refresh shared members, device usage, and budgets."))
-            .disabled(self.teamStore.connection == nil || self.teamStore.isBusy)
+            .accessibilityLabel(L("Refresh shared members, device usage, and budgets."))
+            .disabled(self.teamStore.connection?.enabled != true || self.teamStore.isBusy)
             Button(action: self.onSettings) { Image(systemName: "gearshape") }
                 .help(L("Open team settings"))
+                .accessibilityLabel(L("Open team settings"))
         }
     }
 
-    private var connectionStatus: some View {
+    private func connectionStatus(_ connection: CockpitTeamStore.Connection) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(self.teamStore.connection?.spaceName ?? "").font(.headline)
+            Text(connection.spaceName).font(.headline)
+            if !connection.enabled {
+                Text(L("Synchronization is paused. Showing the last shared data."))
+                    .font(.caption).foregroundStyle(.orange)
+            }
             Text(self.teamStore.uploadStatus).font(.caption).foregroundStyle(.secondary)
             if let date = self.teamStore.lastSyncedAt {
                 HStack(spacing: 4) {
@@ -99,310 +72,186 @@ struct CockpitTeamView: View {
                 }
                 .font(.caption).foregroundStyle(.secondary)
             }
-            Text(L("Shared plans use UTC+8. Budgets coordinate usage; provider limits remain authoritative."))
-                .font(.caption).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private var budgetSection: some View {
-        GroupBox {
-            VStack(alignment: .leading, spacing: 10) {
-                if let total = self.teamStore.recommendedTotal {
-                    LabeledContent(L("Team daily recommendation"), value: self.percent(total))
-                }
-                if let person = self.teamStore.currentPerson {
-                    LabeledContent(L("My member"), value: person.name)
-                    if let allocation = self.teamStore.allocations[person.id] {
-                        LabeledContent(L("My planned budget"), value: self.percent(allocation))
-                    }
-                    HStack {
-                        Text(L("Personal budget"))
-                        Slider(value: self.$personalBudget, in: 0...100, step: 0.5)
-                        Text(self.percent(self.personalBudget)).monospacedDigit().frame(width: 54)
-                    }
-                    HStack {
-                        Button(L("Save my budget")) {
-                            guard let plan = self.originalPlan else { return }
-                            let value = self.personalBudget
-                            Task { await self.teamStore.setPersonalBudget(value, expectedPlan: plan) }
-                        }
-                        Button(L("Use equal share")) {
-                            guard let plan = self.originalPlan else { return }
-                            Task { await self.teamStore.setPersonalBudget(nil, expectedPlan: plan) }
-                        }
-                    }
-                    .disabled(self.budgetActionsDisabled)
-                } else {
-                    Text(L("Assign this device to a member to edit a personal budget."))
-                        .font(.callout).foregroundStyle(.secondary)
-                }
-                if self.teamStore.currentPlan != nil {
-                    Divider()
-                    HStack {
-                        Text(L("Shared risk tolerance"))
-                        Slider(value: self.$risk, in: 0...100, step: 1)
-                            .help(L("Higher risk tolerance increases today's recommended usage."))
-                        Text(self.percent(self.risk)).monospacedDigit().frame(width: 54)
-                    }
-                    HStack {
-                        Button(L("Save risk tolerance")) {
-                            guard let plan = self.originalPlan else { return }
-                            let value = self.risk
-                            Task { await self.teamStore.setRisk(value, expectedPlan: plan) }
-                        }
-                        Button(L("Use default risk tolerance")) {
-                            guard let plan = self.originalPlan else { return }
-                            Task { await self.teamStore.setRisk(nil, expectedPlan: plan) }
-                        }
-                    }
-                    .disabled(self.budgetActionsDisabled)
-                }
-                if self.budgetHasChanges, self.originalPlan != self.teamStore.currentPlan {
-                    Label(L("The shared plan changed. Reload before saving."), systemImage: "exclamationmark.triangle")
-                        .font(.caption).foregroundStyle(.orange)
-                    Button(L("Reload plan")) { self.reloadBudget() }
-                }
-                Text(
-                    L(
-                        "Overrides do not change other budgets. Their sum may exceed the recommendation."))
-                    .font(.caption).foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                if !self.teamStore.accountMatches {
-                    Text(L("Bind the current Codex account in Settings to enable shared quota planning."))
-                        .font(.caption).foregroundStyle(.orange)
-                }
-            }
-            .padding(4)
-        } label: {
-            Text(L("Shared daily plan"))
-        }
-    }
-
-    private var membersSection: some View {
-        GroupBox {
-            VStack(alignment: .leading, spacing: 10) {
-                if self.draft.groups.isEmpty {
-                    Text(L("No members yet. Add a member, then assign their devices below."))
-                        .font(.callout).foregroundStyle(.secondary)
-                }
-                ForEach(self.$draft.groups) { $person in
-                    HStack {
-                        TextField(L("Member name"), text: $person.name)
-                        Text(self.percent(self.teamStore.allocations[person.id]))
-                            .monospacedDigit().foregroundStyle(.secondary)
-                        Button(role: .destructive) { self.removePerson(person.id) } label: {
-                            Image(systemName: "minus.circle")
-                        }
-                        .help(L("Remove this member and leave their devices unassigned."))
-                    }
-                }
-                HStack {
-                    Button(L("Add member"), systemImage: "plus") { self.addPerson() }
-                        .disabled(self.draft.groups.count >= 32)
-                    Spacer()
-                    Button(L("Reload")) { self.reloadDraft() }
-                    Button(L("Save members and devices")) {
-                        let value = self.draft
-                        let revision = self.draftRevision
-                        Task {
-                            await self.teamStore.saveGroups(value, expectedRevision: revision)
-                            if self.teamStore.sharedSettings.value?.groups == value { self.reloadDraft() }
-                        }
-                    }
-                    .disabled(!self.hasChanges || !self.validDraft || self.teamStore.isBusy)
-                }
-                if self.hasChanges, self.teamStore.sharedSettings.revision != self.draftRevision {
-                    Label(
-                        L("Another device changed the members. Reload before applying your changes again."),
-                        systemImage: "exclamationmark.triangle")
-                        .font(.caption).foregroundStyle(.orange)
-                }
-                Text(L("Each device belongs to at most one member. Unassigned devices remain separate."))
-                    .font(.caption).foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(4)
-        } label: {
-            Text(L("Members"))
-        }
-    }
-
-    private var devicesSection: some View {
-        GroupBox {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(self.availableDeviceIDs, id: \.self) { deviceID in
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack {
-                            Label(self.deviceName(deviceID), systemImage: "desktopcomputer")
-                            if deviceID == self.teamStore.connection?.deviceID {
-                                Text(L("This device")).font(.caption).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if self.canRevoke(deviceID) {
-                                Button(L("Revoke"), role: .destructive) {
-                                    self.revokingDevice = self.teamStore.identity?.members.first {
-                                        $0.deviceID == deviceID
-                                    }
-                                }
-                                .disabled(self.teamStore.isBusy)
-                            }
-                        }
-                        Picker(L("Assigned member"), selection: self.assignment(deviceID)) {
-                            Text(L("Unassigned")).tag("")
-                            ForEach(self.draft.groups) { person in
-                                Text(person.name).tag(person.id)
-                            }
-                        }
-                        self.deviceUsage(deviceID)
-                    }
-                    if deviceID != self.availableDeviceIDs.last { Divider() }
-                }
-            }
-            .padding(4)
-        } label: {
-            Text(L("Devices"))
         }
     }
 
     @ViewBuilder
-    private var invitationSection: some View {
-        if self.teamStore.connection?.role == .owner {
+    private func distribution(connection: CockpitTeamStore.Connection) -> some View {
+        if let identity = self.teamStore.identity,
+           identity.space.id == connection.spaceID, identity.deviceID == connection.deviceID
+        {
+            let day = CockpitTeamStore.day(self.teamStore.now())
+            let deviceNames = Dictionary(
+                identity.members.map { ($0.deviceID, $0.displayName) },
+                uniquingKeysWith: { first, _ in first })
+            let usage = CockpitTeamUsageDistribution.build(
+                people: self.teamStore.sharedSettings.value?.groups.groups ?? [],
+                activeDeviceIDs: Set(deviceNames.keys),
+                snapshots: self.teamStore.snapshots,
+                localDate: day)
+            let allocations = self.teamStore.allocations
+            self.distributionSummary(usage, day: day)
+            ForEach(usage.rows) { row in
+                CockpitTeamUsageRow(
+                    row: row,
+                    budget: row.person.flatMap { allocations[$0.id] },
+                    deviceNames: deviceNames,
+                    currentDeviceID: connection.deviceID)
+            }
+        } else {
+            Text(L("Synchronize to load members and devices."))
+                .font(.callout).foregroundStyle(.secondary)
+        }
+    }
+
+    private func distributionSummary(_ usage: CockpitTeamUsageDistribution, day: String) -> some View {
+        let shareExplanation = L(
+            "Shares compare recorded Codex tokens across reporting devices, including unassigned devices.")
+        return GroupBox {
             VStack(alignment: .leading, spacing: 8) {
-                Button(L("Invite a member or device")) { Task { await self.teamStore.invite() } }
-                    .disabled(self.teamStore.isBusy)
-                if let code = self.teamStore.inviteCode {
-                    Text(code).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
-                    if let expiry = self.teamStore.inviteExpiresAt {
-                        HStack {
-                            Text(L("Invitation expires"))
-                            Text(expiry, style: .date)
-                            Text(expiry, style: .time)
-                        }
-                        .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Text(L("Send the service address and this one-use invitation through a trusted channel."))
+                LabeledContent(L("Usage day (UTC+8)"), value: day)
+                if usage.rows.isEmpty {
+                    Text(L("No members or devices yet.")).foregroundStyle(.secondary)
+                } else {
+                    CockpitTeamUsageMetrics(totals: usage.totals)
+                    Text(shareExplanation)
                         .font(.caption).foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+                Divider()
+                LabeledContent(
+                    L("Team daily recommendation"),
+                    value: self.teamStore.recommendedTotal.map { ($0 / 100).formatted(.percent.precision(
+                        .fractionLength(0...1))) } ?? "—")
+                Text(L("Shared plans use UTC+8. Budgets coordinate usage; provider limits remain authoritative."))
+                    .font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            .font(.callout)
+            .padding(4)
+        } label: {
+            Text(L("Shared usage distribution")).font(.headline)
         }
     }
+}
 
-    @ViewBuilder
-    private func deviceUsage(_ deviceID: String) -> some View {
-        if let snapshot = self.teamStore.snapshots.first(where: { $0.deviceID == deviceID }) {
-            HStack(spacing: 6) {
-                Text(L("Updated"))
-                Text(Date(timeIntervalSince1970: snapshot.updatedAt), style: .relative)
-                if snapshot.payload.metadata?.status != .ready {
-                    Text(L("Partial or unavailable usage"))
+@MainActor
+private struct CockpitTeamUsageRow: View {
+    let row: CockpitTeamUsageDistribution.Row
+    let budget: Double?
+    let deviceNames: [String: String]
+    let currentDeviceID: String
+
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 8) {
+                CockpitTeamUsageMetrics(totals: self.row.totals)
+                if let share = self.row.tokenShare {
+                    LabeledContent(L("Share of recorded team tokens"), value: share.formatted(.percent.precision(
+                        .fractionLength(0...1))))
+                    ProgressView(value: share)
+                        .accessibilityHidden(true)
                 }
-            }
-            .font(.caption).foregroundStyle(.secondary)
-            if let day = self.teamStore.currentPlan?.basis.localDate,
-               let usage = snapshot.payload.days[day]
-            {
-                if let cost = usage.cost {
+                if self.row.person != nil {
                     LabeledContent(
-                        L("Shared-day estimated cost (USD)"),
-                        value: cost.formatted(.currency(code: "USD")))
-                        .font(.caption).foregroundStyle(.secondary)
-                } else {
-                    Text(L("Shared-day cost is unavailable"))
-                        .font(.caption).foregroundStyle(.secondary)
+                        L("Shared daily budget · UTC+8"),
+                        value: self.budget
+                            .map { ($0 / 100).formatted(.percent.precision(.fractionLength(0...1))) } ?? "—")
                 }
-            }
-        } else {
-            Text(L("No shared usage snapshot yet"))
-                .font(.caption).foregroundStyle(.secondary)
-        }
-    }
-
-    private var availableDeviceIDs: [String] {
-        var ids = Set(self.teamStore.identity?.members.map(\.deviceID) ?? [])
-        ids.formUnion(self.teamStore.snapshots.map(\.deviceID))
-        ids.formUnion(self.draft.groups.flatMap(\.deviceIDs))
-        if let id = self.teamStore.connection?.deviceID { ids.insert(id) }
-        return ids.sorted()
-    }
-
-    private var hasChanges: Bool {
-        self.draft != self.original
-    }
-
-    private var validDraft: Bool {
-        (try? self.draft.validate()) != nil
-    }
-
-    private func reloadDraft() {
-        let groups = self.teamStore.sharedSettings.value?.groups ?? CockpitTeamGroups()
-        self.draft = groups
-        self.original = groups
-        self.draftRevision = self.teamStore.sharedSettings.revision
-    }
-
-    private var budgetHasChanges: Bool {
-        self.personalBudget != self.originalPersonalBudget || self.risk != self.originalRisk
-    }
-
-    private var budgetActionsDisabled: Bool {
-        self.teamStore.isBusy || self.teamStore.currentPlan == nil || !self.teamStore.accountMatches
-            || self.teamStore.connection?.enabled != true || self.originalPlan != self.teamStore.currentPlan
-    }
-
-    private func reloadBudget() {
-        if let person = self.teamStore.currentPerson {
-            self.personalBudget = self.teamStore.allocations[person.id] ?? 0
-        }
-        self.risk = self.teamStore.currentPlan?.risk.value ?? 0
-        self.originalPersonalBudget = self.personalBudget
-        self.originalRisk = self.risk
-        self.originalPlan = self.teamStore.currentPlan
-    }
-
-    private func addPerson() {
-        let base = L("New member")
-        var name = base
-        var suffix = 2
-        while self.draft.groups.contains(where: { $0.name == name }) {
-            name = "\(base) \(suffix)"
-            suffix += 1
-        }
-        self.draft.groups.append(CockpitTeamPerson(id: UUID().uuidString, name: name))
-    }
-
-    private func removePerson(_ id: String) {
-        self.draft.groups.removeAll { $0.id == id }
-        if self.draft.defaultGroupID == id { self.draft.defaultGroupID = nil }
-    }
-
-    private func assignment(_ deviceID: String) -> Binding<String> {
-        Binding(
-            get: { self.draft.groups.first(where: { $0.deviceIDs.contains(deviceID) })?.id ?? "" },
-            set: { personID in
-                for index in self.draft.groups.indices {
-                    self.draft.groups[index].deviceIDs.removeAll { $0 == deviceID }
-                    if self.draft.groups[index].id == personID {
-                        self.draft.groups[index].deviceIDs.append(deviceID)
+                if !self.row.devices.isEmpty {
+                    DisclosureGroup(L("Devices")) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ForEach(self.row.devices) { device in
+                                self.deviceDetail(device)
+                            }
+                        }
+                        .padding(.top, 6)
                     }
                 }
-            })
+            }
+            .font(.callout)
+            .padding(4)
+        } label: {
+            HStack {
+                Label(
+                    self.row.person?.name ?? L("Unassigned"),
+                    systemImage: self.row.person == nil
+                        ? "desktopcomputer" : "person.fill")
+                    .font(.headline)
+                if self.row.devices.contains(where: { $0.id == self.currentDeviceID }), self.row.person != nil {
+                    Text(L("My member")).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+        }
     }
 
-    private func deviceName(_ id: String) -> String {
-        self.teamStore.identity?.members.first(where: { $0.deviceID == id })?.displayName
-            ?? self.teamStore.snapshots.first(where: { $0.deviceID == id })?.displayName ?? id
+    private func deviceDetail(_ device: CockpitTeamUsageDistribution.Device) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(self.deviceNames[device.id] ?? device.id).fontWeight(.medium)
+                if device.id == self.currentDeviceID {
+                    Text(L("This device")).foregroundStyle(.secondary)
+                }
+            }
+            if let updatedAt = device.updatedAt {
+                HStack(spacing: 4) {
+                    Text(L("Updated"))
+                    Text(updatedAt, style: .relative)
+                }
+                .foregroundStyle(.secondary)
+            }
+            if let tokens = device.tokens {
+                LabeledContent(L("Recorded tokens"), value: tokens.formatted())
+                if let cost = device.estimatedCostUSD {
+                    LabeledContent(
+                        L(device
+                            .coverage == .partial ? "Partial estimated cost (USD)" : "Shared-day estimated cost (USD)"),
+                        value: cost.formatted(.currency(code: "USD")))
+                } else {
+                    Text(L("Shared-day cost is unavailable")).foregroundStyle(.secondary)
+                }
+                if device.coverage == .partial {
+                    Text(L("codex_workspaces_partial_data")).foregroundStyle(.secondary)
+                }
+            } else {
+                Text(L(device.updatedAt == nil ? "No shared usage snapshot yet" : "No shared usage for this day"))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .font(.caption)
     }
+}
 
-    private func canRevoke(_ id: String) -> Bool {
-        self.teamStore.connection?.role == .owner && id != self.teamStore.connection?.deviceID
-            && self.teamStore.identity?.members.contains(where: { $0.deviceID == id }) == true
-    }
+@MainActor
+private struct CockpitTeamUsageMetrics: View {
+    let totals: CockpitTeamUsageDistribution.Totals
 
-    private func percent(_ value: Double?) -> String {
-        guard let value else { return "—" }
-        return value.formatted(.number.precision(.fractionLength(0...1))) + "%"
+    var body: some View {
+        if self.totals.deviceCount == 0 {
+            Text(L("No devices assigned")).foregroundStyle(.secondary)
+        } else {
+            if let tokens = self.totals.tokens {
+                LabeledContent(L("Recorded tokens"), value: tokens.formatted())
+                if let cost = self.totals.estimatedCostUSD {
+                    LabeledContent(
+                        L(self.totals.costCoverage == .partial
+                            ? "Partial estimated cost (USD)" : "Shared-day estimated cost (USD)"),
+                        value: cost.formatted(.currency(code: "USD")))
+                } else {
+                    Text(L("Shared-day cost is unavailable")).font(.caption).foregroundStyle(.secondary)
+                }
+                if self.totals.tokenCoverage == .partial {
+                    Text(L("codex_workspaces_partial_data")).font(.caption).foregroundStyle(.secondary)
+                }
+            } else {
+                Text(L("No shared usage for this day")).foregroundStyle(.secondary)
+            }
+            Text(L(
+                "%1$@ of %2$@ devices reported usage",
+                self.totals.reportingDeviceCount.formatted(),
+                self.totals.deviceCount.formatted()))
+                .font(.caption).foregroundStyle(.secondary)
+        }
     }
 }
 

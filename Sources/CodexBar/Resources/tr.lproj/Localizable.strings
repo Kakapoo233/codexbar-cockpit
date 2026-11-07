@@ -3291,3 +3291,18 @@
 "cockpit_pace_quota_forecast" = "Kota tahmini: %@";
 "cockpit_menu_pace_partial_color_help" = "Renkler, kaydedilen kullanım ile bugünkü öneri arasındaki farkı yansıtır. Kayıtlar eksiktir ve bazı kullanımlar kaydedilmemiş olabilir; yeşil renk, kullanılabilir bir rezerv olduğunu doğrulamaz.";
 "cockpit_menu_pace_recorded_reference_help" = "Tempo, bugün kaydedilen kullanımı günlük önerinin yerel günün geçen oranıyla çarpımıyla, haftalık kotanın yüzde puanı cinsinden karşılaştırır. Gösterilen işaret, Tempo işareti ayarına göre belirlenir.";
+
+"Shared usage distribution" = "Paylaşılan kullanımın dağılımı";
+"Usage day (UTC+8)" = "Kullanım günü (UTC+8)";
+"Recorded tokens" = "Kaydedilen token’lar";
+"Share of recorded team tokens" = "Ekibin kaydedilen token’ları içindeki pay";
+"%1$@ of %2$@ devices reported usage" = "%2$@ cihazdan %1$@ tanesi kullanım bildirdi";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Paylar, atanmamış cihazlar da dahil olmak üzere kullanım bildiren cihazlarda kaydedilen Codex token’ları karşılaştırılarak hesaplanır.";
+"No devices assigned" = "Atanmış cihaz yok";
+"No shared usage for this day" = "Bu güne ait paylaşılan kullanım verisi yok";
+"No members or devices yet." = "Henüz üye veya cihaz yok.";
+"Synchronize to load members and devices." = "Üyeleri ve cihazları yüklemek için eşzamanlayın.";
+"Synchronization is paused. Showing the last shared data." = "Eşzamanlama duraklatıldı. Son paylaşılan veriler gösteriliyor.";
+"Partial estimated cost (USD)" = "Tahmini kısmi maliyet (USD)";
+"Invitations" = "Davetler";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Alan sahibinden ayarlardaki “Members & Devices” bölümünde yeni bir davet oluşturmasını isteyin.";

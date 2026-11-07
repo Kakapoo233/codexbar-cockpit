@@ -3258,3 +3258,18 @@
 "cockpit_pace_quota_forecast" = "주간 할당량 예측: %@";
 "cockpit_menu_pace_partial_color_help" = "색상은 기록된 사용량과 오늘의 권장량 간 차이를 나타냅니다. 기록이 불완전하여 일부 사용량이 누락될 수 있으며, 녹색이라고 해서 여유분이 확인된 것은 아닙니다.";
 "cockpit_menu_pace_recorded_reference_help" = "페이스는 오늘 기록된 사용량과 “일일 권장량 × 현지 날짜의 경과 비율”을 주간 할당량의 퍼센트포인트 단위로 비교합니다. 표시되는 부호는 페이스 부호 설정을 따릅니다.";
+
+"Shared usage distribution" = "공유 사용량 분포";
+"Usage day (UTC+8)" = "사용일(UTC+8)";
+"Recorded tokens" = "기록된 토큰";
+"Share of recorded team tokens" = "기록된 팀 토큰 중 비율";
+"%1$@ of %2$@ devices reported usage" = "기기 %2$@대 중 %1$@대가 사용량을 보고했습니다";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "비율은 미할당 기기를 포함해 사용량을 보고한 기기에 기록된 Codex 토큰을 비교해 계산합니다.";
+"No devices assigned" = "할당된 기기 없음";
+"No shared usage for this day" = "이 날짜의 공유 사용량 데이터 없음";
+"No members or devices yet." = "아직 멤버나 기기가 없습니다.";
+"Synchronize to load members and devices." = "동기화하여 멤버와 기기를 불러오세요.";
+"Synchronization is paused. Showing the last shared data." = "동기화가 일시 중지되었습니다. 마지막으로 공유된 데이터를 표시합니다.";
+"Partial estimated cost (USD)" = "부분 예상 비용(USD)";
+"Invitations" = "초대";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "공간 소유자에게 설정의 ‘Members & Devices’에서 새 초대를 생성해 달라고 요청하세요.";

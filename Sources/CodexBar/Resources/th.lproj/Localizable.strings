@@ -3292,3 +3292,18 @@
 "cockpit_pace_quota_forecast" = "การคาดการณ์โควตา: %@";
 "cockpit_menu_pace_partial_color_help" = "สีแสดงส่วนต่างระหว่างปริมาณการใช้งานที่บันทึกไว้กับปริมาณที่แนะนำสำหรับวันนี้ ข้อมูลที่บันทึกไม่ครบถ้วนและอาจตกหล่นการใช้งานบางส่วน สีเขียวไม่ได้ยืนยันว่ามีปริมาณสำรองเหลืออยู่";
 "cockpit_menu_pace_recorded_reference_help" = "จังหวะการใช้งานเปรียบเทียบปริมาณการใช้งานที่บันทึกไว้วันนี้กับปริมาณที่แนะนำต่อวันคูณด้วยสัดส่วนเวลาของวันตามเวลาท้องถิ่นที่ผ่านไป โดยมีหน่วยเป็นจุดเปอร์เซ็นต์ของโควตารายสัปดาห์ เครื่องหมายที่แสดงเป็นไปตามการตั้งค่าเครื่องหมายจังหวะการใช้งาน";
+
+"Shared usage distribution" = "การกระจายการใช้งานที่แชร์";
+"Usage day (UTC+8)" = "วันที่ใช้งาน (UTC+8)";
+"Recorded tokens" = "โทเค็นที่บันทึกไว้";
+"Share of recorded team tokens" = "สัดส่วนโทเค็นที่บันทึกไว้ของทีม";
+"%1$@ of %2$@ devices reported usage" = "อุปกรณ์ %1$@ จาก %2$@ เครื่องรายงานการใช้งานแล้ว";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "สัดส่วนคำนวณจากการเปรียบเทียบโทเค็น Codex ที่บันทึกไว้ในอุปกรณ์ที่รายงานการใช้งาน รวมถึงอุปกรณ์ที่ยังไม่ได้กำหนดให้สมาชิก";
+"No devices assigned" = "ไม่มีอุปกรณ์ที่กำหนดไว้";
+"No shared usage for this day" = "ไม่มีข้อมูลการใช้งานที่แชร์สำหรับวันที่เลือก";
+"No members or devices yet." = "ยังไม่มีสมาชิกหรืออุปกรณ์";
+"Synchronize to load members and devices." = "ซิงค์เพื่อโหลดสมาชิกและอุปกรณ์";
+"Synchronization is paused. Showing the last shared data." = "หยุดการซิงค์ชั่วคราว กำลังแสดงข้อมูลที่แชร์ล่าสุด";
+"Partial estimated cost (USD)" = "ค่าใช้จ่ายโดยประมาณบางส่วน (USD)";
+"Invitations" = "คำเชิญ";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "ขอให้เจ้าของพื้นที่สร้างคำเชิญใหม่ในส่วน “Members & Devices” ของการตั้งค่า";

@@ -1,5 +1,11 @@
 # Cockpit changes
 
+## 0.8.33 — Member usage overview and centralized settings
+
+- Move member, device assignment, invitation, access and budget controls to Settings.
+- Make the member page a read-only distribution view with recorded usage, device coverage and explicit missing-data states.
+- Apply the same separation in the Windows client while retaining its existing upload and budget limitations.
+
 ## 0.8.32 — Remaining duration beside quota headroom
 
 - Append the estimated remaining duration after the 1.5× headroom hint for session and weekly allowances in the Usage card, using the same model's uncapped projected average rate and explicitly ignoring replenishment at reset.

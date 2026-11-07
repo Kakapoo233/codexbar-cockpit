@@ -121,7 +121,7 @@ enum CockpitTeamValidation {
         })
     }
 
-    private static func day(_ value: String) -> Bool {
+    static func day(_ value: String) -> Bool {
         guard value.range(of: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", options: .regularExpression) != nil else {
             return false
         }
