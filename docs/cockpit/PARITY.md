@@ -6,13 +6,13 @@ and the existing CodexBar collectors; it does not embed a second Tauri applicati
 
 | Upstream capability | Native integration | Remaining distinction |
 | --- | --- | --- |
-| Quota status and daily advice | Usage page alongside the original provider cards; live daily suggestion, manual cap, cross-reset observations | Earlier valid reset announcements/estimates adjust the planning horizon without creating quota |
+| Quota status and daily advice | Usage page alongside the original provider cards; live daily suggestion, manual cap, cross-reset observations | Earlier valid confirmed announcements adjust the planning horizon without creating quota |
 | Local statistics | Existing Usage & Spend dashboard, provider/project/session breakdown and reporting periods | Retained history depends on the selected data sources and scan settings |
 | Personal weekday calibration | Optional local reference with history readiness, separate seven-day validation, stale/drift/no-gain fallbacks | Adapted to observed native quota history; not a new official quota |
 | Subjective Token experience | Calendar feelings, correctable history, recent-experience weighted trend | Descriptive native trend; not the upstream fitted comfort-curve parameter or a productivity forecast |
 | Quota comfort curve | Original smooth-knee function, 0.1–100% knee fit, fixed subjective scores, 14-day decay, partial-data weighting, default/fitted chart and hover details | Direct current-account observations; no team cost-share allocation or reset-risk heatmap |
 | Usage calendar | Day/week/month/quarter/year browsing, Token/cost selection, daily details | Uses loaded local history; unscanned days remain unknown |
-| Reset history | Public history, scheduled previews, local estimates, and early notices | Public reset events never change account quotas or personal plans |
+| Reset history | Public history, scheduled previews, website watches, and early notices; local date estimates removed | Public reset events never change account quotas or personal plans |
 | Usage receipt | One button in the selected historical session; PNG preview/save/copy | Uses the displayed session reporting period; preserves privacy, currency and partial data |
 | Display/settings | CodexBar preferences, existing 23 languages, top-menu English override, layout hover help | Explicit CodexBar settings import; no silent import of unrelated Cockpit state |
 | Floating/always-on-top shell | Replaced by one anchored menu-bar panel with peer pages | Intentional product choice; no floating window |

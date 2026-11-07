@@ -2893,13 +2893,13 @@
 "cockpit_reset_show_date" = "Lihat tanggal";
 "cockpit_reset_forecast_basis" = "Perkiraan berdasarkan median %@ interval reset reguler terbaru dalam 180 hari. Bukan janji resmi.";
 "cockpit_reset_forecast_overdue" = "Waktu perkiraan telah lewat. Reset baru belum dikonfirmasi; menunggu pembaruan pengumuman.";
-"cockpit_reset_forecast_unavailable" = "Riwayat reset reguler terbaru belum cukup untuk memperkirakan tanggal.";
+"cockpit_reset_no_pending_notice" = "Tidak ada pengumuman reset yang tertunda atau peringatan aktif.";
 "cockpit_reset_history_note" = "Tanggal mengikuti waktu pengumuman atau pengamatan. Pengumuman publik tidak memastikan akun Anda sudah direset.";
 "cockpit_reset_original" = "Lihat sumber ↗";
 "cockpit_reset_observed_source" = "Pengamatan komunitas · Data dari";
 "cockpit_reset_announcement_source" = "Pengumuman publik · Data dari";
 "cockpit_reset_notice_setting_title" = "Pemberitahuan awal reset Codex";
-"cockpit_reset_notice_setting_subtitle" = "Beri tahu segera setelah ada pengumuman baru, prediksi situs, atau perkiraan lokal. Buka notifikasi untuk melihat kalender.";
+"cockpit_reset_notice_setting_subtitle" = "Beri tahu segera setelah ada pengumuman baru atau prediksi baru dari situs. Buka notifikasi untuk melihat kalender.";
 "cockpit_reset_sync_failed" = "Sinkronisasi gagal; cache dipertahankan: %@";
 "cockpit_reset_cache_read_failed" = "Cache reset tidak dapat dibaca; file asli telah dipertahankan: %@";
 "cockpit_reset_cache_save_failed" = "Cache reset tidak dapat disimpan: %@";

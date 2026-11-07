@@ -27,13 +27,6 @@ extension CockpitResetHistoryStore {
     var activeCalendarWatch: CockpitResetWatch? {
         self.status?.activeWatch.flatMap { $0.isActive(at: Date()) ? $0 : nil }
     }
-
-    var calendarLocalForecast: CockpitResetForecast? {
-        guard self.pendingCalendarReset == nil, self.activeCalendarWatch == nil else { return nil }
-        if let latest = self.status?.latestReset, latest.kind == .regular, let forecast = self.forecast,
-           latest.id != forecast.anchorEventID, latest.announcedAt > forecast.anchorDate { return nil }
-        return self.forecast
-    }
 }
 
 @MainActor
@@ -119,18 +112,8 @@ struct CockpitResetSummaryView: View {
         } else if let watch = self.store.activeCalendarWatch {
             Label("\(L("cockpit_reset_watch_title")) · \(watch.forecastWindow)", systemImage: "binoculars.fill")
                 .font(CockpitCalendarTypography.caption).foregroundStyle(.orange).lineLimit(2)
-        } else if let forecast = self.store.calendarLocalForecast {
-            Button { self.selectDate(forecast.estimatedAt) } label: {
-                Label(L("cockpit_reset_forecast_date", cockpitResetDateText(
-                    forecast.estimatedAt, calendar: self.calendar)), systemImage: "clock.badge.questionmark")
-            }
-            .buttonStyle(.plain).font(CockpitCalendarTypography.caption).foregroundStyle(.orange)
-            if forecast.isOverdue(at: Date()) {
-                Text(L("cockpit_reset_forecast_overdue")).font(CockpitCalendarTypography.caption)
-                    .foregroundStyle(.secondary).lineLimit(2)
-            }
         } else {
-            Text(L("cockpit_reset_forecast_unavailable")).font(CockpitCalendarTypography.caption)
+            Text(L("cockpit_reset_no_pending_notice")).font(CockpitCalendarTypography.caption)
                 .foregroundStyle(.secondary)
         }
     }
@@ -170,22 +153,8 @@ struct CockpitResetSummaryView: View {
                     .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
                 Link(L("cockpit_reset_original"), destination: watch.sourceURL).font(CockpitCalendarTypography.caption)
             }
-        } else if let forecast = self.store.calendarLocalForecast {
-            HStack(alignment: .top) {
-                Label(L("cockpit_reset_forecast_date", cockpitResetDateText(
-                    forecast.estimatedAt, calendar: self.calendar)), systemImage: "clock.badge.questionmark")
-                    .font(CockpitCalendarTypography.subheadline.weight(.semibold)).foregroundStyle(.orange)
-                Button(L("cockpit_reset_show_date")) { self.selectDate(forecast.estimatedAt) }
-                    .buttonStyle(.borderless).font(CockpitCalendarTypography.body)
-            }
-            Text(L("cockpit_reset_forecast_basis", codexBarLocalizedInteger(forecast.sampleCount)))
-                .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
-            if forecast.isOverdue(at: Date()) {
-                Text(L("cockpit_reset_forecast_overdue")).font(CockpitCalendarTypography.caption)
-                    .foregroundStyle(.orange)
-            }
         } else {
-            Text(L("cockpit_reset_forecast_unavailable")).font(CockpitCalendarTypography.caption)
+            Text(L("cockpit_reset_no_pending_notice")).font(CockpitCalendarTypography.caption)
                 .foregroundStyle(.secondary)
         }
     }
@@ -203,7 +172,6 @@ struct CockpitResetSummaryView: View {
             Label(L("cockpit_reset_regular"), systemImage: "arrow.counterclockwise.circle.fill")
                 .foregroundStyle(.blue)
             Label(L("cockpit_reset_banked"), systemImage: "archivebox.fill").foregroundStyle(.purple)
-            Label(L("cockpit_reset_estimate"), systemImage: "clock.badge.questionmark").foregroundStyle(.orange)
             Label(L("cockpit_reset_scheduled"), systemImage: "calendar.badge.clock").foregroundStyle(.teal)
         }
         .font(CockpitCalendarTypography.caption)
@@ -214,7 +182,6 @@ struct CockpitResetSummaryView: View {
 @MainActor
 struct CockpitResetDayDetails: View {
     let events: [CockpitResetEvent]
-    let forecast: CockpitResetForecast?
     let selectedDay: Date
     let calendar: Calendar
     var scheduled: CockpitScheduledReset?
@@ -225,16 +192,6 @@ struct CockpitResetDayDetails: View {
                self.calendar.isDate(date, inSameDayAs: self.selectedDay)
             {
                 CockpitScheduledResetView(reset: scheduled, calendar: self.calendar, selectDate: { _ in })
-            }
-            if let forecast, self.calendar.isDate(forecast.estimatedAt, inSameDayAs: self.selectedDay) {
-                Label(
-                    L("cockpit_reset_forecast_date", cockpitResetDateText(
-                        forecast.estimatedAt,
-                        calendar: self.calendar)),
-                    systemImage: "clock.badge.questionmark")
-                    .foregroundStyle(.orange)
-                Text(L("cockpit_reset_forecast_basis", codexBarLocalizedInteger(forecast.sampleCount)))
-                    .font(CockpitCalendarTypography.caption).foregroundStyle(.secondary)
             }
             ForEach(self.events) { event in
                 GroupBox {

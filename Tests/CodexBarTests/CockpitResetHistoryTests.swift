@@ -143,61 +143,6 @@ struct CockpitResetHistoryTests {
         #expect(groups[day]?.map(\.id) == ["late-today", "second-one-thirty", "first-one-thirty", "today"])
     }
 
-    @Test
-    func `historical estimate uses recent regular intervals and excludes banked and future announcements`() throws {
-        let now = try Self.date("2026-10-30T00:00:00Z")
-        let events = try [
-            Self.event(id: "anchor", date: "2026-10-28T00:00:00Z"),
-            Self.event(id: "previous", date: "2026-10-26T00:00:00Z"),
-            Self.event(id: "third", date: "2026-10-23T00:00:00Z"),
-            Self.event(id: "fourth", date: "2026-10-19T00:00:00Z"),
-            Self.event(id: "banked", kind: .banked, date: "2026-10-29T00:00:00Z"),
-            Self.event(id: "future", date: "2026-10-31T00:00:00Z"),
-            Self.event(id: "too-old", date: "2025-10-01T00:00:00Z"),
-        ]
-        let forecast = try #require(CockpitResetForecast.estimate(events: events, now: now))
-        #expect(forecast.anchorEventID == "anchor")
-        #expect(forecast.sampleCount == 3)
-        #expect(forecast.medianInterval == 3 * 86400)
-        #expect(forecast.minimumInterval == 2 * 86400)
-        #expect(forecast.maximumInterval == 4 * 86400)
-        #expect(try forecast.estimatedAt == (Self.date("2026-10-31T00:00:00Z")))
-        #expect(!forecast.isOverdue(at: now))
-    }
-
-    @Test
-    func `estimate requires at least three positive intervals and at most the latest ten`() throws {
-        let now = try Self.date("2026-10-30T00:00:00Z")
-        let few = try (0..<3).map {
-            try Self.event(id: "few-\($0)", at: now.addingTimeInterval(Double(-$0) * 86400))
-        }
-        #expect(CockpitResetForecast.estimate(events: few, now: now) == nil)
-        let sameTime = try (0..<4).map { try Self.event(id: "same-\($0)", at: now) }
-        #expect(CockpitResetForecast.estimate(events: sameTime, now: now) == nil)
-        let many = try (0..<20).map {
-            try Self.event(id: "many-\($0)", at: now.addingTimeInterval(Double(-$0) * 86400))
-        }
-        #expect(CockpitResetForecast.estimate(events: many, now: now)?.sampleCount == 10)
-    }
-
-    @Test
-    func `overdue estimate stays anchored and never invents a new reset`() throws {
-        let events = try [
-            Self.event(id: "anchor", date: "2026-10-20T00:00:00Z"),
-            Self.event(id: "two", date: "2026-10-18T00:00:00Z"),
-            Self.event(id: "three", date: "2026-10-16T00:00:00Z"),
-            Self.event(id: "four", date: "2026-10-14T00:00:00Z"),
-        ]
-        let firstNow = try Self.date("2026-10-23T00:00:00Z")
-        let laterNow = try Self.date("2026-10-30T00:00:00Z")
-        let first = try #require(CockpitResetForecast.estimate(events: events, now: firstNow))
-        let later = try #require(CockpitResetForecast.estimate(events: events, now: laterNow))
-        #expect(first == later)
-        #expect(first.isOverdue(at: firstNow))
-        #expect(later.isOverdue(at: laterNow))
-        #expect(try first.estimatedAt == (Self.date("2026-10-22T00:00:00Z")))
-    }
-
     private static func event(
         id: String,
         kind: CockpitResetKind = .regular,

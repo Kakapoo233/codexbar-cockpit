@@ -132,17 +132,18 @@ describe("fork full-local-day planning", () => {
 });
 
 describe("reset inputs remain planning signals", () => {
-  it("gives fresh dated confirmed resets priority over estimates", () => {
-    const signal: CockpitResetSignal = { status: { generatedAt: iso(NOW), scheduled: { kind: "regular", status: "scheduled", announcedAt: iso(NOW - HOUR), resetsAt: iso(NOW + 12 * HOUR) } }, forecast: { resetsAt: iso(NOW + HOUR), anchorAt: iso(NOW - DAY), fetchedAt: iso(NOW), generatedAt: iso(NOW) } };
+  it("uses a fresh dated announcement before the account reset", () => {
+    const signal: CockpitResetSignal = { status: { generatedAt: iso(NOW), scheduled: { kind: "regular", status: "scheduled", announcedAt: iso(NOW - HOUR), resetsAt: iso(NOW + 12 * HOUR) } } };
     const status = plan(continuous(), { resetSignal: signal });
     expect(status.planningResetWindow).toEqual({ resetsAt: iso(NOW + 12 * HOUR), source: "announced" });
     expect(status.comfortAdvice?.riskProbability).toBe(1);
     expect(status.remainingPercent).toBe(90);
   });
-  it("shortens the horizon with an estimate without assigning it certain probability", () => {
-    const status = plan(continuous(), { resetSignal: { forecast: { resetsAt: iso(NOW + 2 * DAY), anchorAt: iso(NOW - DAY), fetchedAt: iso(NOW), generatedAt: iso(NOW) } } });
-    expect(status.planningResetWindow?.source).toBe("estimated");
-    expect(status.comfortAdvice?.riskProbability).toBe(0.1);
+  it("ignores an old local estimate when calculating the daily allowance", () => {
+    const legacySignal = { status: null, forecast: { resetsAt: iso(NOW + 2 * DAY), anchorAt: iso(NOW - DAY), fetchedAt: iso(NOW), generatedAt: iso(NOW) } };
+    const status = plan(continuous(), { resetSignal: legacySignal });
+    expect(status.planningResetWindow).toEqual({ resetsAt: iso(RESET), source: "account" });
+    expect(status.suggestedPercent).toBe(plan(continuous()).suggestedPercent);
   });
   it("ignores stale risk and does not make distant announcements certain today", () => {
     const stale = plan(continuous(), { resetSignal: { status: { generatedAt: iso(NOW - HOUR), watch: { level: "strong", observedAt: iso(NOW - HOUR), expiresAt: iso(NOW + DAY), riskPercent: 100 } } } });
@@ -151,10 +152,14 @@ describe("reset inputs remain planning signals", () => {
     expect(distant.planningResetWindow?.source).toBe("announced");
     expect(distant.comfortAdvice?.riskProbability).toBe(0.1);
   });
-  it("does not infer an exact deadline from website watch duration", () => {
-    const signal = cockpitResetSignal({ score: 80, windowHours: 12, fetchedAt: iso(NOW), resetAnnounced: false, sourceUrl: "https://example.invalid" });
-    expect(signal?.forecast).toBeUndefined();
-    expect(signal?.status?.scheduled).toBeNull();
+  it("uses website watch probability without inferring a reset date", () => {
+    const signal = cockpitResetSignal({
+      score: 80, windowHours: 12, fetchedAt: iso(NOW), resetAnnounced: false, sourceUrl: "https://example.invalid",
+      activeWatch: { level: "strong", resetChancePercent: 70, observedAt: iso(NOW), expiresAt: iso(NOW + 12 * HOUR) },
+    });
+    const status = plan(continuous(), { resetSignal: signal });
+    expect(status.planningResetWindow).toEqual({ resetsAt: iso(RESET), source: "account" });
+    expect(status.comfortAdvice?.riskProbability).toBe(0.7);
   });
 });
 

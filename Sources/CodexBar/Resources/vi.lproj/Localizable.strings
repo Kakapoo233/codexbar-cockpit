@@ -2892,13 +2892,13 @@
 "cockpit_reset_show_date" = "Xem ngày";
 "cockpit_reset_forecast_basis" = "Ước tính theo trung vị của %@ khoảng đặt lại thông thường gần nhất trong 180 ngày. Đây không phải cam kết chính thức.";
 "cockpit_reset_forecast_overdue" = "Đã qua thời điểm ước tính. Chưa xác nhận đợt đặt lại mới; đang chờ thông báo cập nhật.";
-"cockpit_reset_forecast_unavailable" = "Chưa đủ lịch sử đặt lại thông thường gần đây để ước tính ngày.";
+"cockpit_reset_no_pending_notice" = "Không có thông báo đặt lại đang chờ hoặc cảnh báo còn hiệu lực.";
 "cockpit_reset_history_note" = "Ngày được tính theo thời điểm thông báo hoặc quan sát. Thông báo công khai không xác nhận tài khoản của bạn đã được đặt lại.";
 "cockpit_reset_original" = "Xem nguồn ↗";
 "cockpit_reset_observed_source" = "Quan sát cộng đồng · Dữ liệu từ";
 "cockpit_reset_announcement_source" = "Thông báo công khai · Dữ liệu từ";
 "cockpit_reset_notice_setting_title" = "Báo trước đặt lại Codex";
-"cockpit_reset_notice_setting_subtitle" = "Thông báo ngay khi có thông báo mới, dự báo từ trang web hoặc ước tính cục bộ. Mở thông báo để xem lịch.";
+"cockpit_reset_notice_setting_subtitle" = "Thông báo ngay khi có thông báo mới hoặc dự báo từ trang web. Mở thông báo để xem lịch.";
 "cockpit_reset_sync_failed" = "Đồng bộ thất bại; đã giữ bộ nhớ đệm: %@";
 "cockpit_reset_cache_read_failed" = "Không thể đọc bộ nhớ đệm đặt lại; tệp gốc đã được giữ nguyên: %@";
 "cockpit_reset_cache_save_failed" = "Không thể lưu bộ nhớ đệm đặt lại: %@";

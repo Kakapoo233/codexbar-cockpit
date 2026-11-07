@@ -2894,13 +2894,13 @@
 "cockpit_reset_show_date" = "Tarihi göster";
 "cockpit_reset_forecast_basis" = "Son 180 gündeki en son %@ normal sıfırlama aralığının medyanı. Resmî bir taahhüt değil, tahmindir.";
 "cockpit_reset_forecast_overdue" = "Tahmini zaman geçti. Yeni sıfırlama doğrulanmadı; güncel duyurular bekleniyor.";
-"cockpit_reset_forecast_unavailable" = "Tarih tahmini için yeterli yakın tarihli normal sıfırlama kaydı yok.";
+"cockpit_reset_no_pending_notice" = "Bekleyen sıfırlama duyurusu veya etkin uyarı yok.";
 "cockpit_reset_history_note" = "Tarihler duyuru veya gözlem zamanına göredir. Genel duyurular hesabınızda sıfırlama yapıldığını doğrulamaz.";
 "cockpit_reset_original" = "Kaynağı görüntüle ↗";
 "cockpit_reset_observed_source" = "Topluluk gözlemi · Veri kaynağı";
 "cockpit_reset_announcement_source" = "Herkese açık duyuru · Veri kaynağı";
 "cockpit_reset_notice_setting_title" = "Codex sıfırlama ön bildirimleri";
-"cockpit_reset_notice_setting_subtitle" = "Yeni duyuru, site öngörüsü veya yerel tahmin çıkar çıkmaz bildir. Takvimi açmak için bildirime tıklayın.";
+"cockpit_reset_notice_setting_subtitle" = "Yeni duyuru veya site öngörüsü çıkar çıkmaz bildir. Takvimi açmak için bildirime tıklayın.";
 "cockpit_reset_sync_failed" = "Eşitleme başarısız; önbellek korundu: %@";
 "cockpit_reset_cache_read_failed" = "Sıfırlama önbelleği okunamadı; özgün dosya korundu: %@";
 "cockpit_reset_cache_save_failed" = "Sıfırlama önbelleği kaydedilemedi: %@";

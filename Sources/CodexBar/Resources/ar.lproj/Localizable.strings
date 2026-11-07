@@ -2895,13 +2895,13 @@
 "cockpit_reset_show_date" = "عرض التاريخ";
 "cockpit_reset_forecast_basis" = "وسيط آخر %@ فترات بين عمليات إعادة الضبط العادية خلال 180 يومًا. تقدير وليس تعهدًا رسميًا.";
 "cockpit_reset_forecast_overdue" = "مضى الموعد المقدر. لم تتأكد إعادة ضبط جديدة؛ ننتظر تحديث الإعلانات.";
-"cockpit_reset_forecast_unavailable" = "لا توجد عمليات إعادة ضبط عادية حديثة كافية لتقدير الموعد.";
+"cockpit_reset_no_pending_notice" = "لا يوجد إعلان أو تنبيه حالي بشأن إعادة التعيين.";
 "cockpit_reset_history_note" = "التواريخ حسب وقت الإعلان أو الرصد. الإعلان العام لا يؤكد إعادة ضبط حسابك.";
 "cockpit_reset_original" = "عرض المصدر ↗";
 "cockpit_reset_observed_source" = "رصد المجتمع · مصدر البيانات";
 "cockpit_reset_announcement_source" = "إعلان عام · مصدر البيانات";
 "cockpit_reset_notice_setting_title" = "تنبيهات إعادة ضبط Codex المقبلة";
-"cockpit_reset_notice_setting_subtitle" = "إرسال إشعار فور توفر إعلان جديد أو توقع الموقع أو تقدير محلي. افتح الإشعار لعرض التقويم.";
+"cockpit_reset_notice_setting_subtitle" = "إرسال إشعار فور توفر إعلان جديد أو توقع من الموقع. افتح الإشعار لعرض التقويم.";
 "cockpit_reset_sync_failed" = "فشلت المزامنة؛ تم الاحتفاظ بالذاكرة المحفوظة: %@";
 "cockpit_reset_cache_read_failed" = "تعذرت قراءة ذاكرة إعادة الضبط؛ تم الاحتفاظ بالملف الأصلي: %@";
 "cockpit_reset_cache_save_failed" = "تعذر حفظ ذاكرة إعادة الضبط: %@";

@@ -167,7 +167,6 @@ struct CockpitCalendarView: View {
                     if let resetStore {
                         CockpitResetDayDetails(
                             events: self.resetEventsByDay[self.calendar.startOfDay(for: self.selectedDay)] ?? [],
-                            forecast: resetStore.calendarLocalForecast,
                             selectedDay: self.selectedDay,
                             calendar: self.calendar,
                             scheduled: resetStore.pendingCalendarReset)
@@ -257,7 +256,6 @@ struct CockpitCalendarView: View {
 
     private func calendarDays(ledger: CockpitCalendarLedger) -> [Date: CockpitCalendarDay] {
         let eventsByDay = self.resetEventsByDay
-        let forecast = self.resetStore?.calendarLocalForecast
         let scheduled = self.resetStore?.pendingCalendarReset?.scheduledFor
         let visibleDays = [.day, .week].contains(self.scale)
             ? self.period.days(calendar: self.calendar)
@@ -268,7 +266,6 @@ struct CockpitCalendarView: View {
                 tokens: ledger.tokens(on: day).total,
                 feeling: self.feeling(on: day),
                 resetKinds: (eventsByDay[day] ?? []).map(\.kind),
-                hasResetForecast: forecast.map { self.calendar.isDate($0.estimatedAt, inSameDayAs: day) } ?? false,
                 hasScheduledReset: scheduled.map { self.calendar.isDate($0, inSameDayAs: day) } ?? false))
         })
     }

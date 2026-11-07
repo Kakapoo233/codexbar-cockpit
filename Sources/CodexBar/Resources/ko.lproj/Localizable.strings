@@ -2859,13 +2859,13 @@
 "cockpit_reset_show_date" = "날짜 보기";
 "cockpit_reset_forecast_basis" = "최근 180일 내 마지막 %@개 일반 초기화 간격의 중앙값으로 추정합니다. 공식 약속이 아닙니다.";
 "cockpit_reset_forecast_overdue" = "추정 시간이 지났습니다. 새 초기화는 아직 확인되지 않았으며 공지 업데이트를 기다리는 중입니다.";
-"cockpit_reset_forecast_unavailable" = "최근 일반 초기화 기록이 부족하여 날짜를 추정할 수 없습니다.";
+"cockpit_reset_no_pending_notice" = "예정된 초기화 공지나 활성 경보가 없습니다.";
 "cockpit_reset_history_note" = "공지 또는 관측 시각의 날짜로 표시합니다. 공개 공지는 내 계정의 초기화 완료를 보장하지 않습니다.";
 "cockpit_reset_original" = "출처 보기 ↗";
 "cockpit_reset_observed_source" = "커뮤니티 관측 · 데이터 제공";
 "cockpit_reset_announcement_source" = "공개 공지 · 데이터 제공";
 "cockpit_reset_notice_setting_title" = "Codex 초기화 예고";
-"cockpit_reset_notice_setting_subtitle" = "새 공지, 사이트 예측 또는 로컬 추정이 나오면 최대한 빨리 알립니다. 알림을 열면 캘린더가 표시됩니다.";
+"cockpit_reset_notice_setting_subtitle" = "새 공지 또는 사이트 예측이 나오면 최대한 빨리 알립니다. 알림을 열면 캘린더가 표시됩니다.";
 "cockpit_reset_sync_failed" = "동기화하지 못했습니다. 캐시는 유지됩니다: %@";
 "cockpit_reset_cache_read_failed" = "초기화 캐시를 읽을 수 없습니다. 원본 파일은 보존되었습니다: %@";
 "cockpit_reset_cache_save_failed" = "초기화 캐시를 저장할 수 없습니다: %@";

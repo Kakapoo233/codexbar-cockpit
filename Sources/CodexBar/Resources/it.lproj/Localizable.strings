@@ -2895,13 +2895,13 @@
 "cockpit_reset_show_date" = "Mostra data";
 "cockpit_reset_forecast_basis" = "Mediana degli ultimi %@ intervalli tra ripristini regolari in 180 giorni. È una stima, non un impegno ufficiale.";
 "cockpit_reset_forecast_overdue" = "L’orario stimato è trascorso. Nessun nuovo ripristino è confermato; in attesa di nuovi annunci.";
-"cockpit_reset_forecast_unavailable" = "La cronologia recente dei ripristini regolari non è sufficiente per stimare una data.";
+"cockpit_reset_no_pending_notice" = "Nessun annuncio di ripristino in attesa o avviso attivo.";
 "cockpit_reset_history_note" = "Le date seguono l’ora dell’annuncio o dell’osservazione. Gli annunci pubblici non confermano il ripristino del tuo account.";
 "cockpit_reset_original" = "Visualizza fonte ↗";
 "cockpit_reset_observed_source" = "Osservazione della comunità · Dati da";
 "cockpit_reset_announcement_source" = "Annuncio pubblico · Dati da";
 "cockpit_reset_notice_setting_title" = "Preavvisi di ripristino Codex";
-"cockpit_reset_notice_setting_subtitle" = "Avvisa appena è disponibile un nuovo annuncio, una previsione del sito o una stima locale. Apri la notifica per vedere il calendario.";
+"cockpit_reset_notice_setting_subtitle" = "Avvisa appena è disponibile un nuovo annuncio o una nuova previsione del sito. Apri la notifica per vedere il calendario.";
 "cockpit_reset_sync_failed" = "Sincronizzazione non riuscita; dati in cache conservati: %@";
 "cockpit_reset_cache_read_failed" = "Impossibile leggere la cache dei ripristini; il file originale è stato conservato: %@";
 "cockpit_reset_cache_save_failed" = "Impossibile salvare la cache dei ripristini: %@";

@@ -52,7 +52,6 @@ struct CockpitCalendarPeriodScreenshotTests {
                 feeling: number == 30 ? .overloaded : number.isMultiple(of: 4) ? .comfortable : nil,
                 resetKinds: number == 30 ? [.regular, .banked, .unknown("synthetic")]
                     : number == 28 ? [.regular] : [],
-                hasResetForecast: number == 30 || number == 31,
                 hasScheduledReset: number == 30 || number == 1))
         })
         return VStack(alignment: .leading, spacing: 16) {

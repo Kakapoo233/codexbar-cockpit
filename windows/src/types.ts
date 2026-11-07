@@ -327,9 +327,6 @@ export interface DailyPaceBaseline {
   resetsAt: string;
   cycleStartedAt: string;
   cycleStartRemainingPercent: number;
-  planningResetsAt: string;
-  resetForecastScore: number | null;
-  resetForecastWindowHours: number | null;
 }
 
 export interface DailyRecommendationRecord {

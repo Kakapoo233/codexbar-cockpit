@@ -2896,13 +2896,13 @@
 "cockpit_reset_show_date" = "Show date";
 "cockpit_reset_forecast_basis" = "Median of the latest %@ regular-reset intervals within 180 days. An estimate, not an official commitment.";
 "cockpit_reset_forecast_overdue" = "The estimated time has passed. No new reset is confirmed; waiting for updated announcements.";
-"cockpit_reset_forecast_unavailable" = "Not enough recent regular-reset history to estimate a date.";
+"cockpit_reset_no_pending_notice" = "No pending reset announcement or active watch.";
 "cockpit_reset_history_note" = "Dates follow announcement/observation times. Public announcements do not confirm a reset on your account.";
 "cockpit_reset_original" = "View source ↗";
 "cockpit_reset_observed_source" = "Community observation · Data from";
 "cockpit_reset_announcement_source" = "Public announcement · Data from";
 "cockpit_reset_notice_setting_title" = "Codex reset previews";
-"cockpit_reset_notice_setting_subtitle" = "Notify as soon as a new announcement, site forecast, or local estimate is available. Open the notification to view the calendar.";
+"cockpit_reset_notice_setting_subtitle" = "Notify as soon as a new announcement or site forecast is available. Open the notification to view the calendar.";
 "cockpit_reset_sync_failed" = "Sync failed; cached data retained: %@";
 "cockpit_reset_cache_read_failed" = "Cannot read the reset cache; the existing file was preserved: %@";
 "cockpit_reset_cache_save_failed" = "Cannot save the reset cache: %@";

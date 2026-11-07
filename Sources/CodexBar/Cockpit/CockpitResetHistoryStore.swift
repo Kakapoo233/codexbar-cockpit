@@ -23,7 +23,6 @@ final class CockpitResetHistoryStore {
 
     private(set) var history: CockpitResetHistory?
     private(set) var status: CockpitResetStatus?
-    private(set) var forecast: CockpitResetForecast?
     private(set) var isRefreshing = false
     private(set) var lastSyncedAt: Date?
     private(set) var lastStatusSyncedAt: Date?
@@ -63,7 +62,6 @@ final class CockpitResetHistoryStore {
     @ObservationIgnored private var pendingAnchor: String?
     @ObservationIgnored private var activeNotificationIdentifiers: Set<String> = []
     @ObservationIgnored private var activeCandidate: Candidate?
-    @ObservationIgnored private var hasFreshHistory = false
     @ObservationIgnored private var hasFreshStatus = false
     @ObservationIgnored private var historySyncedAt: Date?
     @ObservationIgnored private var currentRequestIncludesHistory = false
@@ -141,7 +139,6 @@ final class CockpitResetHistoryStore {
         self.refreshTask = nil
         self.refreshID = UUID()
         self.isRefreshing = false
-        self.hasFreshHistory = false
         self.hasFreshStatus = false
         self.cancelNotices()
     }
@@ -198,7 +195,7 @@ final class CockpitResetHistoryStore {
                 self.hasFreshStatus = abs(self.now().timeIntervalSince(status.generatedAt)) <= 5 * 60
                 succeeded = true
                 // Announced plans should be visible and notified before a slower history backfill finishes.
-                self.postForecastIfNeeded()
+                self.postNoticeIfNeeded()
             } catch {
                 guard !Task.isCancelled, self.refreshID == id else { return }
                 self.hasFreshStatus = false
@@ -213,22 +210,17 @@ final class CockpitResetHistoryStore {
                 self.history = history
                 self.historySyncedAt = self.now()
                 self.lastSyncedAt = self.historySyncedAt
-                self.hasFreshHistory = abs(self.now().timeIntervalSince(history.generatedAt)) <= 24 * 3600
-                self.forecast = CockpitResetForecast.estimate(events: history.events, now: self.now())
                 succeeded = true
             } catch {
                 guard !Task.isCancelled, self.refreshID == id else { return }
-                self.hasFreshHistory = false
                 failure = self.refreshError(error)
             }
-        } else if let history {
-            self.forecast = CockpitResetForecast.estimate(events: history.events, now: self.now())
         }
         self.errorNotice = failure ?? self.cacheReadError
         if succeeded {
             self.saveCache()
         }
-        self.postForecastIfNeeded()
+        self.postNoticeIfNeeded()
     }
 
     private func historyEventsContain(_ id: String) -> Bool {
@@ -247,7 +239,7 @@ final class CockpitResetHistoryStore {
     func notificationPreferenceDidChange() {
         if self.notificationsEnabled() {
             self.notificationErrorNotice = self.receiptsReadError
-            self.postForecastIfNeeded()
+            self.postNoticeIfNeeded()
         } else {
             self.cancelNotices()
             self.notificationErrorNotice = nil
@@ -260,19 +252,9 @@ final class CockpitResetHistoryStore {
         let freshStatus = self.status.flatMap { status in
             (-300...15 * 60).contains(date.timeIntervalSince(status.generatedAt)) ? status : nil
         }
-        let freshForecast = self.history.flatMap { history -> CockpitResetForecast? in
-            guard (-300...24 * 3600).contains(date.timeIntervalSince(history.generatedAt)),
-                  let synced = self.historySyncedAt,
-                  (-300...Self.historyRefreshInterval * 2).contains(date.timeIntervalSince(synced)) else { return nil }
-            return self.forecast
-        }
-        let hasStalePendingAnnouncement = freshStatus == nil
-            && self.status?.scheduledReset?.isPending(at: date) == true
         return CockpitPlanningResetWindow.resolve(
             accountResetAt: accountResetAt,
             scheduled: freshStatus?.scheduledReset,
-            forecast: hasStalePendingAnnouncement ? nil : freshForecast,
-            latestPublicReset: self.status?.latestReset,
             now: date)
     }
 
@@ -317,24 +299,10 @@ final class CockpitResetHistoryStore {
                     body: L("cockpit_reset_watch_notification_body", watch.forecastWindow))
             }
         }
-        // A known pending source announcement outranks a local estimate even while offline.
-        if let scheduled = self.status?.scheduledReset, scheduled.isPending(at: now) { return nil }
-        if self.status?.activeWatch?.isActive(at: now) == true { return nil }
-        guard self.hasFreshHistory, let forecast = self.forecast, !forecast.isOverdue(at: now),
-              let synced = self.historySyncedAt,
-              (0...Self.historyRefreshInterval * 2).contains(now.timeIntervalSince(synced)) else { return nil }
-        if let latest = self.status?.latestReset, latest.kind == .regular, latest.id != forecast.anchorEventID,
-           latest.announcedAt > forecast.anchorDate
-        {
-            return nil
-        }
-        return Candidate(
-            key: "local:\(forecast.anchorEventID)",
-            title: L("cockpit_reset_forecast_notification_title"),
-            body: L("cockpit_reset_forecast_notification_body", Self.dateText(forecast.estimatedAt)))
+        return nil
     }
 
-    private func postForecastIfNeeded() {
+    private func postNoticeIfNeeded() {
         let candidate = self.candidate()
         if self.activeCandidate != candidate {
             self.cancelNotices()
@@ -413,7 +381,6 @@ extension CockpitResetHistoryStore {
             self.lastSyncedAt = cache.lastSyncedAt
             self.historySyncedAt = cache.historySyncedAt
             self.lastStatusSyncedAt = cache.statusSyncedAt
-            self.forecast = cache.history.flatMap { CockpitResetForecast.estimate(events: $0.events, now: self.now()) }
         } catch {
             self.canSaveCache = false
             self.cacheReadError = CockpitLocalizedMessage("cockpit_reset_cache_read_failed", error.localizedDescription)

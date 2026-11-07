@@ -14,7 +14,6 @@ enum CockpitDailyAdviceProjection {
         let key = switch window.source {
         case .account: "cockpit_advice_reset_account"
         case .announced: "cockpit_advice_reset_announced"
-        case .estimated: "cockpit_advice_reset_estimated"
         }
         return L(key, date)
     }
@@ -147,7 +146,7 @@ struct CockpitDailyAdviceRow: View {
             if let window = self.status.planningResetWindow {
                 Text(CockpitDailyAdviceProjection.resetWindowText(window))
                     .font(.caption2)
-                    .foregroundStyle(window.source == .estimated ? Color.orange : Color.secondary)
+                    .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             CockpitComfortAdviceSummaryView(status: self.status)

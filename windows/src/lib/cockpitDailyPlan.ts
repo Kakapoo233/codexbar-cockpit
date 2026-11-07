@@ -26,9 +26,7 @@ export interface CockpitResetSignal {
     generatedAt: string;
     scheduled?: { status: string; kind: string; announcedAt: string; resetsAt: string | null } | null;
     watch?: { level: string; observedAt: string; expiresAt: string; riskPercent: number | null } | null;
-    latestRegularResetAt?: string | null;
   } | null;
-  forecast?: { resetsAt: string; anchorAt: string; generatedAt: string; fetchedAt: string } | null;
 }
 export interface CockpitComfortObservation {
   providerID: string;
@@ -66,7 +64,7 @@ export interface CockpitDailyPlanStatus {
   remainingDailyBudgetPercent: number | null;
   isStale: boolean;
   suggestionIsPartial: boolean;
-  planningResetWindow: { resetsAt: string; source: "account" | "announced" | "estimated" } | null;
+  planningResetWindow: { resetsAt: string; source: "account" | "announced" } | null;
   comfortAdvice: {
     kneePercent: number;
     softCapPercent: number;
@@ -197,7 +195,7 @@ function fresh(timestamp: string | undefined, now: number, maxAge: number) {
   return age >= -300000 && age <= maxAge;
 }
 function resetPolicy(providerID: string, accountReset: number, now: number, signal?: CockpitResetSignal) {
-  let reset = accountReset, source: "account" | "announced" | "estimated" = "account";
+  let reset = accountReset, source: "account" | "announced" = "account";
   let probability = providerID === "codex" ? 0.1 : 0;
   let riskSource: "assumed" | "announced" | "estimated" = "assumed";
   if (providerID !== "codex" || !signal) return { reset, source, probability, riskSource };
@@ -211,15 +209,8 @@ function resetPolicy(providerID: string, accountReset: number, now: number, sign
       reset = deadline; source = "announced";
       if (deadline - now <= DAY) { probability = 1; riskSource = "announced"; }
     }
-    // Even an undated announcement blocks a conflicting historical estimate/watch probability.
+    // Even an undated announcement takes precedence over a conflicting watch probability.
     return { reset, source, probability, riskSource };
-  }
-  const forecast = signal.forecast;
-  if (!(pending && !statusFresh) && forecast
-    && fresh(forecast.generatedAt, now, DAY) && fresh(forecast.fetchedAt, now, 1800000)
-    && at(forecast.anchorAt) <= now && at(forecast.resetsAt) > now && at(forecast.resetsAt) < accountReset
-    && !(status?.latestRegularResetAt && at(status.latestRegularResetAt) > at(forecast.anchorAt))) {
-    reset = at(forecast.resetsAt); source = "estimated";
   }
   const watch = status?.watch;
   if (statusFresh && watch && ["elevated", "strong"].includes(watch.level)
