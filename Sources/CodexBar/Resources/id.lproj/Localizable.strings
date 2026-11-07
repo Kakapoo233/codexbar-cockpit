@@ -3292,3 +3292,18 @@
 "cockpit_pace_quota_forecast" = "Perkiraan kuota: %@";
 "cockpit_menu_pace_partial_color_help" = "Warna menunjukkan selisih antara penggunaan yang tercatat dan rekomendasi hari ini. Catatan belum lengkap dan mungkin melewatkan penggunaan; warna hijau tidak memastikan adanya cadangan.";
 "cockpit_menu_pace_recorded_reference_help" = "Laju membandingkan penggunaan yang tercatat hari ini dengan rekomendasi harian dikalikan proporsi hari lokal yang telah berlalu, dalam poin persentase kuota mingguan. Tanda yang ditampilkan mengikuti pengaturan tanda laju.";
+
+"Shared usage distribution" = "Distribusi penggunaan bersama";
+"Usage day (UTC+8)" = "Hari penggunaan (UTC+8)";
+"Recorded tokens" = "Token tercatat";
+"Share of recorded team tokens" = "Porsi token tim yang tercatat";
+"%1$@ of %2$@ devices reported usage" = "%1$@ dari %2$@ perangkat telah melaporkan penggunaan";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Porsi dihitung dengan membandingkan token Codex yang tercatat di perangkat yang melaporkan penggunaan, termasuk perangkat yang belum ditetapkan ke anggota.";
+"No devices assigned" = "Tidak ada perangkat yang ditetapkan";
+"No shared usage for this day" = "Tidak ada data penggunaan bersama untuk tanggal ini";
+"No members or devices yet." = "Belum ada anggota atau perangkat.";
+"Synchronize to load members and devices." = "Lakukan sinkronisasi untuk memuat anggota dan perangkat.";
+"Synchronization is paused. Showing the last shared data." = "Sinkronisasi dijeda. Data bersama terakhir ditampilkan.";
+"Partial estimated cost (USD)" = "Perkiraan biaya sebagian (USD)";
+"Invitations" = "Undangan";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Minta pemilik ruang membuat undangan baru di bagian “Members & Devices” pada pengaturan.";

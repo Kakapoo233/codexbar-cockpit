@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { getCloudSyncStatus } from "../lib/cloudSyncStatus";
 import { groupColors } from "../lib/dailyPersonCosts";
 import { getTokeiUsage, saveTokeiGroups } from "../lib/tokeiBridge";
 import type { TokeiGroupSettings, TokeiUsage } from "../lib/tokeiUsage";
 import type { WidgetPreferences } from "../types";
 import { PersonRingColorInput } from "./PersonRingColorInput";
 import { UsageGroupEditor } from "./UsageGroupEditor";
-import { isTauri } from "../lib/bridge";
 
 interface Props {
   usage: TokeiUsage | null;
@@ -26,9 +26,8 @@ export function TeamMemberSettings({ usage, loadingError, preferences, zh, onPre
   const [cloudDevices, setCloudDevices] = useState<string[]>([]);
   const [editorVersion, setEditorVersion] = useState(0);
   useEffect(() => {
-    if (!isTauri()) return;
     let active = true;
-    void import("@tauri-apps/api/core").then(({ invoke }) => invoke<{ config: { role: string } | null; members: { deviceId: string }[] }>("get_cloud_sync_status")).then(status => {
+    void getCloudSyncStatus().then(status => {
       if (active) { setCloudConnected(Boolean(status.config)); setCloudDevices(status.members.map(member => member.deviceId)); }
     }).catch(() => {});
     return () => { active = false; };

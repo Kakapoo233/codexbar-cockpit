@@ -3292,3 +3292,18 @@
 "cockpit_pace_quota_forecast" = "پیش‌بینی سهمیه: %@";
 "cockpit_menu_pace_partial_color_help" = "رنگ‌ها تفاوت مصرف ثبت‌شده با پیشنهاد امروز را نشان می‌دهند. سوابق کامل نیستند و ممکن است بخشی از مصرف ثبت نشده باشد؛ رنگ سبز وجود ذخیره را تأیید نمی‌کند.";
 "cockpit_menu_pace_recorded_reference_help" = "آهنگ مصرف، مصرف ثبت‌شده امروز را با پیشنهاد روزانه ضرب‌در سهم سپری‌شده از روز محلی، بر حسب واحد درصد از سهمیه هفتگی مقایسه می‌کند. علامت نمایش‌داده‌شده از تنظیم علامت آهنگ مصرف پیروی می‌کند.";
+
+"Shared usage distribution" = "توزیع مصرف اشتراک‌گذاری‌شده";
+"Usage day (UTC+8)" = "روز مصرف (UTC+8)";
+"Recorded tokens" = "توکن‌های ثبت‌شده";
+"Share of recorded team tokens" = "سهم از توکن‌های ثبت‌شدهٔ تیم";
+"%1$@ of %2$@ devices reported usage" = "%1$@ دستگاه از %2$@ دستگاه مصرف خود را گزارش کرده‌اند";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "سهم‌ها با مقایسهٔ توکن‌های ثبت‌شدهٔ Codex در دستگاه‌های گزارش‌دهنده، از جمله دستگاه‌های تخصیص‌نیافته، محاسبه می‌شوند.";
+"No devices assigned" = "هیچ دستگاهی تخصیص نیافته است";
+"No shared usage for this day" = "دادهٔ مصرف اشتراک‌گذاری‌شده‌ای برای این روز وجود ندارد";
+"No members or devices yet." = "هنوز عضو یا دستگاهی وجود ندارد.";
+"Synchronize to load members and devices." = "برای بارگیری اعضا و دستگاه‌ها، همگام‌سازی کنید.";
+"Synchronization is paused. Showing the last shared data." = "همگام‌سازی متوقف شده است. آخرین داده‌های اشتراک‌گذاری‌شده نمایش داده می‌شود.";
+"Partial estimated cost (USD)" = "هزینهٔ برآوردی جزئی (USD)";
+"Invitations" = "دعوت‌نامه‌ها";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "از مالک فضا بخواهید در بخش «Members & Devices» تنظیمات، دعوت‌نامهٔ جدیدی ایجاد کند.";

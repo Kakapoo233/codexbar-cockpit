@@ -76,7 +76,7 @@ struct PreferencesTeamSetupSection: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 SecureField(L("Invitation code"), text: self.$inviteCode, prompt: Text(verbatim: "CCI-…"))
-                    .help(L("Ask the space owner to generate a new invitation in Members & Devices."))
+                    .help(L("Ask the space owner to generate a new invitation in Settings under Members & Devices."))
             }
             Button(self.createSpace ? L("Create and connect") : L("Join shared space"), action: self.onEnroll)
                 .disabled(!self.canEnroll || self.isBusy)

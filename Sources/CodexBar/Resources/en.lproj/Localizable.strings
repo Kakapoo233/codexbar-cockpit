@@ -3293,3 +3293,18 @@
 "cockpit_pace_quota_forecast" = "Quota forecast: %@";
 "cockpit_menu_pace_partial_color_help" = "Colors reflect the recorded difference from today's recommendation. Records are incomplete and may miss usage; green does not confirm a reserve.";
 "cockpit_menu_pace_recorded_reference_help" = "Pace compares recorded use today with the daily recommendation multiplied by elapsed local-day progress, in weekly-quota percentage points. The displayed sign follows the Pace sign setting.";
+
+"Shared usage distribution" = "Shared usage distribution";
+"Usage day (UTC+8)" = "Usage day (UTC+8)";
+"Recorded tokens" = "Recorded tokens";
+"Share of recorded team tokens" = "Share of recorded team tokens";
+"%1$@ of %2$@ devices reported usage" = "%1$@ of %2$@ devices reported usage";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Shares compare recorded Codex tokens across reporting devices, including unassigned devices.";
+"No devices assigned" = "No devices assigned";
+"No shared usage for this day" = "No shared usage for this day";
+"No members or devices yet." = "No members or devices yet.";
+"Synchronize to load members and devices." = "Synchronize to load members and devices.";
+"Synchronization is paused. Showing the last shared data." = "Synchronization is paused. Showing the last shared data.";
+"Partial estimated cost (USD)" = "Partial estimated cost (USD)";
+"Invitations" = "Invitations";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Ask the space owner to generate a new invitation in Settings under Members & Devices.";

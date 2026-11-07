@@ -3286,3 +3286,18 @@
 "cockpit_pace_quota_forecast" = "Previsão de cota: %@";
 "cockpit_menu_pace_partial_color_help" = "As cores refletem a diferença entre o uso registrado e a recomendação de hoje. Os registros estão incompletos e podem omitir uso; o verde não confirma que há uma reserva disponível.";
 "cockpit_menu_pace_recorded_reference_help" = "O ritmo compara o uso registrado hoje com a recomendação diária multiplicada pela fração decorrida do dia local, em pontos percentuais da cota semanal. O sinal exibido segue a configuração de sinal do ritmo.";
+
+"Shared usage distribution" = "Distribuição do uso compartilhado";
+"Usage day (UTC+8)" = "Dia de uso (UTC+8)";
+"Recorded tokens" = "Tokens registrados";
+"Share of recorded team tokens" = "Proporção dos tokens registrados da equipe";
+"%1$@ of %2$@ devices reported usage" = "%1$@ de %2$@ dispositivos informaram o uso";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "As proporções comparam os tokens do Codex registrados pelos dispositivos que informaram o uso, incluindo os dispositivos não atribuídos.";
+"No devices assigned" = "Nenhum dispositivo atribuído";
+"No shared usage for this day" = "Nenhum dado de uso compartilhado para este dia";
+"No members or devices yet." = "Ainda não há membros nem dispositivos.";
+"Synchronize to load members and devices." = "Sincronize para carregar os membros e os dispositivos.";
+"Synchronization is paused. Showing the last shared data." = "A sincronização está pausada. Os últimos dados compartilhados estão sendo exibidos.";
+"Partial estimated cost (USD)" = "Custo parcial estimado (USD)";
+"Invitations" = "Convites";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Peça ao proprietário do espaço para gerar um novo convite na seção “Members & Devices” dos ajustes.";

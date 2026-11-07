@@ -3289,3 +3289,18 @@
 "cockpit_pace_quota_forecast" = "Прогноз квоты: %@";
 "cockpit_menu_pace_partial_color_help" = "Цвета отражают разницу между зарегистрированным использованием и сегодняшней рекомендацией. Данные неполны и могут не учитывать часть использования; зелёный цвет не подтверждает наличие запаса.";
 "cockpit_menu_pace_recorded_reference_help" = "Темп сравнивает зарегистрированное сегодня использование с дневной рекомендацией, умноженной на прошедшую долю местного дня, в процентных пунктах недельной квоты. Отображаемый знак определяется настройкой знака темпа.";
+
+"Shared usage distribution" = "Распределение общего использования";
+"Usage day (UTC+8)" = "День использования (UTC+8)";
+"Recorded tokens" = "Учтённые токены";
+"Share of recorded team tokens" = "Доля учтённых токенов команды";
+"%1$@ of %2$@ devices reported usage" = "Данные об использовании получены с %1$@ из %2$@ устройств";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "Доли рассчитываются по числу учтённых токенов Codex на устройствах, сообщивших об использовании, включая неназначенные устройства.";
+"No devices assigned" = "Нет назначенных устройств";
+"No shared usage for this day" = "Нет общих данных об использовании за этот день";
+"No members or devices yet." = "Участников и устройств пока нет.";
+"Synchronize to load members and devices." = "Выполните синхронизацию, чтобы загрузить список участников и устройств.";
+"Synchronization is paused. Showing the last shared data." = "Синхронизация приостановлена. Показаны последние общие данные.";
+"Partial estimated cost (USD)" = "Частичная оценка стоимости (USD)";
+"Invitations" = "Приглашения";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "Попросите владельца пространства создать новое приглашение в разделе «Members & Devices» в настройках.";

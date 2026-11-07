@@ -33,10 +33,25 @@ it("switches peers in the same panel and keeps range controls outside scrolling 
   fireEvent.click(screen.getByRole("button", { name: "90 days" }));
   expect(screen.getByTestId("usage-range").textContent).not.toBe(first);
   fireEvent.click(screen.getByRole("button", { name: "Members & devices" }));
-  expect(screen.getByText("Member editor")).toBeInTheDocument();
+  expect(screen.getByRole("region", { name: "Member usage distribution" })).toBeInTheDocument();
+  expect(screen.queryByText("Member editor")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Calendar" }));
   expect(screen.getByRole("button", { name: "Day" })).toBeInTheDocument();
   expect(container.querySelectorAll(".tray-panel")).toHaveLength(1);
+});
+it("keeps member management in settings and opens it directly from member usage", () => {
+  const fixture = props();
+  render(<TrayPanel {...fixture} />);
+  fireEvent.click(screen.getByRole("button", { name: "Members & devices" }));
+  fireEvent.click(screen.getByRole("button", { name: "Refresh" }));
+  expect(fixture.onRefresh).toHaveBeenCalledTimes(1);
+  expect(screen.queryByText("Cloud settings")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Open member settings" }));
+  expect(screen.getByRole("main", { name: "Settings page" })).toBeInTheDocument();
+  const memberSettings = screen.getByRole("region", { name: "Member settings" });
+  expect(memberSettings).toHaveFocus();
+  expect(memberSettings).toHaveTextContent("Member editor");
+  expect(memberSettings).toHaveTextContent("Cloud settings");
 });
 it("saves tray presentation and English text choices through canonical preferences", () => {
   const fixture = props(); render(<TrayPanel {...fixture} />);

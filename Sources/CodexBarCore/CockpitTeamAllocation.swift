@@ -115,24 +115,11 @@ public enum CockpitTeamAllocation {
         localDate: String) -> [String: Double]
     {
         guard self.day(localDate) != nil else { return [:] }
-        var result: [String: Double] = [:]
-        for (deviceID, copies) in Dictionary(grouping: snapshots, by: \.deviceID) {
-            let valid = copies.filter {
-                $0.payload.deviceID == deviceID && $0.updatedAt.isFinite && $0.updatedAt >= 0
-            }
-            guard let latest = valid.max(by: {
-                ($0.updatedAt, $0.payload.timestamp) < ($1.updatedAt, $1.payload.timestamp)
-            }),
-                latest.payload.metadata?.status != .unavailable,
-                let cost = latest.payload.days[localDate]?.cost, cost.isFinite, cost >= 0,
-                !valid.contains(where: {
-                    $0.updatedAt == latest.updatedAt && $0.payload.timestamp == latest.payload.timestamp
-                        && $0.payload != latest.payload
-                })
-            else { continue }
-            result[deviceID] = cost
+        return CockpitTeamDeviceSnapshot.latestPerDevice(snapshots).compactMapValues { latest in
+            guard latest.payload.metadata?.status != .unavailable,
+                  let cost = latest.payload.days[localDate]?.cost, cost.isFinite, cost >= 0 else { return nil }
+            return cost
         }
-        return result
     }
 
     private static func finiteSum(_ values: [Double]) -> Double? {

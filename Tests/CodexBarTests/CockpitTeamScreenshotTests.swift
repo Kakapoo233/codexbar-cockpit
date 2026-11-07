@@ -53,6 +53,9 @@ struct CockpitTeamScreenshotTests {
             CockpitTeamDevice(
                 deviceID: "synthetic-mac-d",
                 displayName: "演示 Mac 丁"),
+            CockpitTeamDevice(
+                deviceID: "synthetic-mac-e",
+                displayName: "尚未上传的设备"),
         ]
         store.connection = CockpitTeamStore.Connection(
             endpoint: "https://team.example.invalid",
@@ -87,7 +90,7 @@ struct CockpitTeamScreenshotTests {
                 value: 10,
                 revision: 1))
         store.lastSyncedAt = now.addingTimeInterval(-120)
-        store.snapshots = devices.enumerated().map { index, device in
+        store.snapshots = devices.dropLast().enumerated().map { index, device in
             let partial = index == 3
             return CockpitTeamDeviceSnapshot(
                 deviceID: device.deviceID,
@@ -117,6 +120,10 @@ struct CockpitTeamScreenshotTests {
                     try data.write(to: directory.appendingPathComponent("cockpit-team-\(width)x\(height)-zh.png"))
                 }
             }
+            let settings = try #require(await Self.pngData(
+                PreferencesTeamPane(teamStore: store).codexBarLocalized(),
+                size: CGSize(width: 880, height: 1800)))
+            try settings.write(to: directory.appendingPathComponent("cockpit-team-settings-connected-zh.png"))
         }
     }
 

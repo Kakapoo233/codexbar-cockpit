@@ -42,7 +42,8 @@ of the installed CodexBar after acceptance. Project: CodexBar Cockpit, MIT, inte
 - [x] Restore upstream v2 member assignment, invitations, revocation and daily allocation.
 - [x] Separate team data from personal iCloud settings and provider credentials.
 - [x] Include the self-hosted Worker, migrations and synthetic protocol tests.
-- [ ] Select and deploy the owner's cloud service; connect a second device and verify real synchronization.
+- [x] Deploy the owner's cloud service; verify Mac and Windows membership and group synchronization.
+- [ ] Validate Windows activity export and member daily-budget UI when implemented.
 - [ ] Complete desktop acceptance of the new team page and settings.
 
 ## Verification and release

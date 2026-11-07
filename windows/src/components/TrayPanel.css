@@ -42,7 +42,14 @@ body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background
 .tray-reset-announcement { border:1px solid color-mix(in srgb,var(--tray-accent) 40%,var(--tray-border)); background:color-mix(in srgb,var(--tray-accent) 8%,var(--tray-card)); border-radius:10px; padding:12px 15px; display:flex; flex-direction:column; gap:7px; }
 .tray-error { display:flex; align-items:center; gap:10px; justify-content:space-between; background:#fff2db; color:#684516; padding:10px 18px; flex-shrink:0; }
 .tray-settings fieldset { padding:0; border:0; margin:0; min-width:0; }
-.tray-settings fieldset > * + *, .tray-settings > * + * { margin-top:16px; }
+.tray-settings > fieldset > * + *, .tray-settings > * + *, .tray-team-settings > * + * { margin-top:16px; }
+.tray-team-settings { scroll-margin-top:12px; }
+.tray-team-settings > .usage-group-editor {
+  margin-top:0; background:var(--tray-card); border:1px solid var(--tray-border); border-radius:12px; padding:16px;
+}
+.tray-team-settings .person-ring-color-row { flex-wrap:wrap; overflow-wrap:anywhere; }
+.tray-team-settings .person-ring-color-input { min-width:0; }
+.tray-team-settings .person-ring-swatches { flex-wrap:wrap; }
 /* Reusable two-column rows keep controls aligned without styling nested cloud labels. */
 .tray-setting-row,
 .tray-settings .cloud-setup-form label:not(.cloud-share-option) {
@@ -78,6 +85,24 @@ body { font-family:system-ui,"Segoe UI","Microsoft YaHei",sans-serif; background
 .tray-panel .comfort-history-panel,.tray-panel .comfort-curve-panel { background:var(--tray-card); border:1px solid var(--tray-border); border-radius:12px; padding:16px; }
 .tray-panel .comfort-history-grid--day { grid-template-columns:1fr; }
 .tray-panel .comfort-history-grid--day .comfort-history-day { min-height:92px; }
+.team-usage-heading, .team-usage-period { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 16px; }
+.team-usage-heading h2 { margin:0; }
+.team-usage-period { margin-top:14px; }
+.team-usage-period > div { display:flex; flex-wrap:wrap; gap:6px; }
+.team-usage-period small, .team-usage-metrics dt, .team-device-list small, .team-no-devices { color:var(--tray-muted); }
+.team-usage-metrics { display:flex; flex-wrap:wrap; gap:8px 24px; margin:12px 0 8px; }
+.team-usage-metrics > div { min-width:0; }
+.team-usage-metrics dd { margin:4px 0 0; font-weight:650; font-variant-numeric:tabular-nums; }
+.team-member-usage { border-top:1px solid var(--tray-border); padding:14px 0; overflow-wrap:anywhere; }
+.team-member-usage:last-child { padding-bottom:0; }
+.team-member-usage h3 { display:flex; align-items:center; gap:8px; font-size:1em; margin:0; }
+.team-member-usage h3 i { width:8px; height:8px; flex:none; border-radius:50%; }
+.team-device-list, .team-no-devices { display:block; margin-top:10px; }
+.team-device-list summary { width:fit-content; cursor:pointer; }
+.team-device-list summary:focus-visible { outline:2px solid var(--tray-accent); outline-offset:2px; }
+.team-device-list ul { margin:8px 0 0; padding-left:1.3em; }
+.team-device-list li + li { margin-top:8px; }
+.team-device-list small { display:block; margin-top:3px; }
 @media(max-width:650px) { .tray-advice-values { grid-template-columns:1fr; } .tray-date-sidebar { width:84px; } .tray-page-content { padding:12px; } }
 
 /* Ported calendar components inherit the tray theme instead of floating-widget glass colors. */

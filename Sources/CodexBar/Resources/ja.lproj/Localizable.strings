@@ -3290,3 +3290,18 @@
 "cockpit_pace_quota_forecast" = "週間枠の予測：%@";
 "cockpit_menu_pace_partial_color_help" = "色は、記録された使用量と今日の推奨値との差を示します。記録は不完全で、使用量が記録されていない場合があります。緑色でも余裕があると確認されたわけではありません。";
 "cockpit_menu_pace_recorded_reference_help" = "ペースは、今日記録された使用量と「1日の推奨量 × 現地時間での当日の経過割合」を比較し、週間割り当てに対するパーセントポイントで示します。表示される正負の符号は「ペースの符号」設定に従います。";
+
+"Shared usage distribution" = "共有された使用量の内訳";
+"Usage day (UTC+8)" = "使用日（UTC+8）";
+"Recorded tokens" = "記録済みトークン数";
+"Share of recorded team tokens" = "チームの記録済みトークン数に占める割合";
+"%1$@ of %2$@ devices reported usage" = "%2$@ 台中 %1$@ 台のデバイスから使用量の報告がありました";
+"Shares compare recorded Codex tokens across reporting devices, including unassigned devices." = "割合は、割り当てられていないデバイスも含め、報告元のデバイスで記録された Codex トークン数をもとに算出します。";
+"No devices assigned" = "割り当て済みのデバイスはありません";
+"No shared usage for this day" = "この日の共有使用量データはありません";
+"No members or devices yet." = "メンバーやデバイスはまだありません。";
+"Synchronize to load members and devices." = "同期してメンバーとデバイスを読み込んでください。";
+"Synchronization is paused. Showing the last shared data." = "同期は一時停止中です。最後に共有されたデータを表示しています。";
+"Partial estimated cost (USD)" = "一部の推定費用（USD）";
+"Invitations" = "招待";
+"Ask the space owner to generate a new invitation in Settings under Members & Devices." = "スペースの所有者に、設定の「Members & Devices」で新しい招待を作成するよう依頼してください。";

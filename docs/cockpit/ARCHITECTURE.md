@@ -218,6 +218,13 @@ Settings use an explicit field whitelist and an atomic menu-layout/rule bundle. 
 
 ## Team synchronization
 
+The Members page is a read-only usage overview. Canonical Settings owns all membership, device
+assignment, invitation, revocation, account binding, upload consent and budget/risk editing. Refresh
+and navigation to Settings remain on the overview. Member usage shares describe recorded Token
+distribution within the labeled reporting period, never provider quota allocation. Unassigned devices
+remain visible and missing/partial coverage is explicit. Windows retains its disabled local activity
+export and does not imply that its unfinished daily-plan UI is available.
+
 `CockpitTeamStore` is owned by the app delegate and shared by the menu panel and canonical settings.
 Its polling and account-identity observation continue while the popover is closed. It is separate from
 CodexBar's personal iCloud sync: no provider credentials or its account snapshot payloads are reused.
